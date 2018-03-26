@@ -1,0 +1,3 @@
+# Pardus Store
+
+The more is about to come ...
