@@ -166,7 +166,7 @@ ApplicationWindow {
         delegate: Pane {
             id: applicationDelegateItem
             z: grown ? 5 : 0
-
+            //Material.background: "#eeeeee"
             Material.elevation: 5
             width: grown ? gv.width - 10 : 220
             height: grown ? gv.height - 10 : 220
@@ -271,7 +271,7 @@ ApplicationWindow {
 
                 Label {
                     Material.foreground: "#000000"
-                    text: version + "\n" + status
+                    text: "\n" + version + "\n" + status
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                 }

@@ -65,12 +65,16 @@ Pane {
         anchors.verticalCenter: parent.verticalCenter
         model: categoryListModel
 
-        Behavior on spacing {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
-            }
+        highlight: Rectangle {
+            color: "white"
+            radius: 2
+            //z: 200
+            x:-10
+            width: 5
         }
+        focus: true
+        //highlightFollowsCurrentItem : true
+        highlightMoveVelocity: 3600
 
         delegate:  Pane {
             id: categoryDelegateItem
@@ -81,7 +85,7 @@ Pane {
             Label {
                 anchors.centerIn: parent
                 opacity: navima.containsMouse ? 1.0 : 0.0
-                color: "white"
+                color: name === selectedCategory ? "white" : Material.color(Material.BlueGrey)
                 font.capitalization: Font.AllUppercase
                 font.bold: true
                 text: name
@@ -105,11 +109,13 @@ Pane {
 
 
             MouseArea {
+                id: categoryDelegateItemMa
                 anchors.centerIn: parent
                 width: categoryDelegateItem.width
                 height: categoryDelegateItem.height
                 onClicked: {
                     selectedCategory = name
+                    navigationBarListView.currentIndex = categories.indexOf(name)
                 }
                 onPressed: {
                     categoryDelegateItem.Material.elevation = 0
