@@ -2,17 +2,22 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
+import ps.helper 1.0
 
 
 ApplicationWindow {
     id: main
-    width: 1366
-    height: 768
+    minimumWidth: 1366
+    minimumHeight: 768
     visible: true
     title: qsTr("Pardus Store")
     flags: Qt.FramelessWindowHint
 
-    property string selectedCathegory : "all"
+    property string category : navigationBar.selectedCategory
+
+    Helper {
+        id: helper
+    }
 
     MouseArea{
         id: ma
@@ -48,196 +53,93 @@ ApplicationWindow {
         }
     }
 
-
     Pane {
-        id: navi
-        visible: true
-        width: navima.containsMouse ? main.width / 7 : main.width / 21
-        height: main.height
-        z : 100
-        Material.background: Material.BlueGrey
-        Material.elevation: 8
-
+        id: exitBtn
+        width: 32
+        height: 32
+        Material.background: Material.Red
+        Material.elevation: 2
+        Label {
+            anchors.centerIn: parent
+            Material.foreground: "white"
+            text: "X"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+        anchors {
+            top: parent.top
+            right: parent.right
+        }
         MouseArea {
-            id: navima
-            anchors.fill: parent
-            hoverEnabled: true
-        }
-
-        Behavior on width {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
+            id: exitBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (exitBtnMa.containsMouse) {
+                    exitBtn.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                exitBtn.Material.elevation = 2
+            }
+            onClicked: {
+                Qt.quit()
             }
         }
+    }
 
-        Column {
-            id: naviColumn
-            spacing: 10
-            property int foldHeight: main.height / 20
-            property int unFoldHeight: main.height / 10
-
-            Pane {
-                id: c_all
-                width: navi.width - 22
-                height: navima.containsMouse ? naviColumn.unFoldHeight : naviColumn.foldHeight
-                Material.background: Material.Grey
-                Material.elevation: 2
-                Label {
-                    anchors.centerIn: parent
-                    visible: navima.containsMouse
-                    color: "white"
-                    text: "ALL"
-                }
-
-                Behavior on height {
-                    NumberAnimation {
-                        easing.type: Easing.OutExpo
-                        duration: 200
-                    }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        selectedCathegory = "all"
-                    }
-                    onPressed: {
-                        c_all.Material.elevation = 0
-
-                    }
-                    onReleased: {
-
-                        c_all.Material.elevation = 2
-                    }
-                }
-            }
-
-            Pane {
-                id: c_purple
-                width: navi.width - 22
-                height: navima.containsMouse ? naviColumn.unFoldHeight : naviColumn.foldHeight
-                Material.background: Material.Purple
-                Material.elevation: 2
-                Label {
-                    anchors.centerIn: parent
-                    visible: navima.containsMouse
-                    color: "white"
-                    text: "PURPLE"
-                }
-                Behavior on height {
-                    NumberAnimation {
-                        easing.type: Easing.OutExpo
-                        duration: 200
-                    }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        selectedCathegory = "purple"
-                    }
-                    onPressed: {
-                        c_purple.Material.elevation = 0
-
-                    }
-                    onReleased: {
-
-                        c_purple.Material.elevation = 2
-                    }
-                }
-            }
-
-            Pane {
-                id: c_blue
-                width: navi.width - 22
-                height: navima.containsMouse ? naviColumn.unFoldHeight : naviColumn.foldHeight
-                Material.background: Material.Blue
-                Material.elevation: 2
-                Label {
-                    anchors.centerIn: parent
-                    visible: navima.containsMouse
-                    color: "white"
-                    text: "BLUE"
-                }
-                Behavior on height {
-                    NumberAnimation {
-                        easing.type: Easing.OutExpo
-                        duration: 200
-                    }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        selectedCathegory = "blue"
-                    }
-                    onPressed: {
-                        c_blue.Material.elevation = 0
-
-                    }
-                    onReleased: {
-
-                        c_blue.Material.elevation = 2
-                    }
-                }
-            }
-        }
+    NavigationBar {
+        id: navigationBar
 
     }
 
-    onSelectedCathegoryChanged: {
+    onCategoryChanged: {
         lm.clear()
-        fill(selectedCathegory)
-    }
-
-    function fill(type) {
-
-        if (type === "blue") {
-            for (var i = 0; i < 9; i++) {
-                lm.append({
-                              "name": "Inkscape",
-                              "version": "0.92.1-1",
-                              "status": "installed",
-                              "cathegory": "blue"
-                          })
-            }
-        } else if (type === "purple") {
-
-            for (var j = 0; j < 8; j++) {
-                lm.append({
-                              "name": "Inkscape",
-                              "version": "0.92.1-1",
-                              "status": "installed",
-                              "cathegory": "purple"
-                          })
-            }
+        if(category == "all") {
+            fill()
         } else {
-            for (var i = 0; i < 9; i++) {
+            var list = helper.getApplicationsByCategory(category)
+            var it = 0
+            for (var i = 0; i < list.length; i++) {
+
+                it = navigationBar.categories.indexOf(category)
                 lm.append({
-                              "name": "Inkscape",
+                              "name": list[i],
                               "version": "0.92.1-1",
                               "status": "installed",
-                              "cathegory": "blue"
-                          })
-            }
-            for (var j = 0; j < 8; j++) {
-                lm.append({
-                              "name": "Inkscape",
-                              "version": "0.92.1-1",
-                              "status": "installed",
-                              "cathegory": "purple"
+                              "cathegory": category,
+                              "color": navigationBar.categoryColors[it]
                           })
             }
         }
 
     }
-
 
 
     ListModel {
         id: lm
-        Component.onCompleted:  {
-            fill();
 
+    }
 
+    function fill() {
+        var theList = helper.appList()
+        var line = ""
+        var name = ""
+        var c = ""
+        var it = 0
+        for (var i = 0; i < theList.length; i++) {
+            line = theList[i].split(" ")
+            name = line[0]
+            c = line[1]
+            it = navigationBar.categories.indexOf(c)
+            lm.append({
+                          "name": name,
+                          "version": "0.92.1-1",
+                          "status": "installed",
+                          "cathegory": c,
+                          "color": navigationBar.categoryColors[it]
+                      })
         }
     }
 
@@ -258,14 +160,13 @@ ApplicationWindow {
         model: lm
 
         add: Transition {
-                NumberAnimation { properties: "x,y"; duration: 200 ; easing.type: Easing.OutExpo}
-            }
+            NumberAnimation { properties: "x,y"; duration: 200 ; easing.type: Easing.OutExpo}
+        }
 
-        delegate:
-            Pane {
-            id: p
+        delegate: Pane {
+            id: applicationDelegateItem
             z: grown ? 5 : 0
-            visible: selectedCathegory === cathegory || selectedCathegory === "all" ? 1 : 0
+
             Material.elevation: 5
             width: grown ? gv.width - 10 : 220
             height: grown ? gv.height - 10 : 220
@@ -273,14 +174,6 @@ ApplicationWindow {
             property bool grown: false
             property int previousX
             property int previousY
-
-            Component.onCompleted: {
-                if(cathegory === "purple") {
-                    Material.background = Material.Purple
-                } else if(cathegory === "blue") {
-                    Material.background = Material.Blue
-                }
-            }
 
             Behavior on width {
                 NumberAnimation {
@@ -310,42 +203,78 @@ ApplicationWindow {
                 }
             }
 
+            Pane {
+                id:categoryBadge
+                width: grown ? gv.width : 50
+                height: grown ? gv.height / 5 : 50
+                Material.background: color
+                Material.elevation: 1
+                anchors {
+                    top: parent.top
+                    right: parent.right
 
+                }
+
+                Behavior on width {
+                    NumberAnimation {
+                        easing.type: Easing.OutExpo
+                        duration: 350
+                    }
+                }
+
+                Behavior on height {
+                    NumberAnimation {
+                        easing.type: Easing.OutExpo
+                        duration: 350
+                    }
+                }
+            }
 
             MouseArea {
                 id: ma2
                 anchors.fill: parent
                 onClicked: {
 
-                    p.grown = !p.grown
-                    p.Material.elevation = 5
+                    applicationDelegateItem.grown = !applicationDelegateItem.grown
+                    applicationDelegateItem.Material.elevation = 5
 
-                    if (p.grown) {
-                        p.previousX = p.x
-                        p.previousY = p.y
-                        p.x = 0
-                        p.y = 0
+                    if (applicationDelegateItem.grown) {
+                        applicationDelegateItem.previousX = applicationDelegateItem.x
+                        applicationDelegateItem.previousY = applicationDelegateItem.y
+                        applicationDelegateItem.x = 0
+                        applicationDelegateItem.y = 0
                     } else {
-                        p.x = p.previousX
-                        p.y = p.previousY
+                        applicationDelegateItem.x = applicationDelegateItem.previousX
+                        applicationDelegateItem.y = applicationDelegateItem.previousY
                     }
 
                 }
                 onPressed: {
                     if(ma2.containsMouse) {
-                        p.Material.elevation = 0
+                        applicationDelegateItem.Material.elevation = 0
                     }
                 }
                 onReleased: {
 
-                    p.Material.elevation = 5
+                    applicationDelegateItem.Material.elevation = 5
                 }
             }
-
-            Label {
-                Material.foreground: "#000000"
+            Column {
                 anchors.centerIn: parent
-                text: name + " " + version + " " + status
+                Label {
+                    Material.foreground: "#000000"
+                    text: name
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.capitalization: Font.Capitalize
+                }
+
+                Label {
+                    Material.foreground: "#000000"
+                    text: version + "\n" + status
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
             }
         }
     }

@@ -1,40 +1,38 @@
-android-studio
-atom
-chromium
-eclipse
-evince
-evolution
-filezilla
-firefox
-geary
-gnome-boxes
-gnome-builder
-gparted
-guake
-hexchat
-inkscape
-keypassx
-libre-office
-mysql-workbench
-nautilus
-pidgin
-pinta
-playonlinux
-polari
-pycharm
-qtcreator
-remmina
-skype
-slack
-smartgit
-spotify
-steam
-teamviewer
-thunar
-thunderbird
-transmission
-virt-manager
-virtualbox
-vlc
-xfburn
-xfce4-terminal
+android-studio development
+atom development
+chromium internet
+eclipse development
+evince reading
+evolution internet
+filezilla system
+firefox internet
+geary internet
+gnome-boxes system
+gnome-builder development
+gparted system
+guake development
+hexchat chat
+inkscape graphics
+libreoffice office
+mysql-workbench development
+nautilus system
+pidgin chat
+pinta graphics
+playonlinux game
+polari chat
+pycharm development
+qtcreator development
+remmina system
+skype chat
+slack chat
+spotify music
+steam game
+teamviewer system
+thunar system
+thunderbird internet
+transmission internet
+virt-manager system
+virtualbox system
+vlc video
+xfburn others
+xfce4-terminal system

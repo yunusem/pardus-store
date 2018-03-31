@@ -3,16 +3,18 @@ QT += qml quick widgets
 CONFIG += c++11
 
 SOURCES += src/main.cpp \
-    src/helper.cpp
+    src/helper.cpp \
+    src/filehandler.cpp
 
 HEADERS += \
-    src/helper.h
+    src/helper.h \
+    src/filehandler.h
 
 TARGET = ps
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc file.qrc
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-LIBS += -lapt-pkg
+#LIBS += -lapt-pkg
 
