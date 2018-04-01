@@ -3,5 +3,6 @@
         <file>ui/main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>ui/NavigationBar.qml</file>
+        <file>ui/test.qml</file>
     </qresource>
 </RCC>
