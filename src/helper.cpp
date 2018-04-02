@@ -28,13 +28,39 @@ QStringList Helper::appList() {
 QStringList Helper::getApplicationsByCategory(const QString c)
 {
     QStringList out;
+    QStringList sl;
     foreach (QString line, l) {
-        QStringList sl = line.split(" ");
+        sl = line.split(" ");
         if (sl.at(1) == c) {
             out.append(sl.at(0));
         }
     }
     return out;
+}
+
+QStringList Helper::getApplicationsByName(const QString c)
+{
+
+    QStringList sl;
+    QStringList firstPortion;
+    QStringList secondPortion;
+    QString application;
+    QString category;
+    foreach (QString line, l) {
+        sl = line.split(" ");
+        application = sl.at(0);
+        category = sl.at(1);
+
+        if(application.contains(c)) {
+            if(application.mid(0,c.count()-1) == c) {
+                firstPortion.append(application);
+            } else {
+                secondPortion.append(application);
+            }
+        }
+    }
+
+    return firstPortion + secondPortion;
 }
 
 void Helper::startInstalling(const QString pkg)

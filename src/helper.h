@@ -17,6 +17,7 @@ public:
     bool installing() const;
     Q_INVOKABLE QStringList appList();
     Q_INVOKABLE QStringList getApplicationsByCategory(const QString c);
+    Q_INVOKABLE QStringList getApplicationsByName(const QString c);
     Q_INVOKABLE void startInstalling(const QString pkg);
 private:
     bool i;

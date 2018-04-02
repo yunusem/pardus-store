@@ -35,4 +35,12 @@ ApplicationWindow {
             console.log("test")
         }
     }
+
+    TextField {
+        id: t
+        onTextChanged: {
+            var list = helper.getApplicationsByName(t.text)
+            console.log(list)
+        }
+    }
 }
