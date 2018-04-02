@@ -4,11 +4,13 @@ CONFIG += c++11
 
 SOURCES += src/main.cpp \
     src/helper.cpp \
-    src/filehandler.cpp
+    src/filehandler.cpp \
+    src/packagehandler.cpp
 
 HEADERS += \
     src/helper.h \
-    src/filehandler.h
+    src/filehandler.h \
+    src/packagehandler.h
 
 TARGET = ps
 

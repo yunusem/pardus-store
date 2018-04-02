@@ -12,32 +12,41 @@ ApplicationWindow {
 
     Helper {
         id: helper
-        onInstallingFinished: {
+        onProcessingFinished: {
             console.log("installing finished")
             btn.enabled = true
-
+            btn2.enabled = true
         }
     }
 
-    Button {
-        id: btn
+    Column {
         anchors.centerIn: parent
-        text: "install"
-        onClicked:  {
-            btn.enabled = false
-            helper.startInstalling("thunderbird")
-        }
-    }
+        Button {
+            id: btn
 
-    Button {
-        text: "Test"
-        onClicked: {
-            console.log("test")
+            text: "install"
+            onClicked:  {
+                btn.enabled = false
+                btn2.enabled = false
+                helper.install("htop")
+            }
+        }
+
+        Button {
+            id: btn2
+
+            text: "remove"
+            onClicked:  {
+                btn2.enabled = false
+                btn.enabled = false
+                helper.remove("htop")
+            }
         }
     }
 
     TextField {
         id: t
+        anchors.right: parent.right
         onTextChanged: {
             var list = helper.getApplicationsByName(t.text)
             console.log(list)

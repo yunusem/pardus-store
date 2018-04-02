@@ -1,24 +1,22 @@
 #include "helper.h"
 #include "filehandler.h"
-//#include <apt-pkg/pkgcache.h>
-//#include <apt-pkg/dpkgpm.h>
+#include "packagehandler.h"
 #include <QProcess>
 #include <QDebug>
 
-Helper::Helper(QObject *parent) : QObject(parent), i(false)
+Helper::Helper(QObject *parent) : QObject(parent), p(false)
 {
     fh = new FileHandler(this);
+    ph = new PackageHandler(this);
+    l = fh->readLines();    
 
-    l = fh->readLines();
-    p = new QProcess(this);
-
-    connect(p,SIGNAL(finished(int)),this,SLOT(installingFinishedSlot()));
+    connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
 
 }
 
-bool Helper::installing() const
+bool Helper::processing() const
 {
-    return i;
+    return p;
 }
 
 QStringList Helper::appList() {
@@ -63,16 +61,29 @@ QStringList Helper::getApplicationsByName(const QString c)
     return firstPortion + secondPortion;
 }
 
-void Helper::startInstalling(const QString pkg)
+void Helper::install(const QString pkg)
 {
 
-    p->start("apt-get install -y " + pkg);
-    //p->waitForFinished(-1);
-    i = true;
+    ph->install(pkg);
+    p = true;
 }
 
-void Helper::installingFinishedSlot()
+void Helper::remove(const QString pkg)
 {
-    i = false;
-    emit installingFinished();
+
+    ph->remove(pkg);
+    p = true;
+}
+
+void Helper::packageProcessFinished(int code)
+{
+    if(code == 0) {
+        emit processingFinished();
+        qDebug() << ph->getOutput();
+    } else {
+        qDebug() << ph->getError();
+    }
+
+    p = false;
+
 }
