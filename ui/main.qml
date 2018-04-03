@@ -14,6 +14,7 @@ ApplicationWindow {
     flags: Qt.FramelessWindowHint
 
     property string category : navigationBar.selectedCategory
+    property bool searchF: false
 
     Helper {
         id: helper
@@ -89,6 +90,17 @@ ApplicationWindow {
         }
     }
 
+
+    SearchBar {
+        id: searchBar
+        anchors {
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+
+        }
+
+    }
+
     NavigationBar {
         id: navigationBar
 
@@ -110,8 +122,8 @@ ApplicationWindow {
                               "name": line[0],
                               "version": line[1],
                               "status": line[2] === "yes" ? true: false,
-                              "category": category,
-                              "color": navigationBar.categoryColors[it]
+                                                            "category": category,
+                                                            "color": navigationBar.categoryColors[it]
                           })
             }
         }
@@ -135,8 +147,8 @@ ApplicationWindow {
                           "name": line[0],
                           "version": line[2],
                           "status": line[3] === "yes" ? true: false,
-                          "category": line[1],
-                          "color": navigationBar.categoryColors[it]
+                                                        "category": line[1],
+                                                        "color": navigationBar.categoryColors[it]
                       })
         }
     }

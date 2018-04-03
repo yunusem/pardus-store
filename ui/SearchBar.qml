@@ -1,0 +1,209 @@
+import QtQuick 2.7
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.0
+import QtQuick.Controls.Material 2.0
+import QtQuick.Controls.Styles 1.4
+
+
+Pane {
+    id: searchPane
+    width: 200
+    height: 32
+    Material.background: Material.Grey
+    Material.elevation: 10
+
+    property string prelist: ""
+
+    Behavior on width  {
+        NumberAnimation {
+            easing.type: Easing.OutCirc
+            duration: 200
+        }
+    }
+
+    Behavior on height {
+        NumberAnimation {
+            easing.type: Easing.OutCirc
+            duration: 200
+        }
+    }
+
+
+    MouseArea {
+        id: searchBtnMa
+        width: 200
+        height: 32
+        anchors.centerIn: parent
+        onPressed: {
+            if (searchBtnMa.containsMouse) {
+                searchBtnMa.Material.elevation = 0
+            }
+        }
+        onReleased: {
+            searchBtnMa.Material.elevation = 2
+        }
+        onClicked: {
+            if (!main.searchF) {
+                openSearch()
+            }
+        }
+    }
+
+
+    Pane {
+        id: btnClose
+        width: 32
+        height: 32
+        Material.background: Material.Red
+        Material.elevation: 10
+        visible: main.searchF
+
+        anchors {
+            right: parent.right
+            top: parent.top
+        }
+
+        Label {
+            anchors.centerIn: parent
+            Material.foreground: "white"
+            text: "X"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        MouseArea {
+            id: closeSearchBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (closeSearchBtnMa.containsMouse) {
+                    closeSearchBtnMa.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                closeSearchBtnMa.Material.elevation = 2
+            }
+            onClicked: {
+                closeSearch()
+            }
+        }
+    }
+
+
+    TextField {
+        id: searchField
+
+        width: searchPane.width / 2
+        height: 40
+
+        visible: main.searchF
+        opacity: searchF ? 1 : 0
+
+        color: "white"
+
+        placeholderText: "Search an application"
+        anchors.centerIn: parent
+
+
+        Behavior on y {
+            NumberAnimation {
+                easing.type: Easing.OutCirc
+                duration: 200
+            }
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 1000
+            }
+        }
+
+        Behavior on width {
+            NumberAnimation {
+                easing.type: Easing.OutCirc
+                duration: 200
+            }
+        }
+
+
+        onTextChanged: {
+
+            if (searchField.text === "") {
+                lm.clear()
+                fill()
+
+            } else {
+
+                var list = helper.getApplicationsByName(searchField.text)
+
+                var test = String(list)
+                if (test === searchPane.prelist){
+                } else {
+                    lm.clear()
+                    searchPane.prelist = test
+                    var line = ""
+                    var it = 0
+                    for (var i = 0; i < list.length; i++) {
+                        line = list[i].split(" ")
+                        it = navigationBar.categories.indexOf(line[1])
+                        lm.append({
+                                      "name": line[0],
+                                      "version": line[2],
+                                      "status": line[3] === "yes" ? true: false,
+                                                                    "category": line[1],
+                                                                    "color": navigationBar.categoryColors[it]
+                                  })
+                    }
+                }
+
+
+
+            }
+
+        }
+
+
+
+    }
+
+
+    //    function slideSearchField() {
+
+    //        if (searchField.text === "") {
+    //            slideDownSearchField()
+    //        } else {
+    //            slideUpSearchField()
+    //        }
+    //    }
+
+
+    //    function slideDownSearchField() {
+    //        searchField.y = searchPane.height / 2 - searchField.height / 2
+    //        searchField.width = searchPane.width / 2
+    //    }
+
+    //    function slideUpSearchField() {
+    //        searchField.y = 60
+    //        searchField.width = searchPane.width - 80
+    //    }
+
+
+    function closeSearch() {
+        searchPane.width = 200
+        searchPane.height = 32
+        searchField.text = ""
+        main.searchF = false
+    }
+
+
+    function openSearch(){
+        searchPane.width = 500
+        searchPane.height = 40
+        main.searchF = true
+    }
+
+}
+
+
+

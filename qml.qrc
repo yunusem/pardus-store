@@ -4,5 +4,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>ui/NavigationBar.qml</file>
         <file>ui/test.qml</file>
+        <file>ui/SearchBar.qml</file>
     </qresource>
 </RCC>
