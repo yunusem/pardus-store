@@ -88,16 +88,17 @@ QStringList Helper::getApplicationsByName(const QString c)
     QStringList secondPortion;
     QString application;
     QString category;
-    foreach (QString line, l) {
+    QStringList mainList = this->appList();
+    foreach (QString line, mainList) {
         sl = line.split(" ");
         application = sl.at(0);
         category = sl.at(1);
 
         if(application.contains(c)) {
             if(application.mid(0,c.count()-1) == c) {
-                firstPortion.append(application);
+                firstPortion.append(line);
             } else {
-                secondPortion.append(application);
+                secondPortion.append(line);
             }
         }
     }
