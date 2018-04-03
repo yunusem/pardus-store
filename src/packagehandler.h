@@ -21,6 +21,7 @@ signals:
 public slots:
     void install(const QString pkg);
     void remove(const QString pkg);
+    QString getPolicy(const QString pkg) const;
     QByteArray getError();
     QByteArray getOutput();
 };

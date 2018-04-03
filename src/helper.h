@@ -25,9 +25,11 @@ private:
     FileHandler *fh;
     PackageHandler *ph;
     QStringList l;
+    QStringList ldetail;
 
 private slots:
     void packageProcessFinished(int code);
+    QStringList getDetails() const;
 
 signals:
     void processingFinished();

@@ -101,14 +101,16 @@ ApplicationWindow {
         } else {
             var list = helper.getApplicationsByCategory(category)
             var it = 0
+            var line = ""
             for (var i = 0; i < list.length; i++) {
+                line = list[i].split(" ")
 
                 it = navigationBar.categories.indexOf(category)
                 lm.append({
-                              "name": list[i],
-                              "version": "0.92.1-1",
-                              "status": "installed",
-                              "cathegory": category,
+                              "name": line[0],
+                              "version": line[1],
+                              "status": line[2] === "yes" ? true: false,
+                              "category": category,
                               "color": navigationBar.categoryColors[it]
                           })
             }
@@ -125,19 +127,15 @@ ApplicationWindow {
     function fill() {
         var theList = helper.appList()
         var line = ""
-        var name = ""
-        var c = ""
         var it = 0
         for (var i = 0; i < theList.length; i++) {
             line = theList[i].split(" ")
-            name = line[0]
-            c = line[1]
-            it = navigationBar.categories.indexOf(c)
+            it = navigationBar.categories.indexOf(line[1])
             lm.append({
-                          "name": name,
-                          "version": "0.92.1-1",
-                          "status": "installed",
-                          "cathegory": c,
+                          "name": line[0],
+                          "version": line[2],
+                          "status": line[3] === "yes" ? true: false,
+                          "category": line[1],
                           "color": navigationBar.categoryColors[it]
                       })
         }
@@ -205,8 +203,8 @@ ApplicationWindow {
 
             Pane {
                 id:categoryBadge
-                width: grown ? gv.width : 50
-                height: grown ? gv.height / 5 : 50
+                width: grown ? gv.width - 35 : 25
+                height: grown ? gv.height / 5 : 25
                 Material.background: color
                 Material.elevation: 1
                 anchors {
@@ -237,6 +235,8 @@ ApplicationWindow {
 
                     applicationDelegateItem.grown = !applicationDelegateItem.grown
                     applicationDelegateItem.Material.elevation = 5
+                    applicationDelegateItem.forceActiveFocus()
+                    applicationDelegateItem.focus = true
 
                     if (applicationDelegateItem.grown) {
                         applicationDelegateItem.previousX = applicationDelegateItem.x
@@ -260,36 +260,59 @@ ApplicationWindow {
                 }
             }
 
-            Image {
+            Button {
+                id: processButton
+                width: 100
+                height: 50
+                Material.background: status ? Material.DeepOrange : Material.Green
+                //Material.elevation: 1
                 anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: parent.left
-                    leftMargin: 30
+                    bottom: parent.bottom
+                    right: parent.right
+
                 }
 
-                source: "image://application/" + name
+                Label {
+                    id: processButtonLabel
+                    anchors.centerIn: parent
+                    //Material.foreground: "#000000"
+                    text: status ? qsTr("remove") : qsTr("install")
+                }
             }
 
-            Column {
+            Row {
+                spacing: 10
                 anchors {
                     verticalCenter: parent.verticalCenter
-                    right: parent.right
-                    rightMargin: 30
+
+                }
+                Image {
+                    width: grown ? 128 : 64
+                    height: grown ? 128 : 64
+                    smooth: true
+                    mipmap: true
+                    antialiasing: true
+                    source: "image://application/" + name
                 }
 
-                Label {
-                    Material.foreground: "#000000"
-                    text: name
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    font.capitalization: Font.Capitalize
-                }
+                Column {
 
-                Label {
-                    Material.foreground: "#000000"
-                    text: "\n" + version + "\n" + status
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
+
+                    Label {
+                        //Material.foreground: "#000000"
+                        text: name
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        font.capitalization: Font.Capitalize
+                    }
+
+                    Label {
+                        visible: grown
+                        //Material.foreground: "#000000"
+                        text: version
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
                 }
             }
         }
