@@ -1,4 +1,5 @@
 #include "src/helper.h"
+#include "src/iconprovider.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
@@ -9,7 +10,9 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+    engine.addImageProvider(QLatin1String("application"), new IconProvider);
     engine.load(QUrl(QLatin1String("qrc:/ui/main.qml")));
+
 
     return app.exec();
 }

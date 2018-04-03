@@ -10,7 +10,8 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/helper.h \
     src/filehandler.h \
-    src/packagehandler.h
+    src/packagehandler.h \
+    src/iconprovider.h
 
 TARGET = ps
 

@@ -259,8 +259,24 @@ ApplicationWindow {
                     applicationDelegateItem.Material.elevation = 5
                 }
             }
+
+            Image {
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: 30
+                }
+
+                source: "image://application/" + name
+            }
+
             Column {
-                anchors.centerIn: parent
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                    rightMargin: 30
+                }
+
                 Label {
                     Material.foreground: "#000000"
                     text: name

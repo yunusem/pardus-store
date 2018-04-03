@@ -2,12 +2,13 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
+//import "ImageProviderCore"
 import ps.helper 1.0
 
 ApplicationWindow {
     id: test
     width: 400
-    height: 300
+    height: 600
     visible: true
 
     Helper {
@@ -41,6 +42,16 @@ ApplicationWindow {
                 btn.enabled = false
                 helper.remove("htop")
             }
+        }
+
+        Image {
+            source: "image://application/inkscape"
+        }
+        Image {
+            source: "image://application/firefox"
+        }
+        Image {
+            source: "image://application/atom"
         }
     }
 
