@@ -5,5 +5,7 @@
         <file>ui/NavigationBar.qml</file>
         <file>ui/test.qml</file>
         <file>ui/SearchBar.qml</file>
+        <file>ui/ApplicationDelegate.qml</file>
+        <file>ui/CategoryDelegate.qml</file>
     </qresource>
 </RCC>
