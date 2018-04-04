@@ -2,14 +2,15 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
+import QtGraphicalEffects 1.0
 
 Pane {
     id: applicationDelegateItem
-    z: grown ? 5 : 0
-    //Material.background: "#eeeeee"
-    Material.elevation: 5
-    width: grown ? gv.width - 10 : 220
-    height: grown ? gv.height - 10 : 220
+    z: ma.containsMouse ? 100 : 5
+    //Material.background: "#4c4c4c"
+    Material.elevation: ma.containsMouse ? 5 : 3
+    width: 220
+    height: 124
 
     property bool grown: false
     property int previousX
@@ -43,75 +44,52 @@ Pane {
         }
     }
 
-    Pane {
-        id:categoryBadge
-        width: grown ? gv.width - 35 : 25
-        height: grown ? gv.height / 5 : 25
-        Material.background: color
-        Material.elevation: 1
-        anchors {
-            top: parent.top
-            right: parent.right
-
-        }
-
-        Behavior on width {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 350
-            }
-        }
-
-        Behavior on height {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 350
-            }
-        }
-    }
 
     MouseArea {
-        id: ma2
-        anchors.fill: parent
+        id: ma
+        anchors.centerIn: parent
+        hoverEnabled: true
+        width: applicationDelegateItem.width
+        height: applicationDelegateItem.height
         onClicked: {
 
-            applicationDelegateItem.grown = !applicationDelegateItem.grown
-            applicationDelegateItem.Material.elevation = 5
-            applicationDelegateItem.forceActiveFocus()
-            applicationDelegateItem.focus = true
-
-            if (applicationDelegateItem.grown) {
-                applicationDelegateItem.previousX = applicationDelegateItem.x
-                applicationDelegateItem.previousY = applicationDelegateItem.y
-                applicationDelegateItem.x = 0
-                applicationDelegateItem.y = 0
-            } else {
-                applicationDelegateItem.x = applicationDelegateItem.previousX
-                applicationDelegateItem.y = applicationDelegateItem.previousY
-            }
 
         }
         onPressed: {
-            if(ma2.containsMouse) {
+            if(ma.containsMouse) {
                 applicationDelegateItem.Material.elevation = 0
+                dropShadow.opacity = 0.0
             }
         }
         onReleased: {
+            if(ma.containsMouse) {
+                applicationDelegateItem.Material.elevation = 5
+            } else {
+                applicationDelegateItem.Material.elevation = 3
+            }
 
-            applicationDelegateItem.Material.elevation = 5
+            dropShadow.opacity = 1.0
         }
     }
 
     Button {
         id: processButton
-        width: 100
-        height: 50
-        Material.background: status ? Material.DeepOrange : Material.Green
-        //Material.elevation: 1
+        width: 80
+        height: 40
+        opacity: ma.containsMouse ? 1.0 : 0.0
+        //Material.foreground: "white"
+        Material.background: status ? Material.Red : Material.Green
+
         anchors {
             bottom: parent.bottom
             right: parent.right
 
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 200
+            }
         }
 
         Label {
@@ -122,13 +100,13 @@ Pane {
         }
     }
 
-    Row {
-        spacing: 10
-        anchors {
-            verticalCenter: parent.verticalCenter
 
-        }
         Image {
+            id:appIcon
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+            }
             width: grown ? 128 : 64
             height: grown ? 128 : 64
             smooth: true
@@ -137,24 +115,37 @@ Pane {
             source: "image://application/" + name
         }
 
-        Column {
-
-
-            Label {
-                //Material.foreground: "#000000"
-                text: name
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.capitalization: Font.Capitalize
-            }
-
-            Label {
-                visible: grown
-                //Material.foreground: "#000000"
-                text: version
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
+        DropShadow {
+            id:dropShadow
+            //opacity: ma.containsMouse ? 0.0 : 1.0
+            anchors.fill: appIcon
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 8
+            samples: 17
+            color: "#80000000"
+            source: appIcon
         }
-    }
+
+        Label {
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+                left: appIcon.right
+            }
+            //Material.foreground: "#000000"
+            text: name
+            fontSizeMode: Text.HorizontalFit
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.Capitalize
+
+
+        }
+
+
+
+
+
 }

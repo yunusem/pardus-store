@@ -13,8 +13,36 @@ ApplicationWindow {
     title: qsTr("Pardus Store")
     flags: Qt.FramelessWindowHint
 
-    property string category : navigationBar.selectedCategory
+    property string category : selectedCategory
     property bool searchF: false
+    property string selectedCategory: qsTr("all")
+    property variant categories:
+        [qsTr("all"),
+        qsTr("internet"),
+        qsTr("office"),
+        qsTr("development"),
+        qsTr("reading"),
+        qsTr("graphics"),
+        qsTr("game"),
+        qsTr("music"),
+        qsTr("system"),
+        qsTr("video"),
+        qsTr("chat"),
+        qsTr("others")]
+
+    property variant categoryColors:
+        ["#FFCB08",
+        "#9E9E9E",
+        "#795548",
+        "#FF5722",
+        "#8BC34A",
+        "#FF9800",
+        "#009688",
+        "#E91E63",
+        "#673AB7",
+        "#03A9F4",
+        "#9C27B0",
+        "#8BC34A"]
 
     Helper {
         id: helper
@@ -45,12 +73,6 @@ ApplicationWindow {
 
         onReleased: {
 
-        }
-    }
-
-    Behavior on x {
-        NumberAnimation {
-            duration: 75
         }
     }
 
@@ -106,6 +128,11 @@ ApplicationWindow {
 
     }
 
+    ListModel {
+        id: lm
+
+    }
+
     onCategoryChanged: {
         lm.clear()
         if(category == "all") {
@@ -117,13 +144,13 @@ ApplicationWindow {
             for (var i = 0; i < list.length; i++) {
                 line = list[i].split(" ")
 
-                it = navigationBar.categories.indexOf(category)
+                it = categories.indexOf(category)
                 lm.append({
                               "name": line[0],
                               "version": line[1],
                               "status": line[2] === "yes" ? true: false,
                               "category": category,
-                              "color": navigationBar.categoryColors[it]
+                              "color": categoryColors[it]
                           })
             }
         }
@@ -131,10 +158,7 @@ ApplicationWindow {
     }
 
 
-    ListModel {
-        id: lm
 
-    }
 
     function fill() {
         var theList = helper.appList()
@@ -142,13 +166,13 @@ ApplicationWindow {
         var it = 0
         for (var i = 0; i < theList.length; i++) {
             line = theList[i].split(" ")
-            it = navigationBar.categories.indexOf(line[1])
+            it = categories.indexOf(line[1])
             lm.append({
                           "name": line[0],
                           "version": line[2],
                           "status": line[3] === "yes" ? true: false,
                           "category": line[1],
-                          "color": navigationBar.categoryColors[it]
+                          "color": categoryColors[it]
                       })
         }
     }
@@ -157,7 +181,7 @@ ApplicationWindow {
         id: gv
         clip: true
         cellWidth: gv.width / 5
-        cellHeight: gv.cellWidth
+        cellHeight: gv.cellWidth * 3 / 5
         visible: true
         interactive: count > 15 ? true : false
         width: main.width * 19 / 22

@@ -9,24 +9,10 @@ Pane {
     width: navima.containsMouse ? parent.width / 7 : parent.width / 21
     height: parent.height
     z : 100
-    Material.background: Material.BlueGrey
+    Material.background: Material.Indigo
     Material.elevation: 8
 
-    property string selectedCategory: qsTr("all")
-    property variant categories: [qsTr("all"),
-        qsTr("internet"),
-        qsTr("office"),
-        qsTr("development"),
-        qsTr("reading"),
-        qsTr("graphics"),
-        qsTr("game"),
-        qsTr("music"),
-        qsTr("system"),
-        qsTr("video"),
-        qsTr("chat"),
-        qsTr("others")]
 
-    property variant categoryColors: ["#FFCB08","#9E9E9E", "#795548", "#FF5722", "#8BC34A", "#FF9800", "#009688", "#E91E63", "#673AB7", "#03A9F4", "#9C27B0", "#8BC34A"]
 
     MouseArea {
         id: navima

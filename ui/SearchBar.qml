@@ -146,13 +146,13 @@ Pane {
                     var it = 0
                     for (var i = 0; i < list.length; i++) {
                         line = list[i].split(" ")
-                        it = navigationBar.categories.indexOf(line[1])
+                        it = categories.indexOf(line[1])
                         lm.append({
                                       "name": line[0],
                                       "version": line[2],
                                       "status": line[3] === "yes" ? true: false,
                                                                     "category": line[1],
-                                                                    "color": navigationBar.categoryColors[it]
+                                                                    "color": categoryColors[it]
                                   })
                     }
                 }
