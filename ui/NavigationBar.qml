@@ -9,8 +9,8 @@ Pane {
     width: navima.containsMouse ? parent.width / 7 : parent.width / 21
     height: parent.height
     z : 100
-    Material.background: Material.Indigo
-    Material.elevation: 8
+    Material.background: "#2c2c2c"
+    Material.elevation: 5
 
 
 
@@ -52,15 +52,18 @@ Pane {
         model: categoryListModel
 
         highlight: Rectangle {
-            color: "white"
+            color: "transparent"
+
             radius: 2
+            border.color: "#FFCB08"
             //z: 200
-            x:-10
-            width: 5
+            //x:-10
+            //width: 5
         }
         focus: true
         //highlightFollowsCurrentItem : true
         highlightMoveVelocity: 3600
+        highlightResizeVelocity: 3600
 
         delegate:  CategoryDelegate {
 

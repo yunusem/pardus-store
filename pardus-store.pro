@@ -1,4 +1,4 @@
-QT += qml quick widgets
+QT += qml quick widgets svg
 
 CONFIG += c++11
 
@@ -15,7 +15,8 @@ HEADERS += \
 
 TARGET = ps
 
-RESOURCES += qml.qrc file.qrc
+RESOURCES += qml.qrc file.qrc \
+    images.qrc
 
 DEFINES += QT_DEPRECATED_WARNINGS
 

@@ -9,7 +9,7 @@ Pane {
     id: searchPane
     width: 200
     height: 32
-    Material.background: Material.Grey
+    Material.background: "#2c2c2c"
     Material.elevation: 10
 
     property string prelist: ""

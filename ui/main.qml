@@ -44,6 +44,10 @@ ApplicationWindow {
         "#9C27B0",
         "#8BC34A"]
 
+    property variant specialApplications:
+        ["gnome-builder",
+        "xfce4-terminal"]
+
     Helper {
         id: helper
     }
@@ -149,8 +153,8 @@ ApplicationWindow {
                               "name": line[0],
                               "version": line[1],
                               "status": line[2] === "yes" ? true: false,
-                              "category": category,
-                              "color": categoryColors[it]
+                                                            "category": category,
+                                                            "color": categoryColors[it]
                           })
             }
         }
@@ -171,8 +175,8 @@ ApplicationWindow {
                           "name": line[0],
                           "version": line[2],
                           "status": line[3] === "yes" ? true: false,
-                          "category": line[1],
-                          "color": categoryColors[it]
+                                                        "category": line[1],
+                                                        "color": categoryColors[it]
                       })
         }
     }

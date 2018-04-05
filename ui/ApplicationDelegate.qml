@@ -112,7 +112,7 @@ Pane {
             smooth: true
             mipmap: true
             antialiasing: true
-            source: "image://application/" + name
+            source: "image://application/" + getCorrectName(name)
         }
 
         DropShadow {
@@ -134,18 +134,20 @@ Pane {
                 left: appIcon.right
             }
             //Material.foreground: "#000000"
-            text: name
+            text: name.replace("-", " ")
             fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
-
-
         }
 
-
-
-
+        function getCorrectName(appName) {
+            var i = specialApplications.indexOf(appName)
+            if (i != -1) {
+                return appName.split("-")[1]
+            }
+            return appName
+        }
 
 }
