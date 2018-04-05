@@ -9,8 +9,8 @@ Pane {
     id: searchPane
     width: 200
     height: 32
-    Material.background: "#2c2c2c"
-    Material.elevation: 10
+    //Material.background: "#2c2c2c"
+    Material.elevation: 3
 
     property string prelist: ""
 
@@ -26,6 +26,19 @@ Pane {
             easing.type: Easing.OutCirc
             duration: 200
         }
+    }
+
+
+    Image {
+        id: searchIcon
+        width: 28
+        height: 28
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+            leftMargin: -10
+        }
+        source: "qrc:/images/search.svg"
     }
 
 

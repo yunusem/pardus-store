@@ -22,5 +22,6 @@
         <file>images/shopping_cart.svg</file>
         <file>images/chat.svg</file>
         <file>images/internet.svg</file>
+        <file>images/search.svg</file>
     </qresource>
 </RCC>

@@ -4,101 +4,109 @@ import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
 
-Pane {
-    id: applicationDelegateItem
-    z: ma.containsMouse ? 100 : 5
-    //Material.background: "#4c4c4c"
-    Material.elevation: ma.containsMouse ? 5 : 3
-    width: 220
-    height: 124
+Item {
+    width: applicationList.cellWidth
+    height: applicationList.cellHeight
 
-    property bool grown: false
-    property int previousX
-    property int previousY
-
-    Behavior on width {
-        NumberAnimation {
-            easing.type: Easing.OutExpo
-            duration: 200
-        }
-    }
-
-    Behavior on height {
-        NumberAnimation {
-            easing.type: Easing.OutExpo
-            duration: 200
-        }
-    }
-
-    Behavior on x {
-        NumberAnimation {
-            easing.type: Easing.OutExpo
-            duration: 200
-        }
-    }
-
-    Behavior on y {
-        NumberAnimation {
-            easing.type: Easing.OutExpo
-            duration: 200
-        }
-    }
-
-
-    MouseArea {
-        id: ma
-        anchors.centerIn: parent
-        hoverEnabled: true
-        width: applicationDelegateItem.width
-        height: applicationDelegateItem.height
-        onClicked: {
-
-
-        }
-        onPressed: {
-            if(ma.containsMouse) {
-                applicationDelegateItem.Material.elevation = 0
-                dropShadow.opacity = 0.0
-            }
-        }
-        onReleased: {
-            if(ma.containsMouse) {
-                applicationDelegateItem.Material.elevation = 5
-            } else {
-                applicationDelegateItem.Material.elevation = 3
-            }
-
-            dropShadow.opacity = 1.0
-        }
-    }
-
-    Button {
-        id: processButton
-        width: 80
-        height: 40
-        opacity: ma.containsMouse ? 1.0 : 0.0
-        //Material.foreground: "white"
-        Material.background: status ? Material.Red : Material.Green
-
+    Pane {
+        id: applicationDelegateItem
+        z: ma.containsMouse ? 100 : 5
+        //Material.background: "#4c4c4c"
+        Material.elevation: ma.containsMouse ? 5 : 3
+        //width: 220
+        //height: 124
         anchors {
-            bottom: parent.bottom
-            right: parent.right
-
+            margins: 10
+            fill: parent
         }
 
-        Behavior on opacity {
+        property bool grown: false
+        property int previousX
+        property int previousY
+
+        Behavior on width {
             NumberAnimation {
+                easing.type: Easing.OutExpo
                 duration: 200
             }
         }
 
-        Label {
-            id: processButtonLabel
-            anchors.centerIn: parent
-            //Material.foreground: "#000000"
-            text: status ? qsTr("remove") : qsTr("install")
+        Behavior on height {
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 200
+            }
         }
-    }
+
+        Behavior on x {
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 200
+            }
+        }
+
+        Behavior on y {
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 200
+            }
+        }
+
+
+        MouseArea {
+            id: ma
+            anchors.centerIn: parent
+            hoverEnabled: true
+            width: applicationDelegateItem.width
+            height: applicationDelegateItem.height
+            onClicked: {
+                selectedApplication = name
+                swipeView.currentIndex = 2
+            }
+            onPressed: {
+                if(ma.containsMouse) {
+                    applicationDelegateItem.Material.elevation = 0
+                    dropShadow.opacity = 0.0
+                }
+            }
+            onReleased: {
+                if(ma.containsMouse) {
+                    applicationDelegateItem.Material.elevation = 5
+                } else {
+                    applicationDelegateItem.Material.elevation = 3
+                }
+
+                dropShadow.opacity = 1.0
+            }
+        }
+
+        Button {
+            id: processButton
+            width: 80
+            height: 40
+            opacity: ma.containsMouse ? 1.0 : 0.0
+            //Material.foreground: "white"
+            Material.background: status ? Material.Red : Material.Green
+
+            anchors {
+                bottom: parent.bottom
+                right: parent.right
+
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 200
+                }
+            }
+
+            Label {
+                id: processButtonLabel
+                anchors.centerIn: parent
+                //Material.foreground: "#000000"
+                text: status ? qsTr("remove") : qsTr("install")
+            }
+        }
 
 
         Image {
@@ -107,8 +115,8 @@ Pane {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
             }
-            width: grown ? 128 : 64
-            height: grown ? 128 : 64
+            width: 64
+            height: 64
             smooth: true
             mipmap: true
             antialiasing: true
@@ -142,12 +150,13 @@ Pane {
             font.capitalization: Font.Capitalize
         }
 
-        function getCorrectName(appName) {
-            var i = specialApplications.indexOf(appName)
-            if (i != -1) {
-                return appName.split("-")[1]
-            }
-            return appName
-        }
 
+    }
+    function getCorrectName(appName) {
+        var i = specialApplications.indexOf(appName)
+        if (i != -1) {
+            return appName.split("-")[1]
+        }
+        return appName
+    }
 }

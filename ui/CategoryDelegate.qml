@@ -78,8 +78,14 @@ Item {
         width: categoryDelegateItem.width
         height: categoryDelegateItem.height
         onClicked: {
+            selectedApplication = ""
             selectedCategory = name
             navigationBarListView.currentIndex = categories.indexOf(name)
+            if (navigationBarListView.currentIndex == 0) {
+                swipeView.currentIndex = 0
+            } else {
+                swipeView.currentIndex = 1
+            }
         }
         onPressed: {
             categoryDelegateItem.Material.elevation = 0

@@ -10,9 +10,9 @@ Pane {
     height: parent.height
     z : 100
     Material.background: "#2c2c2c"
-    Material.elevation: 5
+    Material.elevation: 3
 
-
+    property alias currentIndex : navigationBarListView.currentIndex
 
     MouseArea {
         id: navima

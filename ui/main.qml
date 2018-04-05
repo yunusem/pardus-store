@@ -12,12 +12,14 @@ ApplicationWindow {
     visible: true
     title: qsTr("Pardus Store")
     flags: Qt.FramelessWindowHint
-
+    color: "transparent"
     property string category : selectedCategory
     property bool searchF: false
-    property string selectedCategory: qsTr("all")
+    property string selectedApplication: ""
+    property string selectedCategory: qsTr("home")
     property variant categories:
-        [qsTr("all"),
+        [qsTr("home"),
+        qsTr("all"),
         qsTr("internet"),
         qsTr("office"),
         qsTr("development"),
@@ -47,16 +49,35 @@ ApplicationWindow {
     property variant specialApplications:
         ["gnome-builder",
         "xfce4-terminal"]
+    Pane {
+        id: mainBackground
+        anchors.fill: parent
+        Material.elevation: 1
 
-    Helper {
-        id: helper
     }
 
-    MouseArea{
+    Pane {
+        id: topDock
+        width: parent.width * 20 / 21
+        height: parent.height / 15
+        z: 90
+        anchors {
+            top: parent.top
+            right: parent.right
+        }
+
+        Material.elevation: 3
+
+
+
+
+    }
+
+    MouseArea {
         id: ma
         property real cposx: 1.0
         property real cposy: 1.0
-
+        z: 91
         height: main.height / 15
         width: main.width
         anchors {
@@ -81,51 +102,104 @@ ApplicationWindow {
     }
 
     Pane {
-        id: exitBtn
-        width: 32
-        height: 32
-        Material.background: Material.Red
-        Material.elevation: 2
-        Label {
-            anchors.centerIn: parent
-            Material.foreground: "white"
-            text: "X"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-        }
-        anchors {
-            top: parent.top
+        id: bottomDock
+        width: parent.width * 20 / 21
+        height: parent.height / 15
+        z: 90
+        anchors  {
+            bottom: parent.bottom
             right: parent.right
         }
-        MouseArea {
-            id: exitBtnMa
-            width: 32
-            height: 32
-            anchors.centerIn: parent
-            onPressed: {
-                if (exitBtnMa.containsMouse) {
-                    exitBtn.Material.elevation = 0
+
+        Material.elevation: 3
+
+        PageIndicator {
+            id: indicator
+            interactive: true
+            count: selectedApplication === "" ? 2 : 3
+            currentIndex: swipeView.currentIndex
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            onCurrentIndexChanged: {
+                swipeView.currentIndex = indicator.currentIndex
+
+                if(currentIndex == 1) {
+                    if(navigationBar.currentIndex == 0) {
+                        navigationBar.currentIndex = 1
+                        selectedCategory = qsTr("all")
+                        selectedApplication = ""
+                    }
+                } else if (currentIndex == 0) {
+                    navigationBar.currentIndex = 0
+                    selectedApplication = ""
                 }
             }
-            onReleased: {
-                exitBtn.Material.elevation = 2
-            }
-            onClicked: {
-                Qt.quit()
-            }
+
         }
     }
-
 
     SearchBar {
         id: searchBar
+        z: 100
         anchors {
             top: parent.top
+            topMargin: 10
             horizontalCenter: parent.horizontalCenter
+            horizontalCenterOffset: main.width / 40
 
         }
 
     }
+
+    Helper {
+        id: helper
+    }
+
+    SwipeView {
+        id: swipeView
+        width: main.width * 20 / 21
+        height: main.height * 13 / 15
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            //rightMargin: 32
+        }
+        currentIndex: 0
+        Page {
+            width: swipeView.width
+            height: swipeView.height
+            Home {
+                id: homePage
+            }
+        }
+
+        Page {
+            width: swipeView.width
+            height: swipeView.height
+            ApplicationList {
+               id: applicationListPage
+            }
+        }
+
+        Page {
+            width: swipeView.width
+            height: swipeView.height
+            ApplicationDetail {
+                id: applicationDetailPage
+            }
+        }
+
+        onCurrentIndexChanged: {
+
+        }
+    }
+
+
+
+
+
+
 
     NavigationBar {
         id: navigationBar
@@ -153,8 +227,8 @@ ApplicationWindow {
                               "name": line[0],
                               "version": line[1],
                               "status": line[2] === "yes" ? true: false,
-                                                            "category": category,
-                                                            "color": categoryColors[it]
+                              "category": category,
+                              "color": categoryColors[it]
                           })
             }
         }
@@ -175,34 +249,46 @@ ApplicationWindow {
                           "name": line[0],
                           "version": line[2],
                           "status": line[3] === "yes" ? true: false,
-                                                        "category": line[1],
-                                                        "color": categoryColors[it]
+                          "category": line[1],
+                          "color": categoryColors[it]
                       })
         }
     }
 
-    GridView {
-        id: gv
-        clip: true
-        cellWidth: gv.width / 5
-        cellHeight: gv.cellWidth * 3 / 5
-        visible: true
-        interactive: count > 15 ? true : false
-        width: main.width * 19 / 22
-        height: main.height * 13 / 15
+    Pane {
+        id: exitBtn
+        width: 32
+        height: 32
+        z: 100
+        Material.background: Material.Red
+        Material.elevation: 1
+        Label {
+            anchors.centerIn: parent
+            Material.foreground: "white"
+            text: "X"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
         anchors {
-            verticalCenter: parent.verticalCenter
+            top: parent.top
             right: parent.right
-            rightMargin: main.width / 28
         }
-        model: lm
-
-        add: Transition {
-            NumberAnimation { properties: "x,y"; duration: 200 ; easing.type: Easing.OutExpo}
-        }
-
-        delegate: ApplicationDelegate{
-
+        MouseArea {
+            id: exitBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (exitBtnMa.containsMouse) {
+                    exitBtn.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                exitBtn.Material.elevation = 2
+            }
+            onClicked: {
+                Qt.quit()
+            }
         }
     }
 
