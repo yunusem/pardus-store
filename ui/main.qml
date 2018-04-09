@@ -163,7 +163,6 @@ ApplicationWindow {
         anchors {
             verticalCenter: parent.verticalCenter
             right: parent.right
-            //rightMargin: 32
         }
         currentIndex: 0
         Page {
@@ -182,22 +181,30 @@ ApplicationWindow {
             }
         }
 
-        Page {
-            width: swipeView.width
-            height: swipeView.height
-            ApplicationDetail {
-                id: applicationDetailPage
-            }
-        }
+
 
         onCurrentIndexChanged: {
 
         }
     }
 
+    Page {
+        id: applicationDetailPage
+        visible: selectedApplication === "" ? false : true
+        width: swipeView.width
+        height: swipeView.height
+        ApplicationDetail {
 
+        }
+    }
 
-
+    onSelectedApplicationChanged: {
+        if(selectedApplication === "") {
+            swipeView.removeItem(2)
+        } else {
+            swipeView.addItem(applicationDetailPage)
+        }
+    }
 
 
 

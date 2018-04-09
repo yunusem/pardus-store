@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
-
+import QtGraphicalEffects 1.0
 
 Pane {
     id: searchPane
@@ -39,6 +39,18 @@ Pane {
             leftMargin: -10
         }
         source: "qrc:/images/search.svg"
+    }
+
+    DropShadow {
+        id:ds
+        visible: true
+        anchors.fill: searchIcon
+        horizontalOffset: 3
+        verticalOffset: 3
+        radius: 8
+        samples: 17
+        color: "#ff000000"
+        source: searchIcon
     }
 
 
