@@ -8,6 +8,14 @@ Item {
     width: applicationList.cellWidth
     height: applicationList.cellHeight
 
+    property bool applicationStatus: false
+
+
+
+    Component.onCompleted: {
+        applicationStatus = status
+    }
+
     Pane {
         id: applicationDelegateItem
         z: ma.containsMouse ? 100 : 5
@@ -19,10 +27,7 @@ Item {
             margins: 10
             fill: parent
         }
-
-        property bool grown: false
-        property int previousX
-        property int previousY
+        property string lastProcess: main.lastProcess
 
         Behavior on width {
             NumberAnimation {
@@ -80,18 +85,35 @@ Item {
             }
         }
 
+        onLastProcessChanged: {
+            if(lastProcess.search(name) == 0) {
+                var s = lastProcess.split(" ")
+                if (s[1] === "true") {
+                  applicationStatus = false
+                } else {
+                  applicationStatus = true
+                }
+                processButton.enabled = true
+            }
+        }
+
         Button {
             id: processButton
             width: 80
             height: 40
             opacity: ma.containsMouse ? 1.0 : 0.0
             //Material.foreground: "white"
-            Material.background: status ? Material.Red : Material.Green
+            Material.background: applicationStatus ? Material.Red : Material.Green
 
             anchors {
                 bottom: parent.bottom
                 right: parent.right
 
+            }
+
+            onClicked: {
+                processQueue.push(name + " " + applicationStatus)
+                enabled = false
             }
 
             Behavior on opacity {
@@ -104,7 +126,7 @@ Item {
                 id: processButtonLabel
                 anchors.centerIn: parent
                 //Material.foreground: "#000000"
-                text: status ? qsTr("remove") : qsTr("install")
+                text: applicationStatus ? qsTr("remove") : qsTr("install")
             }
         }
 
@@ -152,11 +174,5 @@ Item {
 
 
     }
-    function getCorrectName(appName) {
-        var i = specialApplications.indexOf(appName)
-        if (i != -1) {
-            return appName.split("-")[1]
-        }
-        return appName
-    }
+
 }

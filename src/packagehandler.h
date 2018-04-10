@@ -11,7 +11,7 @@ class PackageHandler : public QObject
     Q_OBJECT
 public:
     explicit PackageHandler(QObject *parent = 0);
-
+    ~PackageHandler();
 private:
     QProcess *p;
 

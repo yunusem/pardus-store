@@ -10,9 +10,12 @@ ApplicationWindow {
     minimumWidth: 1366
     minimumHeight: 768
     visible: true
-    title: qsTr("Pardus Store")
+    title: "Pardus" + " " + qsTr("Store")
     flags: Qt.FramelessWindowHint
     color: "transparent"
+    property bool isThereOnGoingProcess: false
+    property variant processQueue: []
+    property string lastProcess: ""
     property string category : selectedCategory
     property bool searchF: false
     property string selectedApplication: ""
@@ -30,21 +33,7 @@ ApplicationWindow {
         qsTr("system"),
         qsTr("video"),
         qsTr("chat"),
-        qsTr("others")]
-
-    property variant categoryColors:
-        ["#FFCB08",
-        "#9E9E9E",
-        "#795548",
-        "#FF5722",
-        "#8BC34A",
-        "#FF9800",
-        "#009688",
-        "#E91E63",
-        "#673AB7",
-        "#03A9F4",
-        "#9C27B0",
-        "#8BC34A"]
+        qsTr("others")]    
 
     property variant specialApplications:
         ["gnome-builder",
@@ -101,42 +90,51 @@ ApplicationWindow {
         }
     }
 
-    Pane {
+    BottomDock {
         id: bottomDock
-        width: parent.width * 20 / 21
-        height: parent.height / 15
-        z: 90
-        anchors  {
-            bottom: parent.bottom
-            right: parent.right
+
+        BusyIndicator {
+            id: busy
+            running: isThereOnGoingProcess
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+            }
         }
 
-        Material.elevation: 3
+        Image {
+            id: appIconProcess
+            enabled: false
+            anchors.centerIn: busy
+            opacity: isThereOnGoingProcess ? 1.0 : 0.0
+            width: 30
+            height: 30
 
-        PageIndicator {
-            id: indicator
-            interactive: true
-            count: selectedApplication === "" ? 2 : 3
-            currentIndex: swipeView.currentIndex
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            onCurrentIndexChanged: {
-                swipeView.currentIndex = indicator.currentIndex
-
-                if(currentIndex == 1) {
-                    if(navigationBar.currentIndex == 0) {
-                        navigationBar.currentIndex = 1
-                        selectedCategory = qsTr("all")
-                        selectedApplication = ""
-                    }
-                } else if (currentIndex == 0) {
-                    navigationBar.currentIndex = 0
-                    selectedApplication = ""
+            Behavior on opacity {
+                NumberAnimation {
+                    easing.type: Easing.OutExpo
+                    duration: 200
                 }
             }
+        }
+
+        Label {
+            id: processOutputLabel
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: busy.right
+                leftMargin: 10
+            }
+            fontSizeMode: Text.HorizontalFit
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.Capitalize
+            enabled: false
+            text: ""
 
         }
+
     }
 
     SearchBar {
@@ -154,6 +152,21 @@ ApplicationWindow {
 
     Helper {
         id: helper
+        onProcessingFinished: {
+            var s = processQueue[0].split(" ")
+            var appName = s[0]
+            var duty = s[1]
+            var dutyText = ""
+            if (duty === "true") {
+                dutyText = qsTr("removed")
+            } else {
+                dutyText = qsTr("installed")
+            }
+
+            processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
+            lastProcess = processQueue.shift()
+            isThereOnGoingProcess = false
+        }
     }
 
     SwipeView {
@@ -227,15 +240,12 @@ ApplicationWindow {
             var it = 0
             var line = ""
             for (var i = 0; i < list.length; i++) {
-                line = list[i].split(" ")
-
-                it = categories.indexOf(category)
+                line = list[i].split(" ")                
                 lm.append({
                               "name": line[0],
                               "version": line[1],
                               "status": line[2] === "yes" ? true: false,
-                              "category": category,
-                              "color": categoryColors[it]
+                              "category": category
                           })
             }
         }
@@ -250,15 +260,113 @@ ApplicationWindow {
         var line = ""
         var it = 0
         for (var i = 0; i < theList.length; i++) {
-            line = theList[i].split(" ")
-            it = categories.indexOf(line[1])
+            line = theList[i].split(" ")            
             lm.append({
                           "name": line[0],
                           "version": line[2],
                           "status": line[3] === "yes" ? true: false,
-                          "category": line[1],
-                          "color": categoryColors[it]
+                          "category": line[1]
+
                       })
+        }
+    }
+
+    function getCorrectName(appName) {
+        var i = specialApplications.indexOf(appName)
+        if (i != -1) {
+            return appName.split("-")[1]
+        }
+        return appName
+    }
+
+
+    Timer {
+        id:timer
+        interval: 4000
+        onTriggered: {
+            var s = processQueue[0].split(" ")
+            var appName = s[0]
+            var duty = s[1]
+            var dutyText = ""
+            if (duty === "true") {
+                dutyText = qsTr("removed")
+            } else {
+                dutyText = qsTr("installed")
+            }
+
+            processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
+            processQueue.shift()
+            isThereOnGoingProcess = false
+
+        }
+
+    }
+
+    Timer {
+        id:queueCleaner
+        interval: 210
+        running: true
+        repeat: true
+        onTriggered: {
+            if(processQueue.length > 0 && !isThereOnGoingProcess) {
+                isThereOnGoingProcess = true
+                var s = processQueue[0].split(" ")
+                var appName = s[0]
+                var duty = s[1]
+                var dutyText = ""
+                if (duty === "true") {
+                    dutyText = qsTr("removing")
+                    busy.Material.accent = Material.Red
+                    helper.remove(appName)
+                } else {
+                    dutyText = qsTr("installing")
+                    busy.Material.accent = Material.Green
+                    helper.install(appName)
+                }
+
+                processOutputLabel.text = dutyText + " " + appName + " ..."
+                appIconProcess.source = "image://application/" + getCorrectName(appName)
+
+            }
+        }
+    }
+
+    Pane {
+        id: minimizeBtn
+        width: 32
+        height: 32
+        z: 100
+        Material.background: "#2c2c2c"
+        Material.elevation: 1
+        Label {
+            anchors.centerIn: parent
+            Material.foreground: "white"
+            text: "-"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 20
+        }
+        anchors {
+            top: parent.top
+            right: exitBtn.left
+            rightMargin: 2
+        }
+        MouseArea {
+            id: minimizeBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (minimizeBtnMa.containsMouse) {
+                    minimizeBtn.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                minimizeBtn.Material.elevation = 2
+            }
+            onClicked: {
+                main.showMinimized()
+            }
         }
     }
 
@@ -275,6 +383,7 @@ ApplicationWindow {
             text: "X"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
+            font.bold: true
         }
         anchors {
             top: parent.top
@@ -298,8 +407,6 @@ ApplicationWindow {
             }
         }
     }
-
-
 }
 //
 

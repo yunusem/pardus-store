@@ -9,5 +9,6 @@
         <file>ui/Home.qml</file>
         <file>ui/ApplicationList.qml</file>
         <file>ui/ApplicationDetail.qml</file>
+        <file>ui/BottomDock.qml</file>
     </qresource>
 </RCC>

@@ -2,17 +2,22 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QByteArray>
-
+#include <QDebug>
 //#include <apt-pkg/pkgcache.h>
 //#include <apt-pkg/dpkgpm.h>
 
 PackageHandler::PackageHandler(QObject *parent) : QObject(parent)
 {
-    p = new QProcess(this);
+    p = new QProcess();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert("LC_ALL","C");
     p->setEnvironment(env.toStringList());
     connect(p,SIGNAL(finished(int)),this,SIGNAL(finished(int)));
+}
+
+PackageHandler::~PackageHandler()
+{
+    p->deleteLater();
 }
 
 void PackageHandler::install(const QString pkg)
@@ -27,15 +32,16 @@ void PackageHandler::remove(const QString pkg)
 
 QString PackageHandler::getPolicy(const QString pkg) const
 {
-    QProcess pr;
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("LC_ALL","C");
-    pr.setEnvironment(env.toStringList());
-    pr.start("apt-cache policy " + pkg);
+    //QProcess pr;
+    //QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    //env.insert("LC_ALL","C");
+    //pr.setEnvironment(env.toStringList());
+    p->start("apt-cache policy " + pkg);
 
-    pr.waitForFinished();
+    p->waitForFinished();
 
-    QString out = QString::fromLocal8Bit(pr.readAllStandardOutput());
+    QString out = QString::fromLatin1(p->readAllStandardOutput());
+    p->close();
     return out;
 }
 QByteArray PackageHandler::getError()

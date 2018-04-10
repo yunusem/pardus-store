@@ -37,7 +37,7 @@ Pane {
 
     Component.onCompleted: {
         for (var i = 0; i < categories.length; i++) {
-            categoryListModel.append({"name" : categories[i], "color": categoryColors[i]})
+            categoryListModel.append({"name" : categories[i]})
         }
     }
 

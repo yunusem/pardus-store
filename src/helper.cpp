@@ -23,6 +23,7 @@ bool Helper::processing() const
 
 QStringList Helper::appList()
 {
+    ldetail = this->getDetails();
     QStringList list;
     for(int i = 0; i < l.length(); i++) {
         list.append(l.at(i) + " " + ldetail.at(i));
@@ -65,6 +66,11 @@ QStringList Helper::getDetails() const
         detail = "";
     }
     return list;
+}
+
+void Helper::updateDetails()
+{
+    ldetail = this->getDetails();
 }
 
 QStringList Helper::getApplicationsByCategory(const QString c)
@@ -122,13 +128,14 @@ void Helper::remove(const QString pkg)
 
 void Helper::packageProcessFinished(int code)
 {
-    if(code == 0) {
-        emit processingFinished();
-        qDebug() << ph->getOutput();
+    if(code == 0) {        
+        //qDebug() << ph->getOutput();
+
     } else {
         qDebug() << ph->getError();
     }
-
+    emit processingFinished();
     p = false;
+    //updateDetails();
 
 }

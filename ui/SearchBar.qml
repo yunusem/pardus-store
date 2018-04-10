@@ -125,7 +125,7 @@ Pane {
         visible: main.searchF
         opacity: searchF ? 1 : 0
 
-        color: "white"
+        //color: "white"
 
         placeholderText: "Search an application"
         anchors.centerIn: parent
@@ -171,13 +171,13 @@ Pane {
                     var it = 0
                     for (var i = 0; i < list.length; i++) {
                         line = list[i].split(" ")
-                        it = categories.indexOf(line[1])
+
                         lm.append({
                                       "name": line[0],
                                       "version": line[2],
                                       "status": line[3] === "yes" ? true: false,
                                                                     "category": line[1],
-                                                                    "color": categoryColors[it]
+
                                   })
                     }
                 }

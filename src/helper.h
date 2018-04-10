@@ -30,6 +30,7 @@ private:
 private slots:
     void packageProcessFinished(int code);
     QStringList getDetails() const;
+    void updateDetails();
 
 signals:
     void processingFinished();
