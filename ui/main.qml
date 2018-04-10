@@ -125,6 +125,7 @@ ApplicationWindow {
                 left: busy.right
                 leftMargin: 10
             }
+            opacity: 1.0
             fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
@@ -132,6 +133,29 @@ ApplicationWindow {
             font.capitalization: Font.Capitalize
             enabled: false
             text: ""
+
+            onTextChanged: {
+                opacity = 1.0
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    easing.type: Easing.OutExpo
+                    duration: 200
+                }
+            }
+
+            Timer {
+                id: outputTimer
+                interval: 8000
+                repeat: true
+                running: true
+                onTriggered: {
+                    if(!isThereOnGoingProcess) {
+                        processOutputLabel.opacity = 0.0
+                    }
+                }
+            }
 
         }
 
@@ -277,29 +301,6 @@ ApplicationWindow {
             return appName.split("-")[1]
         }
         return appName
-    }
-
-
-    Timer {
-        id:timer
-        interval: 4000
-        onTriggered: {
-            var s = processQueue[0].split(" ")
-            var appName = s[0]
-            var duty = s[1]
-            var dutyText = ""
-            if (duty === "true") {
-                dutyText = qsTr("removed")
-            } else {
-                dutyText = qsTr("installed")
-            }
-
-            processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
-            processQueue.shift()
-            isThereOnGoingProcess = false
-
-        }
-
     }
 
     Timer {
