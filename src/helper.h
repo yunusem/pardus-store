@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QString>
+#include "applicationlistmodel.h"
 
 class FileHandler;
 class PackageHandler;
@@ -15,9 +16,9 @@ class Helper : public QObject
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
-    Q_INVOKABLE QStringList appList();
-    Q_INVOKABLE QStringList getApplicationsByCategory(const QString c);
-    Q_INVOKABLE QStringList getApplicationsByName(const QString c);
+
+    //Q_INVOKABLE QStringList getApplicationsByCategory(const QString c);
+    //Q_INVOKABLE QStringList getApplicationsByName(const QString c);
     Q_INVOKABLE void install(const QString pkg);
     Q_INVOKABLE void remove(const QString pkg);
 private:
@@ -26,6 +27,8 @@ private:
     PackageHandler *ph;
     QStringList l;
     QStringList ldetail;
+    ListCover lc;
+    void fillTheList();
 
 private slots:
     void packageProcessFinished(int code);

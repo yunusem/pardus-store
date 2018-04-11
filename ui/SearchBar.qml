@@ -154,37 +154,39 @@ Pane {
 
         onTextChanged: {
 
-            if (searchField.text === "") {
-                lm.clear()
-                fill()
+//            if (searchField.text === "") {
+//                lm.clear()
+//                fill()
 
-            } else {
+//            } else {
 
-                var list = helper.getApplicationsByName(searchField.text)
+//                var list = helper.getApplicationsByName(searchField.text)
 
-                var test = String(list)
-                if (test === searchPane.prelist){
-                } else {
-                    lm.clear()
-                    searchPane.prelist = test
-                    var line = ""
-                    var it = 0
-                    for (var i = 0; i < list.length; i++) {
-                        line = list[i].split(" ")
+//                var test = String(list)
+//                if (test === searchPane.prelist){
+//                } else {
+//                    lm.clear()
+//                    searchPane.prelist = test
+//                    var line = ""
+//                    var it = 0
+//                    for (var i = 0; i < list.length; i++) {
+//                        line = list[i].split(" ")
 
-                        lm.append({
-                                      "name": line[0],
-                                      "version": line[2],
-                                      "status": line[3] === "yes" ? true: false,
-                                                                    "category": line[1],
+//                        lm.append({
+//                                      "name": line[0],
+//                                      "version": line[2],
+//                                      "status": line[3] === "yes" ? true: false,
+//                                                                    "category": line[1],
 
-                                  })
-                    }
-                }
+//                                  })
+//                    }
+//                }
 
 
 
-            }
+//            }
+
+            applicationModel.setFilterString(searchField.text)
 
         }
 

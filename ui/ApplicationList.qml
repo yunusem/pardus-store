@@ -17,7 +17,7 @@ GridView {
 
 
     }
-    model: lm
+    model: applicationModel
 
     add: Transition {
         NumberAnimation { properties: "x,y"; duration: 200 ; easing.type: Easing.OutExpo}

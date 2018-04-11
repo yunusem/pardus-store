@@ -256,44 +256,27 @@ ApplicationWindow {
     }
 
     onCategoryChanged: {
-        lm.clear()
-        if(category == "all") {
-            fill()
-        } else {
-            var list = helper.getApplicationsByCategory(category)
-            var it = 0
-            var line = ""
-            for (var i = 0; i < list.length; i++) {
-                line = list[i].split(" ")                
-                lm.append({
-                              "name": line[0],
-                              "version": line[1],
-                              "status": line[2] === "yes" ? true: false,
-                              "category": category
-                          })
-            }
-        }
-
+//        lm.clear()
+//        if(category == "all") {
+//            fill()
+//        } else {
+//            var list = helper.getApplicationsByCategory(category)
+//            var it = 0
+//            var line = ""
+//            for (var i = 0; i < list.length; i++) {
+//                line = list[i].split(" ")
+//                lm.append({
+//                              "name": line[0],
+//                              "version": line[1],
+//                              "status": line[2] === "yes" ? true: false,
+//                              "category": category
+//                          })
+//            }
+//        }
+        //applicationModel.setFilterString(category.toString())
     }
 
 
-
-
-    function fill() {
-        var theList = helper.appList()
-        var line = ""
-        var it = 0
-        for (var i = 0; i < theList.length; i++) {
-            line = theList[i].split(" ")            
-            lm.append({
-                          "name": line[0],
-                          "version": line[2],
-                          "status": line[3] === "yes" ? true: false,
-                          "category": line[1]
-
-                      })
-        }
-    }
 
     function getCorrectName(appName) {
         var i = specialApplications.indexOf(appName)

@@ -11,7 +11,7 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false)
     ph = new PackageHandler(this);
     l = fh->readLines();    
     ldetail = this->getDetails();
-
+    this->fillTheList();
     connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
 
 }
@@ -21,14 +21,30 @@ bool Helper::processing() const
     return p;
 }
 
-QStringList Helper::appList()
-{
-    ldetail = this->getDetails();
+void Helper::fillTheList()
+{    
     QStringList list;
     for(int i = 0; i < l.length(); i++) {
         list.append(l.at(i) + " " + ldetail.at(i));
     }
-    return list;
+
+    QString line = "";
+    QString name = "";
+    QString version = "";
+    bool stat = false;
+    QString category = "";
+
+    foreach(line, list) {
+        name = line.split(" ")[0];
+        category = line.split(" ")[1];
+        version = line.split(" ")[2];
+        if (line.split(" ")[3] == "yes") {
+            stat = true;
+        } else {
+            stat = false;
+        }
+        lc.l->addData(Application(name,version,stat,category));
+    }
 }
 
 QStringList Helper::getDetails() const
@@ -72,7 +88,7 @@ void Helper::updateDetails()
 {
     ldetail = this->getDetails();
 }
-
+/*
 QStringList Helper::getApplicationsByCategory(const QString c)
 {
     QStringList out;
@@ -111,6 +127,7 @@ QStringList Helper::getApplicationsByName(const QString c)
 
     return firstPortion + secondPortion;
 }
+*/
 
 void Helper::install(const QString pkg)
 {
