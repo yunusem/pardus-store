@@ -88,46 +88,6 @@ void Helper::updateDetails()
 {
     ldetail = this->getDetails();
 }
-/*
-QStringList Helper::getApplicationsByCategory(const QString c)
-{
-    QStringList out;
-    QStringList sl;
-    for(int i = 0; i < l.length(); i++) {
-        sl = l.at(i).split(" ");
-        if (sl.at(1) == c) {
-            out.append(sl.at(0) + " " + ldetail.at(i));
-        }
-    }
-    return out;
-}
-
-QStringList Helper::getApplicationsByName(const QString c)
-{
-
-    QStringList sl;
-    QStringList firstPortion;
-    QStringList secondPortion;
-    QString application;
-    QString category;
-    QStringList mainList = this->appList();
-    foreach (QString line, mainList) {
-        sl = line.split(" ");
-        application = sl.at(0);
-        category = sl.at(1);
-
-        if(application.contains(c)) {
-            if(application.mid(0,c.count()-1) == c) {
-                firstPortion.append(line);
-            } else {
-                secondPortion.append(line);
-            }
-        }
-    }
-
-    return firstPortion + secondPortion;
-}
-*/
 
 void Helper::install(const QString pkg)
 {
@@ -153,6 +113,4 @@ void Helper::packageProcessFinished(int code)
     }
     emit processingFinished();
     p = false;
-    //updateDetails();
-
 }

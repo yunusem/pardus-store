@@ -31,11 +31,7 @@ void PackageHandler::remove(const QString pkg)
 }
 
 QString PackageHandler::getPolicy(const QString pkg) const
-{
-    //QProcess pr;
-    //QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    //env.insert("LC_ALL","C");
-    //pr.setEnvironment(env.toStringList());
+{    
     p->start("apt-cache policy " + pkg);
 
     p->waitForFinished();

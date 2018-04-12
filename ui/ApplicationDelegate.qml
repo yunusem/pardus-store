@@ -8,21 +8,12 @@ Item {
     width: applicationList.cellWidth
     height: applicationList.cellHeight
 
-    property bool applicationStatus: false
-
-
-
-    Component.onCompleted: {
-        applicationStatus = status
-    }
+    property bool applicationStatus: status
 
     Pane {
         id: applicationDelegateItem
-        z: ma.containsMouse ? 100 : 5
-        //Material.background: "#4c4c4c"
-        Material.elevation: ma.containsMouse ? 5 : 3
-        //width: 220
-        //height: 124
+        z: ma.containsMouse ? 100 : 5        
+        Material.elevation: ma.containsMouse ? 5 : 3        
         anchors {
             margins: 10
             fill: parent
@@ -158,12 +149,12 @@ Item {
         }
 
         Label {
+            id: appNameLabel
             anchors {
                 verticalCenter: parent.verticalCenter
                 right: parent.right
                 left: appIcon.right
-            }
-            //Material.foreground: "#000000"
+            }            
             text: name.replace("-", " ")
             fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap

@@ -17,8 +17,6 @@ public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
 
-    //Q_INVOKABLE QStringList getApplicationsByCategory(const QString c);
-    //Q_INVOKABLE QStringList getApplicationsByName(const QString c);
     Q_INVOKABLE void install(const QString pkg);
     Q_INVOKABLE void remove(const QString pkg);
 private:
