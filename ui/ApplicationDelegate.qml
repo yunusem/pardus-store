@@ -88,45 +88,13 @@ Item {
             }
         }
 
-        Button {
-            id: processButton
-            width: 80
-            height: 40
-            opacity: ma.containsMouse ? 1.0 : 0.0
-            //Material.foreground: "white"
-            Material.background: applicationStatus ? Material.Red : Material.Green
-
-            anchors {
-                bottom: parent.bottom
-                right: parent.right
-
-            }
-
-            onClicked: {
-                processQueue.push(name + " " + applicationStatus)
-                enabled = false
-            }
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 200
-                }
-            }
-
-            Label {
-                id: processButtonLabel
-                anchors.centerIn: parent
-                //Material.foreground: "#000000"
-                text: applicationStatus ? qsTr("remove") : qsTr("install")
-            }
-        }
-
 
         Image {
             id:appIcon
             anchors {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
+                verticalCenterOffset: ma.containsMouse ? -27 : 0
             }
             width: 64
             height: 64
@@ -134,6 +102,13 @@ Item {
             mipmap: true
             antialiasing: true
             source: "image://application/" + getCorrectName(name)
+
+            Behavior on anchors.verticalCenterOffset {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutExpo
+                }
+            }
         }
 
         DropShadow {
@@ -152,15 +127,70 @@ Item {
             id: appNameLabel
             anchors {
                 verticalCenter: parent.verticalCenter
+                verticalCenterOffset: ma.containsMouse ? -27 : 0
                 right: parent.right
                 left: appIcon.right
-            }            
+            }
             text: name.replace("-", " ")
             fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
+
+            Behavior on anchors.verticalCenterOffset {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutExpo
+                }
+            }
+        }
+
+        Button {
+            id: processButton
+            width: ma.containsMouse ? 210 : 80
+            height: ma.containsMouse ? 50 : 40
+            opacity: ma.containsMouse ? 1.0 : 0.0
+            Material.background: applicationStatus ? Material.Red : Material.Green
+
+            anchors {
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+
+            }
+
+            onClicked: {
+                processQueue.push(name + " " + applicationStatus)
+                enabled = false
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutExpo
+                }
+            }
+
+            Behavior on width {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutExpo
+                }
+            }
+
+            Behavior on height {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutExpo
+                }
+            }
+
+            Label {
+                id: processButtonLabel
+                anchors.centerIn: parent
+                //Material.foreground: "#000000"
+                text: applicationStatus ? qsTr("remove") : qsTr("install")
+            }
         }
 
 

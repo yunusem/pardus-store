@@ -9,9 +9,7 @@ GridView {
     cellWidth: applicationList.width / 5
     cellHeight: applicationList.cellWidth * 3 / 5
     visible: true
-    interactive: count > 15 ? true : false
-    //width: main.width * 19 / 22
-    //height: main.height * 13 / 15
+    interactive: count > 15 ? true : false    
     anchors {
         fill: parent
 
@@ -20,7 +18,11 @@ GridView {
     model: applicationModel
 
     add: Transition {
-        NumberAnimation { properties: "x,y"; duration: 200 ; easing.type: Easing.OutExpo}
+        NumberAnimation {
+            properties: "x,y"
+            duration: 200
+            easing.type: Easing.OutExpo
+        }
     }
 
     delegate: ApplicationDelegate{

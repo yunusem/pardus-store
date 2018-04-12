@@ -158,17 +158,24 @@ ApplicationWindow {
 
         }
 
-    }
+    }    
 
     SearchBar {
         id: searchBar
         z: 100
         anchors {
             top: parent.top
-            topMargin: 10
+            topMargin: searchF ? 0 : 10
             horizontalCenter: parent.horizontalCenter
             horizontalCenterOffset: main.width / 40
 
+        }
+
+        Behavior on anchors.topMargin {
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 200
+            }
         }
 
     }

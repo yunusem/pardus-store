@@ -31,14 +31,27 @@ Pane {
 
     Image {
         id: searchIcon
-        width: 28
-        height: 28
+        width: searchF ? 36 : 24
+        height: width
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
-            leftMargin: -10
+            leftMargin: searchF ? 0 : -9
         }
         source: "qrc:/images/search.svg"
+
+        Behavior on width  {
+            NumberAnimation {
+                easing.type: Easing.OutCirc
+                duration: 200
+            }
+        }
+        Behavior on anchors.leftMargin {
+            NumberAnimation {
+                easing.type: Easing.OutCirc
+                duration: 200
+            }
+        }
     }
 
     DropShadow {
@@ -226,7 +239,7 @@ Pane {
 
     function openSearch(){
         searchPane.width = 500
-        searchPane.height = 40
+        searchPane.height = parent.height / 15
         searchF = true
         category = qsTr("all")
     }

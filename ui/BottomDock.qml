@@ -31,13 +31,12 @@ Pane {
             swipeView.currentIndex = indicator.currentIndex
 
             if(currentIndex == 1) {
-                if(navigationBar.currentIndex == 0) {
-                    navigationBar.currentIndex = 1
+                if(navigationBar.currentIndex == 0) {                    
                     category = qsTr("all")
                     selectedApplication = ""
                 }
             } else if (currentIndex == 0) {
-                navigationBar.currentIndex = 0
+                category = qsTr("home")
                 selectedApplication = ""
             }
         }
