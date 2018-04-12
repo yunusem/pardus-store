@@ -59,7 +59,7 @@ public:
 
     ~FilterProxyModel();
 
-    Q_INVOKABLE void setFilterString(QString s);
+    Q_INVOKABLE void setFilterString(QString s, bool isSearch);
 
 };
 

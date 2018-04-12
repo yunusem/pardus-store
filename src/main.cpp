@@ -15,7 +15,6 @@ int main(int argc, char *argv[])
     ListCover::setInstance(&listModel);
     FilterProxyModel filterModel;
     filterModel.setSourceModel(&listModel);
-    filterModel.setFilterRole(NameRole);
     filterModel.setSortRole(NameRole);
 
     QQmlApplicationEngine engine;

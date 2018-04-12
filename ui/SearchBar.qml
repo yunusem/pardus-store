@@ -186,7 +186,7 @@ Pane {
 
 //            }
 
-            applicationModel.setFilterString(searchField.text)
+            applicationModel.setFilterString(searchField.text, true)
 
         }
 
@@ -220,14 +220,15 @@ Pane {
         searchPane.width = 200
         searchPane.height = 32
         searchField.text = ""
-        main.searchF = false
+        searchF = false
     }
 
 
     function openSearch(){
         searchPane.width = 500
         searchPane.height = 40
-        main.searchF = true
+        searchF = true
+        category = qsTr("all")
     }
 
 }

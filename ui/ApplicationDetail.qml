@@ -4,7 +4,7 @@ import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
 
 Item {
-    id:home
+    id:appDetail
 
     anchors.fill: parent
 

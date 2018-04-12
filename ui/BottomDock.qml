@@ -33,7 +33,7 @@ Pane {
             if(currentIndex == 1) {
                 if(navigationBar.currentIndex == 0) {
                     navigationBar.currentIndex = 1
-                    selectedCategory = qsTr("all")
+                    category = qsTr("all")
                     selectedApplication = ""
                 }
             } else if (currentIndex == 0) {

@@ -61,7 +61,7 @@ Pane {
             //width: 5
         }
         focus: true
-        //highlightFollowsCurrentItem : true
+        highlightFollowsCurrentItem : true
         highlightMoveVelocity: 3600
         highlightResizeVelocity: 3600
 

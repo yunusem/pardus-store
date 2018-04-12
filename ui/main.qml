@@ -16,10 +16,9 @@ ApplicationWindow {
     property bool isThereOnGoingProcess: false
     property variant processQueue: []
     property string lastProcess: ""
-    property string category : selectedCategory
+    property string category : qsTr("home")
     property bool searchF: false
-    property string selectedApplication: ""
-    property string selectedCategory: qsTr("home")
+    property string selectedApplication: ""    
     property variant categories:
         [qsTr("home"),
         qsTr("all"),
@@ -218,8 +217,6 @@ ApplicationWindow {
             }
         }
 
-
-
         onCurrentIndexChanged: {
 
         }
@@ -247,6 +244,13 @@ ApplicationWindow {
 
     NavigationBar {
         id: navigationBar
+        onCurrentIndexChanged: {
+            if (category !== qsTr("home")) {
+                swipeView.currentIndex = 1
+            } else {
+                swipeView.currentIndex = 0
+            }
+        }
 
     }
 
@@ -256,24 +260,8 @@ ApplicationWindow {
     }
 
     onCategoryChanged: {
-//        lm.clear()
-//        if(category == "all") {
-//            fill()
-//        } else {
-//            var list = helper.getApplicationsByCategory(category)
-//            var it = 0
-//            var line = ""
-//            for (var i = 0; i < list.length; i++) {
-//                line = list[i].split(" ")
-//                lm.append({
-//                              "name": line[0],
-//                              "version": line[1],
-//                              "status": line[2] === "yes" ? true: false,
-//                              "category": category
-//                          })
-//            }
-//        }
-        //applicationModel.setFilterString(category.toString())
+        navigationBar.currentIndex = categories.indexOf(category)
+        applicationModel.setFilterString(category === qsTr("all") ? "" : category, false)
     }
 
 

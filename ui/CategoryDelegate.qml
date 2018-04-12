@@ -45,9 +45,9 @@ Item {
                 leftMargin: 10
             }
             opacity: navima.containsMouse ? 1.0 : 0.0
-            color: name === selectedCategory ? "#FFCB08" : "white"
+            color: name === category ? "#FFCB08" : "white"
             font.capitalization: Font.Capitalize
-            font.bold: name === selectedCategory ? true : false
+            font.bold: name === category ? true : false
             text: name
 
             Behavior on opacity {
@@ -79,13 +79,7 @@ Item {
         height: categoryDelegateItem.height
         onClicked: {
             selectedApplication = ""
-            selectedCategory = name
-            navigationBarListView.currentIndex = categories.indexOf(name)
-            if (navigationBarListView.currentIndex == 0) {
-                swipeView.currentIndex = 0
-            } else {
-                swipeView.currentIndex = 1
-            }
+            category = name
         }
         onPressed: {
             categoryDelegateItem.Material.elevation = 0
