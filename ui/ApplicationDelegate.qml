@@ -195,6 +195,20 @@ Item {
             }
         }
 
+        Image {
+            id: installedIcon
+            anchors {
+                top: parent.top
+                right: parent.right
+            }
+            mipmap: true
+            smooth: true
+            width: 15
+            height: 15
+            source: "qrc:/images/installed.svg"
+            visible: applicationStatus
+        }
+
 
     }
 

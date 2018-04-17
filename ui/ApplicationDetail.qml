@@ -24,60 +24,90 @@ Pane {
         }
     }
 
-    ListView {
-        id: screenshotsLV
-        interactive: true
-        spacing: 15
-        clip: true
-        orientation: Qt.Horizontal
-        width: parent.width * 2 / 3
-        height: width * 9 / 16
+    Pane {
+        Material.elevation : 3
+        width: parent.width * 7 / 12
+        height: (width * 9 / 16) + indicator.height + 15
         anchors {
-            verticalCenter: parent.verticalCenter
+            bottom: parent.bottom
+            //bottomMargin: 15
             left: parent.left
         }
 
-        model: lm
-        snapMode: ListView.SnapOneItem
-        delegate: Item {
-            width: screenshotsLV.width - 10
-            height: screenshotsLV.height - 10
-            Image {
-                id:ss
-                visible: url != "none"
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                source: url == "none" ? "" : url
+        Label {
+            id: indicator
+            property int index: 0
+            visible: urls[0] !== "none"
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                //topMargin: 5
             }
 
-            DropShadow {
-                id:dropShadow
-                visible: ss.visible
-                anchors.fill: ss
-                horizontalOffset: 3
-                verticalOffset: 3
-                radius: 8
-                samples: 17
-                color: "#80000000"
-                source: ss
+            text: (index == -1 ? lm.count.toString() : index + 1) + "/" + lm.count
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.Capitalize
+            enabled: false
+        }
+
+        ListView {
+            id: screenshotsLV
+            interactive: true
+            spacing: 15
+            clip: true
+            orientation: Qt.Horizontal
+            width: parent.width
+            height: width * 9 / 16
+            anchors.centerIn: parent
+            model: lm
+            snapMode: ListView.SnapOneItem
+            delegate: Item {
+                width: screenshotsLV.width - 10
+                height: screenshotsLV.height - 10
+                Image {
+                    id:ss
+                    visible: url != "none"
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectFit
+                    source: url == "none" ? "" : url
+                }
+
+                DropShadow {
+                    id:dropShadow
+                    visible: ss.visible
+                    anchors.fill: ss
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 8
+                    samples: 17
+                    color: "#80000000"
+                    source: ss
+                }
+
+                Label {
+                    anchors.centerIn: parent
+                    text: qsTr("no screenshot found!")
+                    visible: url == "none"
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.capitalization: Font.Capitalize
+                    enabled: false
+                }
+
+                BusyIndicator {
+                    id: imageBusy
+                    anchors.centerIn: parent
+                    running: url == "none" ? 0 : !ss.progress
+                }
             }
 
-            Label {
-                anchors.centerIn: parent
-                text: qsTr("no screenshot found!")
-                visible: url == "none"
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.capitalization: Font.Capitalize
-                enabled: false
-            }
-
-            BusyIndicator {
-                id: imageBusy
-                anchors.centerIn: parent
-                running: url == "none" ? 0 : !ss.progress
+            onMovementEnded: {
+                indicator.index = indexAt(contentX,contentY)
             }
         }
+
+
     }
 
     onLengthChanged: {

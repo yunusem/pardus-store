@@ -31,6 +31,7 @@ void Artwork::replyFinished(QNetworkReply *reply)
 
     if (doc.isNull()) {
         qDebug("Not a json document!");
+        emit screenshotNotFound();
         return;
     }
 

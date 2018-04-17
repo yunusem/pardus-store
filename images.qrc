@@ -23,5 +23,6 @@
         <file>images/chat.svg</file>
         <file>images/internet.svg</file>
         <file>images/search.svg</file>
+        <file>images/installed.svg</file>
     </qresource>
 </RCC>
