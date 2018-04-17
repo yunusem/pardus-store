@@ -17,6 +17,7 @@ public:
 
 signals:
     void screenshotReceived(const ScreenshotInfo &screenshot);
+    void screenshotNotFound();
 
 private slots:
     void replyFinished(QNetworkReply *);

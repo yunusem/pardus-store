@@ -202,6 +202,9 @@ ApplicationWindow {
         onScreenshotReceived: {
             screenshotUrls = urls
         }
+        onScreenshotNotFound: {
+            screenshotUrls = ["none"]
+        }
     }
 
     SwipeView {

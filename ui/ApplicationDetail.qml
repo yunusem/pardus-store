@@ -44,18 +44,15 @@ Pane {
             height: screenshotsLV.height - 10
             Image {
                 id:ss
+                visible: url != "none"
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
-                source: url
-
-                Component.onCompleted: {
-                    console.log(url)
-                }
+                source: url == "none" ? "" : url
             }
 
             DropShadow {
                 id:dropShadow
-                //opacity: ma.containsMouse ? 0.0 : 1.0
+                visible: ss.visible
                 anchors.fill: ss
                 horizontalOffset: 3
                 verticalOffset: 3
@@ -65,10 +62,20 @@ Pane {
                 source: ss
             }
 
+            Label {
+                anchors.centerIn: parent
+                text: qsTr("no screenshot found!")
+                visible: url == "none"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.capitalization: Font.Capitalize
+                enabled: false
+            }
+
             BusyIndicator {
                 id: imageBusy
                 anchors.centerIn: parent
-                running: !ss.progress
+                running: url == "none" ? 0 : !ss.progress
             }
         }
     }

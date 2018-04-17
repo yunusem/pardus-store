@@ -37,6 +37,7 @@ void Artwork::replyFinished(QNetworkReply *reply)
     auto obj = doc.object();
     if (obj["status"].toString() == "404") {
         qDebug("Error: not found!");
+        emit screenshotNotFound();
         return;
     }
 

@@ -18,7 +18,8 @@ class Helper : public QObject
     Q_PROPERTY(bool processing
                READ processing
                NOTIFY processingFinished
-               NOTIFY screenshotReceived)
+               NOTIFY screenshotReceived
+               NOTIFY screenshotNotFound)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -44,6 +45,7 @@ private slots:
 signals:
     void processingFinished();
     void screenshotReceived(const QStringList &urls);
+    void screenshotNotFound();
 
 public slots:
     void screenshotReceivedSlot(const ScreenshotInfo &info);

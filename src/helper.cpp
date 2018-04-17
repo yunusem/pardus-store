@@ -17,6 +17,7 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false)
     this->fillTheList();
     connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
     connect(a,SIGNAL(screenshotReceived(ScreenshotInfo)),this,SLOT(screenshotReceivedSlot(ScreenshotInfo)));
+    connect(a,SIGNAL(screenshotNotFound()),this,SIGNAL(screenshotNotFound()));
 }
 
 bool Helper::processing() const
@@ -127,7 +128,7 @@ void Helper::screenshotReceivedSlot(const ScreenshotInfo &info)
 {
     QStringList ss;
     for(int i = 0; i< info.screenshots().size(); i++) {
-        ss << info.screenshots().at(i).largeImageUrl();
+        ss << info.screenshots().at(i).largeImageUrl().replace("ubuntu.com","debian.net");
     }
 
     emit screenshotReceived(ss);
