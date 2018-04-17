@@ -16,6 +16,21 @@ Screenshot::Screenshot(const QString &smallImgUrl,
 {
 }
 
+QString Screenshot::smallImageUrl() const
+{
+    return m_smallImg;
+}
+
+QString Screenshot::largeImageUrl() const
+{
+    return m_largeImg;
+}
+
+QString Screenshot::version() const
+{
+    return m_version;
+}
+
 QString Screenshot::toString() const
 {
     return QString("version: %1, small: %2, large: %3")

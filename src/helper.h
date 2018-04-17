@@ -4,21 +4,28 @@
 #include <QObject>
 #include <QStringList>
 #include <QString>
+#include <QVariant>
 #include "applicationlistmodel.h"
 
 class FileHandler;
 class PackageHandler;
+class Artwork;
+class ScreenshotInfo;
 
 class Helper : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool processing READ processing NOTIFY processingFinished)
+    Q_PROPERTY(bool processing
+               READ processing
+               NOTIFY processingFinished
+               NOTIFY screenshotReceived)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
 
-    Q_INVOKABLE void install(const QString pkg);
-    Q_INVOKABLE void remove(const QString pkg);
+    Q_INVOKABLE void install(const QString &pkg);
+    Q_INVOKABLE void remove(const QString &pkg);
+    Q_INVOKABLE void getScreenShot(const QString &pkg);
 private:
     bool p;
     FileHandler *fh;
@@ -26,6 +33,7 @@ private:
     QStringList l;
     QStringList ldetail;
     ListCover lc;
+    Artwork *a;
     void fillTheList();
 
 private slots:
@@ -35,8 +43,10 @@ private slots:
 
 signals:
     void processingFinished();
+    void screenshotReceived(const QStringList &urls);
 
 public slots:
+    void screenshotReceivedSlot(const ScreenshotInfo &info);
 };
 
 #endif // HELPER_H

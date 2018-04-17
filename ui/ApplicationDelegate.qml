@@ -58,6 +58,8 @@ Item {
             onClicked: {
                 selectedApplication = name
                 swipeView.currentIndex = 2
+                screenshotUrls = []
+                helper.getScreenShot(name)
             }
             onPressed: {
                 if(ma.containsMouse) {

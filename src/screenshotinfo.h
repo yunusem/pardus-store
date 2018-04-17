@@ -30,10 +30,16 @@ public:
                const QString &largeImgUrl,
                const QString &version);
 
+    QString smallImageUrl() const;
+    QString largeImageUrl() const;
+    QString version() const;
     QString toString() const;
 
 private:
     QString m_smallImg, m_largeImg, m_version;
 };
 
+
+
 #endif /* end of include guard: SCREENSHOTINFO_H_ */
+

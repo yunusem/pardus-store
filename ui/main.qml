@@ -13,6 +13,7 @@ ApplicationWindow {
     title: "Pardus" + " " + qsTr("Store")
     flags: Qt.FramelessWindowHint
     color: "transparent"
+    property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
     property variant processQueue: []
     property string lastProcess: ""
@@ -196,6 +197,10 @@ ApplicationWindow {
             processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
             lastProcess = processQueue.shift()
             isThereOnGoingProcess = false
+        }
+
+        onScreenshotReceived: {
+            screenshotUrls = urls
         }
     }
 

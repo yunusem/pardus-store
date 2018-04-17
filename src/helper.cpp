@@ -1,19 +1,22 @@
 #include "helper.h"
 #include "filehandler.h"
 #include "packagehandler.h"
+#include "artwork.h"
+#include "screenshotinfo.h"
 #include <QProcess>
 #include <QRegExp>
 #include <QDebug>
 
 Helper::Helper(QObject *parent) : QObject(parent), p(false)
 {
+    a = new Artwork(this);
     fh = new FileHandler(this);
     ph = new PackageHandler(this);
     l = fh->readLines();    
     ldetail = this->getDetails();
     this->fillTheList();
     connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
-
+    connect(a,SIGNAL(screenshotReceived(ScreenshotInfo)),this,SLOT(screenshotReceivedSlot(ScreenshotInfo)));
 }
 
 bool Helper::processing() const
@@ -89,18 +92,23 @@ void Helper::updateDetails()
     ldetail = this->getDetails();
 }
 
-void Helper::install(const QString pkg)
+void Helper::install(const QString &pkg)
 {
 
     ph->install(pkg);
     p = true;
 }
 
-void Helper::remove(const QString pkg)
+void Helper::remove(const QString &pkg)
 {
 
     ph->remove(pkg);
     p = true;
+}
+
+void Helper::getScreenShot(const QString &pkg)
+{
+    a->get(pkg);
 }
 
 void Helper::packageProcessFinished(int code)
@@ -113,4 +121,14 @@ void Helper::packageProcessFinished(int code)
     }
     emit processingFinished();
     p = false;
+}
+
+void Helper::screenshotReceivedSlot(const ScreenshotInfo &info)
+{
+    QStringList ss;
+    for(int i = 0; i< info.screenshots().size(); i++) {
+        ss << info.screenshots().at(i).largeImageUrl();
+    }
+
+    emit screenshotReceived(ss);
 }
