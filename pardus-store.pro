@@ -6,14 +6,18 @@ SOURCES += src/main.cpp \
     src/helper.cpp \
     src/filehandler.cpp \
     src/packagehandler.cpp \
-    src/applicationlistmodel.cpp
+    src/applicationlistmodel.cpp \
+    src/artwork.cpp \
+    src/screenshotinfo.cpp
 
 HEADERS += \
     src/helper.h \
     src/filehandler.h \
     src/packagehandler.h \
     src/iconprovider.h \
-    src/applicationlistmodel.h
+    src/applicationlistmodel.h \
+    src/artwork.h \
+    src/screenshotinfo.h
 
 TARGET = ps
 
