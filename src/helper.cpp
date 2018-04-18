@@ -9,7 +9,7 @@
 
 Helper::Helper(QObject *parent) : QObject(parent), p(false)
 {
-    a = new Artwork(this);
+    a = new Artwork(10000, this);
     fh = new FileHandler(this);
     ph = new PackageHandler(this);
     l = fh->readLines();    
