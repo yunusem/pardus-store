@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
 {
     qmlRegisterType<Helper>("ps.helper",1,0,"Helper");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication::setWindowIcon(QIcon(":/images/icon.svg"));
     QGuiApplication app(argc, argv);
 
     ApplicationListModel listModel;
