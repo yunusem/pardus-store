@@ -37,7 +37,7 @@ void Helper::fillTheList()
     QString version = "";
     bool stat = false;
     QString category = "";
-
+    bool non_free = false;
     foreach(line, list) {
         name = line.split(" ")[0];
         category = line.split(" ")[1];
@@ -47,7 +47,12 @@ void Helper::fillTheList()
         } else {
             stat = false;
         }
-        lc.l->addData(Application(name,version,stat,category));
+        if (line.split(" ")[4] == "yes") {
+            non_free = true;
+        } else {
+            non_free = false;
+        }
+        lc.l->addData(Application(name,version,stat,category,non_free));
     }
 }
 
@@ -67,12 +72,16 @@ QStringList Helper::getDetails() const
     QString detail;
     QString version;
     QString installed;
+    QString non_free;
     foreach (QString line, l) {
         app = line.split(" ").at(0);
         ix = output.indexOf(QRegExp(app + QString("*.*")));
         installed = output.at(ix + 1).split(" ").last();
-
-
+        if (output.at(ix+5).indexOf("non-free") != -1) {
+            non_free = "yes";
+        } else {
+            non_free = "no";
+        }
         if (installed.contains("none")) {
             installed = "no";
         } else {
@@ -81,7 +90,8 @@ QStringList Helper::getDetails() const
 
         version = output.at(ix + 2).split(" ").last();
         detail += version + " ";
-        detail += installed;
+        detail += installed + " ";
+        detail += non_free;
         list.append(detail);
         detail = "";
     }
@@ -114,13 +124,12 @@ void Helper::getScreenShot(const QString &pkg)
 
 void Helper::packageProcessFinished(int code)
 {
-    if(code == 0) {        
-        //qDebug() << ph->getOutput();
-
-    } else {
-        qDebug() << ph->getError();
+    if(code == 0) {                
+        emit processingFinished();
+    } else {        
+        emit processingFinishedWithError(QString::fromLatin1(ph->getError()));
     }
-    emit processingFinished();
+
     p = false;
 }
 

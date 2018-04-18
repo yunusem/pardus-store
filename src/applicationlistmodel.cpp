@@ -2,9 +2,9 @@
 
 Application::Application(const QString &name, const QString &version,
                          bool stat, const QString &category,
-                         const QString &description)
+                         bool &non_free, const QString &description)
     :m_name(name), m_version(version), m_status(stat),
-      m_category(category), m_description(description)
+      m_category(category), m_non_free(non_free), m_description(description)
 {
 
 }
@@ -22,6 +22,11 @@ QString Application::version() const
 QString Application::category() const
 {
     return m_category;
+}
+
+bool Application::non_free() const
+{
+    return m_non_free;
 }
 
 QString Application::description() const
@@ -75,6 +80,7 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     case VersionRole: return app.version();
     case StatusRole: return app.status();
     case CategoryRole: return app.category();
+    case NonFreeRole: return app.non_free();
     case DescriptionRole: return app.description();
     default: return QVariant();
     }
@@ -98,6 +104,7 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     roles[VersionRole] = "version";
     roles[StatusRole] = "status";
     roles[CategoryRole] = "category";
+    roles[NonFreeRole] = "nonfree";
     roles[DescriptionRole] = "description";
     return roles;
 }

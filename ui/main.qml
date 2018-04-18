@@ -13,8 +13,10 @@ ApplicationWindow {
     title: "Pardus" + " " + qsTr("Store")
     flags: Qt.FramelessWindowHint
     color: "transparent"
+    property string popupText: ""
     property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
+    property bool errorOccured: false
     property variant processQueue: []
     property string lastProcess: ""
     property string category : qsTr("home")
@@ -204,11 +206,21 @@ ApplicationWindow {
             isThereOnGoingProcess = false
         }
 
+        onProcessingFinishedWithError: {
+            processQueue.shift()
+            errorOccured = true
+            isThereOnGoingProcess = false
+            popupText = output
+            processOutputLabel.opacity = 0.0
+            popup.open()
+        }
+
         onScreenshotReceived: {
             screenshotUrls = urls
         }
         onScreenshotNotFound: {
             screenshotUrls = ["none"]
+
         }
     }
 
@@ -396,6 +408,49 @@ ApplicationWindow {
             }
             onClicked: {
                 Qt.quit()
+            }
+        }
+    }
+
+    Popup {
+        id: popup
+        width: parent.width / 3
+        height: parent.height / 3
+        modal: true
+        closePolicy: Popup.CloseOnPressOutside
+        y: parent.height / 2 - popup.height / 2
+        x: parent.width / 2 - popup.width / 2
+        Material.background: "#2c2c2c"
+
+        Label {
+            text: qsTr("Something went wrong!")
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            Material.foreground: "#fafafa"
+
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+        }
+
+        Label {
+            text: popupText
+            width: parent.width
+            anchors.centerIn: parent
+            Material.foreground: "#fafafa"
+            fontSizeMode: Text.HorizontalFit
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        MouseArea {
+            id: doneBtn
+            anchors.fill: parent
+
+            onClicked: {
+                popup.close()
             }
         }
     }

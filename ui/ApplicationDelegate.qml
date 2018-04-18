@@ -10,6 +10,8 @@ Item {
 
     property bool applicationStatus: status
 
+
+
     Pane {
         id: applicationDelegateItem
         z: ma.containsMouse ? 100 : 5        
@@ -19,6 +21,7 @@ Item {
             fill: parent
         }
         property string lastProcess: main.lastProcess
+        property bool error: main.errorOccured
 
         Behavior on width {
             NumberAnimation {
@@ -92,6 +95,12 @@ Item {
         }
 
 
+        onErrorChanged: {
+            if(error) {
+                processButton.enabled = true
+            }
+        }
+
         Image {
             id:appIcon
             anchors {
@@ -162,6 +171,12 @@ Item {
 
             }
 
+            onEnabledChanged: {
+                if(applicationDelegateItem.error && enabled) {
+                    applicationDelegateItem.error = false
+                }
+            }
+
             onClicked: {
                 processQueue.push(name + " " + applicationStatus)
                 enabled = false
@@ -208,6 +223,26 @@ Item {
             height: 15
             source: "qrc:/images/installed.svg"
             visible: applicationStatus
+        }
+
+        Label {
+            id: nonFreeBadge
+            anchors {
+                top: appNameLabel.bottom
+                topMargin: 5
+                horizontalCenter: appNameLabel.horizontalCenter
+            }
+            Material.foreground: Material.Red
+            //enabled: false
+            text: nonfree ? "Non Free" : ""
+            opacity: ma.containsMouse ? 1.0 : 0.0
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 800
+                    easing.type: Easing.OutExpo
+                }
+            }
         }
 
 

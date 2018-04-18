@@ -9,11 +9,17 @@
 class Application
 {
 public:
-    Application(const QString &name, const QString &version, bool stat, const QString &category, const QString &description = "");
+    Application(const QString &name,
+                const QString &version,
+                bool stat,
+                const QString &category,
+                bool &non_free,
+                const QString &description = "");
     QString name() const;
     QString version() const;
     bool status() const;
     QString category() const;
+    bool non_free() const;
     QString description() const;
     void setStatus(bool stat);
 private:
@@ -21,6 +27,7 @@ private:
     QString m_version;
     bool m_status;
     QString m_category;
+    bool m_non_free;
     QString m_description;
 };
 
@@ -29,6 +36,7 @@ enum Roles {
     VersionRole,
     StatusRole,
     CategoryRole,
+    NonFreeRole,
     DescriptionRole,
 };
 
