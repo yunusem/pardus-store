@@ -60,6 +60,7 @@ Item {
                 swipeView.currentIndex = 2
                 screenshotUrls = []
                 helper.getScreenShot(name)
+                searchF = false
             }
             onPressed: {
                 if(ma.containsMouse) {

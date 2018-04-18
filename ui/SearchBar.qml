@@ -7,12 +7,11 @@ import QtGraphicalEffects 1.0
 
 Pane {
     id: searchPane
-    width: 200
-    height: 32
-    //Material.background: "#2c2c2c"
-    Material.elevation: 3
-
+    width: searchFlag ? 500 : applicationListPage.cellWidth - 20
+    height: searchFlag ? parent.height / 15 : 32
+    Material.elevation: searchFlag ? 3 : 1
     property string prelist: ""
+    property bool searchFlag: searchF
 
     Behavior on width  {
         NumberAnimation {
@@ -31,12 +30,12 @@ Pane {
 
     Image {
         id: searchIcon
-        width: searchF ? 36 : 24
+        width: searchFlag ? 36 : 24
         height: width
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
-            leftMargin: searchF ? 0 : -9
+            leftMargin: searchFlag ? 0 : -9
         }
         source: "qrc:/images/search.svg"
 
@@ -81,9 +80,7 @@ Pane {
             searchBtnMa.Material.elevation = 2
         }
         onClicked: {
-            if (!main.searchF) {
-                openSearch()
-            }
+            searchFlag = true
         }
     }
 
@@ -92,9 +89,9 @@ Pane {
         id: btnClose
         width: 32
         height: 32
-        Material.background: Material.Red
+        Material.background: "#2c2c2c"
         Material.elevation: 10
-        visible: main.searchF
+        visible: searchFlag
 
         anchors {
             right: parent.right
@@ -123,7 +120,7 @@ Pane {
                 closeSearchBtnMa.Material.elevation = 2
             }
             onClicked: {
-                closeSearch()
+                searchFlag = false
             }
         }
     }
@@ -133,14 +130,11 @@ Pane {
         id: searchField
 
         width: searchPane.width / 2
-        height: 40
+        height: 40        
+        visible: searchFlag
+        opacity: searchFlag ? 1 : 0
 
-        visible: main.searchF
-        opacity: searchF ? 1 : 0
-
-        //color: "white"
-
-        placeholderText: "Search an application"
+        placeholderText: qsTr("Search an application")
         anchors.centerIn: parent
 
 
@@ -166,84 +160,17 @@ Pane {
 
 
         onTextChanged: {
-
-//            if (searchField.text === "") {
-//                lm.clear()
-//                fill()
-
-//            } else {
-
-//                var list = helper.getApplicationsByName(searchField.text)
-
-//                var test = String(list)
-//                if (test === searchPane.prelist){
-//                } else {
-//                    lm.clear()
-//                    searchPane.prelist = test
-//                    var line = ""
-//                    var it = 0
-//                    for (var i = 0; i < list.length; i++) {
-//                        line = list[i].split(" ")
-
-//                        lm.append({
-//                                      "name": line[0],
-//                                      "version": line[2],
-//                                      "status": line[3] === "yes" ? true: false,
-//                                                                    "category": line[1],
-
-//                                  })
-//                    }
-//                }
-
-
-
-//            }
-
             applicationModel.setFilterString(searchField.text, true)
-
         }
 
+    }   
 
-
+    onSearchFlagChanged: {
+        searchF = searchFlag
+        if(!searchFlag) {
+            searchField.text = ""
+        }
     }
-
-
-    //    function slideSearchField() {
-
-    //        if (searchField.text === "") {
-    //            slideDownSearchField()
-    //        } else {
-    //            slideUpSearchField()
-    //        }
-    //    }
-
-
-    //    function slideDownSearchField() {
-    //        searchField.y = searchPane.height / 2 - searchField.height / 2
-    //        searchField.width = searchPane.width / 2
-    //    }
-
-    //    function slideUpSearchField() {
-    //        searchField.y = 60
-    //        searchField.width = searchPane.width - 80
-    //    }
-
-
-    function closeSearch() {
-        searchPane.width = 200
-        searchPane.height = 32
-        searchField.text = ""
-        searchF = false
-    }
-
-
-    function openSearch(){
-        searchPane.width = 500
-        searchPane.height = parent.height / 15
-        searchF = true
-        category = qsTr("all")
-    }
-
 }
 
 

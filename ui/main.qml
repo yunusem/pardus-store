@@ -38,6 +38,14 @@ ApplicationWindow {
     property variant specialApplications:
         ["gnome-builder",
         "xfce4-terminal"]
+    onSearchFChanged: {
+        searchBar.searchFlag = searchF
+        if(searchF) {
+            category = qsTr("all")
+            swipeView.currentIndex = 1
+        }
+    }
+
     Pane {
         id: mainBackground
         anchors.fill: parent
@@ -56,9 +64,6 @@ ApplicationWindow {
         }
 
         Material.elevation: 3
-
-
-
 
     }
 
