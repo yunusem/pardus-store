@@ -14,6 +14,7 @@ ApplicationWindow {
     flags: Qt.FramelessWindowHint
     color: "transparent"
     property string popupText: ""
+    property string popupHeaderText: qsTr("Something went wrong!")
     property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
     property bool errorOccured: false
@@ -21,7 +22,7 @@ ApplicationWindow {
     property string lastProcess: ""
     property string category : qsTr("home")
     property bool searchF: false
-    property string selectedApplication: ""    
+    property string selectedApplication: ""
     property variant categories:
         [qsTr("home"),
         qsTr("all"),
@@ -35,7 +36,7 @@ ApplicationWindow {
         qsTr("system"),
         qsTr("video"),
         qsTr("chat"),
-        qsTr("others")]    
+        qsTr("others")]
 
     property variant specialApplications:
         ["gnome-builder",
@@ -67,6 +68,8 @@ ApplicationWindow {
 
         Material.elevation: 3
 
+
+
     }
 
     MouseArea {
@@ -95,6 +98,43 @@ ApplicationWindow {
         onReleased: {
 
         }
+    }
+
+    Button {
+        id: backBtn
+        z: 92
+        height: topDock.height
+        width: height * 2 / 3
+        opacity: bottomDock.pageIndicator.currentIndex == 2 ? 1.0 : 0.0
+        Material.background: "#fafafa"
+        anchors {
+            top: parent.top
+            left: navigationBar.right
+            leftMargin: 5
+
+        }
+
+        Image {
+            id: backIcon
+            width: parent.height - 24
+            anchors.centerIn: parent
+            fillMode: Image.PreserveAspectFit
+            mipmap: true
+            smooth: true
+            source: "qrc:/images/back.svg"
+        }
+
+        onClicked: {
+            swipeView.currentIndex = 1
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
+
     }
 
     BottomDock {
@@ -166,7 +206,7 @@ ApplicationWindow {
 
         }
 
-    }    
+    }
 
     SearchBar {
         id: searchBar
@@ -245,7 +285,7 @@ ApplicationWindow {
             width: swipeView.width
             height: swipeView.height
             ApplicationList {
-               id: applicationListPage
+                id: applicationListPage
             }
         }
 
@@ -407,7 +447,13 @@ ApplicationWindow {
                 exitBtn.Material.elevation = 2
             }
             onClicked: {
-                Qt.quit()
+                if(isThereOnGoingProcess) {
+                    popupHeaderText = qsTr("Warning!")
+                    popupText = "Pardus " + qsTr("Store") + " " + qsTr("can not be closed while a process is ongoing.")
+                    popup.open()
+                } else {
+                    Qt.quit()
+                }
             }
         }
     }
@@ -423,8 +469,7 @@ ApplicationWindow {
         Material.background: "#2c2c2c"
 
         Label {
-            text: qsTr("Something went wrong!")
-
+            text: popupHeaderText
             anchors.horizontalCenter: parent.horizontalCenter
             Material.foreground: "#fafafa"
 
@@ -452,6 +497,11 @@ ApplicationWindow {
             onClicked: {
                 popup.close()
             }
+        }
+
+        onClosed: {
+            popupHeaderText = qsTr("Something went wrong!")
+            popupText = ""
         }
     }
 }

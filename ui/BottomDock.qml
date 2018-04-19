@@ -17,7 +17,7 @@ Pane {
 
 
 
-
+    property alias pageIndicator: indicator
 
     PageIndicator {
         id: indicator
