@@ -323,6 +323,11 @@ ApplicationWindow {
         if(selectedApplication === "") {
             swipeView.removeItem(2)
             openAppDetail = false
+            app.version = ""
+            app.installed = false
+            app.category = ""
+            app.free = true
+            app.description = ""
         } else {
             swipeView.addItem(applicationDetailPage)
             openAppDetail = true
