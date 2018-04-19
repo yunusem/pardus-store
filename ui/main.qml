@@ -18,11 +18,13 @@ ApplicationWindow {
     property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
     property bool errorOccured: false
+    property bool openAppDetail: false
     property variant processQueue: []
     property string lastProcess: ""
     property string category : qsTr("home")
     property bool searchF: false
     property string selectedApplication: ""
+
     property variant categories:
         [qsTr("home"),
         qsTr("all"),
@@ -41,6 +43,19 @@ ApplicationWindow {
     property variant specialApplications:
         ["gnome-builder",
         "xfce4-terminal"]
+    property alias application: app
+
+    Item {
+        id: app
+        property string name: selectedApplication
+        property string version: ""
+        property bool installed: false
+        property string category: ""
+        property bool free: true
+        property string description: ""
+        property bool hasProcessing: false
+    }
+
     onSearchFChanged: {
         searchBar.searchFlag = searchF
         if(searchF) {
@@ -307,8 +322,10 @@ ApplicationWindow {
     onSelectedApplicationChanged: {
         if(selectedApplication === "") {
             swipeView.removeItem(2)
+            openAppDetail = false
         } else {
             swipeView.addItem(applicationDetailPage)
+            openAppDetail = true
         }
     }
 

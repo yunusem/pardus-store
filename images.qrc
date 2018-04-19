@@ -26,5 +26,6 @@
         <file>images/installed.svg</file>
         <file>images/icon.svg</file>
         <file>images/back.svg</file>
+        <file>images/front.svg</file>
     </qresource>
 </RCC>

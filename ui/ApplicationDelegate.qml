@@ -10,7 +10,9 @@ Item {
 
     property bool applicationStatus: status
 
-
+    onApplicationStatusChanged: {
+        app.installed = applicationStatus
+    }
 
     Pane {
         id: applicationDelegateItem
@@ -21,7 +23,6 @@ Item {
             fill: parent
         }
         property string lastProcess: main.lastProcess
-        property bool error: main.errorOccured
 
         Behavior on width {
             NumberAnimation {
@@ -51,7 +52,6 @@ Item {
             }
         }
 
-
         MouseArea {
             id: ma
             anchors.centerIn: parent
@@ -60,6 +60,13 @@ Item {
             height: applicationDelegateItem.height
             onClicked: {
                 selectedApplication = name
+                app.name = name
+                app.version = version
+                app.installed = applicationStatus
+                app.category = category
+                app.free = !nonfree
+                app.description = description
+
                 swipeView.currentIndex = 2
                 screenshotUrls = []
                 helper.getScreenShot(name)
@@ -89,15 +96,8 @@ Item {
                   applicationStatus = false
                 } else {
                   applicationStatus = true
-                }
-                processButton.enabled = true
-            }
-        }
-
-
-        onErrorChanged: {
-            if(error) {
-                processButton.enabled = true
+                }                
+                app.hasProcessing = false
             }
         }
 
@@ -164,11 +164,18 @@ Item {
             height: ma.containsMouse ? 50 : 40
             opacity: ma.containsMouse ? 1.0 : 0.0
             Material.background: applicationStatus ? Material.Red : Material.Green
-
+            Material.foreground: "#fafafa"
+            enabled: !app.hasProcessing
+            property bool error: main.errorOccured
             anchors {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
+            }
 
+            onErrorChanged: {
+                if(error) {
+                    enabled = true
+                }
             }
 
             onEnabledChanged: {
@@ -179,7 +186,7 @@ Item {
 
             onClicked: {
                 processQueue.push(name + " " + applicationStatus)
-                enabled = false
+                app.hasProcessing = true
             }
 
             Behavior on opacity {
