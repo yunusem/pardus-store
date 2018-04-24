@@ -1,9 +1,9 @@
 #include "applicationlistmodel.h"
 
 Application::Application(const QString &name, const QString &version,
-                         bool stat, const QString &category,
+                         bool stat, bool inque, const QString &category,
                          bool &non_free, const QString &description)
-    :m_name(name), m_version(version), m_status(stat),
+    :m_name(name), m_version(version), m_status(stat), m_in_queue(inque),
       m_category(category), m_non_free(non_free), m_description(description)
 {
 
@@ -44,6 +44,16 @@ void Application::setStatus(bool stat)
     m_status = stat;
 }
 
+bool Application::in_queue() const
+{
+    return m_in_queue;
+}
+
+void Application::setInQueue(bool b)
+{
+    m_in_queue = b;
+}
+
 ApplicationListModel::ApplicationListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -79,6 +89,7 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     case NameRole: return app.name();
     case VersionRole: return app.version();
     case StatusRole: return app.status();
+    case InQueueRole: return app.in_queue();
     case CategoryRole: return app.category();
     case NonFreeRole: return app.non_free();
     case DescriptionRole: return app.description();
@@ -89,9 +100,13 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
 
 bool ApplicationListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(index.row() < lst.size() && index.row() >= 0 && role == StatusRole) {
+    if(index.row() < lst.size() && index.row() >= 0 ) {
 
-        lst[index.row()].setStatus(value.toBool());
+        if(role == StatusRole) {
+            lst[index.row()].setStatus(value.toBool());
+        } else if (role == InQueueRole) {
+            lst[index.row()].setInQueue(value.toBool());
+        }
         dataChanged(index,index);
         return true;
     }
@@ -103,6 +118,7 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     roles[NameRole] = "name";
     roles[VersionRole] = "version";
     roles[StatusRole] = "status";
+    roles[InQueueRole] = "inqueue";
     roles[CategoryRole] = "category";
     roles[NonFreeRole] = "nonfree";
     roles[DescriptionRole] = "description";

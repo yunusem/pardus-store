@@ -52,7 +52,7 @@ void Helper::fillTheList()
         } else {
             non_free = false;
         }
-        lc.l->addData(Application(name,version,stat,category,non_free));
+        lc.l->addData(Application(name,version,stat,false,category,non_free));
     }
 }
 

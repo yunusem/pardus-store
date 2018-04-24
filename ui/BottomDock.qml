@@ -22,7 +22,7 @@ Pane {
     PageIndicator {
         id: indicator
         interactive: true
-        count: selectedApplication === "" ? 2 : 3
+        count: app.name === "" ? 2 : 3
         currentIndex: swipeView.currentIndex
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
@@ -33,11 +33,11 @@ Pane {
             if(currentIndex == 1) {
                 if(navigationBar.currentIndex == 0) {                    
                     category = qsTr("all")
-                    selectedApplication = ""
+                    app.name = ""
                 }
             } else if (currentIndex == 0) {
                 category = qsTr("home")
-                selectedApplication = ""
+                app.name = ""
             }
         }
 

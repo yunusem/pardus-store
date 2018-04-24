@@ -11,12 +11,15 @@ Pane {
     height: parent.height - 10
     Material.elevation: 2
     property bool splashFlag: openAppDetail
-    property string applicationName: selectedApplication
     property variant urls: screenshotUrls
     property int length: urls.length
     property int ind: 0
     property int i: indicator.index
     property int detailTextSize : 15
+
+    property string applicationName: app.name
+    property bool applicationInTheQueue: app.hasProcessing
+
 
     ListModel {
         id: lm
@@ -52,7 +55,7 @@ Pane {
             verticalAlignment: Image.AlignVCenter
             fillMode: Image.PreserveAspectFit
             visible: true
-            source: "image://application/" + getCorrectName(applicationName)
+            source: applicationName == "" ? "": "image://application/" + getCorrectName(applicationName)
             mipmap: true
         }
 
@@ -359,7 +362,7 @@ Pane {
             id: processButton
             width: parent.width / 3
             height: width / 3
-            enabled: !app.hasProcessing
+            enabled: !applicationInTheQueue
             Material.background: app.installed ? Material.Red : Material.Green
             Material.foreground: "#fafafa"
             property bool error: main.errorOccured
@@ -381,8 +384,8 @@ Pane {
             }
 
             onClicked: {
-                processQueue.push(app.name + " " + app.installed)
-                app.hasProcessing = true
+                processingApplicationStatus = (applicationName + " " + true)
+                processQueue.push(applicationName + " " + app.installed)
             }
 
             Label {

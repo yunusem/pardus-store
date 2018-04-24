@@ -13,18 +13,18 @@ ApplicationWindow {
     title: "Pardus" + " " + qsTr("Store")
     flags: Qt.FramelessWindowHint
     color: "transparent"
+    property bool hasActiveFocus: false
     property string popupText: ""
     property string popupHeaderText: qsTr("Something went wrong!")
     property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
     property bool errorOccured: false
     property bool openAppDetail: false
+    property string processingApplicationStatus: ""
     property variant processQueue: []
     property string lastProcess: ""
     property string category : qsTr("home")
     property bool searchF: false
-    property string selectedApplication: ""
-
     property variant categories:
         [qsTr("home"),
         qsTr("all"),
@@ -39,28 +39,36 @@ ApplicationWindow {
         qsTr("video"),
         qsTr("chat"),
         qsTr("others")]
-
-    property variant specialApplications:
-        ["gnome-builder",
-        "xfce4-terminal"]
+    property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
     property alias application: app
 
     Item {
         id: app
-        property string name: selectedApplication
+        property string name: ""
         property string version: ""
         property bool installed: false
         property string category: ""
         property bool free: true
         property string description: ""
         property bool hasProcessing: false
-    }
 
-    onSearchFChanged: {
-        searchBar.searchFlag = searchF
-        if(searchF) {
-            category = qsTr("all")
-            swipeView.currentIndex = 1
+        onNameChanged: {
+            if(name === "") {
+                swipeView.removeItem(2)
+                openAppDetail = false
+                version = ""
+                hasProcessing = false
+                installed = false
+                category = ""
+                free = true
+                description = ""
+            } else {
+                swipeView.addItem(applicationDetailPage)
+                openAppDetail = true
+            }
+        }
+        onHasProcessingChanged: {
+            console.log("hasprocessing of", name, "is", hasProcessing)
         }
     }
 
@@ -311,30 +319,13 @@ ApplicationWindow {
 
     Page {
         id: applicationDetailPage
-        visible: selectedApplication === "" ? false : true
+        visible: app.name === "" ? false : true
         width: swipeView.width
         height: swipeView.height
         ApplicationDetail {
 
         }
     }
-
-    onSelectedApplicationChanged: {
-        if(selectedApplication === "") {
-            swipeView.removeItem(2)
-            openAppDetail = false
-            app.version = ""
-            app.installed = false
-            app.category = ""
-            app.free = true
-            app.description = ""
-        } else {
-            swipeView.addItem(applicationDetailPage)
-            openAppDetail = true
-        }
-    }
-
-
 
     NavigationBar {
         id: navigationBar
@@ -351,21 +342,6 @@ ApplicationWindow {
     ListModel {
         id: lm
 
-    }
-
-    onCategoryChanged: {
-        navigationBar.currentIndex = categories.indexOf(category)
-        applicationModel.setFilterString(category === qsTr("all") ? "" : category, false)
-    }
-
-
-
-    function getCorrectName(appName) {
-        var i = specialApplications.indexOf(appName)
-        if (i != -1) {
-            return appName.split("-")[1]
-        }
-        return appName
     }
 
     Timer {
@@ -389,10 +365,8 @@ ApplicationWindow {
                     busy.Material.accent = Material.Green
                     helper.install(appName)
                 }
-
                 processOutputLabel.text = dutyText + " " + appName + " ..."
                 appIconProcess.source = "image://application/" + getCorrectName(appName)
-
             }
         }
     }
@@ -525,6 +499,41 @@ ApplicationWindow {
             popupHeaderText = qsTr("Something went wrong!")
             popupText = ""
         }
+    }
+
+    Timer {
+        id: focusController
+        interval: 10
+        running: true
+        repeat: true
+        onTriggered: {
+            try {
+                hasActiveFocus = main.activeFocusItem.focus
+            } catch (error) {
+                hasActiveFocus = false
+            }
+        }
+    }
+
+    function getCorrectName(appName) {
+        var i = specialApplications.indexOf(appName)
+        if (i != -1) {
+            return appName.split("-")[1]
+        }
+        return appName
+    }
+
+    onSearchFChanged: {
+        searchBar.searchFlag = searchF
+        if(searchF) {
+            category = qsTr("all")
+            swipeView.currentIndex = 1
+        }
+    }
+
+    onCategoryChanged: {
+        navigationBar.currentIndex = categories.indexOf(category)
+        applicationModel.setFilterString(category === qsTr("all") ? "" : category, false)
     }
 }
 

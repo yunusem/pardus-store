@@ -8,21 +8,42 @@ Item {
     width: applicationList.cellWidth
     height: applicationList.cellHeight
 
+    property string applicationName: name
     property bool applicationStatus: status
+    property bool applicationInTheQueue: inqueue
+
+    property string pas: processingApplicationStatus
+
+    onApplicationNameChanged: {
+        app.name = applicationName
+    }
 
     onApplicationStatusChanged: {
         app.installed = applicationStatus
     }
 
+    onApplicationInTheQueueChanged: {
+        app.hasProcessing = applicationInTheQueue
+    }
+
+    onPasChanged: {
+        var appName = pas.split(" ")[0]
+        var stat = pas.split(" ")[1]
+
+        if(appName === applicationName && stat) {
+            pas = ""
+            applicationInTheQueue = true
+        }
+    }
+
     Pane {
         id: applicationDelegateItem
-        z: ma.containsMouse ? 100 : 5        
-        Material.elevation: ma.containsMouse ? 5 : 3        
+        z: delegateMouseArea.containsMouse ? 100 : 5
+        Material.elevation: delegateMouseArea.containsMouse ? 5 : 3
         anchors {
             margins: 10
             fill: parent
         }
-        property string lastProcess: main.lastProcess
 
         Behavior on width {
             NumberAnimation {
@@ -53,16 +74,16 @@ Item {
         }
 
         MouseArea {
-            id: ma
+            id: delegateMouseArea
             anchors.centerIn: parent
             hoverEnabled: true
             width: applicationDelegateItem.width
             height: applicationDelegateItem.height
-            onClicked: {
-                selectedApplication = name
+            onClicked: {                
                 app.name = name
                 app.version = version
                 app.installed = applicationStatus
+                app.hasProcessing = applicationInTheQueue
                 app.category = category
                 app.free = !nonfree
                 app.description = description
@@ -73,13 +94,13 @@ Item {
                 searchF = false
             }
             onPressed: {
-                if(ma.containsMouse) {
+                if(delegateMouseArea.containsMouse) {
                     applicationDelegateItem.Material.elevation = 0
                     dropShadow.opacity = 0.0
                 }
             }
             onReleased: {
-                if(ma.containsMouse) {
+                if(delegateMouseArea.containsMouse) {
                     applicationDelegateItem.Material.elevation = 5
                 } else {
                     applicationDelegateItem.Material.elevation = 3
@@ -89,24 +110,12 @@ Item {
             }
         }
 
-        onLastProcessChanged: {
-            if(lastProcess.search(name) == 0) {
-                var s = lastProcess.split(" ")
-                if (s[1] === "true") {
-                  applicationStatus = false
-                } else {
-                  applicationStatus = true
-                }                
-                app.hasProcessing = false
-            }
-        }
-
         Image {
             id:appIcon
             anchors {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
-                verticalCenterOffset: ma.containsMouse ? -27 : 0
+                verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
             }
             width: 64
             height: 64
@@ -125,7 +134,7 @@ Item {
 
         DropShadow {
             id:dropShadow
-            //opacity: ma.containsMouse ? 0.0 : 1.0
+            //opacity: delegateMouseArea.containsMouse ? 0.0 : 1.0
             anchors.fill: appIcon
             horizontalOffset: 3
             verticalOffset: 3
@@ -139,7 +148,7 @@ Item {
             id: appNameLabel
             anchors {
                 verticalCenter: parent.verticalCenter
-                verticalCenterOffset: ma.containsMouse ? -27 : 0
+                verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
                 right: parent.right
                 left: appIcon.right
             }
@@ -160,21 +169,36 @@ Item {
 
         Button {
             id: processButton
-            width: ma.containsMouse ? 210 : 80
-            height: ma.containsMouse ? 50 : 40
-            opacity: ma.containsMouse ? 1.0 : 0.0
-            Material.background: applicationStatus ? Material.Red : Material.Green
-            Material.foreground: "#fafafa"
-            enabled: !app.hasProcessing
-            property bool error: main.errorOccured
+            width: delegateMouseArea.containsMouse ? 210 : 80
+            height: delegateMouseArea.containsMouse ? 50 : 40
+            opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
             anchors {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
             }
+            Material.background: applicationStatus ? Material.Red : Material.Green
+            Material.foreground: "#fafafa"
 
+            enabled: !applicationInTheQueue
+
+            property bool error: main.errorOccured
+            property string lastProcess: main.lastProcess
             onErrorChanged: {
                 if(error) {
                     enabled = true
+                }
+            }
+
+            onLastProcessChanged: {
+                if(lastProcess.search(name) == 0) {
+                    var s = lastProcess.split(" ")
+                    if (s[1] === "true") {
+                      applicationStatus = false
+                    } else {
+                      applicationStatus = true
+                    }
+                    enabled = true
+                    applicationInTheQueue = false
                 }
             }
 
@@ -186,7 +210,9 @@ Item {
 
             onClicked: {
                 processQueue.push(name + " " + applicationStatus)
-                app.hasProcessing = true
+                applicationName = name
+                processButton.enabled = false
+                applicationInTheQueue = true
             }
 
             Behavior on opacity {
@@ -213,7 +239,6 @@ Item {
             Label {
                 id: processButtonLabel
                 anchors.centerIn: parent
-                //Material.foreground: "#000000"
                 text: applicationStatus ? qsTr("remove") : qsTr("install")
             }
         }
@@ -242,7 +267,7 @@ Item {
             Material.foreground: Material.Red
             //enabled: false
             text: nonfree ? "Non Free" : ""
-            opacity: ma.containsMouse ? 1.0 : 0.0
+            opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
 
             Behavior on opacity {
                 NumberAnimation {
@@ -252,7 +277,5 @@ Item {
             }
         }
 
-
     }
-
 }

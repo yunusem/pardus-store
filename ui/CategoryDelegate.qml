@@ -78,7 +78,7 @@ Item {
         width: categoryDelegateItem.width
         height: categoryDelegateItem.height
         onClicked: {
-            selectedApplication = ""
+            app.name = ""
             category = name
         }
         onPressed: {

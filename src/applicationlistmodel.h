@@ -12,20 +12,24 @@ public:
     Application(const QString &name,
                 const QString &version,
                 bool stat,
+                bool inque,
                 const QString &category,
                 bool &non_free,
                 const QString &description = "");
     QString name() const;
     QString version() const;
     bool status() const;
+    bool in_queue() const;
     QString category() const;
     bool non_free() const;
     QString description() const;
     void setStatus(bool stat);
+    void setInQueue(bool b);
 private:
     QString m_name;
     QString m_version;
     bool m_status;
+    bool m_in_queue;
     QString m_category;
     bool m_non_free;
     QString m_description;
@@ -35,6 +39,7 @@ enum Roles {
     NameRole = Qt::UserRole +1,
     VersionRole,
     StatusRole,
+    InQueueRole,
     CategoryRole,
     NonFreeRole,
     DescriptionRole,
