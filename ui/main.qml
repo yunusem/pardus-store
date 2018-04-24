@@ -42,6 +42,8 @@ ApplicationWindow {
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
     property alias application: app
 
+    signal updateQueue()
+
     Item {
         id: app
         property string name: ""
@@ -66,9 +68,6 @@ ApplicationWindow {
                 swipeView.addItem(applicationDetailPage)
                 openAppDetail = true
             }
-        }
-        onHasProcessingChanged: {
-            console.log("hasprocessing of", name, "is", hasProcessing)
         }
     }
 
@@ -160,6 +159,128 @@ ApplicationWindow {
 
     }
 
+    Popup {
+        id: queuePopup
+        closePolicy: Popup.CloseOnPressOutside
+        Material.background: "#2c2c2c"
+        Material.elevation: 3
+        width: busy.width + processOutputLabel.width
+        //height: repeaterQueue.count * 20 + 24
+        //visible: isThereOnGoingProcess
+
+        z: 99
+        x: parent.width / 21 + 24
+        y: parent.height - queuePopup.height - bottomDock.height - 13
+
+        Behavior on y {
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 600
+            }
+        }
+
+        Label {
+            id: queuePopupTitle
+            text: qsTr("queue")
+            Material.foreground: "#ffcb08"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.Capitalize
+        }
+
+        Column {
+            spacing: 12
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            width: parent.width
+            height: parent.height - queuePopupTitle.height
+            Repeater {
+                id: repeaterQueue
+                model: processQueue
+                Item {
+                    width: parent.width
+                    height: 18
+                    Text {
+                        color: "white"
+                        text: modelData.split(" ")[0]
+                        verticalAlignment: Text.AlignVCenter
+                        font.capitalization: Font.Capitalize
+                    }
+
+                    Rectangle {
+                        id: cancelBtn
+                        width: 16
+                        height: height
+                        radius: 3
+                        color: "#ff0000"
+                        visible: index != 0
+                        anchors.right: parent.right
+                        Text {
+                            text: "X"
+                            color: "white"
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                        MouseArea {
+                            id: cancelBtnMa
+                            visible: true
+                            anchors.fill: parent
+                            onClicked: {
+                                console.log("queue cancel clicked")
+                            }
+                        }
+                    }
+
+                }
+
+                /*
+                delegate: Item {
+                    width: parent.width
+                    Row {
+                        spacing: 10
+                        Image {
+                            id: queueIcon
+                            width: 16
+                            height: width
+                            smooth: true
+                            mipmap: true
+                            antialiasing: true
+                            source: "image://application/" + getCorrectName(modelData.split(" ")[0])
+                        }
+
+                        Label {
+                            id: queueLabel
+                            text: modelData.split(" ")[0]
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            font.capitalization: Font.Capitalize
+                            Material.foreground: "#fafafa"
+                        }
+
+                        Pane {
+                            id: cancelBtn
+                            width: 16
+                            height: height
+                            Material.background: Material.Red
+                            Label {
+                                anchors.centerIn: parent
+                                text: "X"
+                                Material.foreground: "white"
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
+                }
+                */
+            }
+        }
+    }
+
+
+
     BottomDock {
         id: bottomDock
 
@@ -229,6 +350,22 @@ ApplicationWindow {
 
         }
 
+        MouseArea {
+            id: outputMa
+            height: main.height / 15
+            width: height * 6
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
+
+            hoverEnabled: true
+            onContainsMouseChanged: {
+                if(containsMouse) {
+                    queuePopup.open()
+                }
+            }
+        }
     }
 
     SearchBar {
@@ -266,6 +403,7 @@ ApplicationWindow {
 
             processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
             lastProcess = processQueue.shift()
+            updateQueue()
             isThereOnGoingProcess = false
         }
 
@@ -534,6 +672,11 @@ ApplicationWindow {
     onCategoryChanged: {
         navigationBar.currentIndex = categories.indexOf(category)
         applicationModel.setFilterString(category === qsTr("all") ? "" : category, false)
+    }
+
+    onUpdateQueue: {
+        repeaterQueue.model = processQueue
+        queuePopup.height = repeaterQueue.count * 28 + queuePopupTitle.height + 12
     }
 }
 

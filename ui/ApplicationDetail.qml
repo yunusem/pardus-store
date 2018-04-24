@@ -386,6 +386,7 @@ Pane {
             onClicked: {
                 processingApplicationStatus = (applicationName + " " + true)
                 processQueue.push(applicationName + " " + app.installed)
+                updateQueue()
             }
 
             Label {

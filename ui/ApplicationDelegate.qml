@@ -209,10 +209,11 @@ Item {
             }
 
             onClicked: {
-                processQueue.push(name + " " + applicationStatus)
                 applicationName = name
                 processButton.enabled = false
                 applicationInTheQueue = true
+                processQueue.push(name + " " + applicationStatus)
+                updateQueue()
             }
 
             Behavior on opacity {
