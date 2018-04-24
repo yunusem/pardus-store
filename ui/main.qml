@@ -361,7 +361,7 @@ ApplicationWindow {
 
             hoverEnabled: true
             onContainsMouseChanged: {
-                if(containsMouse) {
+                if(containsMouse && isThereOnGoingProcess) {
                     queuePopup.open()
                 }
             }
@@ -677,6 +677,9 @@ ApplicationWindow {
     onUpdateQueue: {
         repeaterQueue.model = processQueue
         queuePopup.height = repeaterQueue.count * 28 + queuePopupTitle.height + 12
+        if(processQueue.length == 0) {
+            queuePopup.close()
+        }
     }
 }
 
