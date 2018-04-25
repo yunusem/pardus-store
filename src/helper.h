@@ -9,8 +9,8 @@
 
 class FileHandler;
 class PackageHandler;
-class Artwork;
-class ScreenshotInfo;
+class NetworkHandler;
+class ApplicationDetail;
 
 class Helper : public QObject
 {
@@ -19,6 +19,7 @@ class Helper : public QObject
                READ processing
                NOTIFY processingFinished
                NOTIFY processingFinishedWithError
+               NOTIFY descriptionReceived
                NOTIFY screenshotReceived
                NOTIFY screenshotNotFound)
 public:
@@ -27,7 +28,7 @@ public:
 
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
-    Q_INVOKABLE void getScreenShot(const QString &pkg);
+    Q_INVOKABLE void getAppDetails(const QString &pkg);
     Q_INVOKABLE void systemNotify(const QString &pkg,
                                   const QString &title,
                                   const QString &content);
@@ -38,7 +39,7 @@ private:
     QStringList l;
     QStringList ldetail;
     ListCover lc;
-    Artwork *a;
+    NetworkHandler *nh;
     void fillTheList();
 
 private slots:
@@ -50,10 +51,11 @@ signals:
     void processingFinished();
     void processingFinishedWithError(const QString &output);
     void screenshotReceived(const QStringList &urls);
+    void descriptionReceived(const QString &description);
     void screenshotNotFound();
 
 public slots:
-    void screenshotReceivedSlot(const ScreenshotInfo &info);
+    void appDetailReceivedSlot(const ApplicationDetail &ad);
 };
 
 #endif // HELPER_H

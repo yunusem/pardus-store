@@ -1,5 +1,5 @@
-#include "artwork.h"
-
+#include "networkhandler.h"
+#include "applicationdetail.h"
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QUrl>
@@ -10,7 +10,8 @@
 #include <QTimer>
 #include <QDebug>
 
-#include "screenshotinfo.h"
+#define MAIN_URL "http://depo.pardus.org.tr:5000"
+#define API_URL "http://depo.pardus.org.tr:5000/api/v1/apps/"
 
 namespace {
 
@@ -47,22 +48,30 @@ QNetworkReply *reply_get(std::map<QNetworkReply *, QTimer *> *m, QTimer *t)
     }
     return nullptr;
 }
-
 }
 
-Artwork::Artwork(int msec, QObject *parent) :
-    QObject(parent),
+NetworkHandler::NetworkHandler(int msec, QObject *parent) : QObject(parent),
     m_timeoutDuration(msec)
 {
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(replyFinished(QNetworkReply*)));
 }
 
-void Artwork::get(const QString &packageName)
+void NetworkHandler::getApplicationList()
 {
     QNetworkReply *reply;
-    QString url = QString("http://screenshots.debian.net/json/package/%1")
-            .arg(packageName);
+    QTimer *timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer->setSingleShot(true);
+    reply = m_nam.get(QNetworkRequest(QUrl(API_URL)));
+    timer_put(&m_timerMap, reply, timer);
+    timer->start(m_timeoutDuration);
+}
+
+void NetworkHandler::getApplicationDetails(const QString &packageName)
+{
+    QNetworkReply *reply;
+    QString url = QString(API_URL).append(packageName);
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
@@ -71,7 +80,7 @@ void Artwork::get(const QString &packageName)
     timer->start(m_timeoutDuration);
 }
 
-void Artwork::replyFinished(QNetworkReply *reply)
+void NetworkHandler::replyFinished(QNetworkReply *reply)
 {
     auto timer = timer_get(&m_timerMap, reply);
     if (timer) {
@@ -82,7 +91,7 @@ void Artwork::replyFinished(QNetworkReply *reply)
     reply->deleteLater();
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << reply->errorString();
-        emit screenshotNotFound();
+        emit notFound();
         return;
     }
 
@@ -91,32 +100,47 @@ void Artwork::replyFinished(QNetworkReply *reply)
 
     if (doc.isNull()) {
         qDebug("Not a json document!");
-        emit screenshotNotFound();
+        emit notFound();
         return;
     }
 
     auto obj = doc.object();
-    if (obj["status"].toString() == "404") {
-        qDebug("Error: not found!");
-        emit screenshotNotFound();
+    if (obj["status"].toString() == "400") {
+        qDebug() << obj["error"].toString();
+        emit notFound();
         return;
     }
 
-    QString packageName = obj["package"].toString();
-
-    QList<Screenshot> sshots;
-    auto arr = obj["screenshots"].toArray();
-    foreach(const QJsonValue &val, arr) {
-        obj = val.toObject();
-        sshots.append(Screenshot(obj["small_image_url"].toString(),
-                      obj["large_image_url"].toString(),
-                obj["version"].toString()));
+    if (obj.contains("app-list")) {
+        QStringList apps;
+        QString item;
+        auto arr = obj["app-list"].toArray();
+        for(int i=0; i < arr.size(); i++) {
+            item = QString("");
+            item += QString(arr.at(i).toObject()["name"].toString()) + " ";
+            item += QString(arr.at(i).toObject()["category"].toString());
+            apps.append(item);
+        }
+        emit appListReceived(apps);
+    } else if (obj.contains("details")) {
+        QStringList ss;
+        QList<Description> descs;
+        QString appName = obj["name"].toString();
+        auto details = obj["details"].toObject();
+        QJsonArray screenshots = details["screenshots"].toArray();
+        for(int i=0; i < screenshots.size(); i++) {
+            ss.append(QString(MAIN_URL).append(screenshots.at(i).toString()));
+        }
+        QJsonObject descObj = details["descriptions"].toObject();
+        foreach(const QString &key, descObj.keys()) {
+            QJsonValue value = descObj.value(key);
+            descs.append(Description(key,value.toString()));
+        }
+        emit appDetailsReceived(ApplicationDetail(appName,ss,descs));
     }
-
-    emit screenshotReceived(ScreenshotInfo(packageName, sshots));
 }
 
-void Artwork::onTimeout()
+void NetworkHandler::onTimeout()
 {
     QTimer *timer;
     QNetworkReply *reply;

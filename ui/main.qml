@@ -418,6 +418,10 @@ ApplicationWindow {
             popup.open()
         }
 
+        onDescriptionReceived: {
+            app.description = description
+        }
+
         onScreenshotReceived: {
             screenshotUrls = urls
         }

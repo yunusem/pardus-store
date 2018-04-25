@@ -7,8 +7,8 @@ SOURCES += src/main.cpp \
     src/filehandler.cpp \
     src/packagehandler.cpp \
     src/applicationlistmodel.cpp \
-    src/artwork.cpp \
-    src/screenshotinfo.cpp
+    src/networkhandler.cpp \
+    src/applicationdetail.cpp
 
 HEADERS += \
     src/helper.h \
@@ -16,8 +16,8 @@ HEADERS += \
     src/packagehandler.h \
     src/iconprovider.h \
     src/applicationlistmodel.h \
-    src/artwork.h \
-    src/screenshotinfo.h
+    src/networkhandler.h \
+    src/applicationdetail.h
 
 TARGET = ps
 

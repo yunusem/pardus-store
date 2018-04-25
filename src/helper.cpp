@@ -1,23 +1,25 @@
 #include "helper.h"
 #include "filehandler.h"
 #include "packagehandler.h"
-#include "artwork.h"
-#include "screenshotinfo.h"
+#include "networkhandler.h"
+#include "applicationdetail.h"
+#include <QLocale>
 #include <QProcess>
 #include <QRegExp>
 #include <QDebug>
 
 Helper::Helper(QObject *parent) : QObject(parent), p(false)
-{
-    a = new Artwork(10000, this);
+{    
+    nh = new NetworkHandler(10000,this);
     fh = new FileHandler(this);
     ph = new PackageHandler(this);
     l = fh->readLines();    
     ldetail = this->getDetails();
     this->fillTheList();
-    connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
-    connect(a,SIGNAL(screenshotReceived(ScreenshotInfo)),this,SLOT(screenshotReceivedSlot(ScreenshotInfo)));
-    connect(a,SIGNAL(screenshotNotFound()),this,SIGNAL(screenshotNotFound()));
+    connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));    
+    connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
+    connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
+
 }
 
 bool Helper::processing() const
@@ -117,9 +119,9 @@ void Helper::remove(const QString &pkg)
     p = true;
 }
 
-void Helper::getScreenShot(const QString &pkg)
-{
-    a->get(pkg);
+void Helper::getAppDetails(const QString &pkg)
+{  
+    nh->getApplicationDetails(pkg);
 }
 
 void Helper::systemNotify(const QString &pkg, const QString &title, const QString &content)
@@ -146,12 +148,23 @@ void Helper::packageProcessFinished(int code)
     p = false;
 }
 
-void Helper::screenshotReceivedSlot(const ScreenshotInfo &info)
+void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
 {
-    QStringList ss;
-    for(int i = 0; i< info.screenshots().size(); i++) {
-        ss << info.screenshots().at(i).largeImageUrl().replace("ubuntu.com","debian.net");
-    }
+    QLocale locale;
+    QString storeLocale = locale.name().split("_")[0];
+    QString l;
+    QString d;
+    for(int i=0; i< ad.descriptions().size(); i++) {
+        l = ad.descriptions().at(i).language();
+        if (l == "en") {
+            d = ad.descriptions().at(i).description();
+        } else if (l == storeLocale) {
+            if(ad.descriptions().at(i).description() != "") {
+                d = ad.descriptions().at(i).description();
+            }
+        }
 
-    emit screenshotReceived(ss);
+    }
+    emit descriptionReceived(d);
+    emit screenshotReceived(ad.screenshots());
 }

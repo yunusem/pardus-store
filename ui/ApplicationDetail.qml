@@ -15,7 +15,7 @@ Pane {
     property int length: urls.length
     property int ind: 0
     property int i: indicator.index
-    property int detailTextSize : 15
+    property int detailTextSize : 14
 
     property string applicationName: app.name
     property bool applicationInTheQueue: app.hasProcessing
@@ -102,6 +102,7 @@ Pane {
             id:popupImage
             fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent
+            width: parent.width - 140
             source: urls[0] !== "none" && urls[0] ? urls[indicator.index] : ""
 
             BusyIndicator {
@@ -350,7 +351,7 @@ Pane {
         width: appBanner.width - imagesPane.width - 12
         x: imagesPane.width + 12
         y: parent.height - (textPane.height + 3)
-
+        clip: true
         Behavior on opacity {
             NumberAnimation {
                 easing.type: Easing.InExpo
@@ -404,33 +405,41 @@ Pane {
                 bottomMargin: 12
             }
 
-            spacing: 10
+            spacing: 9
             Label {
+                id: labelVersion
                 text:qsTr("version")+": " + app.version
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
             }
             Label {
+                id: labelCategory
                 text:qsTr("Category")+": " + app.category
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
             }
             Label {
+                id: labelNonFree
                 text:qsTr("Non-Free")+": " + !app.free
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
             }
             Label {
+                id: labelDescriptionTitle
                 text:qsTr("Description")+": "
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
             }
             Label {
+                width: parent.width
+                height: parent.height - labelVersion.height * 4
                 text: app.description == "" ? "no description found": app.description
+                fontSizeMode: Text.VerticalFit
+                wrapMode: Text.WordWrap
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 enabled: false

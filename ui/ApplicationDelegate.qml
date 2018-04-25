@@ -90,7 +90,7 @@ Item {
 
                 swipeView.currentIndex = 2
                 screenshotUrls = []
-                helper.getScreenShot(name)
+                helper.getAppDetails(name)
                 searchF = false
             }
             onPressed: {
