@@ -279,8 +279,6 @@ ApplicationWindow {
         }
     }
 
-
-
     BottomDock {
         id: bottomDock
 
@@ -404,7 +402,11 @@ ApplicationWindow {
             processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
             lastProcess = processQueue.shift()
             updateQueue()
-            isThereOnGoingProcess = false
+            isThereOnGoingProcess = false            
+            systemNotify(appName,
+                         qsTr("Package process is complete"),
+                         (appName.charAt(0).toUpperCase() + appName.slice(1)) +
+                         " " + dutyText + " (Pardus " + qsTr("Store") + ")")
         }
 
         onProcessingFinishedWithError: {
@@ -421,7 +423,6 @@ ApplicationWindow {
         }
         onScreenshotNotFound: {
             screenshotUrls = ["none"]
-
         }
     }
 

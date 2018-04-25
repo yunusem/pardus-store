@@ -28,6 +28,9 @@ public:
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
     Q_INVOKABLE void getScreenShot(const QString &pkg);
+    Q_INVOKABLE void systemNotify(const QString &pkg,
+                                  const QString &title,
+                                  const QString &content);
 private:
     bool p;
     FileHandler *fh;

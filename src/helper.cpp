@@ -122,6 +122,19 @@ void Helper::getScreenShot(const QString &pkg)
     a->get(pkg);
 }
 
+void Helper::systemNotify(const QString &pkg, const QString &title, const QString &content)
+{
+    QProcess p;
+    QStringList args;
+    args << "-u" << "normal";
+    args << "-t" << "13000";
+    args << "-i" << pkg;
+    args << title << content;
+
+    QString command = "/usr/bin/notify-send";
+    p.execute(command, args);
+}
+
 void Helper::packageProcessFinished(int code)
 {
     if(code == 0) {                
