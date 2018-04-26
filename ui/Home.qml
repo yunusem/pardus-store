@@ -12,23 +12,18 @@ Pane {
 
     width: parent.width - 10
     height: parent.height - 10
-    Material.elevation: 2
-    //Material.background: "#2c2c2c"
-
+    Material.elevation: 2    
+    property int animationSpeed: 200
     property variant surveyList : ["gimp", "webstorm", "discord"]
-
     property string surveySelectedApplication : ""
     property string editorsAppName: "chromium"
     property string mostAppName: "spotify-client"
-
-
 
     Pane {
         id: banner
         width: parent.width
         height: bannerImage.height > 0 ? bannerImage.height + 24 : 250
-        Material.elevation: 2
-        //Material.background: "#fafafa"
+        Material.elevation: 2       
         anchors {
             horizontalCenter: parent.horizontalCenter
         }
@@ -38,7 +33,6 @@ Pane {
             fillMode: Image.PreserveAspectFit
             source: "https://www.pardus.org.tr/wp-content/uploads/2017/07/pardus17-banner-1920.png"
             anchors.centerIn: parent
-
         }
 
         BusyIndicator {
@@ -47,7 +41,6 @@ Pane {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
             }
-
             running: !bannerImage.progress
         }
 
@@ -67,15 +60,13 @@ Pane {
         id: suggester
         height: parent.height - banner.height - 15
         width: height
-        Material.elevation: 2
-        //Material.background: "#fafafa"
+        Material.elevation: 2        
         anchors {
             bottom: parent.bottom
             left: parent.left
         }
 
         // for one app
-
         Pane {
             id: editorApp
             Material.elevation: 2
@@ -88,7 +79,6 @@ Pane {
                 bottomMargin: 5
             }
 
-
             MouseArea {
                 id: editorBadgeMa
                 hoverEnabled: true
@@ -97,28 +87,30 @@ Pane {
                 onClicked: {
                     swipeView.currentIndex = 1
                     applicationModel.setFilterString(editorsAppName, true)
-                    //category = qsTr("all")
-
-
-
 
                 }
             }
-
 
             Image {
                 id:appIcon
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
+                    verticalCenterOffset: editorBadgeMa.containsMouse ? 9 : 27
                 }
-                width: 64
-                height: 64
+                width: 72
+                height: 72
                 smooth: true
                 mipmap: true
                 antialiasing: true
                 source: "image://application/" + getCorrectName(editorsAppName)
 
+                Behavior on anchors.verticalCenterOffset {
+                    NumberAnimation {
+                        duration: animationSpeed
+                        easing.type: Easing.OutExpo
+                    }
+                }
 
             }
 
@@ -133,22 +125,27 @@ Pane {
                 source: appIcon
             }
 
-
             Label {
                 id: appNameLabel
                 anchors {
                     verticalCenter: parent.verticalCenter
-                    right: parent.right
+                    verticalCenterOffset: editorBadgeMa.containsMouse ? 9 : 27
                     left: appIcon.right
+                    right: parent.right
                 }
                 text: editorsAppName.replace("-", " ")
-                fontSizeMode: Text.HorizontalFit
-                wrapMode: Text.WordWrap
+                font.weight: Font.Bold
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.capitalization: Font.Capitalize
+                font.pointSize: 14
 
-
+                Behavior on anchors.verticalCenterOffset {
+                    NumberAnimation {
+                        duration: animationSpeed
+                        easing.type: Easing.OutExpo
+                    }
+                }
             }
 
             Rectangle {
@@ -160,6 +157,7 @@ Pane {
 
                 Rectangle  {
                     id: editorBadge
+
                     width: parent.width * 3
                     height: width
                     radius:  editorBadgeMa.containsMouse ? 0 : height / 2
@@ -182,35 +180,29 @@ Pane {
 
                         Behavior on anchors.bottomMargin {
                             NumberAnimation {
-                                duration: 250
+                                duration: animationSpeed
+                                easing.type: Easing.OutExpo
                             }
-                        }
-                    }
-
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 250
                         }
                     }
 
                     Behavior on y {
                         NumberAnimation {
-                            duration: 250
+                            duration: animationSpeed
+                            easing.type: Easing.OutExpo
                         }
                     }
 
                     Behavior on radius {
                         NumberAnimation {
-                            duration: 250
+                            duration: animationSpeed
+                            easing.type: Easing.OutExpo
                         }
                     }
 
                 }
 
             }
-
-
 
         }
 
@@ -225,7 +217,6 @@ Pane {
                 topMargin: 5
             }
 
-
             MouseArea {
                 id: mostDownloadedAppMa
                 hoverEnabled: true
@@ -234,28 +225,29 @@ Pane {
                 onClicked: {
                     swipeView.currentIndex = 1
                     applicationModel.setFilterString(mostAppName, true)
-
-
                 }
             }
-
-
-
 
             Image {
                 id:appIconMost
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
+                    verticalCenterOffset: mostDownloadedAppMa.containsMouse ? 9 : 27
                 }
-                width: 64
-                height: 64
+                width: 72
+                height: 72
                 smooth: true
                 mipmap: true
                 antialiasing: true
                 source: "image://application/" + getCorrectName(mostAppName)
 
-
+                Behavior on anchors.verticalCenterOffset {
+                    NumberAnimation {
+                        duration: animationSpeed
+                        easing.type: Easing.OutExpo
+                    }
+                }
             }
 
             DropShadow {
@@ -269,24 +261,28 @@ Pane {
                 source: appIconMost
             }
 
-
             Label {
                 id: appNameLabelMost
                 anchors {
                     verticalCenter: parent.verticalCenter
-                    right: parent.right
+                    verticalCenterOffset: mostDownloadedAppMa.containsMouse ? 9 : 27
                     left: appIconMost.right
+                    right: parent.right
                 }
                 text: mostAppName.replace("-", " ")
-                fontSizeMode: Text.HorizontalFit
-                wrapMode: Text.WordWrap
+                font.weight: Font.Bold
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.capitalization: Font.Capitalize
+                font.pointSize: 14
+
+                Behavior on anchors.verticalCenterOffset {
+                    NumberAnimation {
+                        duration: animationSpeed
+                        easing.type: Easing.OutExpo
+                    }
+                }
             }
-
-
-
 
             Rectangle {
                 id: mostDownloadedAppCover
@@ -296,7 +292,7 @@ Pane {
                 color: "transparent"
 
                 Rectangle  {
-                    id: mostDownloadedAppBadge
+                    id: mostDownloadedAppBadge                   
                     width: parent.width * 3
                     height: width
                     radius:  mostDownloadedAppMa.containsMouse ? 0 : height / 2
@@ -318,40 +314,33 @@ Pane {
 
                         Behavior on anchors.bottomMargin {
                             NumberAnimation {
-                                duration: 250
+                                duration: animationSpeed
+                                easing.type: Easing.OutExpo
                             }
-                        }
-                    }
-
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 250
                         }
                     }
 
                     Behavior on y {
                         NumberAnimation {
-                            duration: 250
+                            duration: animationSpeed
+                            easing.type: Easing.OutExpo
                         }
                     }
 
                     Behavior on radius {
                         NumberAnimation {
-                            duration: 250
+                            duration: animationSpeed
+                            easing.type: Easing.OutExpo
                         }
                     }
 
                 }
 
             }
-
         }
-
     }
 
-
-    Rectangle {
+    Item {
         id: middle
         anchors {
             left: suggester.right
@@ -361,14 +350,13 @@ Pane {
             margins: 5
         }
 
-
         Image {
             id: middleBackgroundIcon
             source: "../images/icon.svg"
             width: parent.height
             height: width
             anchors.centerIn: parent
-            opacity: 0.03
+            opacity: 0.02
         }
 
         Column {
@@ -388,6 +376,7 @@ Pane {
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
+
             Label {
                 font.pointSize: 12
                 horizontalAlignment: Text.AlignHCenter
@@ -401,12 +390,14 @@ Pane {
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
-            Label{
+
+            Label {
                 font.pointSize: 12
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 text:qsTr("Version") + " : " + "alpha"
             }
+
             Label {
                 font.pointSize: 12
                 horizontalAlignment: Text.AlignHCenter
@@ -420,20 +411,15 @@ Pane {
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
+
             Label {
                 enabled: false
                 font.pointSize: 12
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: "Bu kısım geçicidir. Daha fazlası yakında gelecek..."
+                text: "Bu kısım geçicidir. Daha fazlası yakında gelecek ..."
             }
-
-
         }
-
-
-
-
     }
 
 
@@ -441,8 +427,7 @@ Pane {
         id: survey
         height: parent.height - banner.height - 15
         width: height
-        Material.elevation: 2
-        //Material.background: "#fafafa"
+        Material.elevation: 2        
         anchors {
             bottom: parent.bottom
             right: parent.right
@@ -501,7 +486,5 @@ Pane {
                 }
             }
         }
-
     }
-
 }

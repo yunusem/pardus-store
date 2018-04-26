@@ -39,6 +39,7 @@ Item {
 
     Component.onCompleted: {
         updateStatusOfAppFromDetail.connect(updateInQueue)
+        app.name = ""
     }
 
     Pane {
@@ -220,7 +221,7 @@ Item {
                 inqueue = true
                 processQueue.push(name + " " + applicationStatus)
                 updateQueue()
-            }
+            }//Material.background: "#fafafa"
 
             Behavior on opacity {
                 NumberAnimation {

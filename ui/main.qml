@@ -59,8 +59,7 @@ ApplicationWindow {
             if(name === "") {
                 swipeView.removeItem(2)
                 openAppDetail = false
-                version = ""
-                //hasProcessing = false
+                version = ""                
                 installed = false
                 category = ""
                 free = true
@@ -68,7 +67,7 @@ ApplicationWindow {
             } else {
                 swipeView.addItem(applicationDetailPage)
                 openAppDetail = true
-            }
+            }            
         }
     }
 

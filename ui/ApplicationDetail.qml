@@ -523,7 +523,7 @@ application. Install with caution.")) : " !")
     onSplashFlagChanged: {
         if(splashFlag) {
             detailAnimation.start()
-            searchF = false
+            //searchF = false
         }
     }
 
