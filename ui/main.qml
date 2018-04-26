@@ -757,6 +757,9 @@ ApplicationWindow {
         onClosed: {
             popupHeaderText = qsTr("Something went wrong!")
             popupText = ""
+            if(splashScreen.visible) {
+                Qt.quit()
+            }
         }
     }
 
