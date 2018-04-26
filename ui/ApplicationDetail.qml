@@ -441,7 +441,7 @@ Pane {
                 fontSizeMode: Text.VerticalFit
                 wrapMode: Text.WordWrap
                 font.pointSize: detailTextSize
-                verticalAlignment: Text.AlignVCenter
+                verticalAlignment: Text.AlignTop
                 enabled: false
             }
         }

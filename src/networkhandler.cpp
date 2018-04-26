@@ -129,7 +129,9 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
         auto details = obj["details"].toObject();
         QJsonArray screenshots = details["screenshots"].toArray();
         for(int i=0; i < screenshots.size(); i++) {
-            ss.append(QString(MAIN_URL).append(screenshots.at(i).toString()));
+            if(screenshots.at(i).toString() != "") {
+                ss.append(QString(MAIN_URL).append(screenshots.at(i).toString()));
+            }
         }
         QJsonObject descObj = details["descriptions"].toObject();
         foreach(const QString &key, descObj.keys()) {

@@ -422,10 +422,13 @@ ApplicationWindow {
             app.description = description
         }
 
-        onScreenshotReceived: {
+        onScreenshotReceived: {            
             screenshotUrls = urls
+            if(urls.length === 0) {
+                screenshotUrls = ["none"]
+            }
         }
-        onScreenshotNotFound: {
+        onScreenshotNotFound: {            
             screenshotUrls = ["none"]
         }
     }
