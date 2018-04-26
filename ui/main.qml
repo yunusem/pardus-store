@@ -805,6 +805,9 @@ ApplicationWindow {
         queuePopup.height = repeaterQueue.count * 28 + queuePopupTitle.height + 12
         if(processQueue.length == 0) {
             queuePopup.close()
+            app.hasProcessing = false
+        } else {
+            app.hasProcessing = true
         }
     }
 }
