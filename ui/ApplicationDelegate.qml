@@ -96,7 +96,6 @@ Item {
                 swipeView.currentIndex = 2
                 screenshotUrls = []
                 helper.getAppDetails(name)
-                searchF = false
             }
             onPressed: {
                 if(delegateMouseArea.containsMouse) {
@@ -217,6 +216,7 @@ Item {
                 applicationName = name
                 processButton.enabled = false
                 applicationInTheQueue = true
+                inqueue = true
                 processQueue.push(name + " " + applicationStatus)
                 updateQueue()
             }

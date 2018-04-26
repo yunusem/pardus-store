@@ -826,6 +826,9 @@ ApplicationWindow {
     onCategoryChanged: {
         navigationBar.currentIndex = categories.indexOf(category)
         applicationModel.setFilterString(category === qsTr("all") ? "" : category, false)
+        if(category === qsTr("home")) {
+            searchF = false
+        }
     }
 
     onUpdateQueue: {

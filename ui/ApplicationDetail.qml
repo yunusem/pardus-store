@@ -516,13 +516,14 @@ application. Install with caution.")) : " !")
             duration: 1000
             from: appDetail.height
             to : appDetail.height - (imagesPane.height + 27)
-        }
+        }       
 
     }
 
     onSplashFlagChanged: {
         if(splashFlag) {
             detailAnimation.start()
+            searchF = false
         }
     }
 
