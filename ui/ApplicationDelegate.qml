@@ -203,6 +203,7 @@ Item {
                     }
                     enabled = true
                     applicationInTheQueue = false
+                    inqueue = false
                 }
             }
 
