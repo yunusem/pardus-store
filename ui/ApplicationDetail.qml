@@ -359,6 +359,60 @@ Pane {
             }
         }
 
+
+        Pane {
+            id: disclamer
+            visible: !app.free
+            clip: true
+            width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width - 48
+            height: disclamerMa.containsMouse ? processButton.height * 2 - 12 : processButton.height - 12
+            Material.background: "#FFCB08"
+            z: 200
+            anchors {
+                bottom: parent.bottom
+                bottomMargin: 6
+                left: parent.left
+            }
+
+            MouseArea {
+                id: disclamerMa
+                width: parent.width + 24
+                height: parent.height + 24
+                anchors.centerIn: parent
+                hoverEnabled: true
+            }
+
+            Behavior on height {
+                NumberAnimation {
+                    easing.type: Easing.OutExpo
+                    duration: 150
+                }
+            }
+
+            Behavior on width {
+                NumberAnimation {
+                    easing.type: Easing.OutExpo
+                    duration: 50
+                }
+            }
+
+            Label {
+                id: disclamerText
+                width: parent.width
+                enabled: disclamerMa.containsMouse
+                text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
+                qsTr("This application served from Pardus non-free package
+repositories, so that the OS has nothing to do with the health of the
+application. Install with caution.")) : " !")
+                //horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                fontSizeMode: Text.VerticalFit
+                wrapMode: Text.WordWrap
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+
         Button {
             id: processButton
             width: parent.width / 3
@@ -419,14 +473,7 @@ Pane {
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
-            }
-            Label {
-                id: labelNonFree
-                text:qsTr("Non-Free")+": " + !app.free
-                font.pointSize: detailTextSize
-                verticalAlignment: Text.AlignVCenter
-                font.capitalization: Font.Capitalize
-            }
+            }            
             Label {
                 id: labelDescriptionTitle
                 text:qsTr("Description")+": "
@@ -436,7 +483,7 @@ Pane {
             }
             Label {
                 width: parent.width
-                height: parent.height - labelVersion.height * 4
+                height: parent.height - labelVersion.height * 3
                 text: app.description == "" ? "no description found": app.description
                 fontSizeMode: Text.VerticalFit
                 wrapMode: Text.WordWrap
