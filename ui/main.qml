@@ -722,14 +722,24 @@ ApplicationWindow {
     Popup {
         id: popup
         width: parent.width / 3
-        height: parent.height / 3
+        height: (popupOutputHeader.height + popupOutput.height + 48) > main.height - 24 ? main.height - 24 :  (popupOutputHeader.height + popupOutput.height + 24)
+
         modal: true
         closePolicy: Popup.CloseOnPressOutside
         y: parent.height / 2 - popup.height / 2
         x: parent.width / 2 - popup.width / 2
         Material.background: "#2c2c2c"
 
+        onHeightChanged: {
+            if(height < (main.height - 24)) {
+                popupOutputContainer.clip = false
+            } else {
+                popupOutputContainer.clip = true
+            }
+        }
+
         Label {
+            id: popupOutputHeader
             text: popupHeaderText
             anchors.horizontalCenter: parent.horizontalCenter
             Material.foreground: "#fafafa"
@@ -740,15 +750,29 @@ ApplicationWindow {
             font.bold: true
         }
 
-        Label {
-            text: popupText
-            width: parent.width
-            anchors.centerIn: parent
-            Material.foreground: "#fafafa"
-            fontSizeMode: Text.HorizontalFit
-            wrapMode: Text.WordWrap
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+        Item {
+            id: popupOutputContainer
+            //clip: true
+            anchors {
+                top: popupOutputHeader.bottom
+                topMargin: 12
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+
+            Label {
+                id: popupOutput
+                text: popupText
+                width: parent.width
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.margins: 18
+                Material.foreground: "#fafafa"
+                fontSizeMode: Text.HorizontalFit
+                wrapMode: Text.WordWrap
+                verticalAlignment: Text.AlignVCenter
+                //horizontalAlignment: Text.AlignHCenter
+            }
         }
 
         MouseArea {
