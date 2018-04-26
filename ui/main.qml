@@ -20,8 +20,7 @@ ApplicationWindow {
     property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
     property bool errorOccured: false
-    property bool openAppDetail: false
-    property string processingApplicationStatus: ""
+    property bool openAppDetail: false    
     property variant processQueue: []
     property string lastProcess: ""
     property string category : qsTr("home")
@@ -44,6 +43,7 @@ ApplicationWindow {
     property alias application: app
     signal updateQueue()
     signal updateCacheFinished()
+    signal updateStatusOfAppFromDetail(string appName)
 
     Item {
         id: app
@@ -60,7 +60,7 @@ ApplicationWindow {
                 swipeView.removeItem(2)
                 openAppDetail = false
                 version = ""
-                hasProcessing = false
+                //hasProcessing = false
                 installed = false
                 category = ""
                 free = true
@@ -832,10 +832,9 @@ ApplicationWindow {
         repeaterQueue.model = processQueue
         queuePopup.height = repeaterQueue.count * 28 + queuePopupTitle.height + 12
         if(processQueue.length == 0) {
-            queuePopup.close()
-            app.hasProcessing = false
+            queuePopup.close()            
         } else {
-            app.hasProcessing = true
+
         }
     }
 }

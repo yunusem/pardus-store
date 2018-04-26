@@ -12,28 +12,33 @@ Item {
     property bool applicationStatus: status
     property bool applicationInTheQueue: inqueue
 
-    property string pas: processingApplicationStatus
-
     onApplicationNameChanged: {
         app.name = applicationName
     }
 
     onApplicationStatusChanged: {
-        app.installed = applicationStatus
+        if(applicationName === app.name) {
+            app.installed = applicationStatus
+        }
     }
 
     onApplicationInTheQueueChanged: {
-        app.hasProcessing = applicationInTheQueue
+        if(applicationName === app.name) {
+            app.hasProcessing = applicationInTheQueue
+            processButton.enabled = !applicationInTheQueue
+        }
     }
 
-    onPasChanged: {
-        var appName = pas.split(" ")[0]
-        var stat = pas.split(" ")[1]
-
-        if(appName === applicationName && stat) {
-            pas = ""
-            applicationInTheQueue = true
+    function updateInQueue(appName) {
+        if(appName !== "") {
+            if(appName === name) {
+                applicationInTheQueue = true
+            }
         }
+    }
+
+    Component.onCompleted: {
+        updateStatusOfAppFromDetail.connect(updateInQueue)
     }
 
     Pane {
@@ -79,7 +84,7 @@ Item {
             hoverEnabled: true
             width: applicationDelegateItem.width
             height: applicationDelegateItem.height
-            onClicked: {                
+            onClicked: {
                 app.name = name
                 app.version = version
                 app.installed = applicationStatus
@@ -193,9 +198,9 @@ Item {
                 if(lastProcess.search(name) == 0) {
                     var s = lastProcess.split(" ")
                     if (s[1] === "true") {
-                      applicationStatus = false
+                        applicationStatus = false
                     } else {
-                      applicationStatus = true
+                        applicationStatus = true
                     }
                     enabled = true
                     applicationInTheQueue = false

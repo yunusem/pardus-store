@@ -439,7 +439,8 @@ application. Install with caution.")) : " !")
             }
 
             onClicked: {
-                processingApplicationStatus = (applicationName + " " + true)
+                //processingApplicationStatus = applicationName
+                updateStatusOfAppFromDetail(applicationName)
                 processQueue.push(applicationName + " " + app.installed)
                 updateQueue()
             }
