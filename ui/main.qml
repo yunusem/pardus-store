@@ -199,6 +199,7 @@ ApplicationWindow {
         width: topDock.width
         anchors {
             top: main.top
+            right: main.right
         }
 
         onPressed: {
@@ -465,7 +466,7 @@ ApplicationWindow {
 
     SearchBar {
         id: searchBar
-        visible: !splashScreen.visible
+        visible: splashScreen.opacity < 0.7
         z: 100
         anchors {
             top: parent.top
@@ -588,6 +589,7 @@ ApplicationWindow {
 
     NavigationBar {
         id: navigationBar
+        visible: splashScreen.opacity < 0.7
         onCurrentIndexChanged: {
             if (category !== qsTr("home")) {
                 swipeView.currentIndex = 1

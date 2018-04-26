@@ -4,11 +4,10 @@ import QtQuick.Controls.Material 2.0
 
 
 Pane {
-    id: navi
-    visible: true
+    id: navi    
     width: navima.containsMouse ? parent.width / 7 : parent.width / 21
     height: parent.height
-    z : 90
+    z : 93
     Material.background: "#2c2c2c"
     Material.elevation: 3
 
