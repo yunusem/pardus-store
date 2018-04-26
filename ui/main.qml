@@ -536,6 +536,10 @@ ApplicationWindow {
         }
         onScreenshotNotFound: {
             screenshotUrls = ["none"]
+            if(splashScreen.visible) {
+                popupText = qsTr("Check your internet connection")
+                popup.open()
+            }
         }
         onFetchingAppListFinished: {
             splashLabel.text = qsTr("Gathering local details.")
