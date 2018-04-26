@@ -12,14 +12,12 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false)
 {    
     nh = new NetworkHandler(10000,this);
     fh = new FileHandler(this);
-    ph = new PackageHandler(this);
-    l = fh->readLines();    
-    ldetail = this->getDetails();
-    this->fillTheList();
-    connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));    
+    ph = new PackageHandler(this);    
+
+    connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
+    connect(nh,SIGNAL(appListReceived(QStringList)),this,SLOT(appListReceivedSlot(QStringList)));
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
-
 }
 
 bool Helper::processing() const
@@ -56,6 +54,60 @@ void Helper::fillTheList()
         }
         lc.l->addData(Application(name,version,stat,false,category,non_free));
     }
+    emit gatheringLocalDetailFinished();
+}
+
+void Helper::updateCache()
+{
+    ph->updateCache();
+}
+
+void Helper::install(const QString &pkg)
+{
+
+    ph->install(pkg);
+    p = true;
+}
+
+void Helper::remove(const QString &pkg)
+{
+
+    ph->remove(pkg);
+    p = true;
+}
+
+void Helper::getAppList()
+{
+    nh->getApplicationList();
+}
+
+void Helper::getAppDetails(const QString &pkg)
+{  
+    nh->getApplicationDetails(pkg);
+}
+
+void Helper::systemNotify(const QString &pkg, const QString &title, const QString &content)
+{
+    QProcess p;
+    QStringList args;
+    args << "-u" << "normal";
+    args << "-t" << "13000";
+    args << "-i" << pkg;
+    args << title << content;
+
+    QString command = "/usr/bin/notify-send";
+    p.execute(command, args);
+}
+
+void Helper::packageProcessFinished(int code)
+{
+    if(code == 0) {                
+        emit processingFinished();
+    } else {        
+        emit processingFinishedWithError(QString::fromLatin1(ph->getError()));
+    }
+
+    p = false;
 }
 
 QStringList Helper::getDetails() const
@@ -105,49 +157,6 @@ void Helper::updateDetails()
     ldetail = this->getDetails();
 }
 
-void Helper::install(const QString &pkg)
-{
-
-    ph->install(pkg);
-    p = true;
-}
-
-void Helper::remove(const QString &pkg)
-{
-
-    ph->remove(pkg);
-    p = true;
-}
-
-void Helper::getAppDetails(const QString &pkg)
-{  
-    nh->getApplicationDetails(pkg);
-}
-
-void Helper::systemNotify(const QString &pkg, const QString &title, const QString &content)
-{
-    QProcess p;
-    QStringList args;
-    args << "-u" << "normal";
-    args << "-t" << "13000";
-    args << "-i" << pkg;
-    args << title << content;
-
-    QString command = "/usr/bin/notify-send";
-    p.execute(command, args);
-}
-
-void Helper::packageProcessFinished(int code)
-{
-    if(code == 0) {                
-        emit processingFinished();
-    } else {        
-        emit processingFinishedWithError(QString::fromLatin1(ph->getError()));
-    }
-
-    p = false;
-}
-
 void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
 {
     QLocale locale;
@@ -167,4 +176,12 @@ void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
     }
     emit descriptionReceived(d);
     emit screenshotReceived(ad.screenshots());
+}
+
+void Helper::appListReceivedSlot(const QStringList &list)
+{
+    l = list;
+    emit fetchingAppListFinished();
+    ldetail = this->getDetails();
+    this->fillTheList();
 }

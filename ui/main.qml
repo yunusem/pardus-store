@@ -14,6 +14,7 @@ ApplicationWindow {
     flags: Qt.FramelessWindowHint
     color: "transparent"
     property bool hasActiveFocus: false
+    property bool cacheIsUpToDate: false
     property string popupText: ""
     property string popupHeaderText: qsTr("Something went wrong!")
     property variant screenshotUrls: []
@@ -41,8 +42,8 @@ ApplicationWindow {
         qsTr("others")]
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
     property alias application: app
-
     signal updateQueue()
+    signal updateCacheFinished()
 
     Item {
         id: app
@@ -79,28 +80,123 @@ ApplicationWindow {
     }
 
     Pane {
+        id: splashScreen
+        anchors.fill: parent
+        z: 91
+        opacity: 1.0
+        Material.background: "#3c3c3c"
+        Timer {
+            id: splashTimer
+            interval: 1000
+            onTriggered: {
+                splashScreen.opacity = 0.0
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 1000
+            }
+        }
+        onOpacityChanged: {
+            if(opacity === 0.0) {
+                splashScreen.visible = false
+            }
+        }
+
+        Image {
+            id: topImage
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.verticalCenter
+            source: "qrc:/images/icon.svg"
+            opacity: 0.0
+            Behavior on opacity {
+                NumberAnimation {
+                    easing.type: Easing.InExpo
+                    duration: 200
+                }
+            }
+            Component.onCompleted: {
+                opacity = 1.0
+            }
+            onOpacityChanged: {
+                if(opacity === 1.0) {
+                    bottomImage.opacity = 1.0
+                }
+            }
+        }
+
+        Image {
+            id: bottomImage
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.verticalCenter
+            anchors.topMargin: 12
+            source: "qrc:/images/splash.svg"
+            opacity: 0.0
+            Behavior on opacity {
+                NumberAnimation {
+                    easing.type: Easing.InExpo
+                    duration: 200
+                }
+            }
+        }
+
+        Label {
+            id: splashLabel
+            font.pointSize: 12
+            anchors{
+                top: bottomImage.bottom
+                topMargin: 12
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            Material.foreground: "#fafafa"
+        }
+
+        BusyIndicator {
+            id: splashBusy
+            height: splashLabel.height + 14
+            width: height
+            anchors.verticalCenter: splashLabel.verticalCenter
+            anchors.left: splashLabel.right
+            anchors.leftMargin: 20
+            running: true
+            Material.accent: "#FFCB08"
+        }
+
+        Component.onCompleted: {
+            splashLabel.text = qsTr("Updating package manager cache.")
+            helper.updateCache()
+        }
+    }
+
+    onUpdateCacheFinished: {
+        splashLabel.text = qsTr("Fetching application list.")
+        helper.getAppList()
+    }
+
+    Pane {
         id: topDock
         width: parent.width * 20 / 21
         height: parent.height / 15
-        z: 90
+        z: 89
         anchors {
             top: parent.top
             right: parent.right
         }
 
         Material.elevation: 3
-
-
-
     }
 
     MouseArea {
         id: ma
         property real cposx: 1.0
         property real cposy: 1.0
-        z: 91
+        z: 92
         height: main.height / 15
-        width: main.width
+        width: topDock.width
         anchors {
             top: main.top
         }
@@ -225,6 +321,7 @@ ApplicationWindow {
                         }
                         MouseArea {
                             id: cancelBtnMa
+                            z: 100
                             visible: true
                             anchors.fill: parent
                             onClicked: {
@@ -368,6 +465,7 @@ ApplicationWindow {
 
     SearchBar {
         id: searchBar
+        visible: !splashScreen.visible
         z: 100
         anchors {
             top: parent.top
@@ -389,24 +487,31 @@ ApplicationWindow {
     Helper {
         id: helper
         onProcessingFinished: {
-            var s = processQueue[0].split(" ")
-            var appName = s[0]
-            var duty = s[1]
-            var dutyText = ""
-            if (duty === "true") {
-                dutyText = qsTr("removed")
-            } else {
-                dutyText = qsTr("installed")
-            }
+            if(processQueue.length !== 0) {
+                var s = processQueue[0].split(" ")
+                var appName = s[0]
+                var duty = s[1]
+                var dutyText = ""
+                if (duty === "true") {
+                    dutyText = qsTr("removed")
+                } else {
+                    dutyText = qsTr("installed")
+                }
 
-            processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
-            lastProcess = processQueue.shift()
-            updateQueue()
-            isThereOnGoingProcess = false            
-            systemNotify(appName,
-                         qsTr("Package process is complete"),
-                         (appName.charAt(0).toUpperCase() + appName.slice(1)) +
-                         " " + dutyText + " (Pardus " + qsTr("Store") + ")")
+                processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
+                lastProcess = processQueue.shift()
+                updateQueue()
+                isThereOnGoingProcess = false
+                systemNotify(appName,
+                             qsTr("Package process is complete"),
+                             (appName.charAt(0).toUpperCase() + appName.slice(1)) +
+                             " " + dutyText + " (Pardus " + qsTr("Store") + ")")
+            } else {
+                if(!cacheIsUpToDate) {
+                    updateCacheFinished()
+                    cacheIsUpToDate = true
+                }
+            }
         }
 
         onProcessingFinishedWithError: {
@@ -422,14 +527,22 @@ ApplicationWindow {
             app.description = description
         }
 
-        onScreenshotReceived: {            
+        onScreenshotReceived: {
             screenshotUrls = urls
             if(urls.length === 0) {
                 screenshotUrls = ["none"]
             }
         }
-        onScreenshotNotFound: {            
+        onScreenshotNotFound: {
             screenshotUrls = ["none"]
+        }
+        onFetchingAppListFinished: {
+            splashLabel.text = qsTr("Gathering local details.")
+        }
+        onGatheringLocalDetailFinished: {
+            splashLabel.text = qsTr("Done.")
+            splashTimer.start()
+            splashBusy.running = false
         }
     }
 

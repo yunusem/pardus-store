@@ -16,9 +16,10 @@ private:
     QProcess *p;
 
 signals:
-    void finished(int code);
+    void finished(int code);    
 
 public slots:
+    void updateCache();
     void install(const QString pkg);
     void remove(const QString pkg);
     QString getPolicy(const QString pkg) const;

@@ -8,7 +8,7 @@ Pane {
     visible: true
     width: navima.containsMouse ? parent.width / 7 : parent.width / 21
     height: parent.height
-    z : 100
+    z : 90
     Material.background: "#2c2c2c"
     Material.elevation: 3
 

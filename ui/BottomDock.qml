@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.0
 Pane {
     width: parent.width * 20 / 21
     height: parent.height / 15
-    z: 90
+    z: 89
     anchors  {
         bottom: parent.bottom
         right: parent.right

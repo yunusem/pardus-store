@@ -16,18 +16,22 @@ class Helper : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool processing
-               READ processing
+               READ processing               
                NOTIFY processingFinished
                NOTIFY processingFinishedWithError
                NOTIFY descriptionReceived
                NOTIFY screenshotReceived
-               NOTIFY screenshotNotFound)
+               NOTIFY screenshotNotFound
+               NOTIFY fetchingAppListFinished
+               NOTIFY gatheringLocalDetailFinished)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
 
+    Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
+    Q_INVOKABLE void getAppList();
     Q_INVOKABLE void getAppDetails(const QString &pkg);
     Q_INVOKABLE void systemNotify(const QString &pkg,
                                   const QString &title,
@@ -53,9 +57,12 @@ signals:
     void screenshotReceived(const QStringList &urls);
     void descriptionReceived(const QString &description);
     void screenshotNotFound();
+    void fetchingAppListFinished();
+    void gatheringLocalDetailFinished();
 
 public slots:
     void appDetailReceivedSlot(const ApplicationDetail &ad);
+    void appListReceivedSlot(const QStringList &list);
 };
 
 #endif // HELPER_H

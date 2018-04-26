@@ -20,6 +20,11 @@ PackageHandler::~PackageHandler()
     p->deleteLater();
 }
 
+void PackageHandler::updateCache()
+{
+    p->start("apt-get update");
+}
+
 void PackageHandler::install(const QString pkg)
 {
     p->start("apt-get install -y " + pkg);
