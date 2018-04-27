@@ -4,6 +4,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QTranslator>
+#include <QLocale>
+#include <QIcon>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +21,13 @@ int main(int argc, char *argv[])
     FilterProxyModel filterModel;
     filterModel.setSourceModel(&listModel);
     filterModel.setSortRole(NameRole);
+
+    QTranslator t;
+    if (t.load(":/translations/pardus-store_" + QLocale::system().name())) {
+        app.installTranslator(&t);
+    } else {
+        qDebug() << "Could not load the translation";
+    }
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();

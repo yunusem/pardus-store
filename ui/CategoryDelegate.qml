@@ -14,7 +14,7 @@ Item {
             id: categoryIcon
             width: 36 //navigationBarListView.foldHeight - 10
             height: width
-            source: "qrc:/images/" + name + ".svg"
+            source: "qrc:/images/" + icon + ".svg"
             anchors {
                 left: parent.left
                 leftMargin: 3

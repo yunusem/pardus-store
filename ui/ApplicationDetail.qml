@@ -402,9 +402,7 @@ Pane {
                 width: parent.width
                 enabled: disclamerMa.containsMouse
                 text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
-                qsTr("This application served from Pardus non-free package
-repositories, so that the OS has nothing to do with the health of the
-application. Install with caution.")) : " !")
+                qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
                 //horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 fontSizeMode: Text.VerticalFit
@@ -470,7 +468,7 @@ application. Install with caution.")) : " !")
             }
             Label {
                 id: labelCategory
-                text:qsTr("Category")+": " + app.category
+                text:qsTr("Category")+": " + categories[categoryIcons.indexOf(app.category)]
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize

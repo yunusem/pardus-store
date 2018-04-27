@@ -22,7 +22,8 @@ HEADERS += \
 TARGET = pardus-store
 
 RESOURCES += qml.qrc file.qrc \
-    images.qrc
+    images.qrc \
+    translations.qrc
 
 DEFINES += QT_DEPRECATED_WARNINGS
 

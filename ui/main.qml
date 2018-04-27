@@ -39,6 +39,19 @@ ApplicationWindow {
         qsTr("video"),
         qsTr("chat"),
         qsTr("others")]
+    property variant categoryIcons: ["home",
+        "all",
+        "internet",
+        "office",
+        "development",
+        "reading",
+        "graphics",
+        "game",
+        "music",
+        "system",
+        "video",
+        "chat",
+        "others"]
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
     property alias application: app
     signal updateQueue()
@@ -825,7 +838,7 @@ ApplicationWindow {
 
     onCategoryChanged: {
         navigationBar.currentIndex = categories.indexOf(category)
-        applicationModel.setFilterString(category === qsTr("all") ? "" : category, false)
+        applicationModel.setFilterString(category === qsTr("all") ? "" : categoryIcons[categories.indexOf(category)], false)
         if(category === qsTr("home")) {
             searchF = false
         }

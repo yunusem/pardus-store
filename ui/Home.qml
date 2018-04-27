@@ -47,7 +47,7 @@ Pane {
         Label {
             id: bannerText
             anchors.centerIn: parent
-            text: qsTr("welcome to") +" Pardus "+ qsTr("Store")
+            text: qsTr("welcome to Pardus Store")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
