@@ -91,10 +91,24 @@ Pane {
         x: -6
         closePolicy: Popup.CloseOnPressOutside
         onClosed: {
-            i = indicator.index
+            if (indicator.index == -1) {
+                i = length - 1
+            } else {
+                i = indicator.index
+            }
+
+            popupImage.source = ""
+
         }
         onOpened: {
-            i = indicator.index
+            if (indicator.index == -1) {
+                i = length - 1
+            } else {
+                i = indicator.index
+            }
+
+            popupImage.source = urls[0] !== "none" && urls[0] ? urls[i] : ""
+
         }
 
 
@@ -104,13 +118,14 @@ Pane {
             anchors.centerIn: parent
             width: parent.width - 140
             height: parent.height
-            source: urls[0] !== "none" && urls[0] ? urls[indicator.index] : ""
+            source: urls[0] !== "none" && urls[0] ? urls[i] : ""
 
             BusyIndicator {
                 id: imageBusyInPopup
                 anchors.centerIn: parent
                 running: urls[0] !== "none" ? 0 : !popupImage.progress
             }
+
         }
 
         Rectangle {
@@ -341,6 +356,14 @@ Pane {
             onMovementEnded: {
                 indicator.index = indexAt(contentX,contentY)
 
+                if (indicator.index == -1) {
+                    i = length - 1
+                } else {
+                    i = indicator.index
+                }
+
+                popupImage.source = urls[0] !== "none" && urls[0] ? urls[i] : ""
+
             }
         }
     }
@@ -402,7 +425,7 @@ Pane {
                 width: parent.width
                 enabled: disclamerMa.containsMouse
                 text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
-                qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
+                                                                         qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
                 //horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 fontSizeMode: Text.VerticalFit
@@ -437,7 +460,7 @@ Pane {
                 }
             }
 
-            onClicked: {                
+            onClicked: {
                 updateStatusOfAppFromDetail(applicationName)
                 processQueue.push(applicationName + " " + app.installed)
                 updateQueue()
@@ -472,7 +495,7 @@ Pane {
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
-            }            
+            }
             Label {
                 id: labelDescriptionTitle
                 text:qsTr("Description")+": "
@@ -480,16 +503,29 @@ Pane {
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
             }
-            Label {
+
+            Flickable {
+                id: flickable
                 width: parent.width
-                height: parent.height - labelVersion.height * 3
-                text: app.description == "" ? "no description found": app.description
-                fontSizeMode: Text.VerticalFit
-                wrapMode: Text.WordWrap
-                font.pointSize: detailTextSize
-                verticalAlignment: Text.AlignTop
-                enabled: false
+                height: parent.height - labelVersion.height * 4
+                contentWidth: labelDescription.width
+                contentHeight: labelDescription.height
+                clip: true
+                ScrollBar.vertical: ScrollBar { }
+                flickableDirection: Flickable.VerticalFlick
+
+                Label {
+                    id: labelDescription
+                    width: textPane.width - 30
+                    text: app.description == "" ? "no description found": app.description
+                    fontSizeMode: Text.VerticalFit
+                    wrapMode: Text.WordWrap
+                    font.pointSize: detailTextSize
+                    verticalAlignment: Text.AlignTop
+                    enabled: false
+                }
             }
+
         }
 
 
@@ -514,8 +550,7 @@ Pane {
             duration: 1000
             from: appDetail.height
             to : appDetail.height - (imagesPane.height + 27)
-        }       
-
+        }
     }
 
     onSplashFlagChanged: {
@@ -527,6 +562,8 @@ Pane {
 
     onApplicationNameChanged: {
         if(!detailAnimation.running) {
+            indicator.index = 0
+            i = indicator.index
             detailAnimation.start()
         }
     }
