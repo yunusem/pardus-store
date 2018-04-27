@@ -1,3 +1,11 @@
+pardus-store (0.0.3) unstable; urgency=medium
+
+  [ Hikmet Baş ]
+  * Fixed popupImage and added flickable area for description
+  * Fixed category unchanged when back button clicked
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Fri, 27 Apr 2018 16:52:40 +0300
+
 pardus-store (0.0.2) unstable; urgency=medium
 
   * Add post inst for 32-bit systems
