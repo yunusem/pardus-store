@@ -27,5 +27,16 @@ RESOURCES += qml.qrc file.qrc \
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
+target.path = /usr/bin
+
+desktop_file.files = pardus-store.desktop
+desktop_file.path = /usr/share/applications/
+
+icon.files = images/icon.svg
+icon.commands = mkdir -p /usr/share/pardus/pardus-store
+icon.path = /usr/share/pardus/pardus-store
+
+INSTALLS += target desktop_file icon
+
 #LIBS += -lapt-pkg
 
