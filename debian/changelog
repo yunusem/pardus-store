@@ -1,3 +1,10 @@
+pardus-store (0.0.2) unstable; urgency=medium
+
+  * Add post inst for 32-bit systems
+  * add gbp.conf for clean build
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Fri, 27 Apr 2018 12:05:06 +0300
+
 pardus-store (0.0.1) unstable; urgency=medium
 
   * Initial release.
