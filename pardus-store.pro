@@ -19,7 +19,7 @@ HEADERS += \
     src/networkhandler.h \
     src/applicationdetail.h
 
-TARGET = ps
+TARGET = pardus-store
 
 RESOURCES += qml.qrc file.qrc \
     images.qrc
