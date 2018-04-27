@@ -103,6 +103,7 @@ Pane {
             fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent
             width: parent.width - 140
+            height: parent.height
             source: urls[0] !== "none" && urls[0] ? urls[indicator.index] : ""
 
             BusyIndicator {
