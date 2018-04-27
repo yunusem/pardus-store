@@ -244,6 +244,7 @@ ApplicationWindow {
 
         onClicked: {
             swipeView.currentIndex = 1
+            applicationModel.setFilterString("", true)
         }
 
         Behavior on opacity {
