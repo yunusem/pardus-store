@@ -10,8 +10,8 @@
 #include <QTimer>
 #include <QDebug>
 
-#define MAIN_URL "http://depo.pardus.org.tr:5000"
-#define API_URL "http://depo.pardus.org.tr:5000/api/v1/apps/"
+#define MAIN_URL "http://193.140.98.197:5000"
+#define API_URL "http://193.140.98.197:5000/api/v1/apps/"
 
 namespace {
 
