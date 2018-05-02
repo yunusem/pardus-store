@@ -1,3 +1,15 @@
+pardus-store (0.0.5~alpha) unstable; urgency=medium
+
+  * Add confirmation dialog at removal. Closes: #4
+  * Fix closing prevention from outside and seperation of confirmation dialog callbacks detail between delegate
+  * Use QSharedMemory for signle instance running. Closes: #5
+  * Use seperation of concern on dialogs and components
+  * Update Turkish translations
+  * Unbind model inqueue and qml inline property. Closes: #10
+  * Take care of the delegates in quque repeater component. Closes: #9
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Wed, 02 May 2018 16:29:53 +0300
+
 pardus-store (0.0.4~alpha) unstable; urgency=medium
 
   * Change API url
