@@ -8,7 +8,8 @@ SOURCES += src/main.cpp \
     src/packagehandler.cpp \
     src/applicationlistmodel.cpp \
     src/networkhandler.cpp \
-    src/applicationdetail.cpp
+    src/applicationdetail.cpp \
+    src/singleton.cpp
 
 HEADERS += \
     src/helper.h \
@@ -17,7 +18,8 @@ HEADERS += \
     src/iconprovider.h \
     src/applicationlistmodel.h \
     src/networkhandler.h \
-    src/applicationdetail.h
+    src/applicationdetail.h \
+    src/singleton.h
 
 TARGET = pardus-store
 

@@ -1,6 +1,7 @@
 #include "src/helper.h"
 #include "src/iconprovider.h"
 #include "src/applicationlistmodel.h"
+#include "src/singleton.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -11,6 +12,10 @@
 
 int main(int argc, char *argv[])
 {
+    Singleton singleton("pardus-application-store");
+    if (!singleton.tryToRun()) {
+        return 0;
+    }
     qmlRegisterType<Helper>("ps.helper",1,0,"Helper");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setWindowIcon(QIcon(":/images/icon.svg"));
