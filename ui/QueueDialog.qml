@@ -12,8 +12,10 @@ Popup {
     x: parent.width / 21 + 24
     y: parent.height - height - bottomDock.height - 13
 
+
     property alias repeater: repeaterQueue
     property alias title: queuePopupTitle
+
     Behavior on y {
         NumberAnimation {
             easing.type: Easing.OutExpo
@@ -43,9 +45,12 @@ Popup {
             model: processQueue
             Item {
                 width: parent.width
-                height: 18
-                Text {
+                height: 24
+
+                Label {
+                    id: nameLabel
                     color: "white"
+                    anchors.verticalCenter: parent.verticalCenter
                     text: modelData.split(" ")[0]
                     verticalAlignment: Text.AlignVCenter
                     font.capitalization: Font.Capitalize
@@ -53,25 +58,44 @@ Popup {
 
                 Rectangle {
                     id: cancelBtn
-                    width: 16
-                    height: height
-                    radius: 3
-                    color: "#ff0000"
                     visible: index != 0
+                    color: "#F44336"
+                    width: 24
+                    height: width
+                    radius: 2
                     anchors.right: parent.right
-                    Text {
+                    Label {
                         text: "X"
-                        color: "white"
+                        Material.foreground: "#fafafa"
+                        anchors.centerIn: parent
                         verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
+                        font.capitalization: Font.Capitalize
+                        font.bold: true
                     }
                     MouseArea {
                         id: cancelBtnMa
                         z: 100
-                        visible: true
-                        anchors.fill: parent
+                        anchors {
+                            fill: parent
+                        }
+                        property string disqueuedApplication: ""
+                        onPressed: cancelBtn.color = "#EF9A9A"
+                        onPressAndHold: cancelBtn.color = "#EF9A9A"
+                        onReleased: cancelBtn.color = "#F44336"
                         onClicked: {
-                            console.log("queue cancel clicked")
+                            var i = processQueue.indexOf(modelData)
+                            disqueuedApplication = processQueue.splice(i, 1).toString()
+                            var s = disqueuedApplication.split(" ")
+                            var duty = s[1]
+
+                            if (duty === "true") {
+                                duty = "false"
+                            } else {
+                                duty = "true"
+                            }
+
+                            lastProcess = (s[0] + " " + duty)
+                            updateQueue()
                         }
                     }
                 }
