@@ -10,7 +10,6 @@ Item {
 
     property string applicationName: name
     property bool applicationStatus: status
-    property bool applicationInTheQueue: inqueue
 
     onApplicationNameChanged: {
         app.name = applicationName
@@ -22,17 +21,10 @@ Item {
         }
     }
 
-    onApplicationInTheQueueChanged: {
-        if(applicationName === app.name) {
-            app.hasProcessing = applicationInTheQueue
-            processButton.enabled = !applicationInTheQueue
-        }
-    }
-
     function updateInQueue(appName) {
         if(appName !== "") {
             if(appName === name) {
-                applicationInTheQueue = true
+                inqueue = true
             }
         }
     }
@@ -41,7 +33,6 @@ Item {
         if(appName !== "" && appName === name && from === "delegate") {
             applicationName = name
             processButton.enabled = false
-            applicationInTheQueue = true
             inqueue = true
             processQueue.push(applicationName + " " + applicationStatus)
             updateQueue()
@@ -101,7 +92,7 @@ Item {
                 app.name = name
                 app.version = version
                 app.installed = applicationStatus
-                app.hasProcessing = applicationInTheQueue
+                app.hasProcessing = inqueue
                 app.category = category
                 app.free = !nonfree
                 app.description = description
@@ -195,7 +186,7 @@ Item {
             Material.background: applicationStatus ? Material.Red : Material.Green
             Material.foreground: "#fafafa"
 
-            enabled: !applicationInTheQueue
+            enabled: !inqueue
 
             property bool error: main.errorOccured
             property string lastProcess: main.lastProcess
@@ -214,7 +205,6 @@ Item {
                         applicationStatus = true
                     }
                     enabled = true
-                    applicationInTheQueue = false
                     inqueue = false
                 }
             }
@@ -233,7 +223,6 @@ Item {
                 } else {
                     applicationName = name
                     processButton.enabled = false
-                    applicationInTheQueue = true
                     inqueue = true
                     processQueue.push(applicationName + " " + applicationStatus)
                     updateQueue()
