@@ -37,8 +37,8 @@ Item {
         }
     }
 
-    function operateRemoval(appName) {
-        if(appName !== "" && appName === name) {
+    function operateRemoval(appName, from) {
+        if(appName !== "" && appName === name && from === "delegate") {
             applicationName = name
             processButton.enabled = false
             applicationInTheQueue = true
@@ -228,6 +228,7 @@ Item {
             onClicked: {
                 if (applicationStatus) {
                     confirmationDialog.name = name
+                    confirmationDialog.from = "delegate"
                     confirmationDialog.open()
                 } else {
                     applicationName = name

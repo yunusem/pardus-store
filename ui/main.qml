@@ -57,7 +57,7 @@ ApplicationWindow {
     signal updateQueue()
     signal updateCacheFinished()
     signal updateStatusOfAppFromDetail(string appName)
-    signal confirmationRemoval(string appName)
+    signal confirmationRemoval(string appName, string from)
 
     Item {
         id: app
@@ -183,11 +183,6 @@ ApplicationWindow {
             splashLabel.text = qsTr("Updating package manager cache.")
             helper.updateCache()
         }
-    }
-
-    onUpdateCacheFinished: {
-        splashLabel.text = qsTr("Fetching application list.")
-        helper.getAppList()
     }
 
     Pane {
@@ -722,13 +717,7 @@ ApplicationWindow {
                 exitBtn.Material.elevation = 2
             }
             onClicked: {
-                if(isThereOnGoingProcess) {
-                    popupHeaderText = qsTr("Warning!")
-                    popupText = "Pardus " + qsTr("Store") + " " + qsTr("can not be closed while a process is ongoing.")
-                    infoPopup.open()
-                } else {
-                    Qt.quit()
-                }
+                main.close()
             }
         }
     }
@@ -814,6 +803,7 @@ ApplicationWindow {
         signal rejected
         property alias content: contentLabel.text
         property string name: ""
+        property string from: ""
 
         Label {
             id: contentLabel
@@ -885,7 +875,7 @@ ApplicationWindow {
         }
 
         onAccepted: {
-            confirmationRemoval(name)
+            confirmationRemoval(name, from)
             confirmationDialog.close()
         }
         onRejected: {
@@ -894,6 +884,7 @@ ApplicationWindow {
 
         onClosed: {
             name = ""
+            from = ""
         }
 
         Component.onCompleted: {
@@ -922,6 +913,22 @@ ApplicationWindow {
             return appName.split("-")[1]
         }
         return appName
+    }
+
+    onClosing: {
+        if(isThereOnGoingProcess) {
+            popupHeaderText = qsTr("Warning!")
+            popupText = "Pardus " + qsTr("Store") + " " + qsTr("can not be closed while a process is ongoing.")
+            infoPopup.open()
+            close.accepted = false
+        } else {
+            close.accepted = true
+        }
+    }
+
+    onUpdateCacheFinished: {
+        splashLabel.text = qsTr("Fetching application list.")
+        helper.getAppList()
     }
 
     onSearchFChanged: {

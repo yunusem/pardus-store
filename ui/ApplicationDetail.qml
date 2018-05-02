@@ -20,8 +20,8 @@ Pane {
     property string applicationName: app.name
     property bool applicationInTheQueue: app.hasProcessing
 
-    function startRemoving(appName) {
-        if(appName !== "" && appName === name) {
+    function startRemoving(appName, from) {
+        if(appName !== "" && appName === applicationName && from === "detail") {
             updateStatusOfAppFromDetail(applicationName)
             processQueue.push(applicationName + " " + app.installed)
             updateQueue()
@@ -474,6 +474,7 @@ Pane {
             onClicked: {
                 if(app.installed) {
                     confirmationDialog.name = app.name
+                    confirmationDialog.from = "detail"
                     confirmationDialog.open()
                 } else {
                     updateStatusOfAppFromDetail(applicationName)
