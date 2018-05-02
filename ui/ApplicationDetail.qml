@@ -20,6 +20,17 @@ Pane {
     property string applicationName: app.name
     property bool applicationInTheQueue: app.hasProcessing
 
+    function startRemoving(appName) {
+        if(appName !== "" && appName === name) {
+            updateStatusOfAppFromDetail(applicationName)
+            processQueue.push(applicationName + " " + app.installed)
+            updateQueue()
+        }
+    }
+
+    Component.onCompleted: {
+        confirmationRemoval.connect(startRemoving)
+    }
 
     ListModel {
         id: lm
@@ -461,9 +472,14 @@ Pane {
             }
 
             onClicked: {
-                updateStatusOfAppFromDetail(applicationName)
-                processQueue.push(applicationName + " " + app.installed)
-                updateQueue()
+                if(app.installed) {
+                    confirmationDialog.name = app.name
+                    confirmationDialog.open()
+                } else {
+                    updateStatusOfAppFromDetail(applicationName)
+                    processQueue.push(applicationName + " " + app.installed)
+                    updateQueue()
+                }
             }
 
             Label {

@@ -37,8 +37,20 @@ Item {
         }
     }
 
+    function operateRemoval(appName) {
+        if(appName !== "" && appName === name) {
+            applicationName = name
+            processButton.enabled = false
+            applicationInTheQueue = true
+            inqueue = true
+            processQueue.push(applicationName + " " + applicationStatus)
+            updateQueue()
+        }
+    }
+
     Component.onCompleted: {
         updateStatusOfAppFromDetail.connect(updateInQueue)
+        confirmationRemoval.connect(operateRemoval)
         app.name = ""
     }
 
@@ -139,7 +151,6 @@ Item {
 
         DropShadow {
             id:dropShadow
-            //opacity: delegateMouseArea.containsMouse ? 0.0 : 1.0
             anchors.fill: appIcon
             horizontalOffset: 3
             verticalOffset: 3
@@ -215,13 +226,18 @@ Item {
             }
 
             onClicked: {
-                applicationName = name
-                processButton.enabled = false
-                applicationInTheQueue = true
-                inqueue = true
-                processQueue.push(name + " " + applicationStatus)
-                updateQueue()
-            }//Material.background: "#fafafa"
+                if (applicationStatus) {
+                    confirmationDialog.name = name
+                    confirmationDialog.open()
+                } else {
+                    applicationName = name
+                    processButton.enabled = false
+                    applicationInTheQueue = true
+                    inqueue = true
+                    processQueue.push(applicationName + " " + applicationStatus)
+                    updateQueue()
+                }
+            }
 
             Behavior on opacity {
                 NumberAnimation {
@@ -286,4 +302,6 @@ Item {
         }
 
     }
+
+
 }

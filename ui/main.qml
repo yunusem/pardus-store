@@ -57,6 +57,7 @@ ApplicationWindow {
     signal updateQueue()
     signal updateCacheFinished()
     signal updateStatusOfAppFromDetail(string appName)
+    signal confirmationRemoval(string appName)
 
     Item {
         id: app
@@ -531,16 +532,21 @@ ApplicationWindow {
         onProcessingFinishedWithError: {
             processQueue.shift()
             errorOccured = true
-            isThereOnGoingProcess = false
-            popupText = output
+            isThereOnGoingProcess = false            
             processOutputLabel.opacity = 0.0
-            popup.open()
+            popupText = output
+            if(output.indexOf("not get lock") !== -1) {
+                popupText = qsTr("Another application is using package manager. Please wait or discard the other application and try again.")
+            } else if (output.indexOf("not open lock") !== -1) {
+                popupText = qsTr("Pardus Store should be run with root privileges")
+            }
+
+            infoPopup.open()
         }
 
         onDescriptionReceived: {
             app.description = description
         }
-
         onScreenshotReceived: {
             screenshotUrls = urls
             if(urls.length === 0) {
@@ -551,7 +557,7 @@ ApplicationWindow {
             screenshotUrls = ["none"]
             if(splashScreen.visible) {
                 popupText = qsTr("Check your internet connection")
-                popup.open()
+                infoPopup.open()
             }
         }
         onFetchingAppListFinished: {
@@ -614,11 +620,6 @@ ApplicationWindow {
                 swipeView.currentIndex = 0
             }
         }
-
-    }
-
-    ListModel {
-        id: lm
 
     }
 
@@ -724,7 +725,7 @@ ApplicationWindow {
                 if(isThereOnGoingProcess) {
                     popupHeaderText = qsTr("Warning!")
                     popupText = "Pardus " + qsTr("Store") + " " + qsTr("can not be closed while a process is ongoing.")
-                    popup.open()
+                    infoPopup.open()
                 } else {
                     Qt.quit()
                 }
@@ -733,28 +734,23 @@ ApplicationWindow {
     }
 
     Popup {
-        id: popup
+        id: infoPopup
         width: parent.width / 3
-        height: (popupOutputHeader.height + popupOutput.height + 48) > main.height - 24 ? main.height - 24 :  (popupOutputHeader.height + popupOutput.height + 24)
-
+        height: popupOutputHeader.height + popupOutput.height + 36
         modal: true
         closePolicy: Popup.CloseOnPressOutside
-        y: parent.height / 2 - popup.height / 2
-        x: parent.width / 2 - popup.width / 2
+        y: parent.height / 2 - infoPopup.height / 2
+        x: parent.width / 2 - infoPopup.width / 2
         Material.background: "#2c2c2c"
-
-        onHeightChanged: {
-            if(height < (main.height - 24)) {
-                popupOutputContainer.clip = false
-            } else {
-                popupOutputContainer.clip = true
-            }
-        }
+        Material.elevation: 2
 
         Label {
             id: popupOutputHeader
             text: popupHeaderText
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors {
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
             Material.foreground: "#fafafa"
 
             wrapMode: Text.WordWrap
@@ -764,36 +760,34 @@ ApplicationWindow {
         }
 
         Item {
-            id: popupOutputContainer
+            id: popupOutputContainer            
+            width: parent.width
             //clip: true
             anchors {
                 top: popupOutputHeader.bottom
                 topMargin: 12
-                left: parent.left
-                right: parent.right
                 bottom: parent.bottom
+                bottomMargin: 12
             }
-
             Label {
-                id: popupOutput
+                id: popupOutput                
                 text: popupText
                 width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.margins: 18
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                }
                 Material.foreground: "#fafafa"
                 fontSizeMode: Text.HorizontalFit
                 wrapMode: Text.WordWrap
-                verticalAlignment: Text.AlignVCenter
-                //horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter                
             }
         }
 
         MouseArea {
             id: doneBtn
             anchors.fill: parent
-
             onClicked: {
-                popup.close()
+                infoPopup.close()
             }
         }
 
@@ -803,6 +797,108 @@ ApplicationWindow {
             if(splashScreen.visible) {
                 Qt.quit()
             }
+        }
+    }
+
+    Popup {
+        id: confirmationDialog
+        modal: true
+        width: 300
+        height: buttonContainer.height + imageContainer.height + 48
+        closePolicy: Popup.NoAutoClose
+        x: parent.width / 2 - width / 2
+        y: parent.height / 2 - height / 2
+        Material.elevation: 2
+        Material.background: "#2c2c2c"
+        signal accepted
+        signal rejected
+        property alias content: contentLabel.text
+        property string name: ""
+
+        Label {
+            id: contentLabel
+            anchors {
+                top: parent.top
+                bottom: imageContainer.top
+                bottomMargin: 12
+            }
+            Material.foreground: "#fafafa"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            width: parent.width
+
+        }
+
+        Row {
+
+            id: imageContainer
+            spacing: 12
+                anchors { horizontalCenter: parent.horizontalCenter
+                bottom: buttonContainer.top
+                bottomMargin: 12
+            }
+
+            Image {
+                id: icon
+                width: 32
+                height: 32
+                smooth: true
+                mipmap: true
+                antialiasing: true
+                source: "image://application/" + getCorrectName(confirmationDialog.name)
+            }
+
+            Label {
+                id: iconLabel
+                Material.foreground: "#fafafa"
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                font.bold: true
+                font.capitalization: Font.Capitalize
+                text: getCorrectName(confirmationDialog.name)
+            }
+        }
+
+        Row {
+            id: buttonContainer
+            spacing: 12
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+
+            Button {
+                id: acceptButton
+                text: qsTr("yes")
+                Material.background: "#3c3c3c"
+                Material.foreground: "#fafafa"
+                onClicked: confirmationDialog.accepted()
+            }
+            Button {
+                id: rejectButton
+                text: qsTr("no")
+                Material.background: "#3c3c3c"
+                Material.foreground: "#fafafa"
+                onClicked: confirmationDialog.rejected()
+            }
+        }
+
+        onAccepted: {
+            confirmationRemoval(name)
+            confirmationDialog.close()
+        }
+        onRejected: {
+            confirmationDialog.close()
+        }
+
+        onClosed: {
+            name = ""
+        }
+
+        Component.onCompleted: {
+            content = qsTr("Are you sure you want to remove this application ?")
+            confirmationDialog.height += contentLabel.height + 36
         }
     }
 
