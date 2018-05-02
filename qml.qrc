@@ -10,5 +10,9 @@
         <file>ui/ApplicationList.qml</file>
         <file>ui/ApplicationDetail.qml</file>
         <file>ui/BottomDock.qml</file>
+        <file>ui/SplashScreen.qml</file>
+        <file>ui/QueueDialog.qml</file>
+        <file>ui/ConfirmationDialog.qml</file>
+        <file>ui/InfoDialog.qml</file>
     </qresource>
 </RCC>

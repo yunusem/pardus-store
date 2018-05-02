@@ -1,0 +1,99 @@
+import QtQuick 2.3
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
+
+Pane {
+    id: splash
+    anchors.fill: parent
+    z: 91
+    opacity: 1.0
+    Material.background: "#3c3c3c"
+    property alias label: splashLabel
+    property alias timer: splashTimer
+    property alias busy: splashBusy
+    Timer {
+        id: splashTimer
+        interval: 1000
+        onTriggered: {
+            splash.opacity = 0.0
+        }
+    }
+    Behavior on opacity {
+        NumberAnimation {
+            easing.type: Easing.OutExpo
+            duration: 1000
+        }
+    }
+    onOpacityChanged: {
+        if(opacity === 0.0) {
+            splash.visible = false
+        }
+    }
+
+    Image {
+        id: topImage
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.verticalCenter
+        source: "qrc:/images/icon.svg"
+        opacity: 0.0
+        Behavior on opacity {
+            NumberAnimation {
+                easing.type: Easing.InExpo
+                duration: 200
+            }
+        }
+        Component.onCompleted: {
+            opacity = 1.0
+        }
+        onOpacityChanged: {
+            if(opacity === 1.0) {
+                bottomImage.opacity = 1.0
+            }
+        }
+    }
+
+    Image {
+        id: bottomImage
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.verticalCenter
+        anchors.topMargin: 12
+        source: "qrc:/images/splash.svg"
+        opacity: 0.0
+        Behavior on opacity {
+            NumberAnimation {
+                easing.type: Easing.InExpo
+                duration: 200
+            }
+        }
+    }
+
+    Label {
+        id: splashLabel
+        font.pointSize: 12
+        anchors{
+            top: bottomImage.bottom
+            topMargin: 12
+            horizontalCenter: parent.horizontalCenter
+        }
+
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        Material.foreground: "#fafafa"
+    }
+
+    BusyIndicator {
+        id: splashBusy
+        height: splashLabel.height + 14
+        width: height
+        anchors.verticalCenter: splashLabel.verticalCenter
+        anchors.left: splashLabel.right
+        anchors.leftMargin: 20
+        running: true
+        Material.accent: "#FFCB08"
+    }
+
+    Component.onCompleted: {
+        splashLabel.text = qsTr("Updating package manager cache.")
+        helper.updateCache()
+    }
+}

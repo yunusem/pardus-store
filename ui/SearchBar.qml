@@ -13,6 +13,22 @@ Pane {
     property string prelist: ""
     property bool searchFlag: searchF
 
+    visible: splashScreen.opacity < 0.7
+    z: 100
+    anchors {
+        top: parent.top
+        topMargin: searchFlag ? 0 : 10
+        horizontalCenter: parent.horizontalCenter
+        horizontalCenterOffset: parent.width / 40
+    }
+
+    Behavior on anchors.topMargin {
+        NumberAnimation {
+            easing.type: Easing.OutExpo
+            duration: 200
+        }
+    }
+
     Behavior on width  {
         NumberAnimation {
             easing.type: Easing.OutCirc

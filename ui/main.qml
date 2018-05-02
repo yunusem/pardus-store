@@ -53,7 +53,10 @@ ApplicationWindow {
         "chat",
         "others"]
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
-    property alias application: app
+
+    property alias processOutputLabel: bottomDock.processOutput
+    property alias busy: bottomDock.busyIndicator
+
     signal updateQueue()
     signal updateCacheFinished()
     signal updateStatusOfAppFromDetail(string appName)
@@ -92,97 +95,8 @@ ApplicationWindow {
 
     }
 
-    Pane {
+    SplashScreen {
         id: splashScreen
-        anchors.fill: parent
-        z: 91
-        opacity: 1.0
-        Material.background: "#3c3c3c"
-        Timer {
-            id: splashTimer
-            interval: 1000
-            onTriggered: {
-                splashScreen.opacity = 0.0
-            }
-        }
-        Behavior on opacity {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 1000
-            }
-        }
-        onOpacityChanged: {
-            if(opacity === 0.0) {
-                splashScreen.visible = false
-            }
-        }
-
-        Image {
-            id: topImage
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.verticalCenter
-            source: "qrc:/images/icon.svg"
-            opacity: 0.0
-            Behavior on opacity {
-                NumberAnimation {
-                    easing.type: Easing.InExpo
-                    duration: 200
-                }
-            }
-            Component.onCompleted: {
-                opacity = 1.0
-            }
-            onOpacityChanged: {
-                if(opacity === 1.0) {
-                    bottomImage.opacity = 1.0
-                }
-            }
-        }
-
-        Image {
-            id: bottomImage
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.verticalCenter
-            anchors.topMargin: 12
-            source: "qrc:/images/splash.svg"
-            opacity: 0.0
-            Behavior on opacity {
-                NumberAnimation {
-                    easing.type: Easing.InExpo
-                    duration: 200
-                }
-            }
-        }
-
-        Label {
-            id: splashLabel
-            font.pointSize: 12
-            anchors{
-                top: bottomImage.bottom
-                topMargin: 12
-                horizontalCenter: parent.horizontalCenter
-            }
-
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            Material.foreground: "#fafafa"
-        }
-
-        BusyIndicator {
-            id: splashBusy
-            height: splashLabel.height + 14
-            width: height
-            anchors.verticalCenter: splashLabel.verticalCenter
-            anchors.left: splashLabel.right
-            anchors.leftMargin: 20
-            running: true
-            Material.accent: "#FFCB08"
-        }
-
-        Component.onCompleted: {
-            splashLabel.text = qsTr("Updating package manager cache.")
-            helper.updateCache()
-        }
     }
 
     Pane {
@@ -265,232 +179,25 @@ ApplicationWindow {
 
     }
 
-    Popup {
-        id: queuePopup
-        closePolicy: Popup.CloseOnPressOutside
-        Material.background: "#2c2c2c"
-        Material.elevation: 3
-        width: busy.width + processOutputLabel.width
-        //height: repeaterQueue.count * 20 + 24
-        //visible: isThereOnGoingProcess
+    QueueDialog {
+        id: queueDialog
+    }
 
-        z: 99
-        x: parent.width / 21 + 24
-        y: parent.height - queuePopup.height - bottomDock.height - 13
+    ConfirmationDialog {
+        id: confirmationDialog
+    }
 
-        Behavior on y {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 600
-            }
-        }
-
-        Label {
-            id: queuePopupTitle
-            text: qsTr("queue")
-            Material.foreground: "#ffcb08"
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-        }
-
-        Column {
-            spacing: 12
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            width: parent.width
-            height: parent.height - queuePopupTitle.height
-            Repeater {
-                id: repeaterQueue
-                model: processQueue
-                Item {
-                    width: parent.width
-                    height: 18
-                    Text {
-                        color: "white"
-                        text: modelData.split(" ")[0]
-                        verticalAlignment: Text.AlignVCenter
-                        font.capitalization: Font.Capitalize
-                    }
-
-                    Rectangle {
-                        id: cancelBtn
-                        width: 16
-                        height: height
-                        radius: 3
-                        color: "#ff0000"
-                        visible: index != 0
-                        anchors.right: parent.right
-                        Text {
-                            text: "X"
-                            color: "white"
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        MouseArea {
-                            id: cancelBtnMa
-                            z: 100
-                            visible: true
-                            anchors.fill: parent
-                            onClicked: {
-                                console.log("queue cancel clicked")
-                            }
-                        }
-                    }
-
-                }
-
-                /*
-                delegate: Item {
-                    width: parent.width
-                    Row {
-                        spacing: 10
-                        Image {
-                            id: queueIcon
-                            width: 16
-                            height: width
-                            smooth: true
-                            mipmap: true
-                            antialiasing: true
-                            source: "image://application/" + getCorrectName(modelData.split(" ")[0])
-                        }
-
-                        Label {
-                            id: queueLabel
-                            text: modelData.split(" ")[0]
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            font.capitalization: Font.Capitalize
-                            Material.foreground: "#fafafa"
-                        }
-
-                        Pane {
-                            id: cancelBtn
-                            width: 16
-                            height: height
-                            Material.background: Material.Red
-                            Label {
-                                anchors.centerIn: parent
-                                text: "X"
-                                Material.foreground: "white"
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-                        }
-                    }
-                }
-                */
-            }
-        }
+    InfoDialog {
+        id: infoDialog
     }
 
     BottomDock {
         id: bottomDock
 
-        BusyIndicator {
-            id: busy
-            running: isThereOnGoingProcess
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-            }
-        }
-
-        Image {
-            id: appIconProcess
-            enabled: false
-            anchors.centerIn: busy
-            opacity: isThereOnGoingProcess ? 1.0 : 0.0
-            width: 30
-            height: 30
-
-            Behavior on opacity {
-                NumberAnimation {
-                    easing.type: Easing.OutExpo
-                    duration: 200
-                }
-            }
-        }
-
-        Label {
-            id: processOutputLabel
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: busy.right
-                leftMargin: 10
-            }
-            opacity: 1.0
-            fontSizeMode: Text.HorizontalFit
-            wrapMode: Text.WordWrap
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-            enabled: false
-            text: ""
-
-            onTextChanged: {
-                opacity = 1.0
-            }
-
-            Behavior on opacity {
-                NumberAnimation {
-                    easing.type: Easing.OutExpo
-                    duration: 200
-                }
-            }
-
-            Timer {
-                id: outputTimer
-                interval: 8000
-                repeat: true
-                running: true
-                onTriggered: {
-                    if(!isThereOnGoingProcess) {
-                        processOutputLabel.opacity = 0.0
-                    }
-                }
-            }
-
-        }
-
-        MouseArea {
-            id: outputMa
-            height: main.height / 15
-            width: height * 6
-            anchors {
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-            }
-
-            hoverEnabled: true
-            onContainsMouseChanged: {
-                if(containsMouse && isThereOnGoingProcess) {
-                    queuePopup.open()
-                }
-            }
-        }
     }
 
     SearchBar {
-        id: searchBar
-        visible: splashScreen.opacity < 0.7
-        z: 100
-        anchors {
-            top: parent.top
-            topMargin: searchF ? 0 : 10
-            horizontalCenter: parent.horizontalCenter
-            horizontalCenterOffset: main.width / 40
-
-        }
-
-        Behavior on anchors.topMargin {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
-            }
-        }
+        id: searchBar        
 
     }
 
@@ -536,7 +243,7 @@ ApplicationWindow {
                 popupText = qsTr("Pardus Store should be run with root privileges")
             }
 
-            infoPopup.open()
+            infoDialog.open()
         }
 
         onDescriptionReceived: {
@@ -552,16 +259,16 @@ ApplicationWindow {
             screenshotUrls = ["none"]
             if(splashScreen.visible) {
                 popupText = qsTr("Check your internet connection")
-                infoPopup.open()
+                infoDialog.open()
             }
         }
         onFetchingAppListFinished: {
-            splashLabel.text = qsTr("Gathering local details.")
+            splashScreen.label.text = qsTr("Gathering local details.")
         }
         onGatheringLocalDetailFinished: {
-            splashLabel.text = qsTr("Done.")
-            splashTimer.start()
-            splashBusy.running = false
+            splashScreen.label.text = qsTr("Done.")
+            splashScreen.timer.start()
+            splashScreen.busy.running = false
         }
     }
 
@@ -640,7 +347,7 @@ ApplicationWindow {
                     helper.install(appName)
                 }
                 processOutputLabel.text = dutyText + " " + appName + " ..."
-                appIconProcess.source = "image://application/" + getCorrectName(appName)
+                bottomDock.processingIcon.source = "image://application/" + getCorrectName(appName)
             }
         }
     }
@@ -722,177 +429,6 @@ ApplicationWindow {
         }
     }
 
-    Popup {
-        id: infoPopup
-        width: parent.width / 3
-        height: popupOutputHeader.height + popupOutput.height + 36
-        modal: true
-        closePolicy: Popup.CloseOnPressOutside
-        y: parent.height / 2 - infoPopup.height / 2
-        x: parent.width / 2 - infoPopup.width / 2
-        Material.background: "#2c2c2c"
-        Material.elevation: 2
-
-        Label {
-            id: popupOutputHeader
-            text: popupHeaderText
-            anchors {
-                top: parent.top
-                horizontalCenter: parent.horizontalCenter
-            }
-            Material.foreground: "#fafafa"
-
-            wrapMode: Text.WordWrap
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.bold: true
-        }
-
-        Item {
-            id: popupOutputContainer            
-            width: parent.width
-            //clip: true
-            anchors {
-                top: popupOutputHeader.bottom
-                topMargin: 12
-                bottom: parent.bottom
-                bottomMargin: 12
-            }
-            Label {
-                id: popupOutput                
-                text: popupText
-                width: parent.width
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                }
-                Material.foreground: "#fafafa"
-                fontSizeMode: Text.HorizontalFit
-                wrapMode: Text.WordWrap
-                verticalAlignment: Text.AlignVCenter                
-            }
-        }
-
-        MouseArea {
-            id: doneBtn
-            anchors.fill: parent
-            onClicked: {
-                infoPopup.close()
-            }
-        }
-
-        onClosed: {
-            popupHeaderText = qsTr("Something went wrong!")
-            popupText = ""
-            if(splashScreen.visible) {
-                Qt.quit()
-            }
-        }
-    }
-
-    Popup {
-        id: confirmationDialog
-        modal: true
-        width: 300
-        height: buttonContainer.height + imageContainer.height + 48
-        closePolicy: Popup.NoAutoClose
-        x: parent.width / 2 - width / 2
-        y: parent.height / 2 - height / 2
-        Material.elevation: 2
-        Material.background: "#2c2c2c"
-        signal accepted
-        signal rejected
-        property alias content: contentLabel.text
-        property string name: ""
-        property string from: ""
-
-        Label {
-            id: contentLabel
-            anchors {
-                top: parent.top
-                bottom: imageContainer.top
-                bottomMargin: 12
-            }
-            Material.foreground: "#fafafa"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
-            width: parent.width
-
-        }
-
-        Row {
-
-            id: imageContainer
-            spacing: 12
-                anchors { horizontalCenter: parent.horizontalCenter
-                bottom: buttonContainer.top
-                bottomMargin: 12
-            }
-
-            Image {
-                id: icon
-                width: 32
-                height: 32
-                smooth: true
-                mipmap: true
-                antialiasing: true
-                source: "image://application/" + getCorrectName(confirmationDialog.name)
-            }
-
-            Label {
-                id: iconLabel
-                Material.foreground: "#fafafa"
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.WordWrap
-                font.bold: true
-                font.capitalization: Font.Capitalize
-                text: getCorrectName(confirmationDialog.name)
-            }
-        }
-
-        Row {
-            id: buttonContainer
-            spacing: 12
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-
-            Button {
-                id: acceptButton
-                text: qsTr("yes")
-                Material.background: "#3c3c3c"
-                Material.foreground: "#fafafa"
-                onClicked: confirmationDialog.accepted()
-            }
-            Button {
-                id: rejectButton
-                text: qsTr("no")
-                Material.background: "#3c3c3c"
-                Material.foreground: "#fafafa"
-                onClicked: confirmationDialog.rejected()
-            }
-        }
-
-        onAccepted: {
-            confirmationRemoval(name, from)
-            confirmationDialog.close()
-        }
-        onRejected: {
-            confirmationDialog.close()
-        }
-
-        onClosed: {
-            name = ""
-            from = ""
-        }
-
-        Component.onCompleted: {
-            content = qsTr("Are you sure you want to remove this application ?")
-            confirmationDialog.height += contentLabel.height + 36
-        }
-    }
-
     Timer {
         id: focusController
         interval: 10
@@ -919,7 +455,7 @@ ApplicationWindow {
         if(isThereOnGoingProcess) {
             popupHeaderText = qsTr("Warning!")
             popupText = "Pardus " + qsTr("Store") + " " + qsTr("can not be closed while a process is ongoing.")
-            infoPopup.open()
+            infoDialog.open()
             close.accepted = false
         } else {
             close.accepted = true
@@ -927,7 +463,7 @@ ApplicationWindow {
     }
 
     onUpdateCacheFinished: {
-        splashLabel.text = qsTr("Fetching application list.")
+        splashScreen.label.text = qsTr("Fetching application list.")
         helper.getAppList()
     }
 
@@ -948,14 +484,12 @@ ApplicationWindow {
     }
 
     onUpdateQueue: {
-        repeaterQueue.model = processQueue
-        queuePopup.height = repeaterQueue.count * 28 + queuePopupTitle.height + 12
+        queueDialog.repeater.model = processQueue
+        queueDialog.height = queueDialog.repeater.count * 28 + queueDialog.title.height + 12
         if(processQueue.length == 0) {
-            queuePopup.close()            
+            queueDialog.close()
         } else {
 
         }
     }
 }
-
-
