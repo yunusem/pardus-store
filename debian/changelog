@@ -1,3 +1,10 @@
+pardus-store (0.0.7~alpha) unstable; urgency=medium
+
+  * Change banner text and image source address
+  * Update Translations
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 03 May 2018 13:56:20 +0300
+
 pardus-store (0.0.6~alpha) unstable; urgency=medium
 
   * Fix error coming from image provider class
