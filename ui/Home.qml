@@ -31,7 +31,7 @@ Pane {
             id: bannerImage
             width: parent.width
             fillMode: Image.PreserveAspectFit
-            source: "https://www.pardus.org.tr/wp-content/uploads/2017/07/pardus17-banner-1920.png"
+            source: "http://193.140.98.197:5000/screenshots/banner.png"
             anchors.centerIn: parent
         }
 
@@ -46,8 +46,15 @@ Pane {
 
         Label {
             id: bannerText
-            anchors.centerIn: parent
-            text: qsTr("welcome to Pardus Store")
+            anchors {
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: - parent.height / 10
+                horizontalCenter: parent.horizontalCenter
+                horizontalCenterOffset: parent.width / 20
+            }
+
+            text: qsTr("welcome")
+            Material.foreground: "#fafafa"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
