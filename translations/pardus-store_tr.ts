@@ -101,47 +101,51 @@
 <context>
     <name>Home</name>
     <message>
-        <location filename="../ui/Home.qml" line="50"/>
         <source>welcome to Pardus Store</source>
-        <translation>Pardus Mağaza&apos; ya hoş geldiniz</translation>
+        <translation type="vanished">Pardus Mağaza&apos; ya hoş geldiniz</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="176"/>
+        <location filename="../ui/Home.qml" line="56"/>
+        <source>welcome</source>
+        <translation>hoş geldiniz</translation>
+    </message>
+    <message>
+        <location filename="../ui/Home.qml" line="183"/>
         <source>Editor&apos;s Pick</source>
         <translation>Editörün Seçimi</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="311"/>
+        <location filename="../ui/Home.qml" line="318"/>
         <source>Most Downloaded App</source>
         <translation>En Çok İndirilen Uygulama</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="369"/>
+        <location filename="../ui/Home.qml" line="376"/>
         <source>Source Code</source>
         <translation>Kaynak Kodu</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="386"/>
+        <location filename="../ui/Home.qml" line="393"/>
         <source>License</source>
         <translation>Lisans</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="400"/>
+        <location filename="../ui/Home.qml" line="407"/>
         <source>Version</source>
         <translation>Versiyon</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="407"/>
+        <location filename="../ui/Home.qml" line="414"/>
         <source>Leave comments on</source>
         <translation>Düşüncelerinizi şurda belirtin</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="443"/>
+        <location filename="../ui/Home.qml" line="450"/>
         <source>application survey</source>
         <translation>uygulama anketi</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="459"/>
+        <location filename="../ui/Home.qml" line="466"/>
         <source>Which application should be added to the store in next week ?</source>
         <translation>Gelecek hafta mağazaya hangi uygulama eklenmeli ?</translation>
     </message>

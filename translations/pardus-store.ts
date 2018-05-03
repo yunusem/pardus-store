@@ -101,47 +101,47 @@
 <context>
     <name>Home</name>
     <message>
-        <location filename="../ui/Home.qml" line="50"/>
-        <source>welcome to Pardus Store</source>
+        <location filename="../ui/Home.qml" line="56"/>
+        <source>welcome</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="176"/>
+        <location filename="../ui/Home.qml" line="183"/>
         <source>Editor&apos;s Pick</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="311"/>
+        <location filename="../ui/Home.qml" line="318"/>
         <source>Most Downloaded App</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="369"/>
+        <location filename="../ui/Home.qml" line="376"/>
         <source>Source Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="386"/>
+        <location filename="../ui/Home.qml" line="393"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="400"/>
+        <location filename="../ui/Home.qml" line="407"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="407"/>
+        <location filename="../ui/Home.qml" line="414"/>
         <source>Leave comments on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="443"/>
+        <location filename="../ui/Home.qml" line="450"/>
         <source>application survey</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="459"/>
+        <location filename="../ui/Home.qml" line="466"/>
         <source>Which application should be added to the store in next week ?</source>
         <translation type="unfinished"></translation>
     </message>
