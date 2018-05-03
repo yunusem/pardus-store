@@ -30,5 +30,6 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
      qml-module-qtgraphicaleffects,
      qml-module-qtquick-controls,
      qml-module-qtquick-templates2
+Recommends: pardus-xfce-icon-theme
 Description: Pardus Application Store
  Qt based nice looking simple to use responsive application store.
