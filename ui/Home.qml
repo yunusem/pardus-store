@@ -50,7 +50,7 @@ Pane {
                 verticalCenter: parent.verticalCenter
                 verticalCenterOffset: - parent.height / 10
                 horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: parent.width / 20
+                horizontalCenterOffset: parent.width / 10
             }
 
             text: qsTr("welcome")
