@@ -485,7 +485,7 @@ ApplicationWindow {
 
     onUpdateQueue: {
         queueDialog.repeater.model = processQueue
-        queueDialog.height = queueDialog.repeater.count * 34 + queueDialog.title.height + 12
+        queueDialog.height = queueDialog.repeater.count * 34 + queueDialog.title.height + 26
         if(processQueue.length == 0) {
             queueDialog.close()
         } else {
