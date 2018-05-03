@@ -20,6 +20,7 @@ public:
             *size = QSize(64, 64);
         }
         const QIcon defaultIcon = QIcon::fromTheme("image-missing",QIcon(id));
+        defaultIcon.setThemeName(default_icon_theme);
         QIcon icon = QIcon::fromTheme(id, defaultIcon);
         icon.setThemeName(default_icon_theme);
 
