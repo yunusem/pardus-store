@@ -4,12 +4,12 @@
 <context>
     <name>ApplicationDelegate</name>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="267"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="257"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="267"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="257"/>
         <source>install</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,6 +61,11 @@
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="537"/>
+        <source>no description found</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BottomDock</name>
@@ -101,42 +106,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="175"/>
+        <location filename="../ui/Home.qml" line="176"/>
         <source>Editor&apos;s Pick</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="309"/>
+        <location filename="../ui/Home.qml" line="311"/>
         <source>Most Downloaded App</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="367"/>
+        <location filename="../ui/Home.qml" line="369"/>
         <source>Source Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="384"/>
+        <location filename="../ui/Home.qml" line="386"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="398"/>
+        <location filename="../ui/Home.qml" line="400"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="405"/>
+        <location filename="../ui/Home.qml" line="407"/>
         <source>Leave comments on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="441"/>
+        <location filename="../ui/Home.qml" line="443"/>
         <source>application survey</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="457"/>
+        <location filename="../ui/Home.qml" line="459"/>
         <source>Which application should be added to the store in next week ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -152,7 +157,7 @@
 <context>
     <name>QueueDialog</name>
     <message>
-        <location filename="../ui/QueueDialog.qml" line="26"/>
+        <location filename="../ui/QueueDialog.qml" line="28"/>
         <source>queue</source>
         <translation type="unfinished"></translation>
     </message>
