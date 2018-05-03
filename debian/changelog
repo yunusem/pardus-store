@@ -1,3 +1,14 @@
+pardus-store (0.0.6~alpha) unstable; urgency=medium
+
+  * Fix error coming from image provider class
+  * Update reading icon measures
+  * Update some static visual adjusments to dynamic
+  * Add missing translation in application detail
+  * Fix the uncliped area bottom of queue dialog
+  * Add default icon theme to recommends
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 03 May 2018 11:41:09 +0300
+
 pardus-store (0.0.5~alpha) unstable; urgency=medium
 
   * Add confirmation dialog at removal. Closes: #4
