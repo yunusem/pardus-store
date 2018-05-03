@@ -125,8 +125,9 @@ Item {
                 left: parent.left
                 verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
             }
-            width: 64
-            height: 64
+            height: parent.height * 2 / 3
+            width: height
+            fillMode: Image.PreserveAspectFit
             smooth: true
             mipmap: true
             antialiasing: true
@@ -176,8 +177,8 @@ Item {
 
         Button {
             id: processButton
-            width: delegateMouseArea.containsMouse ? 210 : 80
-            height: delegateMouseArea.containsMouse ? 50 : 40
+            width: delegateMouseArea.containsMouse ? parent.width : parent.width / 3
+            height: delegateMouseArea.containsMouse ? parent.height / 3 + 10 : parent.height / 3
             opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
             anchors {
                 bottom: parent.bottom

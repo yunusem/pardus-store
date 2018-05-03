@@ -17,7 +17,7 @@ Pane {
     z: 100
     anchors {
         top: parent.top
-        topMargin: searchFlag ? 0 : 10
+        topMargin: searchFlag ? 0 : 8
         horizontalCenter: parent.horizontalCenter
         horizontalCenterOffset: parent.width / 40
     }

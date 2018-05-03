@@ -534,7 +534,7 @@ Pane {
                 Label {
                     id: labelDescription
                     width: textPane.width - 30
-                    text: app.description == "" ? "no description found": app.description
+                    text: app.description == "" ? qsTr("no description found"): app.description
                     fontSizeMode: Text.VerticalFit
                     wrapMode: Text.WordWrap
                     font.pointSize: detailTextSize

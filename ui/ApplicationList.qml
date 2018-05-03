@@ -28,4 +28,5 @@ GridView {
     delegate: ApplicationDelegate{
 
     }
+    ScrollBar.vertical: ScrollBar { }
 }

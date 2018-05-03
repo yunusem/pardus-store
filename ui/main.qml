@@ -7,8 +7,8 @@ import ps.helper 1.0
 
 ApplicationWindow {
     id: main
-    minimumWidth: 1366
-    minimumHeight: 768
+    minimumWidth: 1290
+    minimumHeight: minimumWidth * 9 / 16
     visible: true
     title: "Pardus" + " " + qsTr("Store")
     flags: Qt.FramelessWindowHint

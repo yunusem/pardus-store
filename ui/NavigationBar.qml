@@ -52,12 +52,10 @@ Pane {
 
         highlight: Rectangle {
             color: "transparent"
-
             radius: 2
             border.color: "#FFCB08"
-            //z: 200
-            //x:-10
-            //width: 5
+            border.width: 1.2 // navima.containsMouse ? 1 : 2
+            z: 101
         }
         focus: true
         highlightFollowsCurrentItem : true

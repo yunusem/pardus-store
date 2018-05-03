@@ -97,9 +97,10 @@ Pane {
                     verticalCenter: parent.verticalCenter
                     left: parent.left
                     verticalCenterOffset: editorBadgeMa.containsMouse ? 9 : 27
-                }
-                width: 72
-                height: 72
+                }                
+                height: parent.height * 2 / 3
+                width: height
+                fillMode: Image.PreserveAspectFit
                 smooth: true
                 mipmap: true
                 antialiasing: true
@@ -235,8 +236,9 @@ Pane {
                     left: parent.left
                     verticalCenterOffset: mostDownloadedAppMa.containsMouse ? 9 : 27
                 }
-                width: 72
-                height: 72
+                height: parent.height * 2 / 3
+                width: height
+                fillMode: Image.PreserveAspectFit
                 smooth: true
                 mipmap: true
                 antialiasing: true
@@ -460,9 +462,12 @@ Pane {
             wrapMode: Text.WordWrap
         }
 
-        Column {
+        Column {            
             anchors {
-                centerIn: parent
+                top: surveyText.bottom
+                topMargin: 12
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
             }
 
             Repeater {

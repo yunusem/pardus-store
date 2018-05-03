@@ -7,18 +7,21 @@ import QtGraphicalEffects 1.0
 Item {
     id: categoryDelegateItem
     width: navi.width - 22
-    height: navima.containsMouse ? navigationBarListView.unFoldHeight : navigationBarListView.foldHeight
+    height: navigationBarListView.foldHeight
 
 
         Image {
             id: categoryIcon
-            width: 36 //navigationBarListView.foldHeight - 10
-            height: width
+            width: (parent.height >= parent.width) ? parent.width - 2 : parent.height - 2
+            height: (parent.height >= parent.width) ? parent.width - 2 : parent.height - 2
             source: "qrc:/images/" + icon + ".svg"
+            fillMode: Image.PreserveAspectFit
             anchors {
-                left: parent.left
-                leftMargin: 3
                 verticalCenter: parent.verticalCenter
+                //horizontalCenter: parent.horizontalCenter
+                //horizontalCenterOffset: (width <= parent.width) ? - (parent.width - width) / 2 : 0
+                left: parent.left
+                leftMargin: 2
             }
             mipmap: true
             smooth: true
@@ -27,8 +30,7 @@ Item {
 
         DropShadow {
             id:ds
-            visible: true
-            //opacity: ma.containsMouse ? 0.0 : 1.0
+            visible: true            
             anchors.fill: categoryIcon
             horizontalOffset: 3
             verticalOffset: 3
@@ -42,13 +44,16 @@ Item {
             anchors {
                 verticalCenter: parent.verticalCenter
                 left: categoryIcon.right
-                leftMargin: 10
+                leftMargin: 8
+                right: parent.right
+                rightMargin: 2
             }
-            opacity: navima.containsMouse ? 1.0 : 0.0
+            opacity: navima.containsMouse ? 1.0 : 0.0            
             color: name === category ? "#FFCB08" : "white"
             font.capitalization: Font.Capitalize
             font.bold: name === category ? true : false
             text: name
+            fontSizeMode: Text.HorizontalFit
 
             Behavior on opacity {
                 NumberAnimation {
