@@ -3,6 +3,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QUrl>
+#include <QNetworkInterface>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -11,7 +12,8 @@
 #include <QDebug>
 
 #define MAIN_URL "http://193.140.98.197:5000"
-#define API_URL "http://193.140.98.197:5000/api/v1/apps/"
+#define API_APPS_URL "http://193.140.98.197:5000/api/v1/apps/"
+#define API_SURVEY_URL "http://193.140.98.197:5000/api/v1/survey/"
 
 namespace {
 
@@ -63,7 +65,7 @@ void NetworkHandler::getApplicationList()
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
-    reply = m_nam.get(QNetworkRequest(QUrl(API_URL)));
+    reply = m_nam.get(QNetworkRequest(QUrl(API_APPS_URL)));
     timer_put(&m_timerMap, reply, timer);
     timer->start(m_timeoutDuration);
 }
@@ -71,11 +73,68 @@ void NetworkHandler::getApplicationList()
 void NetworkHandler::getApplicationDetails(const QString &packageName)
 {
     QNetworkReply *reply;
-    QString url = QString(API_URL).append(packageName);
+    QString url = QString(API_APPS_URL).append(packageName);
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
     reply = m_nam.get(QNetworkRequest(QUrl(url)));
+    timer_put(&m_timerMap, reply, timer);
+    timer->start(m_timeoutDuration);
+}
+
+void NetworkHandler::surveyCheck()
+{
+    QUrl url(QString(API_SURVEY_URL).append("list"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject data;
+    QString mac;
+    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
+        auto flags = interface.flags();
+        if(flags.testFlag(QNetworkInterface::IsRunning) &&
+                !flags.testFlag(QNetworkInterface::IsLoopBack)) {
+            mac = interface.hardwareAddress();
+        }
+    }
+
+    data.insert("mac",QJsonValue::fromVariant(mac));
+
+    QNetworkReply *reply;
+    QTimer *timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer->setSingleShot(true);
+    reply = m_nam.post(request, QJsonDocument(data).toJson());
+    timer_put(&m_timerMap, reply, timer);
+    timer->start(m_timeoutDuration);
+}
+
+void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
+{
+    QUrl url(QString(API_SURVEY_URL).append("join"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject data;
+    QString mac;
+    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
+        auto flags = interface.flags();
+        if(flags.testFlag(QNetworkInterface::IsRunning) &&
+                !flags.testFlag(QNetworkInterface::IsLoopBack)) {
+            mac = interface.hardwareAddress();
+            break;
+        }
+    }
+
+    data.insert("mac",QJsonValue::fromVariant(mac));
+    data.insert("app",QJsonValue::fromVariant(appName));
+    data.insert("duty",QJsonValue::fromVariant(duty));
+
+    QNetworkReply *reply;
+    QTimer *timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer->setSingleShot(true);
+    reply = m_nam.post(request, QJsonDocument(data).toJson());
     timer_put(&m_timerMap, reply, timer);
     timer->start(m_timeoutDuration);
 }
@@ -139,6 +198,23 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
             descs.append(Description(key,value.toString()));
         }
         emit appDetailsReceived(ApplicationDetail(appName,ss,descs));
+    } else if(obj.contains("survey-list")) {
+        QStringList sl;
+        QString ps;
+        auto surveylist = obj["survey-list"].toObject();
+        ps = surveylist["individual"].toString();
+        QJsonArray counts = surveylist["counts"].toArray();
+        for(int i=0; i< counts.size();i++) {
+            QString app = counts.at(i).toObject()["app"].toString();
+            int count = counts.at(i).toObject()["count"].toInt();
+            sl.append(app.append(" ").append(count));
+        }
+        emit surveyListReceived(ps, sl);
+    } else if(obj.contains("survey-join")) {
+        auto surveyjoin = obj["survey-join"].toObject();
+        QString duty = surveyjoin["duty"].toString();
+        int result = surveyjoin["result"].toInt();
+        emit surveyJoinResultReceived(duty, result);
     }
 }
 

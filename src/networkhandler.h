@@ -18,10 +18,14 @@ public:
 
     void getApplicationList();
     void getApplicationDetails(const QString &packageName);
+    void surveyCheck();
+    void surveyJoin(const QString &appName, const QString &duty);
 
 signals:
-    void appListReceived(const QStringList &sl);
+    void appListReceived(const QStringList &al);
     void appDetailsReceived(const ApplicationDetail &ad);
+    void surveyListReceived(const QString &mySelection, const QStringList &sl);
+    void surveyJoinResultReceived(const QString &duty, const int &result);
     void notFound();
 
 private slots:
