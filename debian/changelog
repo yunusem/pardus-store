@@ -1,3 +1,15 @@
+pardus-store (0.0.8~alpha) unstable; urgency=medium
+
+  [ Hikmet Baş ]
+  * Fix welcome text offset
+
+  [ Yunusemre Şentürk ]
+  * Add API backend handler for survey
+  * Update bindings against survey backend
+  * Update translations
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Fri, 04 May 2018 14:54:34 +0300
+
 pardus-store (0.0.7~alpha) unstable; urgency=medium
 
   * Change banner text and image source address
