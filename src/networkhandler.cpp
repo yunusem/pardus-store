@@ -207,7 +207,7 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
         for(int i=0; i< counts.size();i++) {
             QString app = counts.at(i).toObject()["app"].toString();
             int count = counts.at(i).toObject()["count"].toInt();
-            sl.append(app.append(" ").append(count));
+            sl.append(app + " " + QString::number(count));
         }
         emit surveyListReceived(ps, sl);
     } else if(obj.contains("survey-join")) {

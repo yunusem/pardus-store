@@ -23,21 +23,30 @@ class Helper : public QObject
                NOTIFY screenshotReceived
                NOTIFY screenshotNotFound
                NOTIFY fetchingAppListFinished
-               NOTIFY gatheringLocalDetailFinished)
+               NOTIFY gatheringLocalDetailFinished
+               NOTIFY surveyListReceived
+               NOTIFY surveyJoinSuccess
+               NOTIFY surveyJoinUpdateSuccess)
+    Q_PROPERTY(QString choice
+               READ choice
+               NOTIFY choiceChanged)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
-
+    QString choice() const;
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
     Q_INVOKABLE void getAppList();
     Q_INVOKABLE void getAppDetails(const QString &pkg);
+    Q_INVOKABLE void surveyCheck();
+    Q_INVOKABLE void surveyJoin(const QString &appName, const QString &duty);
     Q_INVOKABLE void systemNotify(const QString &pkg,
                                   const QString &title,
                                   const QString &content);
 private:
     bool p;
+    QString c;
     FileHandler *fh;
     PackageHandler *ph;
     QStringList l;
@@ -56,13 +65,19 @@ signals:
     void processingFinishedWithError(const QString &output);
     void screenshotReceived(const QStringList &urls);
     void descriptionReceived(const QString &description);
+    void choiceChanged();
+    void surveyListReceived(const QStringList &list);
+    void surveyJoinSuccess();
+    void surveyJoinUpdateSuccess();
     void screenshotNotFound();
     void fetchingAppListFinished();
     void gatheringLocalDetailFinished();
 
-public slots:
+public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);
     void appListReceivedSlot(const QStringList &list);
+    void surveyListReceivedSlot(const QString &mySelection, const QStringList &sl);
+    void surveyJoinResultReceived(const QString &duty, const int &result);
 };
 
 #endif // HELPER_H

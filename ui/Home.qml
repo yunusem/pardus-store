@@ -14,10 +14,43 @@ Pane {
     height: parent.height - 10
     Material.elevation: 2    
     property int animationSpeed: 200
-    property variant surveyList : ["gimp", "webstorm", "discord"]
-    property string surveySelectedApplication : ""
+    property variant surveyList : []
+    property variant surveyCounts: []
+    property string choice : helper.choice
+    property int selectedIndex: 0
     property string editorsAppName: "chromium"
     property string mostAppName: "spotify-client"
+
+    signal joined()
+    signal updated()
+    signal countsChanged()
+
+    function fillSurveyList(sl) {
+        surveyList = []
+        surveyCounts = []
+        for(var i =0; i < sl.length; i++) {
+            surveyList.push(sl[i].split(" ")[0].toString())
+            surveyCounts.push(sl[i].split(" ")[1])
+        }
+        if (surveyRepeater.model[0] !== surveyList[0]) {
+            surveyRepeater.model = surveyList
+        }
+        countsChanged()
+    }
+
+    onJoined: {
+        surveyBtn.enabled = true
+    }
+
+    onUpdated: {
+        surveyBtn.enabled = true
+    }
+
+    Component.onCompleted: {
+        gotSurveyList.connect(fillSurveyList)
+        surveyJoined.connect(joined)
+        surveyJoinUpdated.connect(updated)
+    }
 
     Pane {
         id: banner
@@ -27,6 +60,7 @@ Pane {
         anchors {
             horizontalCenter: parent.horizontalCenter
         }
+
         Image {
             id: bannerImage
             width: parent.width
@@ -478,13 +512,16 @@ Pane {
             }
 
             Repeater {
-                model: surveyList.sort()
+                id: surveyRepeater
+                model: surveyList
                 RadioButton {
                     text: modelData
                     font.capitalization: Font.Capitalize
                     onCheckedChanged: {
-                        surveySelectedApplication = modelData
+                        selectedIndex = index
                     }
+
+                    checked: (modelData === choice)
 
                     Image {
                         anchors {
@@ -494,6 +531,50 @@ Pane {
                         height: parent.height
                         width: height
                         source: "image://application/" + getCorrectName(text)
+                    }
+
+                    Label {
+                        id: counterLabel
+                        anchors.right: parent.left
+                        anchors.rightMargin: 12
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: surveyCounts[index]
+                        font.bold: true
+                        verticalAlignment: Text.AlignVCenter
+
+                        function updateValue() {
+                           text = surveyCounts[index]
+                        }
+
+                        Component.onCompleted: {
+                           countsChanged.connect(updateValue)
+                        }
+                    }
+                }
+            }
+
+            Button {
+                id: surveyBtn
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                }
+                Material.background: "#2c2c2c"
+
+                Label {
+                    id: surveyBtnLabel
+                    anchors.centerIn: parent
+                    Material.foreground: "#ffcb08"
+                    text: (choice === "") ? qsTr("send") : qsTr("update")
+                    font.capitalization: Font.Capitalize
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+                onClicked: {
+                    enabled = false
+                    if(surveyBtnLabel.text === qsTr("send")) {
+                        helper.surveyJoin(surveyList[selectedIndex],"join")
+                    } else {
+                        helper.surveyJoin(surveyList[selectedIndex],"update")
                     }
                 }
             }

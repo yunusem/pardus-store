@@ -8,7 +8,7 @@
 #include <QRegExp>
 #include <QDebug>
 
-Helper::Helper(QObject *parent) : QObject(parent), p(false)
+Helper::Helper(QObject *parent) : QObject(parent), p(false), c("")
 {    
     nh = new NetworkHandler(10000,this);
     fh = new FileHandler(this);
@@ -18,11 +18,18 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false)
     connect(nh,SIGNAL(appListReceived(QStringList)),this,SLOT(appListReceivedSlot(QStringList)));
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
+    connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
+    connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceived(QString,int)));
 }
 
 bool Helper::processing() const
 {
     return p;
+}
+
+QString Helper::choice() const
+{
+    return c;
 }
 
 void Helper::fillTheList()
@@ -84,6 +91,16 @@ void Helper::getAppList()
 void Helper::getAppDetails(const QString &pkg)
 {  
     nh->getApplicationDetails(pkg);
+}
+
+void Helper::surveyCheck()
+{
+    nh->surveyCheck();
+}
+
+void Helper::surveyJoin(const QString &appName, const QString &duty)
+{
+    nh->surveyJoin(appName, duty);
 }
 
 void Helper::systemNotify(const QString &pkg, const QString &title, const QString &content)
@@ -184,4 +201,24 @@ void Helper::appListReceivedSlot(const QStringList &list)
     emit fetchingAppListFinished();
     ldetail = this->getDetails();
     this->fillTheList();
+}
+
+void Helper::surveyListReceivedSlot(const QString &mySelection, const QStringList &sl)
+{
+    c = mySelection;
+    emit choiceChanged();
+    emit surveyListReceived(sl);
+}
+
+void Helper::surveyJoinResultReceived(const QString &duty, const int &result)
+{
+    if (result == 1) {
+        if(duty == "update") {
+            emit surveyJoinUpdateSuccess();
+        } else if(duty == "join") {
+            emit surveyJoinSuccess();
+        }
+    } else {
+        qDebug() << "Survey join result is " << result;
+    }
 }

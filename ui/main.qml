@@ -61,6 +61,9 @@ ApplicationWindow {
     signal updateCacheFinished()
     signal updateStatusOfAppFromDetail(string appName)
     signal confirmationRemoval(string appName, string from)
+    signal gotSurveyList(variant sl)
+    signal surveyJoined()
+    signal surveyJoinUpdated()
 
     Item {
         id: app
@@ -266,9 +269,24 @@ ApplicationWindow {
             splashScreen.label.text = qsTr("Gathering local details.")
         }
         onGatheringLocalDetailFinished: {
-            splashScreen.label.text = qsTr("Done.")
-            splashScreen.timer.start()
-            splashScreen.busy.running = false
+            splashScreen.label.text = qsTr("Fetching survey data.")
+            surveyCheck()
+        }
+        onSurveyListReceived: {
+            gotSurveyList(list)
+            if(splashScreen.visible) {
+                splashScreen.label.text = qsTr("Done.")
+                splashScreen.timer.start()
+                splashScreen.busy.running = false
+            }
+        }
+        onSurveyJoinSuccess: {
+            surveyJoined()
+            surveyCheck()
+        }
+        onSurveyJoinUpdateSuccess: {
+            surveyJoinUpdated()
+            surveyCheck()
         }
     }
 
