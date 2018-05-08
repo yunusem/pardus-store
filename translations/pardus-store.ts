@@ -70,12 +70,12 @@
 <context>
     <name>BottomDock</name>
     <message>
-        <location filename="../ui/BottomDock.qml" line="117"/>
+        <location filename="../ui/BottomDock.qml" line="116"/>
         <source>all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/BottomDock.qml" line="121"/>
+        <location filename="../ui/BottomDock.qml" line="120"/>
         <source>home</source>
         <translation type="unfinished"></translation>
     </message>
@@ -147,7 +147,7 @@
     </message>
     <message>
         <location filename="../ui/Home.qml" line="567"/>
-        <location filename="../ui/Home.qml" line="574"/>
+        <location filename="../ui/Home.qml" line="575"/>
         <source>send</source>
         <translation type="unfinished"></translation>
     </message>
@@ -182,6 +182,14 @@
     </message>
 </context>
 <context>
+    <name>Settings</name>
+    <message>
+        <location filename="../ui/Settings.qml" line="9"/>
+        <source>settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SplashScreen</name>
     <message>
         <location filename="../ui/SplashScreen.qml" line="96"/>
@@ -194,7 +202,7 @@
     <message>
         <location filename="../ui/main.qml" line="13"/>
         <location filename="../ui/main.qml" line="228"/>
-        <location filename="../ui/main.qml" line="475"/>
+        <location filename="../ui/main.qml" line="474"/>
         <source>Store</source>
         <translation type="unfinished"></translation>
     </message>
@@ -206,15 +214,15 @@
     <message>
         <location filename="../ui/main.qml" line="26"/>
         <location filename="../ui/main.qml" line="29"/>
-        <location filename="../ui/main.qml" line="337"/>
-        <location filename="../ui/main.qml" line="499"/>
+        <location filename="../ui/main.qml" line="333"/>
+        <location filename="../ui/main.qml" line="498"/>
         <source>home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/main.qml" line="30"/>
-        <location filename="../ui/main.qml" line="491"/>
-        <location filename="../ui/main.qml" line="498"/>
+        <location filename="../ui/main.qml" line="490"/>
+        <location filename="../ui/main.qml" line="497"/>
         <source>all</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,12 +282,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ui/main.qml" line="42"/>
+        <source>settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/main.qml" line="272"/>
         <source>Fetching survey data.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="484"/>
+        <location filename="../ui/main.qml" line="483"/>
         <source>Fetching application list.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -329,22 +342,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="359"/>
+        <location filename="../ui/main.qml" line="358"/>
         <source>removing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="363"/>
+        <location filename="../ui/main.qml" line="362"/>
         <source>installing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="474"/>
+        <location filename="../ui/main.qml" line="473"/>
         <source>Warning!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="475"/>
+        <location filename="../ui/main.qml" line="474"/>
         <source>can not be closed while a process is ongoing.</source>
         <translation type="unfinished"></translation>
     </message>
