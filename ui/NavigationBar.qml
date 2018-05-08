@@ -44,7 +44,7 @@ Pane {
         id: navigationBarListView
         height: parent.height
         interactive: true
-        spacing: 17
+        spacing: 11
         property int foldHeight: parent.height / count - spacing
         property int unFoldHeight: parent.height / count - spacing
         anchors.verticalCenter: parent.verticalCenter

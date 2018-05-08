@@ -38,7 +38,8 @@ ApplicationWindow {
         qsTr("system"),
         qsTr("video"),
         qsTr("chat"),
-        qsTr("others")]
+        qsTr("others"),
+        qsTr("settings")]
     property variant categoryIcons: ["home",
         "all",
         "internet",
@@ -51,7 +52,8 @@ ApplicationWindow {
         "system",
         "video",
         "chat",
-        "others"]
+        "others",
+        "settings"]
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
 
     property alias processOutputLabel: bottomDock.processOutput
@@ -149,7 +151,7 @@ ApplicationWindow {
         z: 92
         height: topDock.height
         width: height * 2 / 3
-        opacity: bottomDock.pageIndicator.currentIndex == 2 ? 1.0 : 0.0
+        opacity: bottomDock.pageIndicator.currentIndex >= 1 ? 1.0 : 0.0
         Material.background: "#fafafa"
         anchors {
             top: parent.top
@@ -169,7 +171,7 @@ ApplicationWindow {
         }
 
         onClicked: {
-            swipeView.currentIndex = 1
+            swipeView.currentIndex -= 1
             //applicationModel.setFilterString("", true)
         }
 
@@ -196,12 +198,10 @@ ApplicationWindow {
 
     BottomDock {
         id: bottomDock
-
     }
 
     SearchBar {
-        id: searchBar        
-
+        id: searchBar
     }
 
     Helper {
@@ -313,11 +313,7 @@ ApplicationWindow {
             ApplicationList {
                 id: applicationListPage
             }
-        }
-
-        onCurrentIndexChanged: {
-
-        }
+        }        
     }
 
     Page {
@@ -340,7 +336,10 @@ ApplicationWindow {
                 swipeView.currentIndex = 0
             }
         }
+    }
 
+    Settings {
+        id: settings
     }
 
     Timer {
@@ -506,8 +505,6 @@ ApplicationWindow {
         queueDialog.height = queueDialog.repeater.count * 34 + queueDialog.title.height + 26
         if(processQueue.length == 0) {
             queueDialog.close()
-        } else {
-
         }
     }
 }

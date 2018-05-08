@@ -111,9 +111,8 @@ Pane {
 
         onCurrentIndexChanged: {
             swipeView.currentIndex = indicator.currentIndex
-
-            if(currentIndex == 1) {
-                if(navigationBar.currentIndex == 0) {                    
+            if (currentIndex == 1) {
+                if(navigationBar.currentIndex == 0) {
                     category = qsTr("all")
                     app.name = ""
                 }

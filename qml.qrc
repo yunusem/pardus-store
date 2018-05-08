@@ -14,5 +14,6 @@
         <file>ui/QueueDialog.qml</file>
         <file>ui/ConfirmationDialog.qml</file>
         <file>ui/InfoDialog.qml</file>
+        <file>ui/Settings.qml</file>
     </qresource>
 </RCC>
