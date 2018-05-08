@@ -559,12 +559,13 @@ Pane {
                     horizontalCenter: parent.horizontalCenter
                 }
                 Material.background: "#2c2c2c"
-
+                width: surveyBtnLabel.width + 24
                 Label {
                     id: surveyBtnLabel
                     anchors.centerIn: parent
                     Material.foreground: "#ffcb08"
                     text: (choice === "") ? qsTr("send") : qsTr("update")
+                    fontSizeMode: Text.HorizontalFit
                     font.capitalization: Font.Capitalize
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
