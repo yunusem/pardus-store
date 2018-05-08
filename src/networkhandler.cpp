@@ -95,6 +95,7 @@ void NetworkHandler::surveyCheck()
         if(flags.testFlag(QNetworkInterface::IsRunning) &&
                 !flags.testFlag(QNetworkInterface::IsLoopBack)) {
             mac = interface.hardwareAddress();
+            break;
         }
     }
 
