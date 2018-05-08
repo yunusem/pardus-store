@@ -1,3 +1,15 @@
+pardus-store (0.0.9~alpha) unstable; urgency=medium
+
+  * Fix survey button apprereance
+  * Break the loop when we find the first MAC address
+  * Add category role to search filter roles when using searchbar
+  * Make language packages installable if exists
+  * Reverse changes abour search roles
+  * Add settings pane and update backButton visibility statements
+  * Update translations
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 08 May 2018 14:05:37 +0300
+
 pardus-store (0.0.8~alpha) unstable; urgency=medium
 
   [ Hikmet Baş ]
