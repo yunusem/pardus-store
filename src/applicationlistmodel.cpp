@@ -138,7 +138,7 @@ FilterProxyModel::~FilterProxyModel()
 
 void FilterProxyModel::setFilterString(QString s, bool isSearch)
 {
-    this->setFilterRole(isSearch ? NameRole | CategoryRole : CategoryRole);
+    this->setFilterRole(isSearch ? NameRole : CategoryRole);
     this->setFilterCaseSensitivity(Qt::CaseInsensitive);
     this->setFilterFixedString(s);
 
