@@ -20,9 +20,10 @@ signals:
 
 public slots:
     void updateCache();
-    void install(const QString pkg);
-    void remove(const QString pkg);
-    QString getPolicy(const QString pkg) const;
+    void install(const QString &pkg);
+    void remove(const QString &pkg);
+    QString getPolicy(const QString &pkg) const;
+    QString getSearch(const QString &pkg) const;
     QByteArray getError();
     QByteArray getOutput();
 };

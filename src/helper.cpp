@@ -71,16 +71,19 @@ void Helper::updateCache()
 
 void Helper::install(const QString &pkg)
 {
-
-    ph->install(pkg);
     p = true;
+    QString package = getLanguagePackage(pkg);
+    if(package != "") {
+        ph->install(package);
+    } else {
+        ph->install(pkg);
+    }
 }
 
 void Helper::remove(const QString &pkg)
 {
-
-    ph->remove(pkg);
     p = true;
+    ph->remove(pkg);    
 }
 
 void Helper::getAppList()
@@ -118,8 +121,8 @@ void Helper::systemNotify(const QString &pkg, const QString &title, const QStrin
 
 void Helper::packageProcessFinished(int code)
 {
-    if(code == 0) {                
-        emit processingFinished();
+    if(code == 0) {
+        emit processingFinished();        
     } else {        
         emit processingFinishedWithError(QString::fromLatin1(ph->getError()));
     }
@@ -172,6 +175,41 @@ QStringList Helper::getDetails() const
 void Helper::updateDetails()
 {
     ldetail = this->getDetails();
+}
+
+QString Helper::getLanguagePackage(const QString &pkg) const
+{
+    QStringList l = ph->getSearch(pkg).split("\n");
+    QString lang = QLocale::system().name();
+    QString langMajor = lang.split("_")[0];
+    QString langMinor = lang.split("_")[1];
+
+    QStringList pl;
+    QString result = "";
+
+    foreach (QString str, l) {
+        if(str.contains("language")) {
+            pl.append(str.split(" - ")[0]);
+        }
+    }
+    if(pl.size() > 1) {
+        foreach (QString s, pl) {
+            if(langMajor.toLower() == lang.toLower()) {
+                if (s.contains(langMajor, Qt::CaseInsensitive)) {
+                    result = s;
+                }
+            } else {
+                if (s.contains(langMajor, Qt::CaseInsensitive) &&
+                    s.contains(langMinor, Qt::CaseInsensitive)) {
+                    result = s;
+                }
+            }
+        }
+    } else if(pl.size() == 1) {
+        result = pl[0];
+    }
+
+    return result;
 }
 
 void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)

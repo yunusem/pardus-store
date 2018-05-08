@@ -25,17 +25,17 @@ void PackageHandler::updateCache()
     p->start("apt-get update");
 }
 
-void PackageHandler::install(const QString pkg)
-{
-    p->start("apt-get install -y " + pkg);
+void PackageHandler::install(const QString &pkg)
+{    
+    p->start("apt-get install -y " + pkg);    
 }
 
-void PackageHandler::remove(const QString pkg)
+void PackageHandler::remove(const QString &pkg)
 {
     p->start("apt-get remove -y " + pkg);
 }
 
-QString PackageHandler::getPolicy(const QString pkg) const
+QString PackageHandler::getPolicy(const QString &pkg) const
 {    
     p->start("apt-cache policy " + pkg);
 
@@ -45,6 +45,19 @@ QString PackageHandler::getPolicy(const QString pkg) const
     p->close();
     return out;
 }
+
+QString PackageHandler::getSearch(const QString &pkg) const
+{
+    QProcess process;
+    process.start("apt-cache search " + pkg);
+
+    process.waitForFinished();
+
+    QString out = QString::fromLatin1(process.readAllStandardOutput());
+    process.close();
+    return out;
+}
+
 QByteArray PackageHandler::getError()
 {
     return p->readAllStandardError();

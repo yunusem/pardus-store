@@ -59,6 +59,7 @@ private slots:
     void packageProcessFinished(int code);
     QStringList getDetails() const;
     void updateDetails();
+    QString getLanguagePackage(const QString &pkg) const;
 
 signals:
     void processingFinished();
