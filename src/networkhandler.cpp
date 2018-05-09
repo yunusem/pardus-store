@@ -4,6 +4,8 @@
 #include <QNetworkRequest>
 #include <QUrl>
 #include <QNetworkInterface>
+#include <QNetworkProxyFactory>
+#include <QNetworkProxy>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -55,6 +57,15 @@ QNetworkReply *reply_get(std::map<QNetworkReply *, QTimer *> *m, QTimer *t)
 NetworkHandler::NetworkHandler(int msec, QObject *parent) : QObject(parent),
     m_timeoutDuration(msec)
 {
+    QNetworkProxyQuery npq(QUrl(MAIN_URL));
+    QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+    qDebug() << listOfProxies;
+    foreach ( QNetworkProxy p, listOfProxies ) {
+        if(p.hostName() != "") {
+            m_nam.setProxy(p);
+            qDebug() << p.hostName();
+        }
+    }
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(replyFinished(QNetworkReply*)));
 }
