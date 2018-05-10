@@ -38,7 +38,7 @@ private:
 enum Roles {
     NameRole = Qt::UserRole +1,
     VersionRole,
-    StatusRole,
+    InstalledRole,
     InQueueRole,
     CategoryRole,
     NonFreeRole,

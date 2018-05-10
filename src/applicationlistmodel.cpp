@@ -88,7 +88,7 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case NameRole: return app.name();
     case VersionRole: return app.version();
-    case StatusRole: return app.status();
+    case InstalledRole: return app.status();
     case InQueueRole: return app.in_queue();
     case CategoryRole: return app.category();
     case NonFreeRole: return app.non_free();
@@ -102,7 +102,7 @@ bool ApplicationListModel::setData(const QModelIndex &index, const QVariant &val
 {
     if(index.row() < lst.size() && index.row() >= 0 ) {
 
-        if(role == StatusRole) {
+        if(role == InstalledRole) {
             lst[index.row()].setStatus(value.toBool());
         } else if (role == InQueueRole) {
             lst[index.row()].setInQueue(value.toBool());
@@ -117,7 +117,7 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[NameRole] = "name";
     roles[VersionRole] = "version";
-    roles[StatusRole] = "status";
+    roles[InstalledRole] = "installed";
     roles[InQueueRole] = "inqueue";
     roles[CategoryRole] = "category";
     roles[NonFreeRole] = "nonfree";
