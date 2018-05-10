@@ -38,7 +38,11 @@ icon.files = images/icon.svg
 icon.commands = mkdir -p /usr/share/pardus/pardus-store
 icon.path = /usr/share/pardus/pardus-store
 
-INSTALLS += target desktop_file icon
+policy.files = tr.org.pardus.pkexec.pardus-store.policy
+policy.commands = mkdir -p /usr/share/polkit-1/actions
+policy.path = /usr/share/polkit-1/actions
+
+INSTALLS += target desktop_file icon policy
 
 #LIBS += -lapt-pkg
 

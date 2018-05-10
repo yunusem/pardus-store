@@ -22,9 +22,10 @@ Homepage: http://pardus.org.tr
 Package: pardus-store
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends},
-     gksu,
+     apt-transport-https,
      libqt5svg5,
      libnotify-bin,
+     policykit-1,
      qml-module-qtquick-controls2,
      qml-module-qtquick2,
      qml-module-qtgraphicaleffects,
