@@ -8,15 +8,10 @@ Item {
     width: applicationList.cellWidth
     height: applicationList.cellHeight
 
-    property string applicationName: name
-    property bool applicationStatus: status
-
-    onApplicationNameChanged: {
-        app.name = applicationName
-    }
+    property bool applicationStatus: installed
 
     onApplicationStatusChanged: {
-        if(applicationName === app.name) {
+        if(name === app.name) {
             app.installed = applicationStatus
         }
     }
@@ -30,11 +25,10 @@ Item {
     }
 
     function operateRemoval(appName, from) {
-        if(appName !== "" && appName === name && from === "delegate") {
-            applicationName = name
+        if(appName !== "" && appName === name && from === "delegate") {            
             processButton.enabled = false
             inqueue = true
-            processQueue.push(applicationName + " " + applicationStatus)
+            processQueue.push(name + " " + applicationStatus)
             updateQueue()
         }
     }
@@ -207,12 +201,15 @@ Item {
                     }
                     enabled = true
                     inqueue = false
+                    if(app.name === name) {
+                        app.hasProcessing = inqueue
+                    }
                 }
             }
 
             onEnabledChanged: {
-                if(applicationDelegateItem.error && enabled) {
-                    applicationDelegateItem.error = false
+                if(error && enabled) {
+                    error = false
                 }
             }
 
@@ -222,10 +219,10 @@ Item {
                     confirmationDialog.from = "delegate"
                     confirmationDialog.open()
                 } else {
-                    applicationName = name
+                    name = name
                     processButton.enabled = false
                     inqueue = true
-                    processQueue.push(applicationName + " " + applicationStatus)
+                    processQueue.push(name + " " + applicationStatus)
                     updateQueue()
                 }
             }
