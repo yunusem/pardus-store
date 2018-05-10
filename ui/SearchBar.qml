@@ -176,7 +176,7 @@ Pane {
 
 
         onTextChanged: {
-            applicationModel.setFilterString(searchField.text, true)
+            applicationModel.setFilterString(searchField.text.trim(), true)
         }
 
     }   
