@@ -59,11 +59,9 @@ NetworkHandler::NetworkHandler(int msec, QObject *parent) : QObject(parent),
 {
     QNetworkProxyQuery npq(QUrl(MAIN_URL));
     QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
-    qDebug() << listOfProxies;
     foreach ( QNetworkProxy p, listOfProxies ) {
         if(p.hostName() != "") {
             m_nam.setProxy(p);
-            qDebug() << p.hostName();
         }
     }
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)),
