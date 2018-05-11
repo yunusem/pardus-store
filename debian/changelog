@@ -1,3 +1,13 @@
+pardus-store (0.0.11~alpha) unstable; urgency=medium
+
+  * Update splash and applciation icon
+  * Change StatusRole name to InstalledRole and qml side as "installed"
+  * Remove debug outputs related proxy
+  * Fix button disabled after certain application process finished in Detail
+  * Fix searchbar text field white space condition
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Fri, 11 May 2018 11:49:14 +0300
+
 pardus-store (0.0.10~alpha) unstable; urgency=medium
 
   [ Yusuf Düzgün ]
