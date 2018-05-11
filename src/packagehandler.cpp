@@ -6,13 +6,17 @@
 //#include <apt-pkg/pkgcache.h>
 //#include <apt-pkg/dpkgpm.h>
 
-PackageHandler::PackageHandler(QObject *parent) : QObject(parent)
+#include "dpkg-progress.h"
+
+PackageHandler::PackageHandler(QObject *parent) : QObject(parent),
+    dpkg(nullptr)
 {
     p = new QProcess();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert("LC_ALL","C");
     p->setEnvironment(env.toStringList());
     connect(p,SIGNAL(finished(int)),this,SIGNAL(finished(int)));
+    connect(p,SIGNAL(finished(int)),this, SLOT(onFinished(int)));
 }
 
 PackageHandler::~PackageHandler()
@@ -26,8 +30,40 @@ void PackageHandler::updateCache()
 }
 
 void PackageHandler::install(const QString &pkg)
-{    
-    p->start("apt-get install -y " + pkg);    
+{
+    int statusFd;
+    QString cmd = "apt-get install -y ";
+    dpkg = new DpkgProgress();
+
+    statusFd = dpkg->statusFd();
+    if (statusFd >= 0) {
+        cmd.append("-o APT::Status-Fd=%1 %2");
+        cmd = cmd.arg(statusFd).arg(pkg);
+        QObject::connect(dpkg, &DpkgProgress::dpkgProgress,
+                         this, &PackageHandler::onDpkgProgress);
+    } else {
+        /* Unable to get progress information */
+        delete dpkg;
+        dpkg = nullptr;
+        cmd.append("%1");
+        cmd = cmd.arg(pkg);
+    }
+    p->start(cmd);
+}
+
+void PackageHandler::onFinished(int)
+{
+    if (dpkg) {
+        dpkg->disconnect();
+        dpkg->deleteLater();
+        dpkg = nullptr;
+    }
+}
+
+void PackageHandler::onDpkgProgress(const QString &status, const QString &pkg,
+                                    int value, const QString &desc)
+{
+    qDebug() << status << pkg << value << desc;
 }
 
 void PackageHandler::remove(const QString &pkg)
