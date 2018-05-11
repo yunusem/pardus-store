@@ -9,10 +9,17 @@ Item {
     height: applicationList.cellHeight
 
     property bool applicationStatus: installed
+    property bool applicationInQueue: inqueue
+
+    onApplicationInQueueChanged: {
+        if(app.name === name) {
+            app.hasProcessing = inqueue
+        }
+    }
 
     onApplicationStatusChanged: {
         if(name === app.name) {
-            app.installed = applicationStatus
+            app.installed = installed
         }
     }
 
