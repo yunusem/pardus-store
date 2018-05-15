@@ -15,5 +15,6 @@
         <file>ui/ConfirmationDialog.qml</file>
         <file>ui/InfoDialog.qml</file>
         <file>ui/Settings.qml</file>
+        <file>ui/ProgressBarCircle.qml</file>
     </qresource>
 </RCC>
