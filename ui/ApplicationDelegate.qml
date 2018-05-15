@@ -210,6 +210,7 @@ Item {
                     inqueue = false
                     if(app.name === name) {
                         app.hasProcessing = inqueue
+                        app.installed = applicationStatus
                     }
                 }
             }
