@@ -9,7 +9,8 @@ SOURCES += src/main.cpp \
     src/applicationlistmodel.cpp \
     src/networkhandler.cpp \
     src/applicationdetail.cpp \
-    src/singleton.cpp
+    src/singleton.cpp \
+    src/dpkg-progress.cpp
 
 HEADERS += \
     src/helper.h \
@@ -19,7 +20,8 @@ HEADERS += \
     src/applicationlistmodel.h \
     src/networkhandler.h \
     src/applicationdetail.h \
-    src/singleton.h
+    src/singleton.h \
+    src/dpkg-progress.h
 
 TARGET = pardus-store
 
