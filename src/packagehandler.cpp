@@ -62,13 +62,30 @@ void PackageHandler::onFinished(int)
 
 void PackageHandler::onDpkgProgress(const QString &status, const QString &pkg,
                                     int value, const QString &desc)
-{
-    qDebug() << status << pkg << value << desc;
+{    
+    emit dpkgProgressStatus(status, pkg, value, desc);
 }
 
 void PackageHandler::remove(const QString &pkg)
 {
-    p->start("apt-get remove -y " + pkg);
+    int statusFd;
+    QString cmd = "apt-get remove -y ";
+    dpkg = new DpkgProgress();
+
+    statusFd = dpkg->statusFd();
+    if (statusFd >= 0) {
+        cmd.append("-o APT::Status-Fd=%1 %2");
+        cmd = cmd.arg(statusFd).arg(pkg);
+        QObject::connect(dpkg, &DpkgProgress::dpkgProgress,
+                         this, &PackageHandler::onDpkgProgress);
+    } else {
+        /* Unable to get progress information */
+        delete dpkg;
+        dpkg = nullptr;
+        cmd.append("%1");
+        cmd = cmd.arg(pkg);
+    }
+    p->start(cmd);
 }
 
 QString PackageHandler::getPolicy(const QString &pkg) const

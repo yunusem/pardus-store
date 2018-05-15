@@ -15,6 +15,7 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false), c("")
     ph = new PackageHandler(this);    
 
     connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
+    connect(ph,SIGNAL(dpkgProgressStatus(QString,QString,int,QString)),this,SLOT(packageProcessStatus(QString,QString,int,QString)));
     connect(nh,SIGNAL(appListReceived(QStringList)),this,SLOT(appListReceivedSlot(QStringList)));
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
@@ -128,6 +129,13 @@ void Helper::packageProcessFinished(int code)
     }
 
     p = false;
+}
+
+void Helper::packageProcessStatus(const QString &status, const QString &pkg, int value, const QString &desc)
+{
+    Q_UNUSED(pkg);
+    Q_UNUSED(desc);
+    emit processingStatus(status, value);
 }
 
 QStringList Helper::getDetails() const

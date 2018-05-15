@@ -19,6 +19,7 @@ class Helper : public QObject
                READ processing               
                NOTIFY processingFinished
                NOTIFY processingFinishedWithError
+               NOTIFY processingStatus
                NOTIFY descriptionReceived
                NOTIFY screenshotReceived
                NOTIFY screenshotNotFound
@@ -57,6 +58,8 @@ private:
 
 private slots:
     void packageProcessFinished(int code);
+    void packageProcessStatus(const QString &status, const QString &pkg,
+                              int value, const QString &desc);
     QStringList getDetails() const;
     void updateDetails();
     QString getLanguagePackage(const QString &pkg) const;
@@ -64,6 +67,7 @@ private slots:
 signals:
     void processingFinished();
     void processingFinishedWithError(const QString &output);
+    void processingStatus(const QString &condition, int percent);
     void screenshotReceived(const QStringList &urls);
     void descriptionReceived(const QString &description);
     void choiceChanged();

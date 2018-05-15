@@ -15,15 +15,33 @@ Pane {
     Material.elevation: 3
     property alias pageIndicator: indicator
     property alias processOutput: processOutputLabel
+    property alias packageName: processOutputLabel.packageName
+    property alias condition: processOutputLabel.condition
     property alias busyIndicator: busy
     property alias processingIcon: appIconProcess
 
-    BusyIndicator {
+    ProgressBarCircle {
         id: busy
-        running: isThereOnGoingProcess
+        height: main.height / 15
+        width: height
+        colorBackground: "#aaaaaa"
+        thickness: 5
+        visible: true
+        opacity: isThereOnGoingProcess ? 1.0 : 0.0
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
+        }
+        onOpacityChanged: {
+            if(opacity === 0.0) {
+                value = 0
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                easing.type: Easing.InExpo
+                duration: 600
+            }
         }
     }
 
@@ -32,19 +50,21 @@ Pane {
         enabled: false
         anchors.centerIn: busy
         opacity: isThereOnGoingProcess ? 1.0 : 0.0
-        width: 30
-        height: 30
+        width: 27
+        height: width
 
         Behavior on opacity {
             NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
+                easing.type: Easing.InExpo
+                duration: 600
             }
         }
     }
 
     Label {
         id: processOutputLabel
+        property string packageName: ""
+        property string condition: ""
         anchors {
             verticalCenter: parent.verticalCenter
             left: busy.right
@@ -63,6 +83,14 @@ Pane {
             opacity = 1.0
         }
 
+        onConditionChanged: {
+            if(condition === qsTr("installed") || condition === qsTr("removed")) {
+                processOutputLabel.text = packageName + " " + qsTr("is") + " " + condition + "."
+            } else {
+                processOutputLabel.text = condition + " " + packageName + " ..."
+            }
+        }
+
         Behavior on opacity {
             NumberAnimation {
                 easing.type: Easing.OutExpo
@@ -78,6 +106,8 @@ Pane {
             onTriggered: {
                 if(!isThereOnGoingProcess) {
                     processOutputLabel.opacity = 0.0
+                    //processingPackageName = ""
+                    //processingCondition = ""
                 }
             }
         }

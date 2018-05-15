@@ -19,12 +19,13 @@ private:
 
 signals:
     void finished(int code);    
+    void dpkgProgressStatus(const QString &status, const QString &pkg, int value, const QString &desc);
 
 public slots:
     void updateCache();
     void install(const QString &pkg);
     void remove(const QString &pkg);
-    void onFinished(int code);
+    void onFinished(int code);    
     QString getPolicy(const QString &pkg) const;
     QString getSearch(const QString &pkg) const;
     QByteArray getError();

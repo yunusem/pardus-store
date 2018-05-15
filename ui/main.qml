@@ -20,7 +20,7 @@ ApplicationWindow {
     property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
     property bool errorOccured: false
-    property bool openAppDetail: false    
+    property bool openAppDetail: false
     property variant processQueue: []
     property string lastProcess: ""
     property string category : qsTr("home")
@@ -56,6 +56,8 @@ ApplicationWindow {
         "settings"]
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
 
+    property alias processingPackageName: bottomDock.packageName
+    property alias processingCondition: bottomDock.condition
     property alias processOutputLabel: bottomDock.processOutput
     property alias busy: bottomDock.busyIndicator
 
@@ -81,7 +83,7 @@ ApplicationWindow {
             if(name === "") {
                 swipeView.removeItem(2)
                 openAppDetail = false
-                version = ""                
+                version = ""
                 installed = false
                 category = ""
                 free = true
@@ -89,7 +91,7 @@ ApplicationWindow {
             } else {
                 swipeView.addItem(applicationDetailPage)
                 openAppDetail = true
-            }            
+            }
         }
     }
 
@@ -217,8 +219,8 @@ ApplicationWindow {
                 } else {
                     dutyText = qsTr("installed")
                 }
-
-                processOutputLabel.text = appName + " " + qsTr("is") + " " + dutyText + "."
+                processingPackageName = appName
+                processingCondition = dutyText
                 lastProcess = processQueue.shift()
                 updateQueue()
                 isThereOnGoingProcess = false
@@ -237,7 +239,7 @@ ApplicationWindow {
         onProcessingFinishedWithError: {
             processQueue.shift()
             errorOccured = true
-            isThereOnGoingProcess = false            
+            isThereOnGoingProcess = false
             processOutputLabel.opacity = 0.0
             popupText = output
             if(output.indexOf("not get lock") !== -1) {
@@ -247,6 +249,23 @@ ApplicationWindow {
             }
 
             infoDialog.open()
+        }
+
+        onProcessingStatus: {
+            if(condition === "pmstatus") {
+                if(processingCondition === qsTr("removing")) {
+                    busy.colorCircle = Material.color(Material.Red)
+                } else if(processingCondition === qsTr("downloading")) {
+                    busy.colorCircle = Material.color(Material.Green)
+                    processingCondition = qsTr("installing")
+                }
+
+            } else if (condition === "dlstatus") {
+                processingCondition = qsTr("downloading")
+                busy.colorCircle = Material.color(Material.Blue)
+            }
+
+            busy.value = percent
         }
 
         onDescriptionReceived: {
@@ -313,7 +332,7 @@ ApplicationWindow {
             ApplicationList {
                 id: applicationListPage
             }
-        }        
+        }
     }
 
     Page {
@@ -353,17 +372,15 @@ ApplicationWindow {
                 var s = processQueue[0].split(" ")
                 var appName = s[0]
                 var duty = s[1]
-                var dutyText = ""
+                processingPackageName = appName
                 if (duty === "true") {
-                    dutyText = qsTr("removing")
-                    busy.Material.accent = Material.Red
+                    processingCondition = qsTr("removing")
                     helper.remove(appName)
                 } else {
-                    dutyText = qsTr("installing")
-                    busy.Material.accent = Material.Green
+                    processingCondition = qsTr("downloading")
                     helper.install(appName)
                 }
-                processOutputLabel.text = dutyText + " " + appName + " ..."
+
                 bottomDock.processingIcon.source = "image://application/" + getCorrectName(appName)
             }
         }
