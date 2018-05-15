@@ -1,3 +1,18 @@
+pardus-store (0.0.12~alpha) unstable; urgency=medium
+
+  [ Yunusemre Şentürk ]
+  * Fix process button enability not changed when process starts
+
+  [ Cihangir Akturk ]
+  * Add mechanism for tracking progress
+
+  [ Yunusemre Şentürk ]
+  * Add circular progressbar for processing package
+  * Implement dpkg process fd for tracking package process. Closes: #12
+  * Fix process button installed condition in detail
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 15 May 2018 12:57:17 +0300
+
 pardus-store (0.0.11~alpha) unstable; urgency=medium
 
   * Update splash and applciation icon
