@@ -34,9 +34,9 @@ Item {
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
         }
-
+        smooth: true
         text: value.toFixed(0) + "%"
-        font.pointSize: thickness * 2 - 2
+        font.pointSize: thickness * 9 / 7
         color: value == 0 ? "#2c2c2c" : colorCircle
     }
 

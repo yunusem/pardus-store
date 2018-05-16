@@ -25,7 +25,7 @@ Pane {
         height: main.height / 15
         width: height
         colorBackground: "#aaaaaa"
-        thickness: 5
+        thickness: 6
         visible: true
         opacity: isThereOnGoingProcess ? 1.0 : 0.0
         anchors {
