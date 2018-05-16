@@ -5,7 +5,6 @@
         <file>ui/CategoryDelegate.qml</file>
         <file>ui/ApplicationDelegate.qml</file>
         <file>ui/SearchBar.qml</file>
-        <file>ui/test.qml</file>
         <file>ui/Home.qml</file>
         <file>ui/ApplicationList.qml</file>
         <file>ui/ApplicationDetail.qml</file>
