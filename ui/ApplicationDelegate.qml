@@ -35,7 +35,7 @@ Item {
         if(appName !== "" && appName === name && from === "delegate") {            
             processButton.enabled = false
             inqueue = true
-            processQueue.push(name + " " + applicationStatus)
+            processQueue.push(name + " " + installed)
             updateQueue()
         }
     }
@@ -92,7 +92,7 @@ Item {
             onClicked: {
                 app.name = name
                 app.version = version
-                app.installed = applicationStatus
+                app.installed = installed
                 app.hasProcessing = inqueue
                 app.category = category
                 app.free = !nonfree
@@ -161,7 +161,7 @@ Item {
                 right: parent.right
                 left: appIcon.right
             }
-            text: name.replace("-", " ")
+            text: getPrettyName(name)
             fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
@@ -185,7 +185,7 @@ Item {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
             }
-            Material.background: applicationStatus ? Material.Red : Material.Green
+            Material.background: installed ? Material.Red : Material.Green
             Material.foreground: "#fafafa"
 
             enabled: !inqueue
@@ -202,15 +202,15 @@ Item {
                 if(lastProcess.search(name) == 0) {
                     var s = lastProcess.split(" ")
                     if (s[1] === "true") {
-                        applicationStatus = false
+                        installed = false
                     } else {
-                        applicationStatus = true
+                        installed = true
                     }
                     enabled = true
                     inqueue = false
                     if(app.name === name) {
                         app.hasProcessing = inqueue
-                        app.installed = applicationStatus
+                        app.installed = installed
                     }
                 }
             }
@@ -222,7 +222,7 @@ Item {
             }
 
             onClicked: {
-                if (applicationStatus) {
+                if (installed) {
                     confirmationDialog.name = name
                     confirmationDialog.from = "delegate"
                     confirmationDialog.open()
@@ -230,7 +230,7 @@ Item {
                     name = name
                     processButton.enabled = false
                     inqueue = true
-                    processQueue.push(name + " " + applicationStatus)
+                    processQueue.push(name + " " + installed)
                     updateQueue()
                 }
             }
@@ -259,7 +259,7 @@ Item {
             Label {
                 id: processButtonLabel
                 anchors.centerIn: parent
-                text: applicationStatus ? qsTr("remove") : qsTr("install")
+                text: installed ? qsTr("remove") : qsTr("install")
             }
         }
 
@@ -274,7 +274,7 @@ Item {
             width: 15
             height: 15
             source: "qrc:/images/installed.svg"
-            visible: applicationStatus
+            visible: installed
         }
 
         Label {

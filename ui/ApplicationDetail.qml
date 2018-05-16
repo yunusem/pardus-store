@@ -83,7 +83,7 @@ Pane {
 
         Label {
             anchors.centerIn: parent
-            text: getCorrectName(applicationName)
+            text: getPrettyName(applicationName)
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
