@@ -30,7 +30,7 @@ class Helper : public QObject
                NOTIFY surveyJoinUpdateSuccess)
     Q_PROPERTY(QString choice
                READ choice
-               NOTIFY choiceChanged)
+               NOTIFY choiceChanged)    
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -45,6 +45,7 @@ public:
     Q_INVOKABLE void systemNotify(const QString &pkg,
                                   const QString &title,
                                   const QString &content);
+    Q_INVOKABLE QString getMainUrl() const;
 private:
     bool p;
     QString c;

@@ -149,6 +149,11 @@ void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
     timer->start(m_timeoutDuration);
 }
 
+QString NetworkHandler::getMainUrl() const
+{
+    return QString(MAIN_URL);
+}
+
 void NetworkHandler::replyFinished(QNetworkReply *reply)
 {
     auto timer = timer_get(&m_timerMap, reply);

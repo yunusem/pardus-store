@@ -120,6 +120,11 @@ void Helper::systemNotify(const QString &pkg, const QString &title, const QStrin
     p.execute(command, args);
 }
 
+QString Helper::getMainUrl() const
+{
+    return nh->getMainUrl();
+}
+
 void Helper::packageProcessFinished(int code)
 {
     if(code == 0) {

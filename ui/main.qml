@@ -7,7 +7,7 @@ import ps.helper 1.0
 
 ApplicationWindow {
     id: main
-    minimumWidth: 1290
+    minimumWidth: 1296
     minimumHeight: minimumWidth * 9 / 16
     visible: true
     title: "Pardus" + " " + qsTr("Store")

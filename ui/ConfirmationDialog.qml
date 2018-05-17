@@ -49,7 +49,7 @@ Popup {
             smooth: true
             mipmap: true
             antialiasing: true
-            source: "image://application/" + getCorrectName(dialog.name)
+            source: dialog.name === "" ? "" : "image://application/" + getCorrectName(dialog.name)
         }
 
         Label {

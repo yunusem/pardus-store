@@ -20,6 +20,7 @@ public:
     void getApplicationDetails(const QString &packageName);
     void surveyCheck();
     void surveyJoin(const QString &appName, const QString &duty);
+    QString getMainUrl() const;
 
 signals:
     void appListReceived(const QStringList &al);

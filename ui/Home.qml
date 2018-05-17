@@ -12,7 +12,7 @@ Pane {
 
     width: parent.width - 10
     height: parent.height - 10
-    Material.elevation: 2    
+    Material.elevation: 2
     property int animationSpeed: 200
     property variant surveyList : []
     property variant surveyCounts: []
@@ -54,19 +54,33 @@ Pane {
 
     Pane {
         id: banner
-        width: parent.width
-        height: bannerImage.height > 0 ? bannerImage.height + 24 : 250
-        Material.elevation: 2       
+        width: bannerImage.width > 0 ? bannerImage.width : 1200
+        height: bannerImage.height > 0 ? bannerImage.height : 250
+        Material.elevation: 5
         anchors {
             horizontalCenter: parent.horizontalCenter
         }
 
         Image {
             id: bannerImage
-            width: parent.width
-            fillMode: Image.PreserveAspectFit
             source: "http://193.140.98.197:5000/screenshots/banner.png"
-            anchors.centerIn: parent
+            anchors {
+                centerIn: parent
+            }
+            layer.enabled: true
+            layer.smooth: true
+            layer.effect: OpacityMask {
+                maskSource: Item {
+                    width: bannerImage.width
+                    height: bannerImage.height
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: bannerImage.width
+                        height: bannerImage.height
+                        radius: 3
+                    }
+                }
+            }
         }
 
         BusyIndicator {
@@ -86,7 +100,7 @@ Pane {
                 horizontalCenter: parent.horizontalCenter
                 horizontalCenterOffset: parent.width / 10
             }
-
+            smooth: true
             text: qsTr("welcome")
             Material.foreground: "#fafafa"
             verticalAlignment: Text.AlignVCenter
@@ -97,288 +111,181 @@ Pane {
         }
     }
 
-    Pane {
+    Item {
         id: suggester
-        height: parent.height - banner.height - 15
+        height: parent.height - banner.height - 12
         width: height
-        Material.elevation: 2        
         anchors {
             bottom: parent.bottom
             left: parent.left
         }
 
-        // for one app
         Pane {
             id: editorApp
-            Material.elevation: 2
-            //clip: true
+            Material.elevation: editorBadgeMa.containsMouse ? 10 : 5
+            width: editorsImage.width > 0 ? editorsImage.width : 308
+            height: editorsImage.height > 0 ? editorsImage.height : 150
             anchors {
                 top: parent.top
                 left: parent.left
-                right: parent.right
-                bottom: parent.verticalCenter
-                bottomMargin: 5
+            }
+
+            Behavior on Material.elevation {
+                NumberAnimation {
+                    duration: 33
+                }
             }
 
             MouseArea {
                 id: editorBadgeMa
                 hoverEnabled: true
-                anchors.fill: parent
+                anchors.centerIn: parent
+                width: parent.width + 24
+                height: parent.height + 24
 
                 onClicked: {
                     swipeView.currentIndex = 1
                     applicationModel.setFilterString(editorsAppName, true)
 
                 }
+
+                onPressed: {
+                    if(editorBadgeMa.containsMouse) {
+                        editorApp.Material.elevation = 0
+                    }
+                }
+                onPressAndHold: {
+                    if(editorBadgeMa.containsMouse) {
+                        editorApp.Material.elevation = 0
+                    }
+                }
+                onReleased: {
+                    if(editorBadgeMa.containsMouse) {
+                        editorApp.Material.elevation = 10
+                    } else {
+                        editorApp.Material.elevation = 5
+                    }
+                }
             }
 
             Image {
-                id:appIcon
+                id:editorsImage
+                source: helper.getMainUrl() + "/screenshots/editor.png"
                 anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: parent.left
-                    verticalCenterOffset: editorBadgeMa.containsMouse ? 9 : 27
-                }                
-                height: parent.height * 2 / 3
-                width: height
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-                mipmap: true
-                antialiasing: true
-                source: "image://application/" + getCorrectName(editorsAppName)
-
-                Behavior on anchors.verticalCenterOffset {
-                    NumberAnimation {
-                        duration: animationSpeed
-                        easing.type: Easing.OutExpo
+                    centerIn: parent
+                }
+                layer.enabled: true
+                layer.smooth: true
+                layer.effect: OpacityMask {
+                    maskSource: Item {
+                        width: editorsImage.width
+                        height: editorsImage.height
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width: editorsImage.width
+                            height: editorsImage.height
+                            radius: 3
+                        }
                     }
                 }
-
-            }
-
-            DropShadow {
-                id:dropShadow
-                anchors.fill: appIcon
-                horizontalOffset: 3
-                verticalOffset: 3
-                radius: 8
-                samples: 17
-                color: "#80000000"
-                source: appIcon
             }
 
             Label {
-                id: appNameLabel
+                id: editorsLabel
+                enabled: editorBadgeMa.containsMouse
+                Material.foreground: "#ffcb08"
+                text: qsTr("Editor's Pick")
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
                 anchors {
-                    verticalCenter: parent.verticalCenter
-                    verticalCenterOffset: editorBadgeMa.containsMouse ? 9 : 27
-                    left: appIcon.right
+                    bottom: parent.bottom
                     right: parent.right
                 }
-                text: editorsAppName.replace("-", " ")
-                font.weight: Font.Bold
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.capitalization: Font.Capitalize
-                font.pointSize: 14
-
-                Behavior on anchors.verticalCenterOffset {
-                    NumberAnimation {
-                        duration: animationSpeed
-                        easing.type: Easing.OutExpo
-                    }
-                }
             }
-
-            Rectangle {
-                id: editorBadgeCover
-                width: parent.width
-                height: parent.height
-                clip: true
-                color: "transparent"
-
-                Rectangle  {
-                    id: editorBadge
-
-                    width: parent.width * 3
-                    height: width
-                    radius:  editorBadgeMa.containsMouse ? 0 : height / 2
-                    color: "#ffcb08"
-                    //opacity: editorBadgeMa.containsMouse ? 0 : 0.5
-                    opacity: 0.5
-
-
-                    x: - editorBadge.width / 3
-                    y:  editorBadgeMa.containsMouse ? - editorBadge.height + editorBadgeTxt.height + 10
-                                                    : - editorBadge.height + editorBadgeCover.height / 2
-
-                    Text {
-                        id: editorBadgeTxt
-                        text: qsTr("Editor's Pick")
-                        font.bold: true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: editorBadgeMa.containsMouse ? 5 : 30
-
-                        Behavior on anchors.bottomMargin {
-                            NumberAnimation {
-                                duration: animationSpeed
-                                easing.type: Easing.OutExpo
-                            }
-                        }
-                    }
-
-                    Behavior on y {
-                        NumberAnimation {
-                            duration: animationSpeed
-                            easing.type: Easing.OutExpo
-                        }
-                    }
-
-                    Behavior on radius {
-                        NumberAnimation {
-                            duration: animationSpeed
-                            easing.type: Easing.OutExpo
-                        }
-                    }
-
-                }
-
-            }
-
         }
 
         Pane {
             id: mostDownloadedApp
-            Material.elevation: 2
+            Material.elevation: mostDownloadedAppMa.containsMouse ? 10 : 5
+            width: mostDownloadedImage.width > 0 ? mostDownloadedImage.width : 308
+            height: mostDownloadedImage.height > 0 ? mostDownloadedImage.height : 150
             anchors {
-                top: parent.verticalCenter
-                left: parent.left
-                right: parent.right
                 bottom: parent.bottom
-                topMargin: 5
+                left: parent.left
+            }
+
+            Behavior on Material.elevation {
+                NumberAnimation {
+                    duration: 33
+                }
             }
 
             MouseArea {
                 id: mostDownloadedAppMa
                 hoverEnabled: true
-                anchors.fill: parent
+                anchors.centerIn: parent
+                width: parent.width + 24
+                height: parent.height + 24
 
                 onClicked: {
                     swipeView.currentIndex = 1
                     applicationModel.setFilterString(mostAppName, true)
                 }
-            }
-
-            Image {
-                id:appIconMost
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: parent.left
-                    verticalCenterOffset: mostDownloadedAppMa.containsMouse ? 9 : 27
+                onPressed: {
+                    if(mostDownloadedAppMa.containsMouse) {
+                        mostDownloadedApp.Material.elevation = 0
+                    }
                 }
-                height: parent.height * 2 / 3
-                width: height
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-                mipmap: true
-                antialiasing: true
-                source: "image://application/" + getCorrectName(mostAppName)
-
-                Behavior on anchors.verticalCenterOffset {
-                    NumberAnimation {
-                        duration: animationSpeed
-                        easing.type: Easing.OutExpo
+                onPressAndHold: {
+                    if(mostDownloadedAppMa.containsMouse) {
+                        mostDownloadedApp.Material.elevation = 0
+                    }
+                }
+                onReleased: {
+                    if(mostDownloadedAppMa.containsMouse) {
+                        mostDownloadedApp.Material.elevation = 10
+                    } else {
+                        mostDownloadedApp.Material.elevation = 5
                     }
                 }
             }
 
-            DropShadow {
-                id:dropShadowMost
-                anchors.fill: appIconMost
-                horizontalOffset: 3
-                verticalOffset: 3
-                radius: 8
-                samples: 17
-                color: "#80000000"
-                source: appIconMost
+
+            Image {
+                id:mostDownloadedImage
+                source:  helper.getMainUrl() + "/screenshots/most.png"
+                anchors {
+                    centerIn: parent
+                }
+                layer.enabled: true
+                layer.smooth: true
+                layer.effect: OpacityMask {
+                    maskSource: Item {
+                        width: mostDownloadedImage.width
+                        height: mostDownloadedImage.height
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width: mostDownloadedImage.width
+                            height: mostDownloadedImage.height
+                            radius: 3
+                        }
+                    }
+                }
             }
 
             Label {
-                id: appNameLabelMost
+                id: mostDownloadedAppLabel
+                enabled: mostDownloadedAppMa.containsMouse
+                Material.foreground: "#ffcb08"
+                text: qsTr("Most Downloaded App")
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
                 anchors {
-                    verticalCenter: parent.verticalCenter
-                    verticalCenterOffset: mostDownloadedAppMa.containsMouse ? 9 : 27
-                    left: appIconMost.right
+                    bottom: parent.bottom
                     right: parent.right
                 }
-                text: mostAppName.replace("-", " ")
-                font.weight: Font.Bold
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.capitalization: Font.Capitalize
-                font.pointSize: 14
-
-                Behavior on anchors.verticalCenterOffset {
-                    NumberAnimation {
-                        duration: animationSpeed
-                        easing.type: Easing.OutExpo
-                    }
-                }
-            }
-
-            Rectangle {
-                id: mostDownloadedAppCover
-                width: parent.width
-                height: parent.height
-                clip: true
-                color: "transparent"
-
-                Rectangle  {
-                    id: mostDownloadedAppBadge                   
-                    width: parent.width * 3
-                    height: width
-                    radius:  mostDownloadedAppMa.containsMouse ? 0 : height / 2
-                    color: "#ffcb08"
-                    opacity: 0.5
-
-
-                    x: - mostDownloadedAppBadge.width / 3
-                    y:  mostDownloadedAppMa.containsMouse ? - mostDownloadedAppBadge.height + mostDownloadedAppBadgeTxt.height + 10
-                                                          : - mostDownloadedAppBadge.height + mostDownloadedAppCover.height / 2
-
-                    Text {
-                        id: mostDownloadedAppBadgeTxt
-                        text: qsTr("Most Downloaded App")
-                        font.bold: true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: mostDownloadedAppMa.containsMouse ? 5 : 30
-
-                        Behavior on anchors.bottomMargin {
-                            NumberAnimation {
-                                duration: animationSpeed
-                                easing.type: Easing.OutExpo
-                            }
-                        }
-                    }
-
-                    Behavior on y {
-                        NumberAnimation {
-                            duration: animationSpeed
-                            easing.type: Easing.OutExpo
-                        }
-                    }
-
-                    Behavior on radius {
-                        NumberAnimation {
-                            duration: animationSpeed
-                            easing.type: Easing.OutExpo
-                        }
-                    }
-
-                }
-
             }
         }
     }
@@ -399,7 +306,7 @@ Pane {
             width: parent.height
             height: width
             anchors.centerIn: parent
-            opacity: 0.02
+            opacity: 0.04
         }
 
         Column {
@@ -468,9 +375,9 @@ Pane {
 
     Pane {
         id: survey
-        height: parent.height - banner.height - 15
+        height: parent.height - banner.height - 12
         width: height
-        Material.elevation: 2        
+        Material.elevation: 3
         anchors {
             bottom: parent.bottom
             right: parent.right
@@ -503,7 +410,7 @@ Pane {
             wrapMode: Text.WordWrap
         }
 
-        Column {            
+        Column {
             anchors {
                 top: surveyText.bottom
                 topMargin: 12
@@ -543,40 +450,41 @@ Pane {
                         verticalAlignment: Text.AlignVCenter
 
                         function updateValue() {
-                           text = surveyCounts[index]
+                            text = surveyCounts[index]
                         }
 
                         Component.onCompleted: {
-                           countsChanged.connect(updateValue)
+                            countsChanged.connect(updateValue)
                         }
                     }
                 }
             }
+        }
 
-            Button {
-                id: surveyBtn
-                anchors {
-                    horizontalCenter: parent.horizontalCenter
-                }
-                Material.background: "#2c2c2c"
-                width: surveyBtnLabel.width + 24
-                Label {
-                    id: surveyBtnLabel
-                    anchors.centerIn: parent
-                    Material.foreground: "#ffcb08"
-                    text: (choice === "") ? qsTr("send") : qsTr("update")
-                    fontSizeMode: Text.HorizontalFit
-                    font.capitalization: Font.Capitalize
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                }
-                onClicked: {
-                    enabled = false
-                    if(surveyBtnLabel.text === qsTr("send")) {
-                        helper.surveyJoin(surveyList[selectedIndex],"join")
-                    } else {
-                        helper.surveyJoin(surveyList[selectedIndex],"update")
-                    }
+        Button {
+            id: surveyBtn
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+            }
+            Material.background: "#2c2c2c"
+            width: surveyBtnLabel.width + 24
+            Label {
+                id: surveyBtnLabel
+                anchors.centerIn: parent
+                Material.foreground: "#ffcb08"
+                text: (choice === "") ? qsTr("send") : qsTr("update")
+                fontSizeMode: Text.HorizontalFit
+                font.capitalization: Font.Capitalize
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+            onClicked: {
+                enabled = false
+                if(surveyBtnLabel.text === qsTr("send")) {
+                    helper.surveyJoin(surveyList[selectedIndex],"join")
+                } else {
+                    helper.surveyJoin(surveyList[selectedIndex],"update")
                 }
             }
         }
