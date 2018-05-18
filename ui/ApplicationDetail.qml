@@ -127,8 +127,8 @@ Pane {
             id:popupImage
             fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent
-            width: parent.width - 140
-            height: parent.height
+            width: (parent.width - 140) >= sourceSize.width ? sourceSize.width :  parent.width - 140
+            height: parent.height >= sourceSize.height ? sourceSize.height : parent.height
             source: urls[0] !== "none" && urls[0] ? urls[i] : ""
 
             BusyIndicator {
@@ -399,8 +399,8 @@ Pane {
             id: disclamer
             visible: !app.free
             clip: true
-            width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width - 48
-            height: disclamerMa.containsMouse ? processButton.height * 2 - 12 : processButton.height - 12
+            width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width - 42
+            height: disclamerMa.containsMouse ? processButton.height * 2  + 12: processButton.height - 12
             Material.background: "#FFCB08"
             z: 200
             anchors {
@@ -442,9 +442,12 @@ Pane {
                 fontSizeMode: Text.VerticalFit
                 wrapMode: Text.WordWrap
                 anchors.verticalCenter: parent.verticalCenter
+                onTextChanged: {
+
+                }
+
             }
         }
-
 
         Button {
             id: processButton

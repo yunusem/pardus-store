@@ -14,6 +14,7 @@ Item {
     onApplicationInQueueChanged: {
         if(app.name === name) {
             app.hasProcessing = inqueue
+            processButton.enabled = !inqueue
         }
     }
 
@@ -26,7 +27,7 @@ Item {
     function updateInQueue(appName) {
         if(appName !== "") {
             if(appName === name) {
-                inqueue = true
+                inqueue = true                
             }
         }
     }
