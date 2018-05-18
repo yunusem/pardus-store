@@ -9,11 +9,10 @@ GridView {
     cellWidth: applicationList.width / 5
     cellHeight: applicationList.cellWidth * 3 / 5
     visible: true
-    interactive: count > 15 ? true : false    
+    interactive: count > 15 ? true : false
+
     anchors {
         fill: parent
-
-
     }
     model: applicationModel
 

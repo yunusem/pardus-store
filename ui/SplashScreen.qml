@@ -47,17 +47,26 @@ Pane {
         }
         onOpacityChanged: {
             if(opacity === 1.0) {
-                bottomImage.opacity = 1.0
+                appNameLabel.opacity = 1.0
             }
         }
     }
 
-    Image {
-        id: bottomImage
+    Label {
+        id: appNameLabel
+        text: main.title
+        smooth: false
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        Material.foreground: "#ffcb08"
+        font.pointSize: 42
+        font.capitalization: Font.Capitalize
+        font.family: pardusFont.name
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.verticalCenter
         anchors.topMargin: 12
-        source: "qrc:/images/splash.svg"
+
         opacity: 0.0
         Behavior on opacity {
             NumberAnimation {
@@ -71,7 +80,7 @@ Pane {
         id: splashLabel
         font.pointSize: 12
         anchors{
-            top: bottomImage.bottom
+            top: appNameLabel.bottom
             topMargin: 12
             horizontalCenter: parent.horizontalCenter
         }

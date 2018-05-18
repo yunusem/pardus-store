@@ -102,12 +102,14 @@ Pane {
             }
             smooth: true
             text: qsTr("welcome")
+
             Material.foreground: "#fafafa"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
-            font.bold: true
-            font.pointSize: 32
+            font.pointSize: 42
+            font.letterSpacing: 3
+            font.family: pardusFont.name
         }
     }
 

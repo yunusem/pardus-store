@@ -27,6 +27,5 @@
         <file>images/icon.svg</file>
         <file>images/back.svg</file>
         <file>images/front.svg</file>
-        <file>images/splash.svg</file>
     </qresource>
 </RCC>

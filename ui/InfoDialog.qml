@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.0
 
 Popup {
     id: dialog
-    width: parent.width / 3
+    width: parent.width / 3 - 48
     height: popupOutputHeader.height + popupOutput.height + 36
     modal: true
     closePolicy: Popup.CloseOnPressOutside
@@ -46,6 +46,7 @@ Popup {
                 verticalCenter: parent.verticalCenter
             }
             Material.foreground: "#fafafa"
+            horizontalAlignment: Text.AlignHCenter
             fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
