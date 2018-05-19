@@ -2,7 +2,7 @@ Source: pardus-store
 Section: utils
 Priority: optional
 Maintainer: Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>
-Build-Depends: debhelper (>= 9), 
+Build-Depends: debhelper (>= 9),
     libc6,
     libgcc1,
     libgcc-6-dev,
@@ -33,4 +33,4 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
      qml-module-qtquick-templates2
 Recommends: pardus-xfce-icon-theme
 Description: Pardus Application Store
- Qt based nice looking simple to use responsive application store.
+ Qt5-based, nice-looking, simple-to-use,responsive application store.
