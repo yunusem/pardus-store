@@ -368,7 +368,7 @@ ApplicationWindow {
                             horizontalAlignment: Text.AlignHCenter
                             Material.foreground: "#ffcb08"
                             font.pointSize: 32
-                            font.capitalization: Font.Capitalize
+                            //font.capitalization: Font.Capitalize
                             font.family: pardusFont.name
                             anchors.centerIn: parent
 
