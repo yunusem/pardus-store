@@ -1,3 +1,11 @@
+pardus-store (0.0.18~alpha) unstable; urgency=medium
+
+  * Prepare a maximize button and make changes for size changing
+  * Adjust navigation and search bar respecting size changes
+  * Update category icons for HiDpi resolutions
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Mon, 21 May 2018 14:35:15 +0300
+
 pardus-store (0.0.17~alpha) unstable; urgency=medium
 
   * Update screenshot preview popup and make it more sharper
