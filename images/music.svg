@@ -1,4 +1,57 @@
-<svg fill="#FFFFFF" height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 0h24v24H0z" fill="none"/>
-    <path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="256"
+   viewBox="0 0 128 128"
+   width="256"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="music.svg"
+   style="fill:#ffffff"
+   inkscape:version="0.92.1 r15371">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1138"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="1.2291667"
+     inkscape:cx="61.550626"
+     inkscape:cy="146.08144"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     d="M 81.02631,30.5525 H 6.5 v 12.421072 h 74.52631 z m 0,24.842143 H 6.5 V 67.815715 H 81.02631 Z M 6.5,92.657857 H 56.184212 V 80.236786 H 6.5 Z M 93.447369,30.5525 v 50.802183 c -1.92527,-0.683159 -4.036842,-1.117897 -6.210527,-1.117897 -10.309473,0 -18.631578,8.322118 -18.631578,18.631604 0,10.30949 8.322105,18.63161 18.631578,18.63161 10.309468,0 18.631578,-8.32212 18.631578,-18.63161 V 42.973572 H 124.5 V 30.5525 Z"
+     id="path4"
+     style="fill:#fafafa;fill-opacity:1;stroke-width:6.21052694"
+     inkscape:connector-curvature="0" />
 </svg>
