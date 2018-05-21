@@ -45,8 +45,7 @@ Pane {
         height: parent.height
         interactive: true
         spacing: 11
-        property int foldHeight: parent.height / count - spacing
-        property int unFoldHeight: parent.height / count - spacing
+        property real foldHeight: parent.height / count - spacing
         anchors.verticalCenter: parent.verticalCenter
         model: categoryListModel
 
@@ -54,7 +53,7 @@ Pane {
             color: "transparent"
             radius: 2
             border.color: "#FFCB08"
-            border.width: 1.2 // navima.containsMouse ? 1 : 2
+            border.width: 1.2
             z: 101
         }
         focus: true

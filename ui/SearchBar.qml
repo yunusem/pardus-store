@@ -8,7 +8,7 @@ import QtGraphicalEffects 1.0
 Pane {
     id: searchPane
     width: searchFlag ? 500 : applicationListPage.cellWidth - 20
-    height: searchFlag ? parent.height / 15 : 32
+    height: searchFlag ? topDock.height : topDock.height * 2 / 3
     Material.elevation: searchFlag ? 3 : 1
     property string prelist: ""
     property bool searchFlag: searchF
@@ -16,8 +16,7 @@ Pane {
     visible: splashScreen.opacity < 0.7
     z: 100
     anchors {
-        top: parent.top
-        topMargin: searchFlag ? 0 : 8
+        verticalCenter: topDock.verticalCenter
         horizontalCenter: parent.horizontalCenter
         horizontalCenterOffset: parent.width / 40
     }

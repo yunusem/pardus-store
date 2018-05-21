@@ -160,7 +160,7 @@ ApplicationWindow {
         anchors {
             top: parent.top
             left: navigationBar.right
-            leftMargin: 5
+            leftMargin: 6
 
         }
 
