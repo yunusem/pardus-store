@@ -20,6 +20,8 @@ Pane {
     property int selectedIndex: 0
     property string editorsAppName: "chromium"
     property string mostAppName: "spotify-client"
+    property real cellWidth: 308
+    property real cellHeight: 150
 
     signal joined()
     signal updated()
@@ -116,17 +118,17 @@ Pane {
     Item {
         id: suggester
         height: parent.height - banner.height - 12
-        width: height
+        width: editorApp.width
         anchors {
             bottom: parent.bottom
-            left: parent.left
+            left: banner.left
         }
 
         Pane {
             id: editorApp
             Material.elevation: editorBadgeMa.containsMouse ? 10 : 5
-            width: editorsImage.width > 0 ? editorsImage.width : 308
-            height: editorsImage.height > 0 ? editorsImage.height : 150
+            width: editorsImage.width > 0 ? editorsImage.width : cellWidth
+            height: editorsImage.height > 0 ? editorsImage.height : cellHeight
             anchors {
                 top: parent.top
                 left: parent.left
@@ -210,10 +212,11 @@ Pane {
         Pane {
             id: mostDownloadedApp
             Material.elevation: mostDownloadedAppMa.containsMouse ? 10 : 5
-            width: mostDownloadedImage.width > 0 ? mostDownloadedImage.width : 308
-            height: mostDownloadedImage.height > 0 ? mostDownloadedImage.height : 150
+            width: mostDownloadedImage.width > 0 ? mostDownloadedImage.width : cellWidth
+            height: mostDownloadedImage.height > 0 ? mostDownloadedImage.height : cellHeight
             anchors {
-                bottom: parent.bottom
+                top: editorApp.bottom
+                topMargin: 12
                 left: parent.left
             }
 
@@ -297,22 +300,23 @@ Pane {
         anchors {
             left: suggester.right
             right: survey.left
-            top: banner.bottom
-            bottom: parent.bottom
-            margins: 5
+            top: survey.top
+            bottom: survey.bottom
+            margins: 6
         }
 
         Image {
             id: middleBackgroundIcon
             source: "../images/icon.svg"
-            width: parent.height
+            width: parent.width * 2 / 3
             height: width
+            fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent
             opacity: 0.04
         }
 
         Column {
-            anchors.centerIn: parent
+            anchors.horizontalCenter: parent.horizontalCenter
             spacing: 24
 
             Label {
@@ -378,11 +382,11 @@ Pane {
     Pane {
         id: survey
         height: parent.height - banner.height - 12
-        width: height
+        width: banner.width / 3
         Material.elevation: 3
         anchors {
             bottom: parent.bottom
-            right: parent.right
+            right: banner.right
         }
 
         Label {

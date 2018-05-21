@@ -125,8 +125,8 @@ ApplicationWindow {
         property real cposx: 1.0
         property real cposy: 1.0
         z: 92
-        height: main.height / 15
-        width: topDock.width
+        height: splashScreen.visible ? main.height : main.height / 15
+        width: splashScreen.visible ? main.width : topDock.width
         anchors {
             top: main.top
             right: main.right
@@ -135,17 +135,18 @@ ApplicationWindow {
         onPressed: {
             cposx = mouse.x
             cposy = mouse.y
+            cursorShape = Qt.SizeAllCursor
         }
 
         onPositionChanged: {
             var delta = Qt.point(mouse.x - cposx, mouse.y - cposy);
             main.x += delta.x;
             main.y += delta.y;
-
+            cursorShape = Qt.SizeAllCursor
         }
 
         onReleased: {
-
+            cursorShape = Qt.ArrowCursor
         }
     }
 
@@ -456,16 +457,22 @@ ApplicationWindow {
         Material.background: "#2c2c2c"
         Material.elevation: 1
         Label {
-            anchors.centerIn: parent
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.verticalCenter
+                bottomMargin: -6
+            }
+
             Material.foreground: "white"
-            text: "-"
-            verticalAlignment: Text.AlignVCenter
+            text: "_"
+            verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 20
+            font.bold: true
+            font.pointSize: 18
         }
         anchors {
             top: parent.top
-            right: exitBtn.left
+            right: maximizeBtn.left
             rightMargin: 2
         }
         MouseArea {
@@ -488,6 +495,54 @@ ApplicationWindow {
     }
 
     Pane {
+        id: maximizeBtn
+        width: 32
+        height: 32
+        z: 100
+        Material.background: "#2c2c2c"
+        Material.elevation: 1
+        Label {
+            smooth: true
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.verticalCenter
+                bottomMargin: -13
+            }
+            Material.foreground: "white"
+            text: "▫"
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 20
+        }
+        anchors {
+            top: parent.top
+            right: exitBtn.left
+            rightMargin: 2
+        }
+        MouseArea {
+            id: maximizeBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (maximizeBtnMa.containsMouse) {
+                    maximizeBtn.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                maximizeBtn.Material.elevation = 2
+            }
+            onClicked: {
+                if(main.visibility == ApplicationWindow.Maximized) {
+                    main.showNormal()
+                } else {
+                    main.showMaximized()
+                }
+            }
+        }
+    }
+
+    Pane {
         id: exitBtn
         width: 32
         height: 32
@@ -495,12 +550,14 @@ ApplicationWindow {
         Material.background: Material.Red
         Material.elevation: 1
         Label {
+            smooth: true
             anchors.centerIn: parent
             Material.foreground: "white"
             text: "X"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
+            font.pointSize: 13
         }
         anchors {
             top: parent.top

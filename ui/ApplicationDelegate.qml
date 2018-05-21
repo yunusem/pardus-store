@@ -127,7 +127,7 @@ Item {
                 left: parent.left
                 verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
             }
-            height: parent.height * 2 / 3
+            height: (parent.height * 2 / 3 <= sourceSize.height * 3 / 2) ? parent.height * 2 / 3 : sourceSize.height * 3 / 2
             width: height
             fillMode: Image.PreserveAspectFit
             smooth: true
@@ -161,6 +161,7 @@ Item {
                 verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
                 right: parent.right
                 left: appIcon.right
+                leftMargin: 6
             }
             text: getPrettyName(name)
             fontSizeMode: Text.HorizontalFit
@@ -180,7 +181,7 @@ Item {
         Button {
             id: processButton
             width: delegateMouseArea.containsMouse ? parent.width : parent.width / 3
-            height: delegateMouseArea.containsMouse ? parent.height / 3 + 10 : parent.height / 3
+            height: delegateMouseArea.containsMouse ? processButtonLabel.height + 24 : 24
             opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
             anchors {
                 bottom: parent.bottom
