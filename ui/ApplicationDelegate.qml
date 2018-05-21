@@ -273,8 +273,8 @@ Item {
             }
             mipmap: true
             smooth: true
-            width: 15
-            height: 15
+            width: 16
+            height: 16
             source: "qrc:/images/installed.svg"
             visible: installed
         }
