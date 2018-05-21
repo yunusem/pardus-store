@@ -14,6 +14,7 @@ ApplicationWindow {
     title: "Pardus" + " " + qsTr("Store")
     flags: Qt.FramelessWindowHint
     color: "transparent"
+    property bool animate: true
     property bool hasActiveFocus: false
     property bool cacheIsUpToDate: false
     property string popupText: ""

@@ -54,35 +54,7 @@ Item {
         anchors {
             margins: 10
             fill: parent
-        }
-
-        Behavior on width {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
-            }
-        }
-
-        Behavior on height {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
-            }
-        }
-
-        Behavior on x {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
-            }
-        }
-
-        Behavior on y {
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
-            }
-        }
+        }        
 
         MouseArea {
             id: delegateMouseArea

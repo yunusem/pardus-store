@@ -21,6 +21,39 @@ Pane {
         }
     }
 
+    Column {
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.horizontalCenter
+            bottom: parent.bottom
+        }
+
+        Row {
+            Label {
+                text: qsTr("enable animations")
+                font.capitalization: Font.Capitalize
+                Material.foreground: "#fafafa"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+            }
+            Switch {
+                id: sw
+                enabled: true
+                anchors.verticalCenter: parent.verticalCenter
+                onCheckedChanged: {
+                    animate = checked
+                }
+
+                Component.onCompleted: {
+                    checked = animate
+                }
+            }
+        }
+    }
+
     Behavior on opacity {
         NumberAnimation {
             easing.type: Easing.OutExpo
