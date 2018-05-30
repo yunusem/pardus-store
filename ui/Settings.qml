@@ -3,13 +3,15 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 
 Pane {
+    property string previous
+    property string current
     Material.background: "#2c2c2c"
     Material.elevation: 3
     z: 92
     visible: category === qsTr("settings")
-    height: swipeView.height - 12
-    width: swipeView.width - 12
-    anchors.centerIn: swipeView
+    height: stackView.height - 12
+    width: stackView.width - 12
+    anchors.centerIn: stackView
     opacity: 0.0
 
     onVisibleChanged: {
@@ -55,6 +57,7 @@ Pane {
     }
 
     Behavior on opacity {
+        enabled: animate
         NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 800

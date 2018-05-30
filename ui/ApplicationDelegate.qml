@@ -27,13 +27,13 @@ Item {
     function updateInQueue(appName) {
         if(appName !== "") {
             if(appName === name) {
-                inqueue = true                
+                inqueue = true
             }
         }
     }
 
     function operateRemoval(appName, from) {
-        if(appName !== "" && appName === name && from === "delegate") {            
+        if(appName !== "" && appName === name && from === "delegate") {
             processButton.enabled = false
             inqueue = true
             processQueue.push(name + " " + installed)
@@ -54,7 +54,7 @@ Item {
         anchors {
             margins: 10
             fill: parent
-        }        
+        }
 
         MouseArea {
             id: delegateMouseArea
@@ -71,7 +71,11 @@ Item {
                 app.free = !nonfree
                 app.description = description
 
-                swipeView.currentIndex = 2
+                stackView.push(Qt.resolvedUrl("ApplicationDetail.qml"),
+                               {objectName: "detail",
+                                   "current": name,
+                                   "previous": categoryIcons[categories.indexOf(category)]})
+
                 screenshotUrls = []
                 helper.getAppDetails(name)
             }
@@ -108,6 +112,7 @@ Item {
             source: "image://application/" + getCorrectName(name)
 
             Behavior on anchors.verticalCenterOffset {
+                enabled: animate
                 NumberAnimation {
                     duration: 200
                     easing.type: Easing.OutExpo
@@ -143,6 +148,7 @@ Item {
             font.capitalization: Font.Capitalize
 
             Behavior on anchors.verticalCenterOffset {
+                enabled: animate
                 NumberAnimation {
                     duration: 200
                     easing.type: Easing.OutExpo
@@ -210,6 +216,7 @@ Item {
             }
 
             Behavior on opacity {
+                enabled: animate
                 NumberAnimation {
                     duration: 200
                     easing.type: Easing.OutExpo
@@ -217,6 +224,7 @@ Item {
             }
 
             Behavior on width {
+                enabled: animate
                 NumberAnimation {
                     duration: 200
                     easing.type: Easing.OutExpo
@@ -224,6 +232,7 @@ Item {
             }
 
             Behavior on height {
+                enabled: animate
                 NumberAnimation {
                     duration: 200
                     easing.type: Easing.OutExpo
@@ -264,6 +273,7 @@ Item {
             opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
 
             Behavior on opacity {
+                enabled: animate
                 NumberAnimation {
                     duration: 800
                     easing.type: Easing.OutExpo

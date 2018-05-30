@@ -5,14 +5,9 @@ import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
 
 
-Pane {
-    id:home
+Page {
+    id:root
 
-    anchors.centerIn: parent
-
-    width: parent.width - 10
-    height: parent.height - 10
-    Material.elevation: 2
     property int animationSpeed: 200
     property variant surveyList : []
     property variant surveyCounts: []
@@ -60,6 +55,8 @@ Pane {
         height: bannerImage.height > 0 ? bannerImage.height : 250
         Material.elevation: 5
         anchors {
+            top: parent.top
+            topMargin: 12
             horizontalCenter: parent.horizontalCenter
         }
 
@@ -120,7 +117,8 @@ Pane {
         height: parent.height - banner.height - 12
         width: editorApp.width
         anchors {
-            bottom: parent.bottom
+            top: banner.bottom
+            topMargin: 12
             left: banner.left
         }
 
@@ -135,6 +133,7 @@ Pane {
             }
 
             Behavior on Material.elevation {
+                enabled: animate
                 NumberAnimation {
                     duration: 33
                 }
@@ -148,7 +147,7 @@ Pane {
                 height: parent.height + 24
 
                 onClicked: {
-                    swipeView.currentIndex = 1
+                    stackView.currentIndex = 1
                     applicationModel.setFilterString(editorsAppName, true)
 
                 }
@@ -221,6 +220,7 @@ Pane {
             }
 
             Behavior on Material.elevation {
+                enabled: animate
                 NumberAnimation {
                     duration: 33
                 }
@@ -234,7 +234,7 @@ Pane {
                 height: parent.height + 24
 
                 onClicked: {
-                    swipeView.currentIndex = 1
+                    stackView.currentIndex = 1
                     applicationModel.setFilterString(mostAppName, true)
                 }
                 onPressed: {
@@ -381,11 +381,12 @@ Pane {
 
     Pane {
         id: survey
-        height: parent.height - banner.height - 12
+        height: parent.height - banner.height - 36
         width: banner.width / 3
         Material.elevation: 3
         anchors {
-            bottom: parent.bottom
+            top: banner.bottom
+            topMargin: 12
             right: banner.right
         }
 

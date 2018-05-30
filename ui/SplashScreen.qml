@@ -19,7 +19,8 @@ Pane {
         }
     }
     Behavior on opacity {
-        NumberAnimation {
+        enabled: animate
+NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 1000
         }
@@ -37,7 +38,8 @@ Pane {
         source: "qrc:/images/icon.svg"
         opacity: 0.0
         Behavior on opacity {
-            NumberAnimation {
+            enabled: animate
+NumberAnimation {
                 easing.type: Easing.InExpo
                 duration: 200
             }
@@ -69,7 +71,8 @@ Pane {
 
         opacity: 0.0
         Behavior on opacity {
-            NumberAnimation {
+            enabled: animate
+NumberAnimation {
                 easing.type: Easing.InExpo
                 duration: 200
             }

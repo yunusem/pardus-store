@@ -38,6 +38,7 @@ Pane {
             }
         }
         Behavior on opacity {
+            enabled: animate
             NumberAnimation {
                 easing.type: Easing.InExpo
                 duration: 600
@@ -54,6 +55,7 @@ Pane {
         height: width
 
         Behavior on opacity {
+            enabled: animate
             NumberAnimation {
                 easing.type: Easing.InExpo
                 duration: 600
@@ -92,6 +94,7 @@ Pane {
         }
 
         Behavior on opacity {
+            enabled: animate
             NumberAnimation {
                 easing.type: Easing.OutExpo
                 duration: 200
@@ -133,24 +136,12 @@ Pane {
 
     PageIndicator {
         id: indicator
-        interactive: true
-        count: app.name === "" ? 2 : 3
-        currentIndex: swipeView.currentIndex
+        interactive: false
+        visible: stackView.depth > 1
+        count: stackView.depth
+        currentIndex: stackView.depth -1
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-
-        onCurrentIndexChanged: {
-            swipeView.currentIndex = indicator.currentIndex
-            if (currentIndex == 1) {
-                if(navigationBar.currentIndex == 0) {
-                    category = qsTr("all")
-                    app.name = ""
-                }
-            } else if (currentIndex == 0) {
-                category = qsTr("home")
-                app.name = ""
-            }
-        }
 
     }
 }

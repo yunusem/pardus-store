@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.0
 
 Pane {
     id: searchPane
-    width: searchFlag ? 500 : applicationListPage.cellWidth - 20
+    width: searchFlag ? 500 : stackView.width / 5 - 20
     height: searchFlag ? topDock.height : topDock.height * 2 / 3
     Material.elevation: searchFlag ? 3 : 1
     property string prelist: ""
@@ -22,21 +22,24 @@ Pane {
     }
 
     Behavior on anchors.topMargin {
-        NumberAnimation {
+        enabled: animate
+NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 200
         }
     }
 
     Behavior on width  {
-        NumberAnimation {
+        enabled: animate
+NumberAnimation {
             easing.type: Easing.OutCirc
             duration: 200
         }
     }
 
     Behavior on height {
-        NumberAnimation {
+        enabled: animate
+NumberAnimation {
             easing.type: Easing.OutCirc
             duration: 200
         }
@@ -55,13 +58,15 @@ Pane {
         source: "qrc:/images/search.svg"
 
         Behavior on width  {
-            NumberAnimation {
+            enabled: animate
+NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }
         }
         Behavior on anchors.leftMargin {
-            NumberAnimation {
+            enabled: animate
+NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }
@@ -154,20 +159,23 @@ Pane {
 
 
         Behavior on y {
-            NumberAnimation {
+            enabled: animate
+NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }
         }
 
         Behavior on opacity {
-            NumberAnimation {
+            enabled: animate
+NumberAnimation {
                 duration: 1000
             }
         }
 
         Behavior on width {
-            NumberAnimation {
+            enabled: animate
+NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }

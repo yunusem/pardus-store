@@ -6,10 +6,8 @@ import QtGraphicalEffects 1.0
 
 Pane {
     id:appDetail
-    anchors.centerIn: parent
-    width: parent.width - 10
-    height: parent.height - 10
-    Material.elevation: 2
+    property string previous
+    property string current
     property bool splashFlag: openAppDetail
     property variant urls: screenshotUrls
     property int length: urls.length
@@ -49,6 +47,7 @@ Pane {
         opacity: splashFlag ? 1.0 : 0.0
 
         Behavior on opacity {
+            enabled: animate
             NumberAnimation {
                 duration: 200
                 easing.type: Easing.OutExpo
@@ -96,7 +95,7 @@ Pane {
         id:popupImagePreview
         width: parent.width
         height: parent.height
-        modal: true
+        modal: animate
         focus: true
         y: -6
         x: -6
@@ -148,6 +147,7 @@ Pane {
             opacity: nextMa.containsMouse ? 1.0 : 0.2
 
             Behavior on opacity {
+                enabled: animate
                 NumberAnimation {
                     duration: 200
                 }
@@ -187,6 +187,7 @@ Pane {
             opacity: prevMa.containsMouse ? 1.0 : 0.2
 
             Behavior on opacity {
+                enabled: animate
                 NumberAnimation {
                     duration: 200
                 }
@@ -299,7 +300,7 @@ Pane {
         ListView {
             id: screenshotsLV
 
-            interactive: true
+            interactive: animate
             spacing: 15
             clip: true
             orientation: Qt.Horizontal
@@ -388,6 +389,7 @@ Pane {
         y: parent.height - (textPane.height + 3)
         clip: true
         Behavior on opacity {
+            enabled: animate
             NumberAnimation {
                 easing.type: Easing.InExpo
                 duration: 1000
@@ -418,6 +420,7 @@ Pane {
             }
 
             Behavior on height {
+                enabled: animate
                 NumberAnimation {
                     easing.type: Easing.OutExpo
                     duration: 150
@@ -425,6 +428,7 @@ Pane {
             }
 
             Behavior on width {
+                enabled: animate
                 NumberAnimation {
                     easing.type: Easing.OutExpo
                     duration: 50
@@ -554,20 +558,22 @@ Pane {
     ParallelAnimation {
         id: detailAnimation
 
+
         NumberAnimation {
             target: appBanner
             property: "x"
             easing.type: Easing.OutExpo
-            duration: 1000
+            duration: animate ? 1000 : 0
             from: appBanner.width
             to : 0
         }
+
 
         NumberAnimation {
             target: imagesPane
             property: "y"
             easing.type: Easing.OutExpo
-            duration: 1000
+            duration: animate ? 1000 : 0
             from: appDetail.height
             to : appDetail.height - (imagesPane.height + 27)
         }

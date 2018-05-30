@@ -56,6 +56,7 @@ Item {
 
 
         Behavior on opacity {
+            enabled: animate
             NumberAnimation {
                 easing.type: Easing.OutExpo
                 duration: 200
@@ -64,6 +65,7 @@ Item {
     }
 
     Behavior on height {
+        enabled: animate
         NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 200

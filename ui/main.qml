@@ -8,7 +8,7 @@ import ps.helper 1.0
 
 ApplicationWindow {
     id: main
-    minimumWidth: 1296
+    minimumWidth: 1280
     minimumHeight: minimumWidth * 9 / 16
     visible: true
     title: "Pardus" + " " + qsTr("Store")
@@ -26,6 +26,7 @@ ApplicationWindow {
     property variant processQueue: []
     property string lastProcess: ""
     property string category : qsTr("home")
+    property string previousCategory: ""
     property bool searchF: false
     property variant categories:
         [qsTr("home"),
@@ -83,7 +84,7 @@ ApplicationWindow {
 
         onNameChanged: {
             if(name === "") {
-                swipeView.removeItem(2)
+                //stackView.removeItem(2)
                 openAppDetail = false
                 version = ""
                 installed = false
@@ -91,7 +92,7 @@ ApplicationWindow {
                 free = true
                 description = ""
             } else {
-                swipeView.addItem(applicationDetailPage)
+
                 openAppDetail = true
             }
         }
@@ -156,7 +157,7 @@ ApplicationWindow {
         z: 92
         height: topDock.height
         width: height * 2 / 3
-        opacity: bottomDock.pageIndicator.currentIndex >= 1 ? 1.0 : 0.0
+        opacity: category !== qsTr("home") ? 1.0 : 0.0
         Material.background: "#fafafa"
         anchors {
             top: parent.top
@@ -176,11 +177,21 @@ ApplicationWindow {
         }
 
         onClicked: {
-            swipeView.currentIndex -= 1
-            //applicationModel.setFilterString("", true)
+            //var c = categoryIcons[categories.indexOf(category)]
+            var c = ""
+            var name = stackView.currentItem.objectName
+            if(name === "detail") {
+                c = stackView.currentItem.previous
+            } else if (category === "settings") {
+                c = stackView.currentItem.current
+            } else {
+                c = "home"
+            }
+            category = categories[(categoryIcons.indexOf(c))]
         }
 
         Behavior on opacity {
+            enabled: animate
             NumberAnimation {
                 easing.type: Easing.OutExpo
                 duration: 300
@@ -318,107 +329,62 @@ ApplicationWindow {
         }
     }
 
-    SwipeView {
-        id: swipeView
+    StackView {
+        id: stackView
+        clip: true
         width: main.width * 20 / 21
         height: main.height * 13 / 15
         anchors {
             verticalCenter: parent.verticalCenter
             right: parent.right
         }
-        currentIndex: 0
-        Page {
-            width: swipeView.width
-            height: swipeView.height
-            Home {
-                id: homePage
+
+        initialItem: Qt.resolvedUrl("home.qml")
+
+        pushEnter: Transition {
+            enabled: animate
+            XAnimator {
+                from: (stackView.mirrored ? -1 : 1) * stackView.width
+                to: 0
+                duration: 400
+                easing.type: Easing.OutCubic
             }
         }
 
-        Page {
-            width: swipeView.width
-            height: swipeView.height
-            background: Rectangle {
-                color: "transparent"
-                Item {
-                    id: categoryLabelContainer
-                    width: 200
-                    height: 60
-                    anchors {
-                        bottom: parent.bottom
-                        horizontalCenter: parent.horizontalCenter
-                    }
-
-                    Rectangle {
-                        color: "#3c3c3c"
-                        radius: 3
-                        clip: true
-                        visible: (category !== qsTr("settings") && category !== qsTr("home") && category !== qsTr("all"))
-                        width: parent.width - innerShadow.radius
-                        height: parent.height - innerShadow.radius
-                        anchors {
-                            horizontalCenter: parent.horizontalCenter
-                            verticalCenter: parent.verticalCenter
-                            //verticalCenterOffset: 4
-                        }
-                        Label {
-                            id: categoryLabel
-                            text: category
-                            smooth: false
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            Material.foreground: "#ffcb08"
-                            font.pointSize: 32
-                            //font.capitalization: Font.Capitalize
-                            font.family: pardusFont.name
-                            anchors.centerIn: parent
-
-
-                        }
-                    }
-                }
-
-                InnerShadow {
-                    id: innerShadow
-                    anchors.fill: categoryLabelContainer
-                    cached: true
-                    visible: true
-                    smooth: true
-                    radius: 8
-                    samples: 17
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    color: "#ff000000"
-                    source: categoryLabelContainer
-                }
-            }
-
-            ApplicationList {
-                id: applicationListPage
+        pushExit: Transition {
+            enabled: animate
+            XAnimator {
+                from: 0
+                to: (stackView.mirrored ? -1 : 1) * - stackView.width
+                duration: 400
+                easing.type: Easing.OutCubic
             }
         }
-    }
 
-    Page {
-        id: applicationDetailPage
-        visible: app.name === "" ? false : true
-        width: swipeView.width
-        height: swipeView.height
-        ApplicationDetail {
+        popEnter: Transition {
+            enabled: animate
+            XAnimator {
+                from: (stackView.mirrored ? -1 : 1) * - stackView.width
+                to: 0
+                duration: 400
+                easing.type: Easing.OutCubic
+            }
+        }
 
+        popExit: Transition {
+            enabled: animate
+            XAnimator {
+                from: 0
+                to: (stackView.mirrored ? -1 : 1) * stackView.width
+                duration: 400
+                easing.type: Easing.OutCubic
+            }
         }
     }
 
     NavigationBar {
         id: navigationBar
         visible: splashScreen.opacity < 0.7
-        onCurrentIndexChanged: {
-            if (category !== qsTr("home")) {
-                swipeView.currentIndex = 1
-            } else {
-                swipeView.currentIndex = 0
-            }
-        }
     }
 
     Settings {
@@ -644,16 +610,40 @@ ApplicationWindow {
         searchBar.searchFlag = searchF
         if(searchF) {
             category = qsTr("all")
-            swipeView.currentIndex = 1
+            stackView.currentIndex = 1
         }
     }
 
     onCategoryChanged: {
+        var c = categoryIcons[categories.indexOf(category)]
+
         navigationBar.currentIndex = categories.indexOf(category)
         applicationModel.setFilterString(category === qsTr("all") ? "" : categoryIcons[categories.indexOf(category)], false)
         if(category === qsTr("home")) {
             searchF = false
         }
+
+        if(c !== "settings") {
+            if(c === "home") {
+                stackView.pop(null)
+            } else {
+                if(stackView.currentItem.objectName !== c) {
+                    var name = stackView.currentItem.objectName
+                    if(name === "detail") {
+                        stackView.pop()
+                    } else {
+                        if(c !== "home" && c !== "settings") {
+                            if(name !== "list") {
+                                stackView.push(Qt.resolvedUrl("list.qml"),{objectName: "list", "current": c, "previous": previousCategory})
+                            }
+                        } else {
+                            stackView.push(Qt.resolvedUrl(category + ".qml"),{objectName: c, "current": c, "previous": previousCategory})
+                        }
+                    }
+                }
+            }
+        }
+        previousCategory = category
     }
 
     onUpdateQueue: {

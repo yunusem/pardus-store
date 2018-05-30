@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.0
 
 
 Pane {
-    id: navi    
+    id: navi
     width: navima.containsMouse ? parent.width / 7 : parent.width / 21
     height: parent.height
     z : 93
@@ -22,6 +22,7 @@ Pane {
     }
 
     Behavior on width {
+        enabled: animate
         NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 200
@@ -30,8 +31,6 @@ Pane {
 
     ListModel {
         id: categoryListModel
-
-
     }
 
     Component.onCompleted: {

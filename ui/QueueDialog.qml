@@ -17,7 +17,8 @@ Popup {
     property alias title: queuePopupTitle
 
     Behavior on y {
-        NumberAnimation {
+        enabled: animate
+NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 600
         }

@@ -23,7 +23,8 @@ Item {
     }
 
     Behavior on value {
-        NumberAnimation {
+        enabled: animate
+NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 200
         }
