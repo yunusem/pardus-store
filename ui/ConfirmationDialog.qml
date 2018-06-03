@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.0
 
 Popup {
     id: dialog
-    modal: true
+    modal: animate
     width: 300
     height: buttonContainer.height + imageContainer.height + 48
     closePolicy: Popup.NoAutoClose

@@ -5,7 +5,7 @@
         <file>ui/CategoryDelegate.qml</file>
         <file>ui/ApplicationDelegate.qml</file>
         <file>ui/SearchBar.qml</file>
-        <file>ui/home.qml</file>
+        <file>ui/Home.qml</file>
         <file>ui/ApplicationDetail.qml</file>
         <file>ui/BottomDock.qml</file>
         <file>ui/SplashScreen.qml</file>
@@ -14,6 +14,6 @@
         <file>ui/InfoDialog.qml</file>
         <file>ui/Settings.qml</file>
         <file>ui/ProgressBarCircle.qml</file>
-        <file>ui/list.qml</file>
+        <file>ui/ApplicationList.qml</file>
     </qresource>
 </RCC>

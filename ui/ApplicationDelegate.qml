@@ -71,11 +71,10 @@ Item {
                 app.free = !nonfree
                 app.description = description
 
-                stackView.push(Qt.resolvedUrl("ApplicationDetail.qml"),
+                stackView.push(applicationDetail,
                                {objectName: "detail",
                                    "current": name,
-                                   "previous": categoryIcons[categories.indexOf(category)]})
-
+                                   "previous": category})
                 screenshotUrls = []
                 helper.getAppDetails(name)
             }
@@ -280,8 +279,5 @@ Item {
                 }
             }
         }
-
     }
-
-
 }

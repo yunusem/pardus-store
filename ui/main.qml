@@ -177,12 +177,13 @@ ApplicationWindow {
         }
 
         onClicked: {
-            //var c = categoryIcons[categories.indexOf(category)]
             var c = ""
             var name = stackView.currentItem.objectName
+
             if(name === "detail") {
                 c = stackView.currentItem.previous
-            } else if (category === "settings") {
+                stackView.pop()
+            } else if (category === qsTr("settings")) {
                 c = stackView.currentItem.current
             } else {
                 c = "home"
@@ -339,7 +340,7 @@ ApplicationWindow {
             right: parent.right
         }
 
-        initialItem: Qt.resolvedUrl("home.qml")
+        initialItem: Home {}
 
         pushEnter: Transition {
             enabled: animate
@@ -614,9 +615,23 @@ ApplicationWindow {
         }
     }
 
-    onCategoryChanged: {
-        var c = categoryIcons[categories.indexOf(category)]
+    Component {
+        id: applicationList
+        ApplicationList {
 
+        }
+    }
+
+    Component {
+        id: applicationDetail
+        ApplicationDetail {
+
+        }
+    }
+
+    onCategoryChanged: {
+
+        var c = categoryIcons[categories.indexOf(category)]
         navigationBar.currentIndex = categories.indexOf(category)
         applicationModel.setFilterString(category === qsTr("all") ? "" : categoryIcons[categories.indexOf(category)], false)
         if(category === qsTr("home")) {
@@ -629,15 +644,20 @@ ApplicationWindow {
             } else {
                 if(stackView.currentItem.objectName !== c) {
                     var name = stackView.currentItem.objectName
-                    if(name === "detail") {
+                    if(name === "detail" && settings.opacity != 1.0 ) {
                         stackView.pop()
                     } else {
-                        if(c !== "home" && c !== "settings") {
+                        if(c !== "home" && previousCategory !== qsTr("settings")) {
                             if(name !== "list") {
-                                stackView.push(Qt.resolvedUrl("list.qml"),{objectName: "list", "current": c, "previous": previousCategory})
+                                stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousCategory})
+                            } else {
+                                stackView.currentItem.current = c
+                                stackView.currentItem.previous = previousCategory
                             }
                         } else {
-                            stackView.push(Qt.resolvedUrl(category + ".qml"),{objectName: c, "current": c, "previous": previousCategory})
+                            if(stackView.currentItem.previous && name === "detail") {
+                                stackView.pop()
+                            }
                         }
                     }
                 }

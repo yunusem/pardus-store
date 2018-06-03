@@ -81,9 +81,7 @@ Page {
                 easing.type: Easing.OutExpo
             }
         }
-        delegate: ApplicationDelegate {
-
-        }
+        delegate: ApplicationDelegate { }
         ScrollBar.vertical: ScrollBar { }
     }
 }

@@ -23,7 +23,7 @@ Pane {
 
     Behavior on anchors.topMargin {
         enabled: animate
-NumberAnimation {
+        NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 200
         }
@@ -31,7 +31,7 @@ NumberAnimation {
 
     Behavior on width  {
         enabled: animate
-NumberAnimation {
+        NumberAnimation {
             easing.type: Easing.OutCirc
             duration: 200
         }
@@ -39,7 +39,7 @@ NumberAnimation {
 
     Behavior on height {
         enabled: animate
-NumberAnimation {
+        NumberAnimation {
             easing.type: Easing.OutCirc
             duration: 200
         }
@@ -59,14 +59,14 @@ NumberAnimation {
 
         Behavior on width  {
             enabled: animate
-NumberAnimation {
+            NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }
         }
         Behavior on anchors.leftMargin {
             enabled: animate
-NumberAnimation {
+            NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }
@@ -150,7 +150,7 @@ NumberAnimation {
         id: searchField
 
         width: searchPane.width / 2
-        height: 40        
+        height: 40
         visible: searchFlag
         opacity: searchFlag ? 1 : 0
 
@@ -160,7 +160,7 @@ NumberAnimation {
 
         Behavior on y {
             enabled: animate
-NumberAnimation {
+            NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }
@@ -168,14 +168,14 @@ NumberAnimation {
 
         Behavior on opacity {
             enabled: animate
-NumberAnimation {
+            NumberAnimation {
                 duration: 1000
             }
         }
 
         Behavior on width {
             enabled: animate
-NumberAnimation {
+            NumberAnimation {
                 easing.type: Easing.OutCirc
                 duration: 200
             }
@@ -186,7 +186,7 @@ NumberAnimation {
             applicationModel.setFilterString(searchField.text.trim(), true)
         }
 
-    }   
+    }
 
     onSearchFlagChanged: {
         searchF = searchFlag

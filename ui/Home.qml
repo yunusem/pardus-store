@@ -8,6 +8,7 @@ import QtGraphicalEffects 1.0
 Page {
     id:root
 
+    property string current: "home"
     property int animationSpeed: 200
     property variant surveyList : []
     property variant surveyCounts: []
@@ -147,7 +148,7 @@ Page {
                 height: parent.height + 24
 
                 onClicked: {
-                    stackView.currentIndex = 1
+                    category = qsTr("all")
                     applicationModel.setFilterString(editorsAppName, true)
 
                 }
@@ -234,7 +235,7 @@ Page {
                 height: parent.height + 24
 
                 onClicked: {
-                    stackView.currentIndex = 1
+                    category = qsTr("all")
                     applicationModel.setFilterString(mostAppName, true)
                 }
                 onPressed: {

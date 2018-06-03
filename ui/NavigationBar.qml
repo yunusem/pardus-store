@@ -57,8 +57,8 @@ Pane {
         }
         focus: true
         highlightFollowsCurrentItem : true
-        highlightMoveVelocity: 3600
-        highlightResizeVelocity: 3600
+        highlightMoveVelocity: animate ? 3600 : -1
+        highlightResizeVelocity: animate ? 3600 : -1
 
         delegate:  CategoryDelegate {
 

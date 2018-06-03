@@ -27,7 +27,7 @@ Pane {
     }
 
     Component.onCompleted: {
-        confirmationRemoval.connect(startRemoving)
+        confirmationRemoval.connect(startRemoving)       
     }
 
     ListModel {

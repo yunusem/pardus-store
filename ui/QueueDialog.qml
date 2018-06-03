@@ -18,7 +18,7 @@ Popup {
 
     Behavior on y {
         enabled: animate
-NumberAnimation {
+        NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 600
         }

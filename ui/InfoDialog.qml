@@ -6,7 +6,7 @@ Popup {
     id: dialog
     width: parent.width / 3 - 48
     height: popupOutputHeader.height + popupOutput.height + 36
-    modal: true
+    modal: animate
     closePolicy: Popup.CloseOnPressOutside
     y: parent.height / 2 - height / 2
     x: parent.width / 2 - width / 2

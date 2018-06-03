@@ -20,7 +20,7 @@ Pane {
     }
     Behavior on opacity {
         enabled: animate
-NumberAnimation {
+        NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 1000
         }
@@ -39,7 +39,7 @@ NumberAnimation {
         opacity: 0.0
         Behavior on opacity {
             enabled: animate
-NumberAnimation {
+            NumberAnimation {
                 easing.type: Easing.InExpo
                 duration: 200
             }
@@ -72,7 +72,7 @@ NumberAnimation {
         opacity: 0.0
         Behavior on opacity {
             enabled: animate
-NumberAnimation {
+            NumberAnimation {
                 easing.type: Easing.InExpo
                 duration: 200
             }
