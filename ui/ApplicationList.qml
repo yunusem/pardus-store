@@ -81,6 +81,22 @@ Page {
                 easing.type: Easing.OutExpo
             }
         }
+        remove: Transition {
+            enabled: animate
+            ParallelAnimation {
+                NumberAnimation {
+                    property: "opacity"
+                    to: 0
+                    duration: 100
+                    easing.type: Easing.OutExpo
+                }
+                NumberAnimation {
+                    properties: "x,y"
+                    to: 100
+                    duration: 100
+                }
+            }
+        }
         delegate: ApplicationDelegate { }
         ScrollBar.vertical: ScrollBar { }
     }
