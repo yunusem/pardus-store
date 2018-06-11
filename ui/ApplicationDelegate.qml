@@ -77,6 +77,7 @@ Item {
                                    "previous": category})
                 screenshotUrls = []
                 helper.getAppDetails(name)
+                //isSearching = false
             }
             onPressed: {
                 if(delegateMouseArea.containsMouse) {

@@ -11,7 +11,7 @@ Pane {
     height: searchFlag ? topDock.height : topDock.height * 2 / 3
     Material.elevation: searchFlag ? 3 : 1
     property string prelist: ""
-    property bool searchFlag: searchF
+    property bool searchFlag: isSearching
 
     visible: splashScreen.opacity < 0.7
     z: 100
@@ -91,16 +91,11 @@ Pane {
         width: 200
         height: 32
         anchors.centerIn: parent
-        onPressed: {
-            if (searchBtnMa.containsMouse) {
-                searchBtnMa.Material.elevation = 0
-            }
-        }
-        onReleased: {
-            searchBtnMa.Material.elevation = 2
-        }
         onClicked: {
-            searchFlag = true
+            //searchFlag = true
+            isSearching = true
+            searchField.focus = true
+            searchField.forceActiveFocus()
         }
     }
 
@@ -133,14 +128,14 @@ Pane {
             anchors.centerIn: parent
             onPressed: {
                 if (closeSearchBtnMa.containsMouse) {
-                    closeSearchBtnMa.Material.elevation = 0
+                    btnClose.Material.elevation = 1
                 }
             }
             onReleased: {
-                closeSearchBtnMa.Material.elevation = 2
+                btnClose.Material.elevation = 10
             }
             onClicked: {
-                searchFlag = false
+                isSearching = false
             }
         }
     }
@@ -183,14 +178,26 @@ Pane {
 
 
         onTextChanged: {
-            applicationModel.setFilterString(searchField.text.trim(), true)
-        }
+            if(stackView.depth === 3) {
+                stackView.pop()
+            }
 
+            if(searchField.text !== "") {
+                applicationModel.setFilterString(searchField.text.trim(), true)
+            }
+        }
     }
 
     onSearchFlagChanged: {
-        searchF = searchFlag
-        if(!searchFlag) {
+        var c = categoryIcons[categories.indexOf(category)]
+        if(searchFlag) {
+
+            category = categories[categoryIcons.indexOf("all")]
+
+            if(stackView.depth === 3) {
+                stackView.pop()
+            }
+        } else {
             searchField.text = ""
         }
     }

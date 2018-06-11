@@ -6,6 +6,7 @@
 #include <QLocale>
 #include <QProcess>
 #include <QRegExp>
+#include <QSettings>
 #include <QDebug>
 
 Helper::Helper(QObject *parent) : QObject(parent), p(false), c("")
@@ -21,6 +22,50 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false), c("")
     connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
     connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceived(QString,int)));
+
+    readSettings();
+}
+
+bool Helper::animate() const
+{
+    return m_animate;
+}
+
+void Helper::setAnimate(bool a)
+{
+    if(a != m_animate) {
+      m_animate = a;
+      writeSettings("animate", m_animate);
+      emit animateChanged();
+    }
+}
+
+bool Helper::update() const
+{
+    return m_update;
+}
+
+void Helper::setUpdate(bool u)
+{
+    if(u != m_update) {
+      m_update = u;
+      writeSettings("update", m_update);
+      emit updateChanged();
+    }
+}
+
+void Helper::readSettings()
+{
+    QSettings settings;
+
+    setAnimate(settings.value("animate", true).toBool());
+    setUpdate(settings.value("update", true).toBool());
+}
+
+void Helper::writeSettings(const QString &key, const QVariant &value)
+{
+    QSettings settings;
+    settings.setValue(key,value);
 }
 
 bool Helper::processing() const
@@ -127,6 +172,7 @@ QString Helper::getMainUrl() const
 
 void Helper::packageProcessFinished(int code)
 {
+    qDebug() << "package process finished called";
     if(code == 0) {
         emit processingFinished();        
     } else {        
@@ -152,7 +198,8 @@ QStringList Helper::getDetails() const
             apps += " ";
         }
     }
-    QStringList output = ph->getPolicy(apps).split(QRegExp("\n|\r\n|\r"));
+
+    QStringList output = ph->getPolicy(apps).split(QRegExp("\n|\r\n|\r"));    
     QStringList list;
     int ix = 0;
     QString app;
@@ -183,11 +230,6 @@ QStringList Helper::getDetails() const
         detail = "";
     }
     return list;
-}
-
-void Helper::updateDetails()
-{
-    ldetail = this->getDetails();
 }
 
 QString Helper::getLanguagePackage(const QString &pkg) const

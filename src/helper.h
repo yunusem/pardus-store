@@ -30,10 +30,22 @@ class Helper : public QObject
                NOTIFY surveyJoinUpdateSuccess)
     Q_PROPERTY(QString choice
                READ choice
-               NOTIFY choiceChanged)    
+               NOTIFY choiceChanged)
+    Q_PROPERTY(bool animate
+               READ animate
+               WRITE setAnimate
+               NOTIFY animateChanged)
+    Q_PROPERTY(bool update
+               READ update
+               WRITE setUpdate
+               NOTIFY updateChanged)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
+    bool animate() const;
+    void setAnimate(bool a);
+    bool update() const;
+    void setUpdate(bool u);
     QString choice() const;
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
@@ -46,6 +58,8 @@ public:
                                   const QString &title,
                                   const QString &content);
     Q_INVOKABLE QString getMainUrl() const;
+
+
 private:
     bool p;
     QString c;
@@ -56,14 +70,17 @@ private:
     ListCover lc;
     NetworkHandler *nh;
     void fillTheList();
+    bool m_animate;
+    bool m_update;
+    void readSettings();
 
 private slots:
     void packageProcessFinished(int code);
     void packageProcessStatus(const QString &status, const QString &pkg,
                               int value, const QString &desc);
-    QStringList getDetails() const;
-    void updateDetails();
+    QStringList getDetails() const;    
     QString getLanguagePackage(const QString &pkg) const;
+    void writeSettings(const QString &key, const QVariant &value);
 
 signals:
     void processingFinished();
@@ -78,6 +95,8 @@ signals:
     void screenshotNotFound();
     void fetchingAppListFinished();
     void gatheringLocalDetailFinished();
+    void animateChanged();
+    void updateChanged();
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);

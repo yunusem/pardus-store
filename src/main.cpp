@@ -21,6 +21,10 @@ int main(int argc, char *argv[])
     QGuiApplication::setWindowIcon(QIcon(":/images/icon.svg"));
     QGuiApplication app(argc, argv);
 
+    app.setOrganizationName("TÜBİTAK ULAKBİM");
+    app.setOrganizationDomain("www.pardus.org.tr");
+    app.setApplicationName("pardus-store");
+
     ApplicationListModel listModel;
     ListCover::setInstance(&listModel);
     FilterProxyModel filterModel;

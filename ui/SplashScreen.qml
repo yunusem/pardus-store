@@ -105,7 +105,11 @@ Pane {
     }
 
     Component.onCompleted: {
-        splashLabel.text = qsTr("Updating package manager cache.")
-        helper.updateCache()
+        if(updateCache) {
+            splashLabel.text = qsTr("Updating package manager cache.")
+            helper.updateCache()
+        } else {
+            updateCacheFinished()
+        }
     }
 }

@@ -7,8 +7,7 @@ import QtGraphicalEffects 1.0
 Pane {
     id:appDetail
     property string previous
-    property string current
-    property bool splashFlag: openAppDetail
+    property string current    
     property variant urls: screenshotUrls
     property int length: urls.length
     property int ind: 0
@@ -27,7 +26,8 @@ Pane {
     }
 
     Component.onCompleted: {
-        confirmationRemoval.connect(startRemoving)       
+        confirmationRemoval.connect(startRemoving)
+        detailAnimation.start()
     }
 
     ListModel {
@@ -44,15 +44,6 @@ Pane {
 
         Material.elevation: 3
         visible: true
-        opacity: splashFlag ? 1.0 : 0.0
-
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.OutExpo
-            }
-        }
 
         Image {
             id:appBannerIcon
@@ -134,6 +125,22 @@ Pane {
                 id: imageBusyInPopup
                 anchors.centerIn: parent
                 running: urls[0] !== "none" ? 0 : !popupImage.progress
+            }
+
+            onSourceChanged: {
+                if(animate) {
+                    trans.start()
+                }
+            }
+
+            NumberAnimation {
+                id: trans
+                target: popupImage
+                property: "opacity"
+                from: 0
+                to: 1.0
+                duration: 200
+                easing.type: Easing.InExpo
             }
 
         }
@@ -381,21 +388,12 @@ Pane {
     }
 
     Pane {
-        id:textPane
-        opacity: splashFlag ? 1.0 : 0.0
+        id:textPane        
         height: imagesPane.height
         width: appBanner.width - imagesPane.width - 12
         x: imagesPane.width + 12
         y: parent.height - (textPane.height + 3)
         clip: true
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.InExpo
-                duration: 1000
-            }
-        }
-
 
         Pane {
             id: disclamer
@@ -576,13 +574,6 @@ Pane {
             duration: animate ? 1000 : 0
             from: appDetail.height
             to : appDetail.height - (imagesPane.height + 27)
-        }
-    }
-
-    onSplashFlagChanged: {
-        if(splashFlag) {
-            detailAnimation.start()
-            //searchF = false
         }
     }
 

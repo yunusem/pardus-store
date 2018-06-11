@@ -41,16 +41,32 @@ Pane {
                 anchors.verticalCenter: parent.verticalCenter
 
             }
-            Switch {
-                id: sw
+            Switch {                
                 enabled: true
                 anchors.verticalCenter: parent.verticalCenter
+                checked: animate
                 onCheckedChanged: {
                     animate = checked
                 }
+            }
+        }
 
-                Component.onCompleted: {
-                    checked = animate
+        Row {
+            Label {
+                text: qsTr("update package manager cache on start")
+                font.capitalization: Font.Capitalize
+                Material.foreground: "#fafafa"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+            }
+            Switch {                
+                enabled: true
+                anchors.verticalCenter: parent.verticalCenter
+                checked: updateCache
+                onCheckedChanged: {
+                    updateCache = checked
                 }
             }
         }

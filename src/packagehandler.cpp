@@ -17,6 +17,7 @@ PackageHandler::PackageHandler(QObject *parent) : QObject(parent),
     p->setEnvironment(env.toStringList());
     connect(p,SIGNAL(finished(int)),this,SIGNAL(finished(int)));
     connect(p,SIGNAL(finished(int)),this, SLOT(onFinished(int)));
+    connect(p,SIGNAL(finished(int)),this,SLOT(finishedCheck(int)));
 }
 
 PackageHandler::~PackageHandler()
@@ -25,12 +26,12 @@ PackageHandler::~PackageHandler()
 }
 
 void PackageHandler::updateCache()
-{
+{    
     p->start("apt-get update");
 }
 
 void PackageHandler::install(const QString &pkg)
-{
+{    
     int statusFd;
     QString cmd = "apt-get install -y ";
     dpkg = new DpkgProgress();
@@ -67,7 +68,7 @@ void PackageHandler::onDpkgProgress(const QString &status, const QString &pkg,
 }
 
 void PackageHandler::remove(const QString &pkg)
-{
+{    
     int statusFd;
     QString cmd = "apt-get remove -y ";
     dpkg = new DpkgProgress();
@@ -89,13 +90,17 @@ void PackageHandler::remove(const QString &pkg)
 }
 
 QString PackageHandler::getPolicy(const QString &pkg) const
-{    
-    p->start("apt-cache policy " + pkg);
+{
+    QProcess process;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("LC_ALL","C");
+    process.setEnvironment(env.toStringList());
+    process.start("apt-cache policy " + pkg);
 
-    p->waitForFinished();
+    process.waitForFinished(-1);
 
-    QString out = QString::fromLatin1(p->readAllStandardOutput());
-    p->close();
+    QString out = QString::fromLatin1(process.readAllStandardOutput());
+    process.close();
     return out;
 }
 
@@ -119,5 +124,10 @@ QByteArray PackageHandler::getError()
 QByteArray PackageHandler::getOutput()
 {
     return p->readAllStandardOutput();
+}
+
+void PackageHandler::finishedCheck(int code)
+{
+    qDebug() << "from finishedcheck the return value is " << code;
 }
 

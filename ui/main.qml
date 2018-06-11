@@ -14,7 +14,7 @@ ApplicationWindow {
     title: "Pardus" + " " + qsTr("Store")
     flags: Qt.FramelessWindowHint
     color: "transparent"
-    property bool animate: true
+
     property bool hasActiveFocus: false
     property bool cacheIsUpToDate: false
     property string popupText: ""
@@ -27,9 +27,8 @@ ApplicationWindow {
     property string lastProcess: ""
     property string category : qsTr("home")
     property string previousCategory: ""
-    property bool searchF: false
-    property variant categories:
-        [qsTr("home"),
+    property bool isSearching: false
+    property variant categories: [qsTr("home"),
         qsTr("all"),
         qsTr("internet"),
         qsTr("office"),
@@ -63,6 +62,8 @@ ApplicationWindow {
     property alias processingCondition: bottomDock.condition
     property alias processOutputLabel: bottomDock.processOutput
     property alias busy: bottomDock.busyIndicator
+    property alias animate: helper.animate
+    property alias updateCache: helper.update
 
     signal updateQueue()
     signal updateCacheFinished()
@@ -71,6 +72,8 @@ ApplicationWindow {
     signal gotSurveyList(variant sl)
     signal surveyJoined()
     signal surveyJoinUpdated()
+
+
 
     Item {
         id: app
@@ -84,16 +87,11 @@ ApplicationWindow {
 
         onNameChanged: {
             if(name === "") {
-                //stackView.removeItem(2)
-                openAppDetail = false
                 version = ""
                 installed = false
                 category = ""
                 free = true
                 description = ""
-            } else {
-
-                openAppDetail = true
             }
         }
     }
@@ -189,6 +187,9 @@ ApplicationWindow {
                 c = "home"
             }
             category = categories[(categoryIcons.indexOf(c))]
+            if(isSearching) {
+                isSearching = false
+            }
         }
 
         Behavior on opacity {
@@ -230,6 +231,7 @@ ApplicationWindow {
     Helper {
         id: helper
         onProcessingFinished: {
+            console.log("on processing finished from qml")
             if(processQueue.length !== 0) {
                 var s = processQueue[0].split(" ")
                 var appName = s[0]
@@ -271,7 +273,6 @@ ApplicationWindow {
 
             infoDialog.open()
         }
-
         onProcessingStatus: {
             if(condition === "pmstatus") {
                 if(processingCondition === qsTr("removing")) {
@@ -288,7 +289,6 @@ ApplicationWindow {
 
             busy.value = percent
         }
-
         onDescriptionReceived: {
             app.description = description
         }
@@ -564,6 +564,20 @@ ApplicationWindow {
         }
     }
 
+    Component {
+        id: applicationList
+        ApplicationList {
+
+        }
+    }
+
+    Component {
+        id: applicationDetail
+        ApplicationDetail {
+
+        }
+    }
+
     function getCorrectName(appName) {
         var i = specialApplications.indexOf(appName)
         if (i != -1) {
@@ -592,6 +606,7 @@ ApplicationWindow {
     }
 
     onClosing: {
+
         if(isThereOnGoingProcess) {
             popupHeaderText = qsTr("Warning!")
             popupText = "Pardus " + qsTr("Store") + " " + qsTr("can not be closed while a process is ongoing.")
@@ -602,40 +617,13 @@ ApplicationWindow {
         }
     }
 
-    onUpdateCacheFinished: {
-        splashScreen.label.text = qsTr("Fetching application list.")
-        helper.getAppList()
-    }
-
-    onSearchFChanged: {
-        searchBar.searchFlag = searchF
-        if(searchF) {
-            category = qsTr("all")
-            stackView.currentIndex = 1
-        }
-    }
-
-    Component {
-        id: applicationList
-        ApplicationList {
-
-        }
-    }
-
-    Component {
-        id: applicationDetail
-        ApplicationDetail {
-
-        }
-    }
-
     onCategoryChanged: {
 
         var c = categoryIcons[categories.indexOf(category)]
         navigationBar.currentIndex = categories.indexOf(category)
         applicationModel.setFilterString(category === qsTr("all") ? "" : categoryIcons[categories.indexOf(category)], false)
         if(category === qsTr("home")) {
-            searchF = false
+            isSearching = false
         }
 
         if(c !== "settings") {
@@ -672,5 +660,10 @@ ApplicationWindow {
         if(processQueue.length == 0) {
             queueDialog.close()
         }
+    }
+
+    onUpdateCacheFinished: {
+        splashScreen.label.text = qsTr("Fetching application list.")
+        helper.getAppList()
     }
 }
