@@ -1,3 +1,16 @@
+pardus-store (0.0.19~alpha) unstable; urgency=medium
+
+  * Improve visual on application delegate installed badge
+  * Update category text capitlization on App list pageview
+  * Add global variable for animation disabling
+  * Implement stackview to be able to disable animations on swipe
+  * Adjust qml resources according to stackview
+  * implement remove animation for gridview
+  * Fix some visual bugs after stackview implementation
+  * Fix some visual bugs
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 14 Jun 2018 11:51:56 +0300
+
 pardus-store (0.0.18~alpha) unstable; urgency=medium
 
   * Prepare a maximize button and make changes for size changing
