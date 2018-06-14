@@ -11,6 +11,7 @@ class FileHandler;
 class PackageHandler;
 class NetworkHandler;
 class ApplicationDetail;
+class QSettings;
 
 class Helper : public QObject
 {
@@ -69,6 +70,7 @@ private:
     QStringList ldetail;
     ListCover lc;
     NetworkHandler *nh;
+    QSettings *s;
     void fillTheList();
     bool m_animate;
     bool m_update;

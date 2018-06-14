@@ -13,7 +13,7 @@ Pane {
     property alias busy: splashBusy
     Timer {
         id: splashTimer
-        interval: 1000
+        interval: 800
         onTriggered: {
             splash.opacity = 0.0
         }

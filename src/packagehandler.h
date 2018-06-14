@@ -33,9 +33,7 @@ public slots:
 
 private slots:
     void onDpkgProgress(const QString &status, const QString &pkg,
-                        int value, const QString &desc);
-
-    void finishedCheck(int code);
+                        int value, const QString &desc);    
 
 };
 

@@ -231,7 +231,7 @@ ApplicationWindow {
     Helper {
         id: helper
         onProcessingFinished: {
-            console.log("on processing finished from qml")
+
             if(processQueue.length !== 0) {
                 var s = processQueue[0].split(" ")
                 var appName = s[0]
@@ -635,13 +635,19 @@ ApplicationWindow {
                     if(name === "detail" && settings.opacity != 1.0 ) {
                         stackView.pop()
                     } else {
-                        if(c !== "home" && previousCategory !== qsTr("settings")) {
-                            if(name !== "list") {
-                                stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousCategory})
-                            } else {
-                                stackView.currentItem.current = c
-                                stackView.currentItem.previous = previousCategory
-                            }
+                        if(c !== "home") {
+
+                                if(name !== "list") {
+                                     if(previousCategory === qsTr("settings")) {
+                                        stackView.pop(null)
+                                     }
+                                     stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousCategory})
+
+                                } else {
+                                    stackView.currentItem.current = c
+                                    stackView.currentItem.previous = previousCategory
+                                }
+
                         } else {
                             if(stackView.currentItem.previous && name === "detail") {
                                 stackView.pop()
@@ -650,7 +656,7 @@ ApplicationWindow {
                     }
                 }
             }
-        }
+        }        
         previousCategory = category
     }
 

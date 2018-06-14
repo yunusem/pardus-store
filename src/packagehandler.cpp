@@ -16,8 +16,7 @@ PackageHandler::PackageHandler(QObject *parent) : QObject(parent),
     env.insert("LC_ALL","C");
     p->setEnvironment(env.toStringList());
     connect(p,SIGNAL(finished(int)),this,SIGNAL(finished(int)));
-    connect(p,SIGNAL(finished(int)),this, SLOT(onFinished(int)));
-    connect(p,SIGNAL(finished(int)),this,SLOT(finishedCheck(int)));
+    connect(p,SIGNAL(finished(int)),this, SLOT(onFinished(int)));    
 }
 
 PackageHandler::~PackageHandler()
@@ -125,9 +124,3 @@ QByteArray PackageHandler::getOutput()
 {
     return p->readAllStandardOutput();
 }
-
-void PackageHandler::finishedCheck(int code)
-{
-    qDebug() << "from finishedcheck the return value is " << code;
-}
-

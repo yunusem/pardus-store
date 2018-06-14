@@ -317,7 +317,7 @@ Page {
         }
 
         Column {
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.centerIn: parent
             spacing: 24
 
             Label {
@@ -367,15 +367,7 @@ Page {
                     acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
-            }
-
-            Label {
-                enabled: false
-                font.pointSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text: "Bu kısım geçicidir. Daha fazlası yakında gelecek ..."
-            }
+            }           
         }
     }
 

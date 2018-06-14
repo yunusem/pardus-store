@@ -9,11 +9,14 @@
 #include <QSettings>
 #include <QDebug>
 
+#define CONFIG_PATH "/usr/share/pardus/pardus-store/config.ini"
+
 Helper::Helper(QObject *parent) : QObject(parent), p(false), c("")
 {    
     nh = new NetworkHandler(10000,this);
     fh = new FileHandler(this);
-    ph = new PackageHandler(this);    
+    ph = new PackageHandler(this);
+    s = new QSettings(CONFIG_PATH, QSettings::IniFormat);
 
     connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
     connect(ph,SIGNAL(dpkgProgressStatus(QString,QString,int,QString)),this,SLOT(packageProcessStatus(QString,QString,int,QString)));
@@ -56,16 +59,13 @@ void Helper::setUpdate(bool u)
 
 void Helper::readSettings()
 {
-    QSettings settings;
-
-    setAnimate(settings.value("animate", true).toBool());
-    setUpdate(settings.value("update", true).toBool());
+    setAnimate(s->value("animate", true).toBool());
+    setUpdate(s->value("update", false).toBool());
 }
 
 void Helper::writeSettings(const QString &key, const QVariant &value)
-{
-    QSettings settings;
-    settings.setValue(key,value);
+{    
+    s->setValue(key,value);
 }
 
 bool Helper::processing() const
@@ -172,7 +172,6 @@ QString Helper::getMainUrl() const
 
 void Helper::packageProcessFinished(int code)
 {
-    qDebug() << "package process finished called";
     if(code == 0) {
         emit processingFinished();        
     } else {        
