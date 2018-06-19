@@ -44,6 +44,9 @@ class Helper : public QObject
                READ ratio
                WRITE setRatio
                NOTIFY ratioChanged)
+    Q_PROPERTY(QString version
+               READ version
+               NOTIFY versionChanged)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -54,6 +57,7 @@ public:
     unsigned int ratio() const;
     void setRatio(const unsigned int &r);
     QString choice() const;
+    QString version() const;
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
@@ -70,6 +74,7 @@ public:
 private:
     bool p;
     QString c;
+    QString v;
     FileHandler *fh;
     PackageHandler *ph;
     QStringList l;
@@ -90,6 +95,7 @@ private slots:
     QStringList getDetails() const;    
     QString getLanguagePackage(const QString &pkg) const;
     void writeSettings(const QString &key, const QVariant &value);
+    void getSelfVersion();
 
 signals:
     void processingFinished();
@@ -98,6 +104,7 @@ signals:
     void screenshotReceived(const QStringList &urls);
     void descriptionReceived(const QString &description);
     void choiceChanged();
+    void versionChanged();
     void surveyListReceived(const QStringList &list);
     void surveyJoinSuccess();
     void surveyJoinUpdateSuccess();

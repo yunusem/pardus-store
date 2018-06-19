@@ -352,7 +352,7 @@ Page {
                 font.pointSize: 12
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text:qsTr("Version") + " : " + "alpha"
+                text:qsTr("Version") + " : " + helper.version
             }
 
             Label {

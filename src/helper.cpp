@@ -11,7 +11,7 @@
 
 #define CONFIG_PATH "/usr/share/pardus/pardus-store/config.ini"
 
-Helper::Helper(QObject *parent) : QObject(parent), p(false), c("")
+Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("alpha")
 {    
     nh = new NetworkHandler(10000,this);
     fh = new FileHandler(this);
@@ -91,6 +91,11 @@ bool Helper::processing() const
 QString Helper::choice() const
 {
     return c;
+}
+
+QString Helper::version() const
+{
+    return v;
 }
 
 void Helper::fillTheList()
@@ -335,11 +340,23 @@ void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
     emit screenshotReceived(ad.screenshots());
 }
 
+void Helper::getSelfVersion()
+{
+    QStringList output = ph->getPolicy("pardus-store").split(QRegExp("\n|\r\n|\r"));
+    int ix = output.indexOf(QRegExp("pardus-store" + QString("*.*")));
+    QString installed = output.at(ix + 1).split(" ").last();
+    if(!installed.contains("none")) {
+        v = installed;
+        emit versionChanged();
+    }
+}
+
 void Helper::appListReceivedSlot(const QStringList &list)
 {
     l = list;
     emit fetchingAppListFinished();
     ldetail = this->getDetails();
+    this->getSelfVersion();
     this->fillTheList();
 }
 
