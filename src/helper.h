@@ -40,6 +40,10 @@ class Helper : public QObject
                READ update
                WRITE setUpdate
                NOTIFY updateChanged)
+    Q_PROPERTY(unsigned int ratio
+               READ ratio
+               WRITE setRatio
+               NOTIFY ratioChanged)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -47,6 +51,8 @@ public:
     void setAnimate(bool a);
     bool update() const;
     void setUpdate(bool u);
+    unsigned int ratio() const;
+    void setRatio(const unsigned int &r);
     QString choice() const;
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
@@ -74,6 +80,7 @@ private:
     void fillTheList();
     bool m_animate;
     bool m_update;
+    unsigned int m_ratio;
     void readSettings();
 
 private slots:
@@ -99,6 +106,7 @@ signals:
     void gatheringLocalDetailFinished();
     void animateChanged();
     void updateChanged();
+    void ratioChanged();
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);

@@ -64,6 +64,7 @@ ApplicationWindow {
     property alias busy: bottomDock.busyIndicator
     property alias animate: helper.animate
     property alias updateCache: helper.update
+    property alias ratio: helper.ratio
 
     signal updateQueue()
     signal updateCacheFinished()
@@ -79,6 +80,7 @@ ApplicationWindow {
         id: app
         property string name: ""
         property string version: ""
+        property string downloadSize: ""
         property bool installed: false
         property string category: ""
         property bool free: true
@@ -88,6 +90,7 @@ ApplicationWindow {
         onNameChanged: {
             if(name === "") {
                 version = ""
+                downloadSize: ""
                 installed = false
                 category = ""
                 free = true

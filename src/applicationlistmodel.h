@@ -11,6 +11,7 @@ class Application
 public:
     Application(const QString &name,
                 const QString &version,
+                const QString &dsize,
                 bool stat,
                 bool inque,
                 const QString &category,
@@ -18,6 +19,7 @@ public:
                 const QString &description = "");
     QString name() const;
     QString version() const;
+    QString download_size() const;
     bool status() const;
     bool in_queue() const;
     QString category() const;
@@ -28,6 +30,7 @@ public:
 private:
     QString m_name;
     QString m_version;
+    QString m_dsize;
     bool m_status;
     bool m_in_queue;
     QString m_category;
@@ -38,6 +41,7 @@ private:
 enum Roles {
     NameRole = Qt::UserRole +1,
     VersionRole,
+    DownloadSizeRole,
     InstalledRole,
     InQueueRole,
     CategoryRole,

@@ -52,7 +52,7 @@ Item {
         z: delegateMouseArea.containsMouse ? 100 : 5
         Material.elevation: delegateMouseArea.containsMouse ? 5 : 3
         anchors {
-            margins: 10
+            margins: 6
             fill: parent
         }
 
@@ -65,6 +65,7 @@ Item {
             onClicked: {
                 app.name = name
                 app.version = version
+                app.downloadSize = dsize
                 app.installed = installed
                 app.hasProcessing = inqueue
                 app.category = category
@@ -131,30 +132,7 @@ Item {
             source: appIcon
         }
 
-        Label {
-            id: appNameLabel
-            anchors {
-                verticalCenter: parent.verticalCenter
-                verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
-                right: parent.right
-                left: appIcon.right
-                leftMargin: 6
-            }
-            text: getPrettyName(name)
-            fontSizeMode: Text.HorizontalFit
-            wrapMode: Text.WordWrap
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
 
-            Behavior on anchors.verticalCenterOffset {
-                enabled: animate
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutExpo
-                }
-            }
-        }
 
         Button {
             id: processButton
@@ -261,14 +239,71 @@ Item {
         }
 
         Label {
+            id: downloadSize
+            anchors {
+                top: parent.top
+                right: parent.right
+                left: appIcon.right
+                leftMargin: 3
+                bottom: appNameLabel.top
+                bottomMargin: downloadSize.font.pointSize / 2
+            }
+
+            Material.foreground: Material.Blue
+            text: installed ? "" : (qsTr("Download size")+ "\n" + dsize)
+            fontSizeMode: Text.VerticalFit
+            font.pointSize: applicationList.cellWidth / 23
+            font.capitalization: Font.Capitalize
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            //wrapMode: Text.WordWrap
+            opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
+
+            Behavior on opacity {
+                enabled: animate
+                NumberAnimation {
+                    duration: 800
+                    easing.type: Easing.OutExpo
+                }
+            }
+
+        }
+
+        Label {
+            id: appNameLabel
+            anchors {
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: delegateMouseArea.containsMouse ? - (appNameLabel.font.pointSize * 3 / 2) : 0
+                right: parent.right
+                left: appIcon.right
+                leftMargin: 3
+            }
+            text: getPrettyName(name)
+            font.pointSize: applicationList.cellWidth / 23
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.Capitalize
+
+            Behavior on anchors.verticalCenterOffset {
+                enabled: animate
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutExpo
+                }
+            }
+        }
+
+        Label {
             id: nonFreeBadge
+            property int offSetAdjuster: applicationList.cellWidth < 250 ? 2 : 0
             anchors {
                 top: appNameLabel.bottom
-                topMargin: 5
+                topMargin: nonFreeBadge.font.pointSize / 2 - nonFreeBadge.offSetAdjuster
                 horizontalCenter: appNameLabel.horizontalCenter
             }
+            font.pointSize: applicationList.cellWidth / 23
             Material.foreground: Material.Red
-            //enabled: false
             text: nonfree ? "Non Free" : ""
             opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
 

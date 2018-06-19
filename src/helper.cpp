@@ -57,10 +57,25 @@ void Helper::setUpdate(bool u)
     }
 }
 
+unsigned int Helper::ratio() const
+{
+    return m_ratio;
+}
+
+void Helper::setRatio(const unsigned int &r)
+{
+    if(r != m_ratio && r < 6 && r > 2) {
+      m_ratio = r;
+      writeSettings("ratio", m_ratio);
+      emit ratioChanged();
+    }
+}
+
 void Helper::readSettings()
 {
     setAnimate(s->value("animate", true).toBool());
     setUpdate(s->value("update", false).toBool());
+    setRatio(s->value("ratio", 5).toUInt());
 }
 
 void Helper::writeSettings(const QString &key, const QVariant &value)
@@ -88,24 +103,27 @@ void Helper::fillTheList()
     QString line = "";
     QString name = "";
     QString version = "";
+    QString dsize = "";
     bool stat = false;
     QString category = "";
     bool non_free = false;
     foreach(line, list) {
-        name = line.split(" ")[0];
-        category = line.split(" ")[1];
-        version = line.split(" ")[2];
-        if (line.split(" ")[3] == "yes") {
+        QStringList params = line.split(" ");
+        name = params[0];
+        category = params[1];
+        version = params[2];
+        if (params[3] == "yes") {
             stat = true;
         } else {
             stat = false;
         }
-        if (line.split(" ")[4] == "yes") {
+        if (params[4] == "yes") {
             non_free = true;
         } else {
             non_free = false;
         }
-        lc.l->addData(Application(name,version,stat,false,category,non_free));
+        dsize = params[5] + " " + params[6];
+        lc.l->addData(Application(name,version,dsize,stat,false,category,non_free));
     }
     emit gatheringLocalDetailFinished();
 }
@@ -198,7 +216,34 @@ QStringList Helper::getDetails() const
         }
     }
 
-    QStringList output = ph->getPolicy(apps).split(QRegExp("\n|\r\n|\r"));    
+    QStringList output = ph->getPolicy(apps).split(QRegExp("\n|\r\n|\r"));
+    QStringList showOutput = ph->getShow(apps).split(QRegExp("\n|\r\n|\r"));
+    QStringList sizeList;
+    QString name = "";
+    bool nameChanged = false;
+    foreach (QString ln, showOutput) {
+        if(ln.contains(QRegExp("^Package"))) {
+            if(ln != name) {
+                name = ln;
+                nameChanged = true;
+            } else {
+                nameChanged = false;
+            }
+        } else if(ln.contains(QRegExp("^Size"))) {
+            if(nameChanged) {
+                double size = ln.mid(6).toDouble() / 1024.0;
+                if(size > 1024) {
+                    size = size / 1024.0;
+                    ln = QString(QString::number(size,'f',1) + " MB");
+                } else {
+                    ln = QString(QString::number(size,'f',1) + " KB");
+                }
+
+                sizeList.append(ln);
+            }
+        }
+    }
+
     QStringList list;
     int ix = 0;
     QString app;
@@ -206,6 +251,7 @@ QStringList Helper::getDetails() const
     QString version;
     QString installed;
     QString non_free;
+    unsigned int cnt = 0;
     foreach (QString line, l) {
         app = line.split(" ").at(0);
         ix = output.indexOf(QRegExp(app + QString("*.*")));
@@ -224,9 +270,11 @@ QStringList Helper::getDetails() const
         version = output.at(ix + 2).split(" ").last();
         detail += version + " ";
         detail += installed + " ";
-        detail += non_free;
+        detail += non_free + " ";
+        detail += sizeList.at(cnt);
         list.append(detail);
         detail = "";
+        cnt++;
     }
     return list;
 }

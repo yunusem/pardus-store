@@ -27,6 +27,7 @@ public slots:
     void remove(const QString &pkg);
     void onFinished(int code);    
     QString getPolicy(const QString &pkg) const;
+    QString getShow(const QString &pkg) const;
     QString getSearch(const QString &pkg) const;
     QByteArray getError();
     QByteArray getOutput();

@@ -103,6 +103,21 @@ QString PackageHandler::getPolicy(const QString &pkg) const
     return out;
 }
 
+QString PackageHandler::getShow(const QString &pkg) const
+{
+    QProcess process;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("LC_ALL","C");
+    process.setEnvironment(env.toStringList());
+    process.start("apt-cache show " + pkg);
+
+    process.waitForFinished(-1);
+
+    QString out = QString::fromLatin1(process.readAllStandardOutput());
+    process.close();
+    return out;
+}
+
 QString PackageHandler::getSearch(const QString &pkg) const
 {
     QProcess process;

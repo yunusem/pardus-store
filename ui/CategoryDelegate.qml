@@ -42,7 +42,7 @@ Item {
         anchors {
             verticalCenter: parent.verticalCenter
             left: categoryIcon.right
-            leftMargin: 8
+            leftMargin: font.pointSize
             right: parent.right
             rightMargin: 2
         }

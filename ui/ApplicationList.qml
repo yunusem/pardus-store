@@ -65,7 +65,7 @@ Page {
     GridView {
         id: applicationList
         clip: true
-        cellWidth: applicationList.width / 5
+        cellWidth: applicationList.width / ratio
         cellHeight: applicationList.cellWidth * 3 / 5
         visible: true
         interactive: count > 15 ? true : false

@@ -511,6 +511,16 @@ Pane {
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
             }
+
+            Label {
+                id: labelDownloadSize
+                visible: !app.installed
+                text:qsTr("Download size")+": " + app.downloadSize
+                font.pointSize: detailTextSize
+                verticalAlignment: Text.AlignVCenter
+                font.capitalization: Font.Capitalize
+            }
+
             Label {
                 id: labelCategory
                 text:qsTr("Category")+": " + categories[categoryIcons.indexOf(app.category)]
