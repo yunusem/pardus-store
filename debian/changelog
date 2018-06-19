@@ -1,3 +1,9 @@
+pardus-store (0.0.23~alpha) unstable; urgency=medium
+
+  * Fix variable confusion on app model cousing back btn miss behave
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 19 Jun 2018 13:19:42 +0300
+
 pardus-store (0.0.22~alpha) unstable; urgency=medium
 
   * Make self version live in Home screen
