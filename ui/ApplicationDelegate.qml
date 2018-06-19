@@ -63,19 +63,21 @@ Item {
             width: applicationDelegateItem.width
             height: applicationDelegateItem.height
             onClicked: {
+
                 app.name = name
                 app.version = version
                 app.downloadSize = dsize
                 app.installed = installed
                 app.hasProcessing = inqueue
-                app.category = category
+                app.category = section
                 app.free = !nonfree
                 app.description = description
 
                 stackView.push(applicationDetail,
                                {objectName: "detail",
                                    "current": name,
-                                   "previous": category})
+                                   "previous": categoryIcons[categories.indexOf(category)]})
+
                 screenshotUrls = []
                 helper.getAppDetails(name)
                 //isSearching = false

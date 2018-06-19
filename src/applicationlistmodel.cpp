@@ -128,7 +128,7 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     roles[DownloadSizeRole] = "dsize";
     roles[InstalledRole] = "installed";
     roles[InQueueRole] = "inqueue";
-    roles[CategoryRole] = "category";
+    roles[CategoryRole] = "section";
     roles[NonFreeRole] = "nonfree";
     roles[DescriptionRole] = "description";
     return roles;
