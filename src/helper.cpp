@@ -74,7 +74,7 @@ void Helper::setRatio(const unsigned int &r)
 void Helper::readSettings()
 {
     setAnimate(s->value("animate", true).toBool());
-    setUpdate(s->value("update", false).toBool());
+    setUpdate(s->value("update", true).toBool());
     setRatio(s->value("ratio", 5).toUInt());
 }
 
@@ -127,7 +127,11 @@ void Helper::fillTheList()
         } else {
             non_free = false;
         }
-        dsize = params[5] + " " + params[6];
+        if(params[5] != "") {
+            dsize = params[5] + " " + params[6];
+        } else {
+            dsize = "";
+        }
         lc.l->addData(Application(name,version,dsize,stat,false,category,non_free));
     }
     emit gatheringLocalDetailFinished();
@@ -213,8 +217,10 @@ void Helper::packageProcessStatus(const QString &status, const QString &pkg, int
 
 QStringList Helper::getDetails() const
 {
+    QMap<QString,QString> sizeList;
     QString apps;
     for(int i = 0; i < l.length(); i++) {
+        sizeList.insert(l[i].split(" ").at(0),"");
         apps += (l[i].split(" ").at(0));
         if (i != (l.length() - 1)) {
             apps += " ";
@@ -223,13 +229,13 @@ QStringList Helper::getDetails() const
 
     QStringList output = ph->getPolicy(apps).split(QRegExp("\n|\r\n|\r"));
     QStringList showOutput = ph->getShow(apps).split(QRegExp("\n|\r\n|\r"));
-    QStringList sizeList;
+
     QString name = "";
     bool nameChanged = false;
     foreach (QString ln, showOutput) {
         if(ln.contains(QRegExp("^Package"))) {
-            if(ln != name) {
-                name = ln;
+            if(ln.mid(9) != name) {
+                name = ln.mid(9);
                 nameChanged = true;
             } else {
                 nameChanged = false;
@@ -237,17 +243,17 @@ QStringList Helper::getDetails() const
         } else if(ln.contains(QRegExp("^Size"))) {
             if(nameChanged) {
                 double size = ln.mid(6).toDouble() / 1024.0;
+
                 if(size > 1024) {
                     size = size / 1024.0;
                     ln = QString(QString::number(size,'f',1) + " MB");
                 } else {
                     ln = QString(QString::number(size,'f',1) + " KB");
-                }
-
-                sizeList.append(ln);
+                }                
+                sizeList.insert(name,ln);
             }
         }
-    }
+    }    
 
     QStringList list;
     int ix = 0;
@@ -255,8 +261,7 @@ QStringList Helper::getDetails() const
     QString detail;
     QString version;
     QString installed;
-    QString non_free;
-    unsigned int cnt = 0;
+    QString non_free;    
     foreach (QString line, l) {
         app = line.split(" ").at(0);
         ix = output.indexOf(QRegExp(app + QString("*.*")));
@@ -276,10 +281,9 @@ QStringList Helper::getDetails() const
         detail += version + " ";
         detail += installed + " ";
         detail += non_free + " ";
-        detail += sizeList.at(cnt);
+        detail += sizeList.value(app);
         list.append(detail);
-        detail = "";
-        cnt++;
+        detail = "";        
     }
     return list;
 }
