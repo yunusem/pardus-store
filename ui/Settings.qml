@@ -11,7 +11,7 @@ Pane {
     property variant optionsModel: []
     Material.background: "#2c2c2c"
     Material.elevation: 3
-    z: 92
+    z: 200
     visible: category === qsTr("settings")
     width: (main.width * 20 / 21) - 12
     height: (main.height * 13 / 15) - 12
@@ -83,7 +83,7 @@ Pane {
             id: row2
             spacing: 12
             Label {
-                text: qsTr("update package manager cache on start")
+                text: qsTr("Change application list column count")
                 font.capitalization: Font.Capitalize
                 Material.foreground: row2Ma.containsMouse ? "#FFCB08":"#fafafa"
                 horizontalAlignment: Text.AlignHCenter
@@ -96,79 +96,6 @@ Pane {
                     onContainsMouseChanged: {
                         if(row2Ma.containsMouse) {
                             currentOption = 1
-                            exp.text = optionsModel[currentOption]
-                        }
-                    }
-                }
-            }
-            Switch {
-                enabled: true
-                anchors.verticalCenter: parent.verticalCenter
-                checked: updateCache
-                onCheckedChanged: {
-                    updateCache = checked
-                }
-            }
-
-        }
-        Row {
-            id: row3
-            spacing: 12
-            Label {
-                text: qsTr("Correct package manager sources list")
-                font.capitalization: Font.Capitalize
-                Material.foreground: row3Ma.containsMouse ? "#FFCB08":"#fafafa"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                anchors.verticalCenter: parent.verticalCenter
-                MouseArea {
-                    id: row3Ma
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onContainsMouseChanged: {
-                        if(row3Ma.containsMouse) {
-                            currentOption = 2
-                            exp.text = optionsModel[currentOption]
-                        }
-                    }
-                }
-            }
-            Button {
-                id: correctBtn
-                enabled: false
-                anchors.verticalCenter: parent.verticalCenter
-                Material.background: "#FFCB08"
-
-                Label {
-                    enabled: true
-                    anchors.centerIn: parent
-                    text: qsTr("correct")
-                    font.bold: true
-                    Material.foreground: correctBtn.enabled ? "#2c2c2c" : "#fafafa"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    font.capitalization: Font.Capitalize
-                }
-            }
-        }
-
-        Row {
-            id: row4
-            spacing: 12
-            Label {
-                text: qsTr("Change application list column count")
-                font.capitalization: Font.Capitalize
-                Material.foreground: row4Ma.containsMouse ? "#FFCB08":"#fafafa"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                anchors.verticalCenter: parent.verticalCenter
-                MouseArea {
-                    id: row4Ma
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onContainsMouseChanged: {
-                        if(row4Ma.containsMouse) {
-                            currentOption = 3
                             exp.text = optionsModel[currentOption]
                         }
                     }
@@ -193,7 +120,7 @@ Pane {
 
                 onHoveredChanged: {
                     if(hovered) {
-                        currentOption = 3
+                        currentOption = 1
                         exp.text = optionsModel[currentOption]
                     }
                 }
@@ -254,6 +181,146 @@ Pane {
             }
 
         }
+
+        Row {
+            id: row3
+            spacing: 12
+            Label {
+                text: qsTr("update package manager cache on start")
+                font.capitalization: Font.Capitalize
+                Material.foreground: row3Ma.containsMouse ? "#FFCB08":"#fafafa"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
+                MouseArea {
+                    id: row3Ma
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: {
+                        if(row3Ma.containsMouse) {
+                            currentOption = 2
+                            exp.text = optionsModel[currentOption]
+                        }
+                    }
+                }
+            }
+            Switch {
+                enabled: true
+                anchors.verticalCenter: parent.verticalCenter
+                checked: updateCache
+                onCheckedChanged: {
+                    updateCache = checked
+                }
+            }
+
+        }
+        Row {
+            id: row4
+            spacing: 12
+            Label {
+                text: qsTr("Correct package manager sources list")
+                font.capitalization: Font.Capitalize
+                Material.foreground: row4Ma.containsMouse ? "#FFCB08":"#fafafa"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
+                MouseArea {
+                    id: row4Ma
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: {
+                        if(row4Ma.containsMouse) {
+                            currentOption = 3
+                            exp.text = optionsModel[currentOption]
+                        }
+                    }
+                }
+            }
+            Button {
+                id: correctBtn
+                anchors.verticalCenter: parent.verticalCenter
+                Material.background: "#FFCB08"
+                hoverEnabled: true
+
+                Label {
+                    enabled: true
+                    anchors.centerIn: parent
+                    text: qsTr("correct")
+                    font.bold: true
+                    Material.foreground: "#2c2c2c"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.capitalization: Font.Capitalize
+                }
+                onClicked: {
+                    popupConfirmCorrect.open()
+                }
+                onHoveredChanged: {
+                    if(hovered) {
+                        currentOption = 3
+                        exp.text = optionsModel[currentOption]
+                    }
+                }
+            }
+
+        }
+
+
+    }
+
+    Popup {
+        id: popupConfirmCorrect
+        modal: animate
+        width: 300
+        closePolicy: Popup.NoAutoClose
+        x: parent.width / 2 - width / 2
+        y: parent.height / 2 - height / 2
+        Material.elevation: 2
+        Material.background: "#2c2c2c"
+        signal accepted
+        signal rejected
+
+        Column {
+            anchors.fill: parent
+            spacing: 12
+
+            Label {
+                Material.foreground: "#fafafa"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                width: parent.width
+                text: qsTr("I have carefully read the explanation on the right and agree to proceed.")
+            }
+
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 12
+
+                Button {
+                    text: qsTr("yes")
+                    Material.background: "#3c3c3c"
+                    Material.foreground: "#fafafa"
+                    onClicked: popupConfirmCorrect.accepted()
+                }
+                Button {
+                    text: qsTr("no")
+                    Material.background: "#3c3c3c"
+                    Material.foreground: "#fafafa"
+                    onClicked: popupConfirmCorrect.rejected()
+                }
+            }
+        }
+
+        onAccepted: {
+            console.log("accepted")
+            popupConfirmCorrect.close()
+        }
+
+        onRejected: {
+            console.log("rejected")
+            popupConfirmCorrect.close()
+        }
     }
 
     Rectangle {
@@ -296,7 +363,7 @@ Pane {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: parent.width
                     height: 100
-                    visible: currentOption === 3
+                    visible: currentOption === 1
 
                     Row {
                         width: parent.width
@@ -377,8 +444,9 @@ Pane {
 
     Component.onCompleted:  {
         optionsModel.push(qsTr("Controls the transitions animations. If you have low performance graphic card, disabling animation may give you more comfort."))
-        optionsModel.push(qsTr("Checks the system package manager's cache when Pardus-Store is started. Disabling this could speed up the starting process but if you do not use Pardus-Store often you should enable this option."))
-        optionsModel.push(qsTr("Coming soon."))
         optionsModel.push(qsTr("Controls the visual column count of applications list view."))
+        optionsModel.push(qsTr("Checks the system package manager's cache when Pardus-Store is started. Disabling this could speed up the starting process but if you do not use Pardus-Store often you should enable this option."))
+        optionsModel.push(qsTr("Corrects the system sources list that used by package manager. This process will revert all the changes have been done and will use Pardus Official Repository source addresses. Use with caution."))
+
     }
 }

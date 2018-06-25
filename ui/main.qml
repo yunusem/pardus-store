@@ -268,10 +268,14 @@ ApplicationWindow {
             isThereOnGoingProcess = false
             processOutputLabel.opacity = 0.0
             popupText = output
+            infoDialog.settingsButtonOn = false
             if(output.indexOf("not get lock") !== -1) {
-                popupText = qsTr("Another application is using package manager. Please wait or discard the other application and try again.")
-            } else if (output.indexOf("not open lock") !== -1) {
-                popupText = qsTr("Pardus Store should be run with root privileges")
+                popupText = qsTr("Another application is using package manager. Please wait or discard the other application and try again.")                
+            } else if (output.indexOf("not open lock") !== -1) {                
+                popupText = qsTr("Pardus Store should be run with root privileges")                
+            } else if ((output.indexOf("404  Not Found") !== -1) || (output.indexOf("is not signed") !== -1)) {
+                popupText = qsTr("Pardus Store detected some broken sources for the package manager.") + "\n\n"+qsTr("Please fix it manually or use Pardus Store's settings.")
+                infoDialog.settingsButtonOn = true
             }
 
             infoDialog.open()

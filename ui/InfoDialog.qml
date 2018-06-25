@@ -4,8 +4,10 @@ import QtQuick.Controls.Material 2.0
 
 Popup {
     id: dialog
+    property bool settingsOrdered: false
+    property bool settingsButtonOn: false
     width: parent.width / 3 - 48
-    height: popupOutputHeader.height + popupOutput.height + 36
+    //height: popupOutputHeader.height + popupOutputContainer.height + 24
     modal: animate
     closePolicy: Popup.CloseOnPressOutside
     y: parent.height / 2 - height / 2
@@ -13,58 +15,83 @@ Popup {
     Material.background: "#2c2c2c"
     Material.elevation: 2
 
-    Label {
-        id: popupOutputHeader
-        text: popupHeaderText
-        anchors {
-            top: parent.top
-            horizontalCenter: parent.horizontalCenter
-        }
-        Material.foreground: "#fafafa"
+    Column {
+        anchors.fill: parent
+        spacing: 12
+        Label {
+            id: popupOutputHeader
+            text: popupHeaderText
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+            }
+            Material.foreground: "#fafafa"
 
-        wrapMode: Text.WordWrap
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.bold: true
-    }
-
-    Item {
-        id: popupOutputContainer
-        width: parent.width
-        //clip: true
-        anchors {
-            top: popupOutputHeader.bottom
-            topMargin: 12
-            bottom: parent.bottom
-            bottomMargin: 12
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
         }
+
         Label {
             id: popupOutput
             text: popupText
             width: parent.width
-            anchors {
-                verticalCenter: parent.verticalCenter
-            }
+
             Material.foreground: "#fafafa"
             horizontalAlignment: Text.AlignHCenter
             fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
-        }
-    }
 
-    MouseArea {
-        id: doneBtn
-        anchors.fill: parent
-        onClicked: {
-            dialog.close()
+        }
+
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 12
+            Button {
+                id: setBtn
+                visible: settingsButtonOn
+                width: setBtnLabel.width + 24
+                Material.background: "#3c3c3c"
+                Material.foreground: "#fafafa"
+                Label {
+                    id: setBtnLabel
+                    text: qsTr("settings")
+                    anchors.centerIn: parent
+                    font.capitalization: Font.Capitalize
+                }
+
+                onClicked: {
+                    settings.visible = true
+                    //settings.z = 200
+                    settingsOrdered = true
+                    dialog.close()
+                }
+            }
+
+            Button {
+                id: closeBtn
+
+                Material.background: "#3c3c3c"
+                Material.foreground: "#fafafa"
+
+                Label {
+                    text: qsTr("close")
+                    anchors.centerIn: parent
+                    font.capitalization: Font.Capitalize
+                }
+
+                onClicked: {
+                    dialog.close()
+                }
+            }
         }
     }
 
     onClosed: {
         popupHeaderText = qsTr("Something went wrong!")
         popupText = ""
-        if(splashScreen.visible) {
+        if(splashScreen.visible && !settingsOrdered) {
             Qt.quit()
         }
     }

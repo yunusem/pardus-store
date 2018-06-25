@@ -26,7 +26,7 @@ PackageHandler::~PackageHandler()
 
 void PackageHandler::updateCache()
 {    
-    p->start("apt-get update");
+    p->start("apt update");
 }
 
 void PackageHandler::install(const QString &pkg)

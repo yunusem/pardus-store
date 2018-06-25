@@ -201,7 +201,7 @@ void Helper::packageProcessFinished(int code)
 {
     if(code == 0) {
         emit processingFinished();        
-    } else {        
+    } else {
         emit processingFinishedWithError(QString::fromLatin1(ph->getError()));
     }
 
