@@ -47,6 +47,10 @@ class Helper : public QObject
     Q_PROPERTY(QString version
                READ version
                NOTIFY versionChanged)
+    Q_PROPERTY(bool corrected
+               READ corrected
+               NOTIFY correctingFinished
+               NOTIFY correctingFinishedWithError)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -58,6 +62,7 @@ public:
     void setRatio(const unsigned int &r);
     QString choice() const;
     QString version() const;
+    bool corrected() const;
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
@@ -69,12 +74,14 @@ public:
                                   const QString &title,
                                   const QString &content);
     Q_INVOKABLE QString getMainUrl() const;
+    Q_INVOKABLE void correctSourcesList();
 
 
 private:
     bool p;
     QString c;
     QString v;
+    bool m_corrected;
     FileHandler *fh;
     PackageHandler *ph;
     QStringList l;
@@ -114,12 +121,15 @@ signals:
     void animateChanged();
     void updateChanged();
     void ratioChanged();
+    void correctingFinished();
+    void correctingFinishedWithError(const QString &errorString);
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);
     void appListReceivedSlot(const QStringList &list);
     void surveyListReceivedSlot(const QString &mySelection, const QStringList &sl);
     void surveyJoinResultReceived(const QString &duty, const int &result);
+    void correctingFinishedSlot();
 };
 
 #endif // HELPER_H

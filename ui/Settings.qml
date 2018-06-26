@@ -7,6 +7,7 @@ Pane {
     id: pane
     property string previous
     property string current
+    property bool corrected: helper.corrected
     property int currentOption: 0
     property variant optionsModel: []
     Material.background: "#2c2c2c"
@@ -241,11 +242,12 @@ Pane {
                 anchors.verticalCenter: parent.verticalCenter
                 Material.background: "#FFCB08"
                 hoverEnabled: true
-
+                enabled: ! corrected
+                width: correctBtnLabel.width + 24
                 Label {
-                    enabled: true
+                    id: correctBtnLabel
                     anchors.centerIn: parent
-                    text: qsTr("correct")
+                    text: corrected ? qsTr("corrected"): qsTr("correct")
                     font.bold: true
                     Material.foreground: "#2c2c2c"
                     horizontalAlignment: Text.AlignHCenter
@@ -285,6 +287,16 @@ Pane {
             spacing: 12
 
             Label {
+                text: qsTr("Informing");
+                anchors.horizontalCenter: parent.horizontalCenter
+                Material.foreground: "#fafafa"
+                wrapMode: Text.WordWrap
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.bold: true
+            }
+
+            Label {
                 Material.foreground: "#fafafa"
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -313,12 +325,11 @@ Pane {
         }
 
         onAccepted: {
-            console.log("accepted")
+            helper.correctSourcesList()
             popupConfirmCorrect.close()
         }
 
         onRejected: {
-            console.log("rejected")
             popupConfirmCorrect.close()
         }
     }

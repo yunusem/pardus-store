@@ -215,17 +215,17 @@
 <context>
     <name>InfoDialog</name>
     <message>
-        <location filename="../ui/InfoDialog.qml" line="59"/>
+        <location filename="../ui/InfoDialog.qml" line="58"/>
         <source>settings</source>
         <translation>ayarlar</translation>
     </message>
     <message>
-        <location filename="../ui/InfoDialog.qml" line="79"/>
+        <location filename="../ui/InfoDialog.qml" line="78"/>
         <source>close</source>
         <translation>kapat</translation>
     </message>
     <message>
-        <location filename="../ui/InfoDialog.qml" line="92"/>
+        <location filename="../ui/InfoDialog.qml" line="91"/>
         <source>Something went wrong!</source>
         <translation>Bir şeyler rast gitmedi!</translation>
     </message>
@@ -253,67 +253,77 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../ui/Settings.qml" line="15"/>
+        <location filename="../ui/Settings.qml" line="16"/>
         <source>settings</source>
         <translation>ayarlar</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="52"/>
+        <location filename="../ui/Settings.qml" line="53"/>
         <source>enable animations</source>
         <translation>animasyonları etkinleştir</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="189"/>
+        <location filename="../ui/Settings.qml" line="190"/>
         <source>update package manager cache on start</source>
         <translation>paket yöneticisi ön belleğini her açılışta güncelle</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="221"/>
+        <location filename="../ui/Settings.qml" line="222"/>
         <source>Correct package manager sources list</source>
         <translation>Paket yöneticisi kaynak listesini düzelt</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="248"/>
+        <location filename="../ui/Settings.qml" line="250"/>
         <source>correct</source>
         <translation>düzelt</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="86"/>
+        <location filename="../ui/Settings.qml" line="87"/>
         <source>Change application list column count</source>
         <translation>Uygulama listesi sütun sayısını değiştir</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="293"/>
+        <location filename="../ui/Settings.qml" line="250"/>
+        <source>corrected</source>
+        <translation>düzeltildi</translation>
+    </message>
+    <message>
+        <location filename="../ui/Settings.qml" line="290"/>
+        <source>Informing</source>
+        <translation>Bilgilendirme</translation>
+    </message>
+    <message>
+        <location filename="../ui/Settings.qml" line="305"/>
         <source>I have carefully read the explanation on the right and agree to proceed.</source>
         <translation>Sağdaki açıklamayı dikkatlice okudum ve devam edilmesini onaylıyorum.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="301"/>
+        <location filename="../ui/Settings.qml" line="313"/>
         <source>yes</source>
         <translation>evet</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="307"/>
+        <location filename="../ui/Settings.qml" line="319"/>
         <source>no</source>
         <translation>hayır</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="429"/>
+        <location filename="../ui/Settings.qml" line="440"/>
         <source>Currently selected</source>
         <translation>Seçilmiş olan</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="446"/>
+        <location filename="../ui/Settings.qml" line="457"/>
         <source>Controls the transitions animations. If you have low performance graphic card, disabling animation may give you more comfort.</source>
         <translation>Geçiş animasyonlarını denetler. Eğer düşük performanslı bir ekran kartınız varsa, animasyonları devre dışı bırakmak daha rahat bir kullanım sağlayabilir.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="448"/>
+        <location filename="../ui/Settings.qml" line="459"/>
         <source>Checks the system package manager&apos;s cache when Pardus-Store is started. Disabling this could speed up the starting process but if you do not use Pardus-Store often you should enable this option.</source>
         <translation>Pardus Mağaza başlatıldığında sistem paket yöneticisinin ön belleğini kontrol eder. Bunu devre dışı bırakmak başlama işlemini hızlandırabilir ama Pardus Mağazayı çok sık kullanmıyorsanız bu seçeneği etkinleştirmelisiniz.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="449"/>
+        <location filename="../ui/Settings.qml" line="460"/>
         <source>Corrects the system sources list that used by package manager. This process will revert all the changes have been done and will use Pardus Official Repository source addresses. Use with caution.</source>
         <translation>Paket yöneticisi tarafından kullanılan sistem kaynakları listesini düzeltir. Bu süreç, kaynak listesi üzerinde yapılan tüm değişiklikleri geri alacak ve Pardus Resmi paket deposu adreslerini kullanacaktır. Dikkatle kullanın.</translation>
     </message>
@@ -322,7 +332,7 @@
         <translation type="vanished">Çok yakında.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="447"/>
+        <location filename="../ui/Settings.qml" line="458"/>
         <source>Controls the visual column count of applications list view.</source>
         <translation>Uygulamalar listesi görünümünün görsel sütun sayısını kontrol eder.</translation>
     </message>
@@ -402,7 +412,7 @@
     <message>
         <location filename="../ui/main.qml" line="14"/>
         <location filename="../ui/main.qml" line="256"/>
-        <location filename="../ui/main.qml" line="619"/>
+        <location filename="../ui/main.qml" line="633"/>
         <source>Store</source>
         <translation>Mağaza</translation>
     </message>
@@ -415,13 +425,13 @@
         <location filename="../ui/main.qml" line="28"/>
         <location filename="../ui/main.qml" line="31"/>
         <location filename="../ui/main.qml" line="161"/>
-        <location filename="../ui/main.qml" line="632"/>
+        <location filename="../ui/main.qml" line="646"/>
         <source>home</source>
         <translation>ana sayfa</translation>
     </message>
     <message>
         <location filename="../ui/main.qml" line="32"/>
-        <location filename="../ui/main.qml" line="631"/>
+        <location filename="../ui/main.qml" line="645"/>
         <source>all</source>
         <translation>tümü</translation>
     </message>
@@ -483,16 +493,21 @@
     <message>
         <location filename="../ui/main.qml" line="44"/>
         <location filename="../ui/main.qml" line="187"/>
-        <location filename="../ui/main.qml" line="648"/>
+        <location filename="../ui/main.qml" line="662"/>
         <source>settings</source>
         <translation>ayarlar</translation>
+    </message>
+    <message>
+        <location filename="../ui/main.qml" line="342"/>
+        <source>Correcting of system package manager sources list is done. You can now restart Pardus Store.</source>
+        <translation>Sistem paketi yöneticisi kaynak listesi düzeltilmesi tamamlandı. Artık Pardus Mağaza&apos; yı yeniden başlatabilirsiniz.</translation>
     </message>
     <message>
         <source>Updating package manager cache.</source>
         <translation type="vanished">Paket yöneticisi ön belleği güncelleniyor.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="679"/>
+        <location filename="../ui/main.qml" line="693"/>
         <source>Fetching application list.</source>
         <translation>Uygulama listesi getiriliyor.</translation>
     </message>
@@ -536,7 +551,7 @@
     <message>
         <location filename="../ui/main.qml" line="287"/>
         <location filename="../ui/main.qml" line="293"/>
-        <location filename="../ui/main.qml" line="418"/>
+        <location filename="../ui/main.qml" line="432"/>
         <source>downloading</source>
         <translation>indiriliyor</translation>
     </message>
@@ -562,7 +577,7 @@
     </message>
     <message>
         <location filename="../ui/main.qml" line="285"/>
-        <location filename="../ui/main.qml" line="415"/>
+        <location filename="../ui/main.qml" line="429"/>
         <source>removing</source>
         <translation>kaldırılıyor</translation>
     </message>
@@ -582,12 +597,22 @@
         <translation>kuruluyor</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="618"/>
+        <location filename="../ui/main.qml" line="341"/>
+        <source>Informing</source>
+        <translation>Bilgilendirme</translation>
+    </message>
+    <message>
+        <location filename="../ui/main.qml" line="348"/>
+        <source>Show this result to the maintainer.</source>
+        <translation>Bu sonucu geliştiriciye bildirin.</translation>
+    </message>
+    <message>
+        <location filename="../ui/main.qml" line="632"/>
         <source>Warning!</source>
         <translation>Uyarı!</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="619"/>
+        <location filename="../ui/main.qml" line="633"/>
         <source>can not be closed while a process is ongoing.</source>
         <translation>bir süreç devam ederken kapatılamaz.</translation>
     </message>

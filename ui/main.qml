@@ -335,6 +335,20 @@ ApplicationWindow {
             surveyJoinUpdated()
             surveyCheck()
         }
+
+        onCorrectingFinished: {
+            settings.corrected = helper.corrected
+            popupHeaderText = qsTr("Informing");
+            popupText = qsTr("Correcting of system package manager sources list is done. You can now restart Pardus Store.")
+            infoDialog.settingsButtonOn = false
+            infoDialog.open()
+        }
+        onCorrectingFinishedWithError: {
+            settings.corrected = helper.corrected
+            popupText = qsTr("Show this result to the maintainer.") + "\n\n\"" + errorString + "\""
+            infoDialog.settingsButtonOn = false
+            infoDialog.open()
+        }
     }
 
     StackView {

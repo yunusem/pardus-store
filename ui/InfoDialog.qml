@@ -7,7 +7,6 @@ Popup {
     property bool settingsOrdered: false
     property bool settingsButtonOn: false
     width: parent.width / 3 - 48
-    //height: popupOutputHeader.height + popupOutputContainer.height + 24
     modal: animate
     closePolicy: Popup.CloseOnPressOutside
     y: parent.height / 2 - height / 2
@@ -39,7 +38,6 @@ Popup {
 
             Material.foreground: "#fafafa"
             horizontalAlignment: Text.AlignHCenter
-            fontSizeMode: Text.HorizontalFit
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
 
@@ -92,7 +90,11 @@ Popup {
         popupHeaderText = qsTr("Something went wrong!")
         popupText = ""
         if(splashScreen.visible && !settingsOrdered) {
-            Qt.quit()
+            main.close()
+        }
+
+        if(helper.corrected) {
+            main.close()
         }
     }
 }

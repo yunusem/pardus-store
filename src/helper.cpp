@@ -11,8 +11,8 @@
 
 #define CONFIG_PATH "/usr/share/pardus/pardus-store/config.ini"
 
-Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("alpha")
-{    
+Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("beta"), m_corrected(false)
+{
     nh = new NetworkHandler(10000,this);
     fh = new FileHandler(this);
     ph = new PackageHandler(this);
@@ -25,6 +25,8 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("alpha")
     connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
     connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceived(QString,int)));
+    connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));
+    connect(fh,SIGNAL(correctingSourcesFinishedWithError(QString)),this,SIGNAL(correctingFinishedWithError(QString)));
 
     readSettings();
 }
@@ -96,6 +98,11 @@ QString Helper::choice() const
 QString Helper::version() const
 {
     return v;
+}
+
+bool Helper::corrected() const
+{
+    return m_corrected;
 }
 
 void Helper::fillTheList()
@@ -195,6 +202,11 @@ void Helper::systemNotify(const QString &pkg, const QString &title, const QStrin
 QString Helper::getMainUrl() const
 {
     return nh->getMainUrl();
+}
+
+void Helper::correctSourcesList()
+{
+    fh->correctSources();
 }
 
 void Helper::packageProcessFinished(int code)
@@ -382,4 +394,10 @@ void Helper::surveyJoinResultReceived(const QString &duty, const int &result)
     } else {
         qDebug() << "Survey join result is " << result;
     }
+}
+
+void Helper::correctingFinishedSlot()
+{
+    m_corrected = true;
+    emit correctingFinished();
 }

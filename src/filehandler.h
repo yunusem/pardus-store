@@ -2,18 +2,18 @@
 #define FILEHANDLER_H
 
 #include <QObject>
-#include <QStringList>
 
 class FileHandler : public QObject
 {
     Q_OBJECT
 public:
     explicit FileHandler(QObject *parent = 0);
+    void correctSources();
 
 signals:
+    void correctingSourcesFinished();
+    void correctingSourcesFinishedWithError(const QString &err);
 
-public slots:
-    QStringList readLines();
 };
 
 #endif // FILEHANDLER_H
