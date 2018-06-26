@@ -1,3 +1,11 @@
+pardus-store (0.1.0) unstable; urgency=medium
+
+  * Bump version to 0.1.0
+  * Prepare frontend for the sources list correction
+  * Finish up backend file io operations for sources list correction
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 26 Jun 2018 16:15:32 +0300
+
 pardus-store (0.0.24~alpha) unstable; urgency=medium
 
   * Fix reaching non existing indexes cousing seg fault
