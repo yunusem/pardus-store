@@ -1,3 +1,9 @@
+pardus-store (0.1.1~beta1) unstable; urgency=medium
+
+  * Fix settings view overrides the navigation bar on z axis
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 03 Jul 2018 09:11:26 +0300
+
 pardus-store (0.1.0) unstable; urgency=medium
 
   * Bump version to 0.1.0
