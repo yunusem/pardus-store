@@ -125,7 +125,7 @@ ApplicationWindow {
 
     MouseArea {
         id: ma
-        property real cposx: 1.0desktop-base
+        property real cposx: 1.0
         property real cposy: 1.0
         z: 92
         height: splashScreen.visible ? main.height : main.height / 15
