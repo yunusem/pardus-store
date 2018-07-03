@@ -13,10 +13,12 @@
 
 Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("beta"), m_corrected(false)
 {
+    s = new QSettings(CONFIG_PATH, QSettings::IniFormat);
+    readSettings();
+
     nh = new NetworkHandler(10000,this);
     fh = new FileHandler(this);
     ph = new PackageHandler(this);
-    s = new QSettings(CONFIG_PATH, QSettings::IniFormat);
 
     connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
     connect(ph,SIGNAL(dpkgProgressStatus(QString,QString,int,QString)),this,SLOT(packageProcessStatus(QString,QString,int,QString)));
@@ -27,8 +29,6 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("beta"), m
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceived(QString,int)));
     connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));
     connect(fh,SIGNAL(correctingSourcesFinishedWithError(QString)),this,SIGNAL(correctingFinishedWithError(QString)));
-
-    readSettings();
 }
 
 bool Helper::animate() const

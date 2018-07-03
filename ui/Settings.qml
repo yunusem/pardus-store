@@ -12,7 +12,7 @@ Pane {
     property variant optionsModel: []
     Material.background: "#2c2c2c"
     Material.elevation: 3
-    z: 200
+    z: 92
     visible: category === qsTr("settings")
     width: (main.width * 20 / 21) - 12
     height: (main.height * 13 / 15) - 12

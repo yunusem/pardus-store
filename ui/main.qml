@@ -125,7 +125,7 @@ ApplicationWindow {
 
     MouseArea {
         id: ma
-        property real cposx: 1.0
+        property real cposx: 1.0desktop-base
         property real cposy: 1.0
         z: 92
         height: splashScreen.visible ? main.height : main.height / 15
@@ -268,16 +268,16 @@ ApplicationWindow {
             isThereOnGoingProcess = false
             processOutputLabel.opacity = 0.0
             popupText = output
-            infoDialog.settingsButtonOn = false
+            infoDialog.settingsButtonOn = true
             if(output.indexOf("not get lock") !== -1) {
+                infoDialog.settingsButtonOn = false
                 popupText = qsTr("Another application is using package manager. Please wait or discard the other application and try again.")                
-            } else if (output.indexOf("not open lock") !== -1) {                
+            } else if (output.indexOf("not open lock") !== -1) {
+                infoDialog.settingsButtonOn = false
                 popupText = qsTr("Pardus Store should be run with root privileges")                
             } else if ((output.indexOf("404  Not Found") !== -1) || (output.indexOf("is not signed") !== -1)) {
-                popupText = qsTr("Pardus Store detected some broken sources for the package manager.") + "\n\n"+qsTr("Please fix it manually or use Pardus Store's settings.")
-                infoDialog.settingsButtonOn = true
+                popupText = qsTr("Pardus Store detected some broken sources for the package manager.") + "\n\n"+qsTr("Please fix it manually or use Pardus Store's settings.")                
             }
-
             infoDialog.open()
         }
         onProcessingStatus: {
