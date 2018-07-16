@@ -8,6 +8,7 @@ Currently the server side of the store is on a test environment and can be updat
 
 You can join the discussion on [Pardus Forums](http://forum.pardus.org.tr/t/pardus-store-0-1-0/5542).
 
+
 ## 0.1.0 Version Notes
 
 Still work in progress. Will be packaged with Pardus 17.3 point releases.
