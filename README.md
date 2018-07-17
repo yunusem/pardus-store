@@ -1,6 +1,6 @@
 # Pardus Store
 
-Pardus Store is an application store front-end for GNU/Linux based operating systems.
+Pardus Store is an application store front-end for debian based operating systems.
 
 It is currently a work in progress. Maintenance is done by [Pardus](https://pardus.org.tr) team.
 
