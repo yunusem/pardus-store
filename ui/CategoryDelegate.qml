@@ -78,8 +78,11 @@ Item {
         width: categoryDelegateItem.width
         height: categoryDelegateItem.height
         onClicked: {
-            app.name = ""
-            category = name
+            if (stackView.depth === 3 && category === name) {
+                backBtn.clicked()
+            } else {
+                category = name
+            }
         }
         onPressed: {
             categoryDelegateItem.Material.elevation = 0

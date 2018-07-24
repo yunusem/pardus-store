@@ -5,8 +5,9 @@ import QtQuick.Controls.Material 2.0
 
 Pane {
     id: navi
-    width: navima.containsMouse ? parent.width / 7 : parent.width / 21
-    height: parent.height
+    //width: navima.containsMouse ? parent.width / 7 : parent.width / 21
+    width: parent.width * 3 / 16
+    height: parent.height    
     z : 93
     Material.background: "#2c2c2c"
     Material.elevation: 3

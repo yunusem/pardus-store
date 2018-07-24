@@ -52,7 +52,7 @@ Item {
         z: delegateMouseArea.containsMouse ? 100 : 5
         Material.elevation: delegateMouseArea.containsMouse ? 5 : 3
         anchors {
-            margins: 6
+            margins: 8
             fill: parent
         }
 

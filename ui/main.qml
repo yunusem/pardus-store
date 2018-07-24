@@ -8,11 +8,11 @@ import ps.helper 1.0
 
 ApplicationWindow {
     id: main
-    minimumWidth: 1280
-    minimumHeight: minimumWidth * 9 / 16
+    minimumWidth: 1150
+    minimumHeight: minimumWidth * 3 / 5
     visible: true
     title: "Pardus" + " " + qsTr("Store")
-    flags: Qt.FramelessWindowHint
+    //flags: Qt.FramelessWindowHint
     color: "transparent"
 
     property bool hasActiveFocus: false
@@ -22,7 +22,7 @@ ApplicationWindow {
     property variant screenshotUrls: []
     property bool isThereOnGoingProcess: false
     property bool errorOccured: false
-    property bool openAppDetail: false
+
     property variant processQueue: []
     property string lastProcess: ""
     property string category : qsTr("home")
@@ -75,7 +75,6 @@ ApplicationWindow {
     signal surveyJoinUpdated()
 
 
-
     Item {
         id: app
         property string name: ""
@@ -99,12 +98,14 @@ ApplicationWindow {
         }
     }
 
+
     Pane {
         id: mainBackground
         anchors.fill: parent
-        Material.elevation: 1
-
+        Material.background: "#4c4c4c"
+        Material.elevation: 1        
     }
+
 
     SplashScreen {
         id: splashScreen
@@ -112,43 +113,57 @@ ApplicationWindow {
 
     Pane {
         id: topDock
-        width: parent.width * 20 / 21
+        width: parent.width * 13 / 16
         height: parent.height / 15
+        x: parent.width * 3 / 16
+        y: ma.containsMouse ? 0 : - (height + 6)
         z: 89
-        anchors {
-            top: parent.top
-            right: parent.right
-        }
 
+
+        //color: "transparent"
         Material.elevation: 3
+
+        Behavior on y {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 200
+            }
+        }
     }
 
     MouseArea {
         id: ma
         property real cposx: 1.0
         property real cposy: 1.0
+        hoverEnabled: true
+        property bool presure: false
         z: 92
         height: splashScreen.visible ? main.height : main.height / 15
-        width: splashScreen.visible ? main.width : topDock.width
+        width: splashScreen.visible ? main.width : topDock.width + 12
         anchors {
             top: main.top
-            right: main.right
+            right: parent.right
         }
 
         onPressed: {
             cposx = mouse.x
             cposy = mouse.y
             cursorShape = Qt.SizeAllCursor
+            presure = true
         }
 
         onPositionChanged: {
-            var delta = Qt.point(mouse.x - cposx, mouse.y - cposy);
-            main.x += delta.x;
-            main.y += delta.y;
-            cursorShape = Qt.SizeAllCursor
+            if(presure) {
+                var delta = Qt.point(mouse.x - cposx, mouse.y - cposy);
+                main.x += delta.x;
+                main.y += delta.y;
+                cursorShape = Qt.SizeAllCursor
+            }
         }
 
         onReleased: {
+            presure = false
             cursorShape = Qt.ArrowCursor
         }
     }
@@ -271,12 +286,12 @@ ApplicationWindow {
             infoDialog.settingsButtonOn = true
             if(output.indexOf("not get lock") !== -1) {
                 infoDialog.settingsButtonOn = false
-                popupText = qsTr("Another application is using package manager. Please wait or discard the other application and try again.")                
+                popupText = qsTr("Another application is using package manager. Please wait or discard the other application and try again.")
             } else if (output.indexOf("not open lock") !== -1) {
                 infoDialog.settingsButtonOn = false
-                popupText = qsTr("Pardus Store should be run with root privileges")                
+                popupText = qsTr("Pardus Store should be run with root privileges")
             } else if ((output.indexOf("404  Not Found") !== -1) || (output.indexOf("is not signed") !== -1)) {
-                popupText = qsTr("Pardus Store detected some broken sources for the package manager.") + "\n\n"+qsTr("Please fix it manually or use Pardus Store's settings.")                
+                popupText = qsTr("Pardus Store detected some broken sources for the package manager.") + "\n\n"+qsTr("Please fix it manually or use Pardus Store's settings.")
             }
             infoDialog.open()
         }
@@ -354,10 +369,11 @@ ApplicationWindow {
     StackView {
         id: stackView
         clip: true
-        width: main.width * 20 / 21
-        height: main.height * 13 / 15
+        width: main.width * 13 / 16
+        height: main.height //* 14 / 15
         anchors {
             verticalCenter: parent.verticalCenter
+            //bottom: parent.bottom
             right: parent.right
         }
 
@@ -442,9 +458,11 @@ ApplicationWindow {
         id: minimizeBtn
         width: 32
         height: 32
+        opacity: ma.containsMouse ? 1.0 : 0.0
         z: 100
         Material.background: "#2c2c2c"
         Material.elevation: 1
+
         Label {
             anchors {
                 horizontalCenter: parent.horizontalCenter
@@ -459,11 +477,13 @@ ApplicationWindow {
             font.bold: true
             font.pointSize: 18
         }
+
         anchors {
             top: parent.top
             right: maximizeBtn.left
             rightMargin: 2
         }
+
         MouseArea {
             id: minimizeBtnMa
             width: 32
@@ -481,12 +501,21 @@ ApplicationWindow {
                 main.showMinimized()
             }
         }
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
     }
 
     Pane {
         id: maximizeBtn
         width: 32
         height: 32
+        opacity: ma.containsMouse ? 1.0 : 0.0
         z: 100
         Material.background: "#2c2c2c"
         Material.elevation: 1
@@ -503,11 +532,13 @@ ApplicationWindow {
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 20
         }
+
         anchors {
             top: parent.top
             right: exitBtn.left
             rightMargin: 2
         }
+
         MouseArea {
             id: maximizeBtnMa
             width: 32
@@ -529,15 +560,25 @@ ApplicationWindow {
                 }
             }
         }
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
     }
 
     Pane {
         id: exitBtn
         width: 32
         height: 32
+        opacity: ma.containsMouse ? 1.0 : 0.0
         z: 100
         Material.background: Material.Red
         Material.elevation: 1
+
         Label {
             smooth: true
             anchors.centerIn: parent
@@ -548,10 +589,12 @@ ApplicationWindow {
             font.bold: true
             font.pointSize: 13
         }
+
         anchors {
             top: parent.top
             right: parent.right
         }
+
         MouseArea {
             id: exitBtnMa
             width: 32
@@ -567,6 +610,14 @@ ApplicationWindow {
             }
             onClicked: {
                 main.close()
+            }
+        }
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
             }
         }
     }
@@ -658,16 +709,16 @@ ApplicationWindow {
                     } else {
                         if(c !== "home") {
 
-                                if(name !== "list") {
-                                     if(previousCategory === qsTr("settings")) {
-                                        stackView.pop(null)
-                                     }
-                                     stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousCategory})
-
-                                } else {
-                                    stackView.currentItem.current = c
-                                    stackView.currentItem.previous = previousCategory
+                            if(name !== "list") {
+                                if(previousCategory === qsTr("settings")) {
+                                    stackView.pop(null)
                                 }
+                                stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousCategory})
+
+                            } else {
+                                stackView.currentItem.current = c
+                                stackView.currentItem.previous = previousCategory
+                            }
 
                         } else {
                             if(stackView.currentItem.previous && name === "detail") {
@@ -677,7 +728,7 @@ ApplicationWindow {
                     }
                 }
             }
-        }        
+        }
         previousCategory = category
     }
 

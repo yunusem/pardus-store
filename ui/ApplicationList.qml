@@ -65,10 +65,12 @@ Page {
     GridView {
         id: applicationList
         clip: true
-        cellWidth: applicationList.width / ratio
-        cellHeight: applicationList.cellWidth * 3 / 5
+        cellWidth: width / ratio
+        cellHeight: height / ratio
+
         visible: true
         interactive: count > 15 ? true : false
+        snapMode: GridView.SnapToRow
         anchors {
             fill: parent
         }

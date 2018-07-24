@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
 
-Pane {
+Rectangle {
     width: parent.width * 20 / 21
     height: parent.height / 15
     z: 89
@@ -12,7 +12,8 @@ Pane {
         right: parent.right
     }
 
-    Material.elevation: 3
+    //Material.elevation: 3
+    color: "transparent"
     property alias pageIndicator: indicator
     property alias processOutput: processOutputLabel
     property alias packageName: processOutputLabel.packageName
