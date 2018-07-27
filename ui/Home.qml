@@ -5,9 +5,9 @@ import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
 
 
-Page {
+Rectangle {
     id:root
-
+    color: "transparent"
     property string current: "home"
     property int animationSpeed: 200
     property variant surveyList : []
@@ -52,7 +52,7 @@ Page {
 
     Pane {
         id: banner
-        width: bannerImage.width > 0 ? bannerImage.width : 1200
+        width: parent.width - 24 //bannerImage.width > 0 ? bannerImage.width : 1200
         height: bannerImage.height > 0 ? bannerImage.height : 250
         Material.elevation: 5
         anchors {
@@ -63,6 +63,7 @@ Page {
 
         Image {
             id: bannerImage
+            width: parent.width
             source: "http://193.140.98.197:5000/screenshots/banner.png"
             anchors {
                 centerIn: parent

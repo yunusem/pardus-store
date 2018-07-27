@@ -63,7 +63,7 @@ Page {
     }
 
     GridView {
-        id: applicationList
+        id: gridView
         clip: true
         cellWidth: width / ratio
         cellHeight: height / ratio
@@ -71,9 +71,9 @@ Page {
         visible: true
         interactive: count > 15 ? true : false
         snapMode: GridView.SnapToRow
-        anchors {
-            fill: parent
-        }
+        width: parent.width - 36
+        height: parent.height
+        anchors.centerIn: parent
         model: applicationModel
         add: Transition {
             enabled: animate

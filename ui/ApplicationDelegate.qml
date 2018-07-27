@@ -5,8 +5,8 @@ import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
 
 Item {
-    width: applicationList.cellWidth
-    height: applicationList.cellHeight
+    width: gridView.cellWidth
+    height: gridView.cellHeight
 
     property bool applicationStatus: installed
     property bool applicationInQueue: inqueue
@@ -254,7 +254,7 @@ Item {
             Material.foreground: Material.Blue
             text: installed ? "" : (qsTr("Download size")+ "\n" + dsize)
             fontSizeMode: Text.VerticalFit
-            font.pointSize: applicationList.cellWidth / 23
+            font.pointSize: gridView.cellWidth / 23
             font.capitalization: Font.Capitalize
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -281,7 +281,7 @@ Item {
                 leftMargin: 3
             }
             text: getPrettyName(name)
-            font.pointSize: applicationList.cellWidth / 23
+            font.pointSize: gridView.cellWidth / 23
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -298,13 +298,13 @@ Item {
 
         Label {
             id: nonFreeBadge
-            property int offSetAdjuster: applicationList.cellWidth < 250 ? 2 : 0
+            property int offSetAdjuster: gridView.cellWidth < 250 ? 2 : 0
             anchors {
                 top: appNameLabel.bottom
                 topMargin: nonFreeBadge.font.pointSize / 2 - nonFreeBadge.offSetAdjuster
                 horizontalCenter: appNameLabel.horizontalCenter
             }
-            font.pointSize: applicationList.cellWidth / 23
+            font.pointSize: gridView.cellWidth / 23
             Material.foreground: Material.Red
             text: nonfree ? "Non Free" : ""
             opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0

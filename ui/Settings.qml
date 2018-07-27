@@ -10,12 +10,12 @@ Pane {
     property bool corrected: helper.corrected
     property int currentOption: 0
     property variant optionsModel: []
-    Material.background: "#2c2c2c"
+    Material.background: "#4C4C4C"
     Material.elevation: 3
     z: 92
-    visible: category === qsTr("settings")
-    width: (main.width * 20 / 21) - 12
-    height: (main.height * 13 / 15) - 12
+    visible: selectedMenu === qsTr("settings")
+    width: stackView.width
+    height: stackView.height
     anchors.centerIn: stackView
     opacity: 0.0
 

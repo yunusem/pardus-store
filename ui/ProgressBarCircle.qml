@@ -24,7 +24,7 @@ Item {
 
     Behavior on value {
         enabled: animate
-NumberAnimation {
+        NumberAnimation {
             easing.type: Easing.OutExpo
             duration: 200
         }
@@ -55,14 +55,14 @@ NumberAnimation {
             var end = parent.arcEnd
             ctx.reset()
             ctx.beginPath();
-            ctx.arc(x, y, (width / 2) - parent.thickness / 2, 0, Math.PI * 1.5, false)
-            ctx.lineWidth = parent.thickness
-            ctx.strokeStyle = parent.colorBackground
+            ctx.arc(x, y, (width / 2) - thickness / 2, 0, Math.PI * 1.5, false)
+            ctx.lineWidth = thickness
+            ctx.strokeStyle = colorBackground
             ctx.stroke()
             ctx.beginPath();
-            ctx.arc(x, y, (width / 2) - parent.thickness / 2, start, end, false)
-            ctx.lineWidth = parent.thickness
-            ctx.strokeStyle = parent.colorCircle
+            ctx.arc(x, y, (width / 2) - thickness / 2, start, end, false)
+            ctx.lineWidth = thickness
+            ctx.strokeStyle = colorCircle
             ctx.stroke()
 
         }

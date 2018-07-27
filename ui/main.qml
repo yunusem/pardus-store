@@ -28,7 +28,14 @@ ApplicationWindow {
     property string category : qsTr("home")
     property string previousCategory: ""
     property bool isSearching: false
-    property variant categories: [qsTr("home"),
+
+    property bool expanded: false
+    property string selectedCategory: qsTr("all")
+    property string selectedMenu: qsTr("home")
+
+    property variant menus: [qsTr("home"), qsTr("categories"), qsTr("settings")]
+    property variant menuIcons: ["home", "categories", "settings"]
+    property variant categories: [
         qsTr("all"),
         qsTr("internet"),
         qsTr("office"),
@@ -40,9 +47,8 @@ ApplicationWindow {
         qsTr("system"),
         qsTr("video"),
         qsTr("chat"),
-        qsTr("others"),
-        qsTr("settings")]
-    property variant categoryIcons: ["home",
+        qsTr("others")]
+    property variant categoryIcons: [
         "all",
         "internet",
         "office",
@@ -54,8 +60,7 @@ ApplicationWindow {
         "system",
         "video",
         "chat",
-        "others",
-        "settings"]
+        "others"]
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
 
     property alias processingPackageName: bottomDock.packageName
@@ -102,7 +107,7 @@ ApplicationWindow {
     Pane {
         id: mainBackground
         anchors.fill: parent
-        Material.background: "#4c4c4c"
+        Material.background: "#4C4C4C"
         Material.elevation: 1        
     }
 
@@ -110,7 +115,7 @@ ApplicationWindow {
     SplashScreen {
         id: splashScreen
     }
-
+/*
     Pane {
         id: topDock
         width: parent.width * 13 / 16
@@ -131,94 +136,94 @@ ApplicationWindow {
             }
         }
     }
+*/
+//    MouseArea {
+//        id: ma
+//        property real cposx: 1.0
+//        property real cposy: 1.0
+//        hoverEnabled: true
+//        property bool presure: false
+//        z: 92
+//        height: splashScreen.visible ? main.height : main.height / 15
+//        width: splashScreen.visible ? main.width : topDock.width + 12
+//        anchors {
+//            top: main.top
+//            right: parent.right
+//        }
 
-    MouseArea {
-        id: ma
-        property real cposx: 1.0
-        property real cposy: 1.0
-        hoverEnabled: true
-        property bool presure: false
-        z: 92
-        height: splashScreen.visible ? main.height : main.height / 15
-        width: splashScreen.visible ? main.width : topDock.width + 12
-        anchors {
-            top: main.top
-            right: parent.right
-        }
+//        onPressed: {
+//            cposx = mouse.x
+//            cposy = mouse.y
+//            cursorShape = Qt.SizeAllCursor
+//            presure = true
+//        }
 
-        onPressed: {
-            cposx = mouse.x
-            cposy = mouse.y
-            cursorShape = Qt.SizeAllCursor
-            presure = true
-        }
+//        onPositionChanged: {
+//            if(presure) {
+//                var delta = Qt.point(mouse.x - cposx, mouse.y - cposy);
+//                main.x += delta.x;
+//                main.y += delta.y;
+//                cursorShape = Qt.SizeAllCursor
+//            }
+//        }
 
-        onPositionChanged: {
-            if(presure) {
-                var delta = Qt.point(mouse.x - cposx, mouse.y - cposy);
-                main.x += delta.x;
-                main.y += delta.y;
-                cursorShape = Qt.SizeAllCursor
-            }
-        }
+//        onReleased: {
+//            presure = false
+//            cursorShape = Qt.ArrowCursor
+//        }
+//    }
 
-        onReleased: {
-            presure = false
-            cursorShape = Qt.ArrowCursor
-        }
-    }
+//    Button {
+//        id: backBtn
+//        z: 92
+//        height: topDock.height
+//        width: height * 2 / 3
+//        opacity: category !== qsTr("home") ? 1.0 : 0.0
+//        Material.background: "#fafafa"
+//        anchors {
+//            top: parent.top
+//            left: navigationBar.right
+//            leftMargin: 6
 
-    Button {
-        id: backBtn
-        z: 92
-        height: topDock.height
-        width: height * 2 / 3
-        opacity: category !== qsTr("home") ? 1.0 : 0.0
-        Material.background: "#fafafa"
-        anchors {
-            top: parent.top
-            left: navigationBar.right
-            leftMargin: 6
+//        }
 
-        }
+//        Image {
+//            id: backIcon
+//            width: parent.height - 24
+//            anchors.centerIn: parent
+//            fillMode: Image.PreserveAspectFit
+//            mipmap: true
+//            smooth: true
+//            source: "qrc:/images/back.svg"
+//        }
 
-        Image {
-            id: backIcon
-            width: parent.height - 24
-            anchors.centerIn: parent
-            fillMode: Image.PreserveAspectFit
-            mipmap: true
-            smooth: true
-            source: "qrc:/images/back.svg"
-        }
+//        onClicked: {
+//            var c = ""
+//            var name = stackView.currentItem.objectName
 
-        onClicked: {
-            var c = ""
-            var name = stackView.currentItem.objectName
+//            if(name === "detail") {
+//                c = stackView.currentItem.previous
+//                stackView.pop()
+//            } else if (category === qsTr("settings")) {
+//                c = stackView.currentItem.current
+//            } else {
+//                c = "home"
+//            }
+//            category = categories[(categoryIcons.indexOf(c))]
+//            if(isSearching) {
+//                isSearching = false
+//            }
+//        }
 
-            if(name === "detail") {
-                c = stackView.currentItem.previous
-                stackView.pop()
-            } else if (category === qsTr("settings")) {
-                c = stackView.currentItem.current
-            } else {
-                c = "home"
-            }
-            category = categories[(categoryIcons.indexOf(c))]
-            if(isSearching) {
-                isSearching = false
-            }
-        }
+//        Behavior on opacity {
+//            enabled: animate
+//            NumberAnimation {
+//                easing.type: Easing.OutExpo
+//                duration: 300
+//            }
+//        }
 
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 300
-            }
-        }
-
-    }
+//    }
 
     QueueDialog {
         id: queueDialog
@@ -235,11 +240,11 @@ ApplicationWindow {
     BottomDock {
         id: bottomDock
     }
-
+/*
     SearchBar {
         id: searchBar
     }
-
+*/
     FontLoader {
         id: pardusFont
         name: "Pardus"
@@ -454,173 +459,173 @@ ApplicationWindow {
         }
     }
 
-    Pane {
-        id: minimizeBtn
-        width: 32
-        height: 32
-        opacity: ma.containsMouse ? 1.0 : 0.0
-        z: 100
-        Material.background: "#2c2c2c"
-        Material.elevation: 1
+//    Pane {
+//        id: minimizeBtn
+//        width: 32
+//        height: 32
+//        opacity: ma.containsMouse ? 1.0 : 0.0
+//        z: 100
+//        Material.background: "#2c2c2c"
+//        Material.elevation: 1
 
-        Label {
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: parent.verticalCenter
-                bottomMargin: -6
-            }
+//        Label {
+//            anchors {
+//                horizontalCenter: parent.horizontalCenter
+//                bottom: parent.verticalCenter
+//                bottomMargin: -6
+//            }
 
-            Material.foreground: "white"
-            text: "_"
-            verticalAlignment: Text.AlignTop
-            horizontalAlignment: Text.AlignHCenter
-            font.bold: true
-            font.pointSize: 18
-        }
+//            Material.foreground: "white"
+//            text: "_"
+//            verticalAlignment: Text.AlignTop
+//            horizontalAlignment: Text.AlignHCenter
+//            font.bold: true
+//            font.pointSize: 18
+//        }
 
-        anchors {
-            top: parent.top
-            right: maximizeBtn.left
-            rightMargin: 2
-        }
+//        anchors {
+//            top: parent.top
+//            right: maximizeBtn.left
+//            rightMargin: 2
+//        }
 
-        MouseArea {
-            id: minimizeBtnMa
-            width: 32
-            height: 32
-            anchors.centerIn: parent
-            onPressed: {
-                if (minimizeBtnMa.containsMouse) {
-                    minimizeBtn.Material.elevation = 0
-                }
-            }
-            onReleased: {
-                minimizeBtn.Material.elevation = 2
-            }
-            onClicked: {
-                main.showMinimized()
-            }
-        }
+//        MouseArea {
+//            id: minimizeBtnMa
+//            width: 32
+//            height: 32
+//            anchors.centerIn: parent
+//            onPressed: {
+//                if (minimizeBtnMa.containsMouse) {
+//                    minimizeBtn.Material.elevation = 0
+//                }
+//            }
+//            onReleased: {
+//                minimizeBtn.Material.elevation = 2
+//            }
+//            onClicked: {
+//                main.showMinimized()
+//            }
+//        }
 
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 300
-            }
-        }
-    }
+//        Behavior on opacity {
+//            enabled: animate
+//            NumberAnimation {
+//                easing.type: Easing.OutExpo
+//                duration: 300
+//            }
+//        }
+//    }
 
-    Pane {
-        id: maximizeBtn
-        width: 32
-        height: 32
-        opacity: ma.containsMouse ? 1.0 : 0.0
-        z: 100
-        Material.background: "#2c2c2c"
-        Material.elevation: 1
-        Label {
-            smooth: true
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: parent.verticalCenter
-                bottomMargin: -13
-            }
-            Material.foreground: "white"
-            text: "▫"
-            verticalAlignment: Text.AlignTop
-            horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 20
-        }
+//    Pane {
+//        id: maximizeBtn
+//        width: 32
+//        height: 32
+//        opacity: ma.containsMouse ? 1.0 : 0.0
+//        z: 100
+//        Material.background: "#2c2c2c"
+//        Material.elevation: 1
+//        Label {
+//            smooth: true
+//            anchors {
+//                horizontalCenter: parent.horizontalCenter
+//                bottom: parent.verticalCenter
+//                bottomMargin: -13
+//            }
+//            Material.foreground: "white"
+//            text: "▫"
+//            verticalAlignment: Text.AlignTop
+//            horizontalAlignment: Text.AlignHCenter
+//            font.pointSize: 20
+//        }
 
-        anchors {
-            top: parent.top
-            right: exitBtn.left
-            rightMargin: 2
-        }
+//        anchors {
+//            top: parent.top
+//            right: exitBtn.left
+//            rightMargin: 2
+//        }
 
-        MouseArea {
-            id: maximizeBtnMa
-            width: 32
-            height: 32
-            anchors.centerIn: parent
-            onPressed: {
-                if (maximizeBtnMa.containsMouse) {
-                    maximizeBtn.Material.elevation = 0
-                }
-            }
-            onReleased: {
-                maximizeBtn.Material.elevation = 2
-            }
-            onClicked: {
-                if(main.visibility == ApplicationWindow.Maximized) {
-                    main.showNormal()
-                } else {
-                    main.showMaximized()
-                }
-            }
-        }
+//        MouseArea {
+//            id: maximizeBtnMa
+//            width: 32
+//            height: 32
+//            anchors.centerIn: parent
+//            onPressed: {
+//                if (maximizeBtnMa.containsMouse) {
+//                    maximizeBtn.Material.elevation = 0
+//                }
+//            }
+//            onReleased: {
+//                maximizeBtn.Material.elevation = 2
+//            }
+//            onClicked: {
+//                if(main.visibility == ApplicationWindow.Maximized) {
+//                    main.showNormal()
+//                } else {
+//                    main.showMaximized()
+//                }
+//            }
+//        }
 
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 300
-            }
-        }
-    }
+//        Behavior on opacity {
+//            enabled: animate
+//            NumberAnimation {
+//                easing.type: Easing.OutExpo
+//                duration: 300
+//            }
+//        }
+//    }
 
-    Pane {
-        id: exitBtn
-        width: 32
-        height: 32
-        opacity: ma.containsMouse ? 1.0 : 0.0
-        z: 100
-        Material.background: Material.Red
-        Material.elevation: 1
+//    Pane {
+//        id: exitBtn
+//        width: 32
+//        height: 32
+//        opacity: ma.containsMouse ? 1.0 : 0.0
+//        z: 100
+//        Material.background: Material.Red
+//        Material.elevation: 1
 
-        Label {
-            smooth: true
-            anchors.centerIn: parent
-            Material.foreground: "white"
-            text: "X"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.bold: true
-            font.pointSize: 13
-        }
+//        Label {
+//            smooth: true
+//            anchors.centerIn: parent
+//            Material.foreground: "white"
+//            text: "X"
+//            verticalAlignment: Text.AlignVCenter
+//            horizontalAlignment: Text.AlignHCenter
+//            font.bold: true
+//            font.pointSize: 13
+//        }
 
-        anchors {
-            top: parent.top
-            right: parent.right
-        }
+//        anchors {
+//            top: parent.top
+//            right: parent.right
+//        }
 
-        MouseArea {
-            id: exitBtnMa
-            width: 32
-            height: 32
-            anchors.centerIn: parent
-            onPressed: {
-                if (exitBtnMa.containsMouse) {
-                    exitBtn.Material.elevation = 0
-                }
-            }
-            onReleased: {
-                exitBtn.Material.elevation = 2
-            }
-            onClicked: {
-                main.close()
-            }
-        }
+//        MouseArea {
+//            id: exitBtnMa
+//            width: 32
+//            height: 32
+//            anchors.centerIn: parent
+//            onPressed: {
+//                if (exitBtnMa.containsMouse) {
+//                    exitBtn.Material.elevation = 0
+//                }
+//            }
+//            onReleased: {
+//                exitBtn.Material.elevation = 2
+//            }
+//            onClicked: {
+//                main.close()
+//            }
+//        }
 
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 300
-            }
-        }
-    }
+//        Behavior on opacity {
+//            enabled: animate
+//            NumberAnimation {
+//                easing.type: Easing.OutExpo
+//                duration: 300
+//            }
+//        }
+//    }
 
     Timer {
         id: focusController
@@ -689,6 +694,47 @@ ApplicationWindow {
         }
     }
 
+    onSelectedMenuChanged: {
+        var m = menuIcons[menus.indexOf(selectedMenu)]
+        navigationBar.currentIndex = categories.indexOf(category)
+
+        if(m !== "settings") {
+            if(m === "home") {
+                stackView.pop(null)
+            } else {
+                if(stackView.currentItem.objectName !== m) {
+                    var name = stackView.currentItem.objectName
+                    if(name === "detail" && settings.opacity != 1.0 ) {
+                        stackView.pop()
+                    } else {
+                        if(m !== "home") {
+                            if(name !== "list") {
+                                if(previousCategory === qsTr("settings")) {
+                                    stackView.pop(null)
+                                }
+                                stackView.push(applicationList,{objectName: "list", "current": m, "previous": previousCategory})
+
+                            } else {
+                                stackView.currentItem.current = m
+                                stackView.currentItem.previous = previousCategory
+                            }
+
+                        } else {
+                            if(stackView.currentItem.previous && name === "detail") {
+                                stackView.pop()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        previousCategory = category
+    }
+
+    onSelectedCategoryChanged: {
+        applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
+    }
+
     onCategoryChanged: {
 
         var c = categoryIcons[categories.indexOf(category)]
@@ -731,6 +777,8 @@ ApplicationWindow {
         }
         previousCategory = category
     }
+
+
 
     onUpdateQueue: {
         queueDialog.repeater.model = processQueue
