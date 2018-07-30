@@ -6,5 +6,3 @@ RUN apt-get update && apt-get install \
 
 COPY . /pardus-store
 
-
-
