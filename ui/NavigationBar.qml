@@ -11,10 +11,17 @@ Rectangle {
     color: "#2C2C2C"
 
     property alias currentIndex : menuListView.currentIndex
-    property int categoryItemHeight: 32
+    property int categoryItemHeight: 30
     property int categoryItemListSpacing: 3
     property int menuItemHeight: 40
     property int menuItemListSpacing: 6
+
+
+    property alias processOutput: processOutputLabel
+    property alias packageName: processOutputLabel.packageName
+    property alias condition: processOutputLabel.condition
+    property alias busyIndicator: busy
+    property alias processingIcon: appIconProcess
 
     ListModel {
         id: menuListModel
@@ -33,19 +40,7 @@ Rectangle {
         }
     }
 
-    ListView {
-        id: menuListView
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: parent.top
-            topMargin: 12
-            bottom: parent.bottom
-        }
 
-        delegate: menuItemDelegate
-        model: menuListModel
-        spacing: 6
-    }
 
     Component {
         id: categoryItemDelegate
@@ -222,5 +217,133 @@ Rectangle {
         }
     }
 
+    ListView {
+        id: menuListView
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: 12
+            bottom: parent.bottom
+        }
+
+        delegate: menuItemDelegate
+        model: menuListModel
+        spacing: 6
+    }
+
+
+    ProgressBarCircle {
+        id: busy
+        width: 90
+        height: width
+        colorBackground: "#FAFAFA"
+        thickness: 9
+        visible: true
+        opacity: isThereOnGoingProcess ? 1.0 : 0.0
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+        }
+        onOpacityChanged: {
+            if(opacity === 0.0) {
+                value = 0
+            }
+        }
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.InExpo
+                duration: 600
+            }
+        }
+    }
+
+    Image {
+        id: appIconProcess
+        enabled: false
+        anchors.centerIn: busy
+        opacity: isThereOnGoingProcess ? 1.0 : 0.0
+        width: 44
+        height: width
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.InExpo
+                duration: 600
+            }
+        }
+    }
+
+    Label {
+        id: processOutputLabel
+        property string packageName: ""
+        property string condition: ""
+        anchors {
+            verticalCenter: busy.verticalCenter
+            left: busy.right
+            right: parent.right
+        }
+        opacity: 1.0
+        fontSizeMode: Text.VerticalFit
+        wrapMode: Text.WordWrap
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        font.capitalization: Font.Capitalize
+        enabled: false
+        text: ""
+
+        onTextChanged: {
+            opacity = 1.0
+        }
+
+        onConditionChanged: {
+            if(condition === qsTr("installed") || condition === qsTr("removed")) {
+                processOutputLabel.text = packageName + " " + qsTr("is") + " " + condition
+            } else {
+                processOutputLabel.text = condition + " " + packageName
+            }
+        }
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 200
+            }
+        }
+
+        Timer {
+            id: outputTimer
+            interval: 8000
+            repeat: true
+            running: true
+            onTriggered: {
+                if(!isThereOnGoingProcess) {
+                    processOutputLabel.opacity = 0.0
+                    //processingPackageName = ""
+                    //processingCondition = ""
+                }
+            }
+        }
+
+    }
+
+    MouseArea {
+        id: outputMa
+        height: busy.height
+        width: parent.width
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+        }
+
+        hoverEnabled: true
+        onContainsMouseChanged: {
+            if(containsMouse && isThereOnGoingProcess) {
+                queueDialog.open()
+            }
+        }
+    }
 
 }

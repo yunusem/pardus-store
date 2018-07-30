@@ -10,7 +10,7 @@ Item {
     property real value : 0
     property real maximumValue : 100
     property real arcEnd: value * (Math.PI * 1.5) / maximumValue
-    property real thickness: 5
+    property real thickness: 10
     property string colorCircle: "#2c2c2c"
     property string colorBackground: "#aaaaaa"
 
@@ -55,12 +55,12 @@ Item {
             var end = parent.arcEnd
             ctx.reset()
             ctx.beginPath();
-            ctx.arc(x, y, (width / 2) - thickness / 2, 0, Math.PI * 1.5, false)
+            ctx.arc(x, y, (width / 2 - 5) - thickness / 2, 0, Math.PI * 1.5, false)
             ctx.lineWidth = thickness
             ctx.strokeStyle = colorBackground
             ctx.stroke()
             ctx.beginPath();
-            ctx.arc(x, y, (width / 2) - thickness / 2, start, end, false)
+            ctx.arc(x, y, (width / 2 - 5) - thickness / 2, start, end, false)
             ctx.lineWidth = thickness
             ctx.strokeStyle = colorCircle
             ctx.stroke()

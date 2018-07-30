@@ -5,12 +5,12 @@ import QtQuick.Controls.Material 2.0
 Popup {
     id: queue
     closePolicy: Popup.CloseOnPressOutside
-    Material.background: "#2c2c2c"
+    Material.background: "#4C4C4C"
     Material.elevation: 3
-    width: busy.width + processOutputLabel.width
+    width: navigationBarWidth - 12
     z: 99
-    x: parent.width / 21 + 24
-    y: parent.height - height - bottomDock.height - 13
+    x: 6
+    y: parent.height - height - 100
 
 
     property alias repeater: repeaterQueue

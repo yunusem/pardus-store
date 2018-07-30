@@ -64,10 +64,10 @@ ApplicationWindow {
         "others"]
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
 
-    property alias processingPackageName: bottomDock.packageName
-    property alias processingCondition: bottomDock.condition
-    property alias processOutputLabel: bottomDock.processOutput
-    property alias busy: bottomDock.busyIndicator
+    property alias processingPackageName: navigationBar.packageName
+    property alias processingCondition: navigationBar.condition
+    property alias processOutputLabel: navigationBar.processOutput
+    property alias busy: navigationBar.busyIndicator
     property alias animate: helper.animate
     property alias updateCache: helper.update
     property alias ratio: helper.ratio
@@ -455,7 +455,7 @@ ApplicationWindow {
                     helper.install(appName)
                 }
 
-                bottomDock.processingIcon.source = "image://application/" + getCorrectName(appName)
+                navigationBar.processingIcon.source = "image://application/" + getCorrectName(appName)
             }
         }
     }
