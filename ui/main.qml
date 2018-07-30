@@ -25,10 +25,11 @@ ApplicationWindow {
 
     property variant processQueue: []
     property string lastProcess: ""
-    property string category : qsTr("home")
-    property string previousCategory: ""
+
+    property string previousMenu: ""
     property bool isSearching: false
 
+    property real navigationBarWidth: 215.625
     property bool expanded: false
     property string selectedCategory: qsTr("all")
     property string selectedMenu: qsTr("home")
@@ -374,7 +375,7 @@ ApplicationWindow {
     StackView {
         id: stackView
         clip: true
-        width: main.width * 13 / 16
+        width: main.width - navigationBarWidth
         height: main.height //* 14 / 15
         anchors {
             verticalCenter: parent.verticalCenter
@@ -696,89 +697,28 @@ ApplicationWindow {
 
     onSelectedMenuChanged: {
         var m = menuIcons[menus.indexOf(selectedMenu)]
-        navigationBar.currentIndex = categories.indexOf(category)
+        navigationBar.currentIndex = categories.indexOf(selectedCategory)
 
-        if(m !== "settings") {
-            if(m === "home") {
-                stackView.pop(null)
+        if(m === "home") {
+            stackView.pop(null)
+        } else if (m === "categories") {
+            if(stackView.currentItem.previous && stackView.currentItem.objectName === "detail") {
+
+            } else if(previousMenu === "settings") {
+
             } else {
-                if(stackView.currentItem.objectName !== m) {
-                    var name = stackView.currentItem.objectName
-                    if(name === "detail" && settings.opacity != 1.0 ) {
-                        stackView.pop()
-                    } else {
-                        if(m !== "home") {
-                            if(name !== "list") {
-                                if(previousCategory === qsTr("settings")) {
-                                    stackView.pop(null)
-                                }
-                                stackView.push(applicationList,{objectName: "list", "current": m, "previous": previousCategory})
-
-                            } else {
-                                stackView.currentItem.current = m
-                                stackView.currentItem.previous = previousCategory
-                            }
-
-                        } else {
-                            if(stackView.currentItem.previous && name === "detail") {
-                                stackView.pop()
-                            }
-                        }
-                    }
-                }
+                stackView.push(applicationList,{objectName: "list", "current": selectedCategory, "previous": previousMenu})
             }
         }
-        previousCategory = category
+        previousMenu = m
     }
 
     onSelectedCategoryChanged: {
         applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
-    }
-
-    onCategoryChanged: {
-
-        var c = categoryIcons[categories.indexOf(category)]
-        navigationBar.currentIndex = categories.indexOf(category)
-        applicationModel.setFilterString(category === qsTr("all") ? "" : categoryIcons[categories.indexOf(category)], false)
-        if(category === qsTr("home")) {
-            isSearching = false
+        if(stackView.currentItem.previous && stackView.currentItem.objectName === "detail") {
+            stackView.pop()
         }
-
-        if(c !== "settings") {
-            if(c === "home") {
-                stackView.pop(null)
-            } else {
-                if(stackView.currentItem.objectName !== c) {
-                    var name = stackView.currentItem.objectName
-                    if(name === "detail" && settings.opacity != 1.0 ) {
-                        stackView.pop()
-                    } else {
-                        if(c !== "home") {
-
-                            if(name !== "list") {
-                                if(previousCategory === qsTr("settings")) {
-                                    stackView.pop(null)
-                                }
-                                stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousCategory})
-
-                            } else {
-                                stackView.currentItem.current = c
-                                stackView.currentItem.previous = previousCategory
-                            }
-
-                        } else {
-                            if(stackView.currentItem.previous && name === "detail") {
-                                stackView.pop()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        previousCategory = category
     }
-
-
 
     onUpdateQueue: {
         queueDialog.repeater.model = processQueue

@@ -5,12 +5,16 @@ import QtGraphicalEffects 1.0
 
 Rectangle {
     id: navi
-    width: parent.width * 3 / 16
+    width: navigationBarWidth
     height: parent.height
     z : 93
     color: "#2C2C2C"
 
     property alias currentIndex : menuListView.currentIndex
+    property int categoryItemHeight: 32
+    property int categoryItemListSpacing: 3
+    property int menuItemHeight: 40
+    property int menuItemListSpacing: 6
 
     ListModel {
         id: menuListModel
@@ -47,22 +51,17 @@ Rectangle {
         id: categoryItemDelegate
         Item {
             id:categoryItemWrapper
-            anchors.right: parent.right
-            width: 180
-            height: 28
-            state: ((name === "categories") && expanded) ? "expanded" : ""
-            Rectangle {
-                id: bgRectCategory
-                color: "#4C4C4C"
-                opacity: 0.5
-                anchors.fill: parent
-            }
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width * 3 / 4
+            height: categoryItemHeight
+
+
 
             Image {
                 id: categoryItemIcon
                 source: "qrc:/images/" + icon + ".svg"
                 fillMode: Image.PreserveAspectFit
-                height: 24
+                height: categoryItemHeight - anchors.topMargin * 2
                 width: height
                 anchors {
                     top: parent.top
@@ -95,22 +94,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     selectedCategory = name
-                }
-                onPressed: {
-                    if(categoryMa.containsMouse) {
-                        bgRectCategory.opacity = 0.9
-                    }
-                }
-
-                onPressAndHold: {
-                    if(categoryMa.containsMouse) {
-                        bgRectCategory.opacity = 0.9
-                    }
-                }
-
-                onReleased: {
-                    bgRectCategory.opacity = 0.5
-                }
+                }                
             }
         }
     }
@@ -121,8 +105,8 @@ Rectangle {
             id: menuItemWrapper
             anchors.horizontalCenter: parent.horizontalCenter
             width: navi.width
-            height: 40
-            state: ((name === "categories") && expanded) ? "expanded" : ""
+            height: menuItemHeight
+            state: ((name === qsTr("categories")) && expanded) ? "expanded" : ""
 
 
             Item {
@@ -188,9 +172,9 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         selectedMenu = name
-                        if(selectedMenu === "categories") {
+                        if(selectedMenu === qsTr("categories")) {
                             expanded = !expanded
-                            selectedCategory = "all"
+                            selectedCategory = qsTr("all")
                         } else {
                             expanded = false
                         }
@@ -210,8 +194,7 @@ Rectangle {
                 }
 
                 ListView {
-                    id: categoryListView
-                    visible: expanded && name === "categories"
+                    id: categoryListView                    
                     clip: true
                     interactive: false
                     spacing: 3
@@ -224,7 +207,7 @@ Rectangle {
             states: [
                 State {
                     name: "expanded"
-                    PropertyChanges { target: menuItemWrapper; height: menuListView.height - 156}
+                    PropertyChanges { target: menuItemWrapper; height: menuItemHeight + categories.length * (categoryItemHeight + categoryItemListSpacing) + categoryItemListSpacing}
                 }
             ]
 

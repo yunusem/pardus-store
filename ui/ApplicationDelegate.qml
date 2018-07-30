@@ -76,8 +76,7 @@ Item {
                 stackView.push(applicationDetail,
                                {objectName: "detail",
                                    "current": name,
-                                   "previous": categoryIcons[categories.indexOf(category)]})
-
+                                   "previous": categoryIcons[categories.indexOf(selectedCategory)]})
                 screenshotUrls = []
                 helper.getAppDetails(name)
                 //isSearching = false
@@ -139,14 +138,15 @@ Item {
         Button {
             id: processButton
             width: delegateMouseArea.containsMouse ? parent.width : parent.width / 3
-            height: delegateMouseArea.containsMouse ? processButtonLabel.height + 24 : 24
+            height: delegateMouseArea.containsMouse ? 36 : 24
             opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
             anchors {
                 bottom: parent.bottom
                 horizontalCenter: parent.horizontalCenter
             }
             Material.background: installed ? Material.Red : Material.Green
-            Material.foreground: "#fafafa"
+            Material.foreground: Material.theme === Material.Dark ? "#3c3c3c" :"#fafafa"
+            text: installed ? qsTr("remove") : qsTr("install")
 
             enabled: !inqueue
 
@@ -217,12 +217,6 @@ Item {
                     duration: 200
                     easing.type: Easing.OutExpo
                 }
-            }
-
-            Label {
-                id: processButtonLabel
-                anchors.centerIn: parent
-                text: installed ? qsTr("remove") : qsTr("install")
             }
         }
 

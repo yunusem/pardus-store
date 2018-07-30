@@ -107,8 +107,8 @@ Pane {
                 id: slider
                 Material.foreground: "#fafafa"
                 anchors.top: parent.top
-                from: 3
-                to: 5
+                from: 2
+                to: 4
                 value: ratio
                 stepSize: 1
                 snapMode: Slider.SnapAlways
@@ -169,7 +169,7 @@ Pane {
                             Label {
                                 height: contentHeight
                                 Material.foreground: "#FAFAFA"
-                                text: index + 3
+                                text: index + slider.from
                                 //anchors.horizontalCenter: parent.horizontalCenter
                                 font.pointSize: 7
                                 verticalAlignment: Text.AlignVCenter
@@ -388,11 +388,11 @@ Pane {
 
                                 Label {
                                     height: contentHeight
-                                    Material.foreground: (ratio - 3) === index ? "#FFCB08" : "#FAFAFA"
-                                    text: index + 3
+                                    Material.foreground: (ratio - slider.from) === index ? "#FFCB08" : "#FAFAFA"
+                                    text: index + slider.from
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     font.pointSize: 15
-                                    font.bold: (ratio - 3) === index ? true : false
+                                    font.bold: (ratio - slider.from) === index ? true : false
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignHCenter
                                 }
@@ -400,11 +400,12 @@ Pane {
                                 Rectangle {
                                     property int count : index
                                     width: (explanationVisual.width - 48) / 3
-                                    height: width * 9 / 16
-                                    border.color: (ratio - 3) === index ? "#FFCB08" : "#FAFAFA"
+                                    height: width * 3 / 4
+                                    border.color: (ratio - slider.from) === index ? "#FFCB08" : "#FAFAFA"
                                     border.width: 1
                                     radius: 2
                                     color: "transparent"
+
 
                                     GridView {
                                         id: gv
@@ -413,8 +414,8 @@ Pane {
                                         interactive: false
                                         anchors.fill: parent
                                         anchors.margins: 2
-                                        cellWidth: width / (parent.count + 3)
-                                        cellHeight: cellWidth * 3 / 5
+                                        cellWidth: width / (parent.count + slider.from)
+                                        cellHeight: cellWidth * 3 / 4
                                         model: 10
                                         delegate: Item {
                                             visible: true
@@ -435,7 +436,7 @@ Pane {
                                     height: contentHeight
                                     width: parent.width
                                     wrapMode: Text.WordWrap
-                                    visible: (ratio - 3) === index
+                                    visible: (ratio - slider.from) === index
                                     Material.foreground: "#FFCB08"
                                     text: qsTr("Currently selected")
                                     anchors.horizontalCenter: parent.horizontalCenter

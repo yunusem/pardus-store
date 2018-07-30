@@ -66,7 +66,7 @@ unsigned int Helper::ratio() const
 
 void Helper::setRatio(const unsigned int &r)
 {
-    if(r != m_ratio && r < 6 && r > 2) {
+    if(r != m_ratio && r < 5 && r > 1) {
       m_ratio = r;
       writeSettings("ratio", m_ratio);
       emit ratioChanged();
@@ -77,7 +77,7 @@ void Helper::readSettings()
 {
     setAnimate(s->value("animate", true).toBool());
     setUpdate(s->value("update", true).toBool());
-    setRatio(s->value("ratio", 5).toUInt());
+    setRatio(s->value("ratio", 4).toUInt());
 }
 
 void Helper::writeSettings(const QString &key, const QVariant &value)

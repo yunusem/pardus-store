@@ -52,8 +52,8 @@ Rectangle {
 
     Pane {
         id: banner
-        width: parent.width - 24 //bannerImage.width > 0 ? bannerImage.width : 1200
-        height: bannerImage.height > 0 ? bannerImage.height : 250
+        width: parent.width - 48
+        height: bannerImage.height > 0 ? bannerImage.height : 250        
         Material.elevation: 5
         anchors {
             top: parent.top
@@ -63,8 +63,8 @@ Rectangle {
 
         Image {
             id: bannerImage
-            width: parent.width
-            source: "http://193.140.98.197:5000/screenshots/banner.png"
+            width: parent.width + 24
+            source: helper.getMainUrl() + "/screenshots/banner.png"
             anchors {
                 centerIn: parent
             }
@@ -78,11 +78,14 @@ Rectangle {
                         anchors.centerIn: parent
                         width: bannerImage.width
                         height: bannerImage.height
-                        radius: 3
+                        radius: 2
                     }
+
                 }
             }
         }
+
+
 
         BusyIndicator {
             id: bannerBusy
@@ -189,7 +192,7 @@ Rectangle {
                             anchors.centerIn: parent
                             width: editorsImage.width
                             height: editorsImage.height
-                            radius: 3
+                            radius: 2
                         }
                     }
                 }
@@ -275,7 +278,7 @@ Rectangle {
                             anchors.centerIn: parent
                             width: mostDownloadedImage.width
                             height: mostDownloadedImage.height
-                            radius: 3
+                            radius: 2
                         }
                     }
                 }

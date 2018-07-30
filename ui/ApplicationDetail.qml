@@ -4,7 +4,7 @@ import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
 
-Pane {
+Rectangle {
     id:appDetail
     property string previous
     property string current    
@@ -12,7 +12,7 @@ Pane {
     property int length: urls.length
     property int ind: 0
     property int i: indicator.index
-    property int detailTextSize : 14
+    property int detailTextSize : 12
 
     property string applicationName: app.name
     property bool applicationInTheQueue: app.hasProcessing
@@ -24,6 +24,8 @@ Pane {
             updateQueue()
         }
     }
+
+    color: "transparent"
 
     Component.onCompleted: {
         confirmationRemoval.connect(startRemoving)
@@ -39,11 +41,11 @@ Pane {
 
     Pane {
         id:appBanner
-        width: parent.width
-        height: parent.height / 5
-
+        width: parent.width - 60
+        height: parent.height / 4
         Material.elevation: 3
         visible: true
+        y: 12
 
         Image {
             id:appBannerIcon
@@ -84,12 +86,12 @@ Pane {
 
     Popup {
         id:popupImagePreview
-        width: parent.width
-        height: parent.height
+        width: main.width - 12
+        height: parent.height - 12
         modal: animate
         focus: true
-        y: -6
-        x: -6
+        x: - navigationBarWidth + 6
+        y: 6
         closePolicy: Popup.CloseOnPressOutside
         onClosed: {
             if (indicator.index == -1) {
@@ -269,9 +271,9 @@ Pane {
         id: imagesPane
         Material.elevation : 3
         width: parent.width * 19 / 32
-        height: (width * 9 / 16) + indicator.height + titleText.height + 12
-        y: parent.height - (imagesPane.height + 12)
-
+        height: parent.height - appBanner.height - 36
+        y: appBanner.y + appBanner.height + 12
+        x: 30
         Label {
             id: titleText
             height: 36
@@ -288,21 +290,7 @@ Pane {
             font.bold: true
         }
 
-        Label {
-            id: indicator
-            property int index: 0
-            visible: urls[0] !== "none"
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: parent.bottom
-            }
 
-            text: (index == -1 ? lm.count.toString() : index + 1) + "/" + lm.count
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-            enabled: false
-        }
 
         ListView {
             id: screenshotsLV
@@ -313,10 +301,7 @@ Pane {
             orientation: Qt.Horizontal
             width: parent.width
             height: width * 9 / 16
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: indicator.top
-            }
+            anchors.centerIn: parent
 
             model: lm
             snapMode: ListView.SnapOneItem
@@ -385,23 +370,41 @@ Pane {
 
             }
         }
+
+        Label {
+            id: indicator
+            property int index: 0
+            visible: urls[0] !== "none"
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: screenshotsLV.bottom
+                topMargin: 6
+            }
+
+            text: (index == -1 ? lm.count.toString() : index + 1) + "/" + lm.count
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.Capitalize
+            enabled: false
+        }
     }
 
     Pane {
         id:textPane        
         height: imagesPane.height
         width: appBanner.width - imagesPane.width - 12
-        x: imagesPane.width + 12
-        y: parent.height - (textPane.height + 3)
+        x: imagesPane.width + imagesPane.x + 12
+        y: appBanner.height + 24
         clip: true
-
-        Pane {
+        Material.background: "transparent"
+        Rectangle {
             id: disclamer
             visible: !app.free
             clip: true
-            width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width - 42
-            height: disclamerMa.containsMouse ? processButton.height * 2  + 12: processButton.height - 12
-            Material.background: "#FFCB08"
+            width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width
+            height: disclamerMa.containsMouse ? processButton.height * 3 - 12 : processButton.height - 12
+            color: "#FFCB08"
+            radius: 2
             z: 200
             anchors {
                 bottom: parent.bottom
@@ -435,15 +438,17 @@ Pane {
 
             Label {
                 id: disclamerText
-                width: parent.width
-                enabled: disclamerMa.containsMouse
+                width: parent.width - 12
+                //enabled: disclamerMa.containsMouse
+                Material.foreground: "#2C2C2C"
                 text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
                                                                          qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
                 //horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                fontSizeMode: Text.VerticalFit
+                fontSizeMode: Text.HorizontalFit
                 wrapMode: Text.WordWrap
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.centerIn: parent
+                anchors.margins: 6
                 onTextChanged: {
 
                 }
@@ -454,10 +459,11 @@ Pane {
         Button {
             id: processButton
             width: parent.width / 3
-            height: width / 3
+            //height: width / 2
             enabled: !applicationInTheQueue
             Material.background: app.installed ? Material.Red : Material.Green
-            Material.foreground: "#fafafa"
+            Material.foreground: "#2C2C2C"
+            text: app.installed ? qsTr("remove") : qsTr("install")
             property bool error: main.errorOccured
             anchors {
                 bottom: parent.bottom
@@ -487,12 +493,6 @@ Pane {
                     updateQueue()
                 }
             }
-
-            Label {
-                id: processButtonLabel
-                anchors.centerIn: parent
-                text: app.installed ? qsTr("remove") : qsTr("install")
-            }
         }
 
         Column {
@@ -503,7 +503,7 @@ Pane {
                 bottomMargin: 12
             }
 
-            spacing: 9
+            spacing: 6
             Label {
                 id: labelVersion
                 text:qsTr("version")+": " + app.version
@@ -573,7 +573,7 @@ Pane {
             easing.type: Easing.OutExpo
             duration: animate ? 1000 : 0
             from: appBanner.width
-            to : 0
+            to : 30
         }
 
 
@@ -583,7 +583,7 @@ Pane {
             easing.type: Easing.OutExpo
             duration: animate ? 1000 : 0
             from: appDetail.height
-            to : appDetail.height - (imagesPane.height + 27)
+            to : appBanner.y + appBanner.height + 12
         }
     }
 
