@@ -1,3 +1,28 @@
+pardus-store (0.2.0~beta1) unstable; urgency=medium
+
+  [ Yunusemre Şentürk ]
+  * Bump the version to 0.2.0~beta1
+
+  [ Gökhan Gurbetoğlu ]
+  * Added description and version information
+  * Added description and version information
+  * Create LICENSE - GNU GPL v3.0
+
+  [ Yunusemre Şentürk ]
+  * Update README.md
+  * Prepare ui for static and accordion navigation bar
+  * Start implementing new menu style
+  * Fix navigation for new static navigation bar
+  * Move package installation status bar to navigation area
+
+  [ Hikmet Baş ]
+  * Redesign and integrate search bar
+
+  [ Yunusemre Şentürk ]
+  * Adjust cards and reinsert back button only for detail, update translation
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 31 Jul 2018 15:41:38 +0800
+
 pardus-store (0.1.1~beta2) unstable; urgency=medium
 
   * Fix syntax error
