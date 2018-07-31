@@ -14,7 +14,7 @@ Rectangle {
     property int categoryItemHeight: 30
     property int categoryItemListSpacing: 3
     property int menuItemHeight: 40
-    property int menuItemListSpacing: 6
+    property int menuItemListSpacing: 4
 
 
     property alias processOutput: processOutputLabel
@@ -49,8 +49,6 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 3 / 4
             height: categoryItemHeight
-
-
 
             Image {
                 id: categoryItemIcon
@@ -88,7 +86,12 @@ Rectangle {
                 id: categoryMa
                 anchors.fill: parent
                 onClicked: {
+                    if(name === selectedCategory && applicationModel.getFilterString() !== "") {
+                        applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
+                    }
+
                     selectedCategory = name
+                    forceActiveFocus()
                 }                
             }
         }
@@ -128,7 +131,7 @@ Rectangle {
                         top: parent.top
                         topMargin: 2
                         left: parent.left
-                        leftMargin: width / 2
+                        leftMargin: width * 3 / 4
                     }
                     mipmap: true
                     smooth: true
@@ -166,6 +169,7 @@ Rectangle {
                     id: menuMa
                     anchors.fill: parent
                     onClicked: {
+                        forceActiveFocus()
                         selectedMenu = name
                         if(selectedMenu === qsTr("categories")) {
                             expanded = !expanded
@@ -192,7 +196,7 @@ Rectangle {
                     id: categoryListView                    
                     clip: true
                     interactive: false
-                    spacing: 3
+                    spacing: categoryItemListSpacing
                     anchors.fill: parent
                     model: categoryListModel
                     delegate: categoryItemDelegate
@@ -222,7 +226,7 @@ Rectangle {
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
-            topMargin: 12
+            topMargin: 30
         }
     }
 
@@ -237,16 +241,16 @@ Rectangle {
 
         delegate: menuItemDelegate
         model: menuListModel
-        spacing: 6
+        spacing: menuItemListSpacing
     }
 
 
     ProgressBarCircle {
         id: busy
-        width: 90
+        width: 85
         height: width
-        colorBackground: "#FAFAFA"
-        thickness: 9
+        colorBackground: "#EEEEEE"
+        thickness: 10
         visible: true
         opacity: isThereOnGoingProcess ? 1.0 : 0.0
         anchors {

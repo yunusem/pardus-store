@@ -52,8 +52,8 @@ Rectangle {
 
     Pane {
         id: banner
-        width: parent.width - 48
-        height: bannerImage.height > 0 ? bannerImage.height : 250        
+        width: 838.375
+        height: 318.375
         Material.elevation: 5
         anchors {
             top: parent.top
@@ -64,6 +64,7 @@ Rectangle {
         Image {
             id: bannerImage
             width: parent.width + 24
+            height: parent.height + 24
             source: helper.getMainUrl() + "/screenshots/banner.png"
             anchors {
                 centerIn: parent
@@ -152,7 +153,10 @@ Rectangle {
                 height: parent.height + 24
 
                 onClicked: {
-                    category = qsTr("all")
+                    selectedCategory = qsTr("all")
+                    expanded = true
+                    selectedMenu = qsTr("categories")
+                    forceActiveFocus()
                     applicationModel.setFilterString(editorsAppName, true)
 
                 }
@@ -239,7 +243,10 @@ Rectangle {
                 height: parent.height + 24
 
                 onClicked: {
-                    category = qsTr("all")
+                    selectedCategory = qsTr("all")
+                    expanded = true
+                    selectedMenu = qsTr("categories")
+                    forceActiveFocus()
                     applicationModel.setFilterString(mostAppName, true)
                 }
                 onPressed: {
@@ -300,86 +307,86 @@ Rectangle {
         }
     }
 
-    Item {
-        id: middle
-        anchors {
-            left: suggester.right
-            right: survey.left
-            top: survey.top
-            bottom: survey.bottom
-            margins: 6
-        }
+//    Item {
+//        id: middle
+//        anchors {
+//            left: suggester.right
+//            right: survey.left
+//            top: survey.top
+//            bottom: survey.bottom
+//            margins: 6
+//        }
 
-        Image {
-            id: middleBackgroundIcon
-            source: "../images/icon.svg"
-            width: parent.width * 2 / 3
-            height: width
-            fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
-            opacity: 0.04
-        }
+//        Image {
+//            id: middleBackgroundIcon
+//            source: "../images/icon.svg"
+//            width: parent.width * 2 / 3
+//            height: width
+//            fillMode: Image.PreserveAspectFit
+//            anchors.centerIn: parent
+//            opacity: 0.04
+//        }
 
-        Column {
-            anchors.centerIn: parent
-            spacing: 24
+//        Column {
+//            anchors.centerIn: parent
+//            spacing: 24
 
-            Label {
-                text: qsTr("Source Code") + " : " +"<a href='https://github.com/yunusem/pardus-store'>GitHub</a>"
-                font.pointSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                onLinkActivated: Qt.openUrlExternally(link)
+//            Label {
+//                text: qsTr("Source Code") + " : " +"<a href='https://github.com/yunusem/pardus-store'>GitHub</a>"
+//                font.pointSize: 12
+//                horizontalAlignment: Text.AlignHCenter
+//                verticalAlignment: Text.AlignVCenter
+//                onLinkActivated: Qt.openUrlExternally(link)
 
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                }
-            }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+//                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+//                }
+//            }
 
-            Label {
-                font.pointSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text: qsTr("License") + " : " +"<a href='http://ozgurlisanslar.org.tr/gpl/gpl-v3/'>GPL v3</a>"
-                onLinkActivated: Qt.openUrlExternally(link)
+//            Label {
+//                font.pointSize: 12
+//                horizontalAlignment: Text.AlignHCenter
+//                verticalAlignment: Text.AlignVCenter
+//                text: qsTr("License") + " : " +"<a href='http://ozgurlisanslar.org.tr/gpl/gpl-v3/'>GPL v3</a>"
+//                onLinkActivated: Qt.openUrlExternally(link)
 
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                }
-            }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+//                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+//                }
+//            }
 
-            Label {
-                font.pointSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text:qsTr("Version") + " : " + helper.version
-            }
+//            Label {
+//                font.pointSize: 12
+//                horizontalAlignment: Text.AlignHCenter
+//                verticalAlignment: Text.AlignVCenter
+//                text:qsTr("Version") + " : " + helper.version
+//            }
 
-            Label {
-                font.pointSize: 12
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text: qsTr("Leave comments on") + " : " +"<a href='http://forum.pardus.org.tr/t/pardus-magaza-pardus-store'>Pardus Forum</a>"
-                onLinkActivated: Qt.openUrlExternally(link)
+//            Label {
+//                font.pointSize: 12
+//                horizontalAlignment: Text.AlignHCenter
+//                verticalAlignment: Text.AlignVCenter
+//                text: qsTr("Leave comments on") + " : " +"<a href='http://forum.pardus.org.tr/t/pardus-magaza-pardus-store'>Pardus Forum</a>"
+//                onLinkActivated: Qt.openUrlExternally(link)
 
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                }
-            }           
-        }
-    }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+//                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+//                }
+//            }
+//        }
+//    }
 
 
     Pane {
         id: survey
         height: parent.height - banner.height - 36
-        width: banner.width / 3
+        width: 512.375
         Material.elevation: 3
         anchors {
             top: banner.bottom

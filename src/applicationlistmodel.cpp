@@ -153,6 +153,11 @@ void FilterProxyModel::setFilterString(QString s, bool isSearch)
 
 }
 
+QString FilterProxyModel::getFilterString() const
+{
+    return this->filterRegExp().pattern();
+}
+
 ApplicationListModel *ListCover::l = 0;
 
 void ListCover::setInstance(ApplicationListModel *p)

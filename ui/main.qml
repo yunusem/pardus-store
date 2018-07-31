@@ -226,6 +226,10 @@ ApplicationWindow {
 
 //    }
 
+//    BottomDock {
+//        id: bottomDock
+//    }
+
     QueueDialog {
         id: queueDialog
     }
@@ -236,10 +240,6 @@ ApplicationWindow {
 
     InfoDialog {
         id: infoDialog
-    }
-
-    BottomDock {
-        id: bottomDock
     }
 /*
     SearchBar {
@@ -304,15 +304,15 @@ ApplicationWindow {
         onProcessingStatus: {
             if(condition === "pmstatus") {
                 if(processingCondition === qsTr("removing")) {
-                    busy.colorCircle = Material.color(Material.Red)
+                    busy.colorCircle = "#EF9A9A" //Material.color(Material.Red)
                 } else if(processingCondition === qsTr("downloading")) {
-                    busy.colorCircle = Material.color(Material.Green)
+                    busy.colorCircle = "#A5D6A7" //Material.color(Material.Green)
                     processingCondition = qsTr("installing")
                 }
 
             } else if (condition === "dlstatus") {
                 processingCondition = qsTr("downloading")
-                busy.colorCircle = Material.color(Material.Blue)
+                busy.colorCircle = "#90CAF9" //Material.color(Material.Blue)
             }
 
             busy.value = percent
@@ -453,7 +453,7 @@ ApplicationWindow {
                 } else {
                     processingCondition = qsTr("downloading")
                     helper.install(appName)
-                }
+                }                
 
                 navigationBar.processingIcon.source = "image://application/" + getCorrectName(appName)
             }
@@ -697,17 +697,17 @@ ApplicationWindow {
 
     onSelectedMenuChanged: {
         var m = menuIcons[menus.indexOf(selectedMenu)]
-        navigationBar.currentIndex = categories.indexOf(selectedCategory)
+        var c = categoryIcons[categories.indexOf(selectedCategory)]
+        var current = stackView.currentItem.current
+        var name = stackView.currentItem.objectName
 
         if(m === "home") {
             stackView.pop(null)
         } else if (m === "categories") {
-            if(stackView.currentItem.previous && stackView.currentItem.objectName === "detail") {
-
-            } else if(previousMenu === "settings") {
-
-            } else {
-                stackView.push(applicationList,{objectName: "list", "current": selectedCategory, "previous": previousMenu})
+            if(name === "detail") {
+                stackView.pop()
+            } else if((previousMenu !== "settings") || (previousMenu === "settings" && current === "home")) {
+                stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousMenu})
             }
         }
         previousMenu = m
@@ -716,6 +716,7 @@ ApplicationWindow {
     onSelectedCategoryChanged: {
         applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
         if(stackView.currentItem.previous && stackView.currentItem.objectName === "detail") {
+
             stackView.pop()
         }
     }

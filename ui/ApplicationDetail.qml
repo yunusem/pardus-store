@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.0
 Rectangle {
     id:appDetail
     property string previous
-    property string current    
+    property string current
     property variant urls: screenshotUrls
     property int length: urls.length
     property int ind: 0
@@ -32,6 +32,46 @@ Rectangle {
         detailAnimation.start()
     }
 
+    Button {
+        id: backBtn
+        z: 92
+        height: 54
+        width: height * 2 / 3
+        opacity: selectedCategory !== qsTr("home") ? 1.0 : 0.0
+        Material.background: "#2C2C2C"
+        anchors {
+            top: parent.top
+            topMargin: 6
+            left: parent.left
+            leftMargin: 8
+
+        }
+
+        Image {
+            id: backIcon
+            width: parent.height - 24
+            anchors.centerIn: parent
+            fillMode: Image.PreserveAspectFit
+            mipmap: true
+            smooth: true
+            source: "qrc:/images/back.svg"
+        }
+
+        onClicked: {
+            stackView.pop()
+
+        }
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
+
+    }
+
     ListModel {
         id: lm
         ListElement {
@@ -41,7 +81,7 @@ Rectangle {
 
     Pane {
         id:appBanner
-        width: parent.width - 60
+        width: parent.width - 108
         height: parent.height / 4
         Material.elevation: 3
         visible: true
@@ -90,7 +130,7 @@ Rectangle {
         height: parent.height - 12
         modal: animate
         focus: true
-        x: - navigationBarWidth + 6
+        x: - navigationBarWidth + 54
         y: 6
         closePolicy: Popup.CloseOnPressOutside
         onClosed: {
@@ -273,7 +313,7 @@ Rectangle {
         width: parent.width * 19 / 32
         height: parent.height - appBanner.height - 36
         y: appBanner.y + appBanner.height + 12
-        x: 30
+        x: 54
         Label {
             id: titleText
             height: 36
@@ -390,7 +430,7 @@ Rectangle {
     }
 
     Pane {
-        id:textPane        
+        id:textPane
         height: imagesPane.height
         width: appBanner.width - imagesPane.width - 12
         x: imagesPane.width + imagesPane.x + 12
@@ -402,7 +442,7 @@ Rectangle {
             visible: !app.free
             clip: true
             width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width
-            height: disclamerMa.containsMouse ? processButton.height * 3 - 12 : processButton.height - 12
+            height: disclamerMa.containsMouse ? processButton.height * 3 + 18 : processButton.height - 12
             color: "#FFCB08"
             radius: 2
             z: 200
@@ -449,9 +489,6 @@ Rectangle {
                 wrapMode: Text.WordWrap
                 anchors.centerIn: parent
                 anchors.margins: 6
-                onTextChanged: {
-
-                }
 
             }
         }
@@ -500,10 +537,10 @@ Rectangle {
             anchors {
                 top: parent.top
                 bottom: processButton.top
-                bottomMargin: 12
+                bottomMargin: 21
             }
 
-            spacing: 6
+            spacing: 3
             Label {
                 id: labelVersion
                 text:qsTr("version")+": " + app.version
@@ -573,7 +610,7 @@ Rectangle {
             easing.type: Easing.OutExpo
             duration: animate ? 1000 : 0
             from: appBanner.width
-            to : 30
+            to : 54
         }
 
 

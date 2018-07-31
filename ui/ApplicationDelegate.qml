@@ -63,7 +63,7 @@ Item {
             width: applicationDelegateItem.width
             height: applicationDelegateItem.height
             onClicked: {
-
+                forceActiveFocus()
                 app.name = name
                 app.version = version
                 app.downloadSize = dsize
@@ -182,6 +182,7 @@ Item {
             }
 
             onClicked: {
+                forceActiveFocus()
                 if (installed) {
                     confirmationDialog.name = name
                     confirmationDialog.from = "delegate"

@@ -21,7 +21,7 @@ Page {
         visible: true
         interactive: count > 15 ? true : false
         snapMode: GridView.SnapToRow
-        width: parent.width - 36
+        width: parent.width - 84
         height: parent.height
         anchors.centerIn: parent
         model: applicationModel

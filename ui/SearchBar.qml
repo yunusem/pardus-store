@@ -3,22 +3,20 @@ import QtQuick.Controls 2.0
 
 Item {
     id: container
-    width: 180
-    height: 30
+    width: 161.625
+    height: 32
     property int searchBarBorderWidth: 1
     property int radiusValue: 3
-    property int marginValue: 15
+    property int marginValue: 22
     property string textColor: "#fafafa"
-    property string borderColor: "#5c5c5c"
     property string searchBarColor: "#4c4c4c"
-    property string placeholderText: "Bir Uygulama Ara"
 
     Rectangle {
         id: searchBarBorder
         width: parent.width
         height: parent.height
         radius: container.radiusValue
-        color: container.borderColor
+        color: searchText.focus ? "#FFCB08" : "#5C5C5C"
 
         anchors.centerIn: parent
 
@@ -31,24 +29,56 @@ Item {
 
             anchors.centerIn: parent
 
+            MouseArea {
+                id: searchBarMa
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.IBeamCursor
+                acceptedButtons: Qt.NoButton
+
+            }
+
             TextInput {
                 id: searchText
                 width: parent.width - clearIcon.width - container.marginValue
                 color: container.textColor
-                horizontalAlignment: searchText.text ? Text.AlignHCenter : Text.AlignLeft
+                font.pointSize: 16
+                horizontalAlignment: Text.AlignHCenter
                 clip: true
-
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: container.marginValue
+
+                onActiveFocusChanged: {
+                    if(activeFocus && searchBarMa.containsMouse) {
+                        if(stackView.depth === 3) {
+                            stackView.pop()
+                        }
+                        selectedMenu = qsTr("categories")
+                        selectedCategory = qsTr("all")
+                        expanded = true
+                    }
+
+                }
+
+                Keys.onEscapePressed: {
+                        text = ""
+                        focus = false
+                    }
+                onTextChanged: {
+                    applicationModel.setFilterString(searchText.text.trim(), true)
+                }
+
             }
 
             Image {
                 id: clearIcon
                 width: searchText.height
                 height: searchText.height
-                source: "../images/back.svg"
+                source: "qrc:/images/back.svg"
                 smooth: true
+                antialiasing: true
+                mipmap: true
                 visible: searchText.text
 
                 anchors.verticalCenter: parent.verticalCenter
@@ -58,37 +88,50 @@ Item {
                 MouseArea {
                     id: maClear
                     anchors.fill: parent
-
+                    hoverEnabled: true
                     onClicked: {
                         searchText.text = ""
                     }
+
                 }
             }
         }
 
-        Row {
-            id: placeHolderRow
-            anchors.centerIn: parent
 
-            Image {
-                id: searchIcon
-                width: searchBar.height
-                height: searchBar.height
-                source: "../images/search.svg"
-                smooth: true
-                anchors.verticalCenter: parent.verticalCenter
-                visible: !searchText.text
-            }
-
-            Text {
-                id: placeHolder
-                height: searchBar.height
-                text: container.placeholderText
-                verticalAlignment: Text.AlignVCenter
-                color: container.textColor
-                visible: !searchText.text
+        Image {
+            id: searchIcon
+            height: searchBar.height - 5
+            width: height
+            visible: !searchText.text
+            source: "qrc:/images/search.svg"
+            smooth: true
+            mipmap: true
+            antialiasing: true
+            anchors{
+                left: parent.left
+                leftMargin: 6
+                verticalCenter: parent.verticalCenter
             }
         }
+
+        Label {
+            id: placeHolder
+            enabled: false
+            height: searchBar.height
+            visible: !searchText.text
+            text: qsTr("Search an application")
+            fontSizeMode: Text.HorizontalFit
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            anchors {
+                left: searchIcon.right
+                leftMargin: 6
+                right: parent.right
+                rightMargin: 8
+                verticalCenter: parent.verticalCenter
+            }
+        }
+
     }
 }
 
