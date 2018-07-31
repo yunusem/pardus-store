@@ -226,7 +226,7 @@ Rectangle {
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
-            topMargin: 30
+            topMargin: 21
         }
     }
 
@@ -235,7 +235,7 @@ Rectangle {
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: searchBar.bottom
-            topMargin: 12
+            topMargin: 21
             bottom: parent.bottom
         }
 
