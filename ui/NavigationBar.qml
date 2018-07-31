@@ -217,11 +217,20 @@ Rectangle {
         }
     }
 
+    SearchBar {
+        id: searchBar
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: 12
+        }
+    }
+
     ListView {
         id: menuListView
         anchors {
             horizontalCenter: parent.horizontalCenter
-            top: parent.top
+            top: searchBar.bottom
             topMargin: 12
             bottom: parent.bottom
         }
