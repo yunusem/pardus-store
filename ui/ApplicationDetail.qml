@@ -130,7 +130,7 @@ Rectangle {
         height: parent.height - 12
         modal: animate
         focus: true
-        x: - navigationBarWidth + 54
+        x: - navigationBarWidth + 6
         y: 6
         closePolicy: Popup.CloseOnPressOutside
         onClosed: {
