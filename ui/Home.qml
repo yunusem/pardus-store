@@ -52,8 +52,8 @@ Rectangle {
 
     Pane {
         id: banner
-        width: 838.375
-        height: 318.375
+        width: parent.width - 96
+        height: bannerImage.sourceSize.height * width / bannerImage.sourceSize.width
         Material.elevation: 5
         anchors {
             top: parent.top
