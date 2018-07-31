@@ -1,3 +1,11 @@
+pardus-store (0.2.0~beta2) unstable; urgency=medium
+
+  * Make home screen banner stretchable
+  * Fix position of the popup screenshot detail
+  * Move searchbar vertically center of the top gap
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 31 Jul 2018 18:32:25 +0800
+
 pardus-store (0.2.0~beta1) unstable; urgency=medium
 
   [ Yunusemre Şentürk ]
