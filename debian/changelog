@@ -1,3 +1,9 @@
+pardus-store (0.2.0~beta3) unstable; urgency=medium
+
+  * Remove CategoryDelegate.qml file and fix config issues coused by upgrading
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Mon, 06 Aug 2018 14:12:22 +0300
+
 pardus-store (0.2.0~beta2) unstable; urgency=medium
 
   * Make home screen banner stretchable
