@@ -112,7 +112,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
-            font.pointSize: 42
+            font.pointSize: banner.width / 30
             font.letterSpacing: 3
             font.family: pardusFont.name
         }

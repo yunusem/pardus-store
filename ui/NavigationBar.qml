@@ -212,6 +212,7 @@ Rectangle {
 
             transitions: [
                 Transition {
+                    enabled: animate
                     NumberAnimation {
                         duration: 200
                         properties: "height" //,width,anchors.rightMargin,anchors.topMargin,opacity,contentY"

@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>ui/main.qml</file>
         <file>ui/NavigationBar.qml</file>
-        <file>ui/CategoryDelegate.qml</file>
         <file>ui/ApplicationDelegate.qml</file>
         <file>ui/SearchBar.qml</file>
         <file>ui/Home.qml</file>

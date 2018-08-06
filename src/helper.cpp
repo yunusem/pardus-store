@@ -39,9 +39,9 @@ bool Helper::animate() const
 void Helper::setAnimate(bool a)
 {
     if(a != m_animate) {
-      m_animate = a;
-      writeSettings("animate", m_animate);
-      emit animateChanged();
+        m_animate = a;
+        writeSettings("animate", m_animate);
+        emit animateChanged();
     }
 }
 
@@ -53,9 +53,9 @@ bool Helper::update() const
 void Helper::setUpdate(bool u)
 {
     if(u != m_update) {
-      m_update = u;
-      writeSettings("update", m_update);
-      emit updateChanged();
+        m_update = u;
+        writeSettings("update", m_update);
+        emit updateChanged();
     }
 }
 
@@ -66,10 +66,16 @@ unsigned int Helper::ratio() const
 
 void Helper::setRatio(const unsigned int &r)
 {
-    if(r != m_ratio && r < 5 && r > 1) {
-      m_ratio = r;
-      writeSettings("ratio", m_ratio);
-      emit ratioChanged();
+    if(r != m_ratio ) {
+        if(r >= 5) {
+            m_ratio = 4;
+        } else if (r <= 1) {
+            m_ratio = 2;
+        } else {
+            m_ratio = r;
+        }
+        writeSettings("ratio", m_ratio);
+        emit ratioChanged();
     }
 }
 
@@ -163,7 +169,7 @@ void Helper::install(const QString &pkg)
 void Helper::remove(const QString &pkg)
 {
     p = true;
-    ph->remove(pkg);    
+    ph->remove(pkg);
 }
 
 void Helper::getAppList()
@@ -212,7 +218,7 @@ void Helper::correctSourcesList()
 void Helper::packageProcessFinished(int code)
 {
     if(code == 0) {
-        emit processingFinished();        
+        emit processingFinished();
     } else {
         emit processingFinishedWithError(QString::fromLatin1(ph->getError()));
     }
@@ -261,11 +267,11 @@ QStringList Helper::getDetails() const
                     ln = QString(QString::number(size,'f',1) + " MB");
                 } else {
                     ln = QString(QString::number(size,'f',1) + " KB");
-                }                
+                }
                 sizeList.insert(name,ln);
             }
         }
-    }    
+    }
 
     QStringList list;
     int ix = 0;
@@ -273,7 +279,7 @@ QStringList Helper::getDetails() const
     QString detail;
     QString version;
     QString installed;
-    QString non_free;    
+    QString non_free;
     foreach (QString line, l) {
         app = line.split(" ").at(0);
         ix = output.indexOf(QRegExp(app + QString("*.*")));
@@ -295,7 +301,7 @@ QStringList Helper::getDetails() const
         detail += non_free + " ";
         detail += sizeList.value(app);
         list.append(detail);
-        detail = "";        
+        detail = "";
     }
     return list;
 }
@@ -323,7 +329,7 @@ QString Helper::getLanguagePackage(const QString &pkg) const
                 }
             } else {
                 if (s.contains(langMajor, Qt::CaseInsensitive) &&
-                    s.contains(langMinor, Qt::CaseInsensitive)) {
+                        s.contains(langMinor, Qt::CaseInsensitive)) {
                     result = s;
                 }
             }

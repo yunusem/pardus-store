@@ -7,6 +7,8 @@ import QtGraphicalEffects 1.0
 Page {
     property string previous
     property string current
+    property int visualOffset: 84
+    property int scrollBarWidth: 16
     background: Rectangle {
         anchors.fill: parent
         color: "transparent"
@@ -15,15 +17,16 @@ Page {
     GridView {
         id: gridView
         clip: true
-        cellWidth: width / ratio
+        cellWidth: (width - scrollBarWidth) / ratio
         cellHeight: height / ratio
 
         visible: true
         interactive: count > 15 ? true : false
         snapMode: GridView.SnapToRow
-        width: parent.width - 84
+        width: parent.width - visualOffset + scrollBarWidth
         height: parent.height
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: scrollBarWidth / 2
         model: applicationModel
         /*header: Rectangle {
             color: "transparent"
@@ -98,7 +101,14 @@ Page {
                 }
             }
         }
-        delegate: ApplicationDelegate { }
-        ScrollBar.vertical: ScrollBar { }
+        delegate: ApplicationDelegate {}
+        ScrollBar.vertical: ScrollBar {
+            hoverEnabled: true
+            active: hovered || pressed
+            anchors.left: parent.left
+            anchors.leftMargin: gridView.width - scrollBarWidth - 12
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+        }
     }
 }

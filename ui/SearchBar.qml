@@ -72,9 +72,9 @@ Item {
             }
 
             Image {
-                id: clearIcon
-                width: searchText.height
+                id: clearIcon                
                 height: searchText.height
+                width: height
                 source: "qrc:/images/back.svg"
                 smooth: true
                 antialiasing: true
@@ -100,7 +100,7 @@ Item {
 
         Image {
             id: searchIcon
-            height: searchBar.height - 5
+            height: searchBar.height - 10
             width: height
             visible: !searchText.text
             source: "qrc:/images/search.svg"
@@ -109,7 +109,7 @@ Item {
             antialiasing: true
             anchors{
                 left: parent.left
-                leftMargin: 6
+                leftMargin: 12
                 verticalCenter: parent.verticalCenter
             }
         }
@@ -125,7 +125,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             anchors {
                 left: searchIcon.right
-                leftMargin: 6
+                leftMargin: 5
                 right: parent.right
                 rightMargin: 8
                 verticalCenter: parent.verticalCenter

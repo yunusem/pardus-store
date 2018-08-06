@@ -89,7 +89,7 @@ Rectangle {
 
         Image {
             id:appBannerIcon
-            height: appBanner.height - 30
+            height: appBanner.height - 74
             width: height
             anchors {
                 left: parent.left
@@ -100,6 +100,8 @@ Rectangle {
             visible: true
             source: applicationName == "" ? "": "image://application/" + getCorrectName(applicationName)
             mipmap: true
+            antialiasing: true
+            smooth: true
         }
 
         DropShadow {
@@ -111,6 +113,8 @@ Rectangle {
             samples: 17
             color: "#80000000"
             source: appBannerIcon
+            smooth: true
+            antialiasing: true
         }
 
         Label {
@@ -436,7 +440,7 @@ Rectangle {
         x: imagesPane.width + imagesPane.x + 12
         y: appBanner.height + 24
         clip: true
-        Material.background: "transparent"
+        Material.background: "#4C4C4C"
         Rectangle {
             id: disclamer
             visible: !app.free
@@ -495,13 +499,14 @@ Rectangle {
 
         Button {
             id: processButton
-            width: parent.width / 3
-            //height: width / 2
+            width: parent.width / 3            
+
             enabled: !applicationInTheQueue
             Material.background: app.installed ? Material.Red : Material.Green
-            Material.foreground: "#2C2C2C"
+            Material.foreground: Material.theme === Material.Dark ? "#3c3c3c" :"#fafafa"
             text: app.installed ? qsTr("remove") : qsTr("install")
             property bool error: main.errorOccured
+
             anchors {
                 bottom: parent.bottom
                 right: parent.right
