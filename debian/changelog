@@ -1,3 +1,9 @@
+pardus-store (0.2.0~beta4) unstable; urgency=medium
+
+  * Fix navigation problem after selecting from Home screen
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Mon, 06 Aug 2018 14:39:22 +0300
+
 pardus-store (0.2.0~beta3) unstable; urgency=medium
 
   * Remove CategoryDelegate.qml file and fix config issues coused by upgrading
