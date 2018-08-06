@@ -57,27 +57,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="550"/>
+        <location filename="../ui/ApplicationDetail.qml" line="551"/>
         <source>version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="559"/>
+        <location filename="../ui/ApplicationDetail.qml" line="560"/>
         <source>Download size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="567"/>
+        <location filename="../ui/ApplicationDetail.qml" line="568"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="574"/>
+        <location filename="../ui/ApplicationDetail.qml" line="575"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="593"/>
+        <location filename="../ui/ApplicationDetail.qml" line="594"/>
         <source>no description found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -184,17 +184,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="314"/>
+        <location filename="../ui/NavigationBar.qml" line="315"/>
         <source>installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="314"/>
+        <location filename="../ui/NavigationBar.qml" line="315"/>
         <source>removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="315"/>
+        <location filename="../ui/NavigationBar.qml" line="316"/>
         <source>is</source>
         <translation type="unfinished"></translation>
     </message>
@@ -339,7 +339,8 @@
     <message>
         <location filename="../ui/main.qml" line="34"/>
         <location filename="../ui/main.qml" line="40"/>
-        <location filename="../ui/main.qml" line="717"/>
+        <location filename="../ui/main.qml" line="706"/>
+        <location filename="../ui/main.qml" line="723"/>
         <source>all</source>
         <translation type="unfinished"></translation>
     </message>
@@ -431,7 +432,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="733"/>
+        <location filename="../ui/main.qml" line="739"/>
         <source>Fetching application list.</source>
         <translation type="unfinished"></translation>
     </message>

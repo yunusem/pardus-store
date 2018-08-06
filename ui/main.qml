@@ -701,8 +701,14 @@ ApplicationWindow {
         var current = stackView.currentItem.current
         var name = stackView.currentItem.objectName
 
+        if(m !== "categories") {
+            if(applicationModel.getFilterString() !== "") {
+                applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
+            }
+        }
+
         if(m === "home") {
-            stackView.pop(null)
+            stackView.pop(null)            
         } else if (m === "categories") {
             if(name === "detail") {
                 stackView.pop()

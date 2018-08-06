@@ -61,27 +61,27 @@
         <translation>kur</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="550"/>
+        <location filename="../ui/ApplicationDetail.qml" line="551"/>
         <source>version</source>
         <translation>versiyon</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="559"/>
+        <location filename="../ui/ApplicationDetail.qml" line="560"/>
         <source>Download size</source>
         <translation>İndirme boyutu</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="567"/>
+        <location filename="../ui/ApplicationDetail.qml" line="568"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="574"/>
+        <location filename="../ui/ApplicationDetail.qml" line="575"/>
         <source>Description</source>
         <translation>Tanım</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="593"/>
+        <location filename="../ui/ApplicationDetail.qml" line="594"/>
         <source>no description found</source>
         <translation>tanım bulunamadı</translation>
     </message>
@@ -246,17 +246,17 @@
         <translation>tümü</translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="314"/>
+        <location filename="../ui/NavigationBar.qml" line="315"/>
         <source>installed</source>
         <translation>kuruldu</translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="314"/>
+        <location filename="../ui/NavigationBar.qml" line="315"/>
         <source>removed</source>
         <translation>kaldırıldı</translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="315"/>
+        <location filename="../ui/NavigationBar.qml" line="316"/>
         <source>is</source>
         <translation> </translation>
     </message>
@@ -467,7 +467,8 @@
     <message>
         <location filename="../ui/main.qml" line="34"/>
         <location filename="../ui/main.qml" line="40"/>
-        <location filename="../ui/main.qml" line="717"/>
+        <location filename="../ui/main.qml" line="706"/>
+        <location filename="../ui/main.qml" line="723"/>
         <source>all</source>
         <translation>tümü</translation>
     </message>
@@ -546,7 +547,7 @@
         <translation type="vanished">Paket yöneticisi ön belleği güncelleniyor.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="733"/>
+        <location filename="../ui/main.qml" line="739"/>
         <source>Fetching application list.</source>
         <translation>Uygulama listesi getiriliyor.</translation>
     </message>
