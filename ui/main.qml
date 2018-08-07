@@ -460,173 +460,175 @@ ApplicationWindow {
         }
     }
 
-//    Pane {
-//        id: minimizeBtn
-//        width: 32
-//        height: 32
-//        opacity: ma.containsMouse ? 1.0 : 0.0
-//        z: 100
-//        Material.background: "#2c2c2c"
-//        Material.elevation: 1
+/*
+    Pane {
+        id: minimizeBtn
+        width: 32
+        height: 32
+        opacity: ma.containsMouse ? 1.0 : 0.0
+        z: 100
+        Material.background: "#2c2c2c"
+        Material.elevation: 1
 
-//        Label {
-//            anchors {
-//                horizontalCenter: parent.horizontalCenter
-//                bottom: parent.verticalCenter
-//                bottomMargin: -6
-//            }
+        Label {
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.verticalCenter
+                bottomMargin: -6
+            }
 
-//            Material.foreground: "white"
-//            text: "_"
-//            verticalAlignment: Text.AlignTop
-//            horizontalAlignment: Text.AlignHCenter
-//            font.bold: true
-//            font.pointSize: 18
-//        }
+            Material.foreground: "white"
+            text: "_"
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+            font.pointSize: 18
+        }
 
-//        anchors {
-//            top: parent.top
-//            right: maximizeBtn.left
-//            rightMargin: 2
-//        }
+        anchors {
+            top: parent.top
+            right: maximizeBtn.left
+            rightMargin: 2
+        }
 
-//        MouseArea {
-//            id: minimizeBtnMa
-//            width: 32
-//            height: 32
-//            anchors.centerIn: parent
-//            onPressed: {
-//                if (minimizeBtnMa.containsMouse) {
-//                    minimizeBtn.Material.elevation = 0
-//                }
-//            }
-//            onReleased: {
-//                minimizeBtn.Material.elevation = 2
-//            }
-//            onClicked: {
-//                main.showMinimized()
-//            }
-//        }
+        MouseArea {
+            id: minimizeBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (minimizeBtnMa.containsMouse) {
+                    minimizeBtn.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                minimizeBtn.Material.elevation = 2
+            }
+            onClicked: {
+                main.showMinimized()
+            }
+        }
 
-//        Behavior on opacity {
-//            enabled: animate
-//            NumberAnimation {
-//                easing.type: Easing.OutExpo
-//                duration: 300
-//            }
-//        }
-//    }
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
+    }
 
-//    Pane {
-//        id: maximizeBtn
-//        width: 32
-//        height: 32
-//        opacity: ma.containsMouse ? 1.0 : 0.0
-//        z: 100
-//        Material.background: "#2c2c2c"
-//        Material.elevation: 1
-//        Label {
-//            smooth: true
-//            anchors {
-//                horizontalCenter: parent.horizontalCenter
-//                bottom: parent.verticalCenter
-//                bottomMargin: -13
-//            }
-//            Material.foreground: "white"
-//            text: "▫"
-//            verticalAlignment: Text.AlignTop
-//            horizontalAlignment: Text.AlignHCenter
-//            font.pointSize: 20
-//        }
+    Pane {
+        id: maximizeBtn
+        width: 32
+        height: 32
+        opacity: ma.containsMouse ? 1.0 : 0.0
+        z: 100
+        Material.background: "#2c2c2c"
+        Material.elevation: 1
+        Label {
+            smooth: true
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.verticalCenter
+                bottomMargin: -13
+            }
+            Material.foreground: "white"
+            text: "▫"
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 20
+        }
 
-//        anchors {
-//            top: parent.top
-//            right: exitBtn.left
-//            rightMargin: 2
-//        }
+        anchors {
+            top: parent.top
+            right: exitBtn.left
+            rightMargin: 2
+        }
 
-//        MouseArea {
-//            id: maximizeBtnMa
-//            width: 32
-//            height: 32
-//            anchors.centerIn: parent
-//            onPressed: {
-//                if (maximizeBtnMa.containsMouse) {
-//                    maximizeBtn.Material.elevation = 0
-//                }
-//            }
-//            onReleased: {
-//                maximizeBtn.Material.elevation = 2
-//            }
-//            onClicked: {
-//                if(main.visibility == ApplicationWindow.Maximized) {
-//                    main.showNormal()
-//                } else {
-//                    main.showMaximized()
-//                }
-//            }
-//        }
+        MouseArea {
+            id: maximizeBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (maximizeBtnMa.containsMouse) {
+                    maximizeBtn.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                maximizeBtn.Material.elevation = 2
+            }
+            onClicked: {
+                if(main.visibility == ApplicationWindow.Maximized) {
+                    main.showNormal()
+                } else {
+                    main.showMaximized()
+                }
+            }
+        }
 
-//        Behavior on opacity {
-//            enabled: animate
-//            NumberAnimation {
-//                easing.type: Easing.OutExpo
-//                duration: 300
-//            }
-//        }
-//    }
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
+    }
 
-//    Pane {
-//        id: exitBtn
-//        width: 32
-//        height: 32
-//        opacity: ma.containsMouse ? 1.0 : 0.0
-//        z: 100
-//        Material.background: Material.Red
-//        Material.elevation: 1
+    Pane {
+        id: exitBtn
+        width: 32
+        height: 32
+        opacity: ma.containsMouse ? 1.0 : 0.0
+        z: 100
+        Material.background: Material.Red
+        Material.elevation: 1
 
-//        Label {
-//            smooth: true
-//            anchors.centerIn: parent
-//            Material.foreground: "white"
-//            text: "X"
-//            verticalAlignment: Text.AlignVCenter
-//            horizontalAlignment: Text.AlignHCenter
-//            font.bold: true
-//            font.pointSize: 13
-//        }
+        Label {
+            smooth: true
+            anchors.centerIn: parent
+            Material.foreground: "white"
+            text: "X"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.bold: true
+            font.pointSize: 13
+        }
 
-//        anchors {
-//            top: parent.top
-//            right: parent.right
-//        }
+        anchors {
+            top: parent.top
+            right: parent.right
+        }
 
-//        MouseArea {
-//            id: exitBtnMa
-//            width: 32
-//            height: 32
-//            anchors.centerIn: parent
-//            onPressed: {
-//                if (exitBtnMa.containsMouse) {
-//                    exitBtn.Material.elevation = 0
-//                }
-//            }
-//            onReleased: {
-//                exitBtn.Material.elevation = 2
-//            }
-//            onClicked: {
-//                main.close()
-//            }
-//        }
+        MouseArea {
+            id: exitBtnMa
+            width: 32
+            height: 32
+            anchors.centerIn: parent
+            onPressed: {
+                if (exitBtnMa.containsMouse) {
+                    exitBtn.Material.elevation = 0
+                }
+            }
+            onReleased: {
+                exitBtn.Material.elevation = 2
+            }
+            onClicked: {
+                main.close()
+            }
+        }
 
-//        Behavior on opacity {
-//            enabled: animate
-//            NumberAnimation {
-//                easing.type: Easing.OutExpo
-//                duration: 300
-//            }
-//        }
-//    }
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
+    }
+*/
 
     Timer {
         id: focusController

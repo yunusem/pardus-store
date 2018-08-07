@@ -12,6 +12,7 @@ Rectangle {
     property int animationSpeed: 200
     property variant surveyList : []
     property variant surveyCounts: []
+    property string surveySelectedApp: ""
     property string choice : helper.choice
     property int selectedIndex: 0
     property string editorsAppName: "chromium"
@@ -49,6 +50,7 @@ Rectangle {
         surveyJoined.connect(joined)
         surveyJoinUpdated.connect(updated)
     }
+
 
     Pane {
         id: banner
@@ -307,80 +309,80 @@ Rectangle {
         }
     }
 
-//    Item {
-//        id: middle
-//        anchors {
-//            left: suggester.right
-//            right: survey.left
-//            top: survey.top
-//            bottom: survey.bottom
-//            margins: 6
-//        }
+    //    Item {
+    //        id: middle
+    //        anchors {
+    //            left: suggester.right
+    //            right: survey.left
+    //            top: survey.top
+    //            bottom: survey.bottom
+    //            margins: 6
+    //        }
 
-//        Image {
-//            id: middleBackgroundIcon
-//            source: "../images/icon.svg"
-//            width: parent.width * 2 / 3
-//            height: width
-//            fillMode: Image.PreserveAspectFit
-//            anchors.centerIn: parent
-//            opacity: 0.04
-//        }
+    //        Image {
+    //            id: middleBackgroundIcon
+    //            source: "../images/icon.svg"
+    //            width: parent.width * 2 / 3
+    //            height: width
+    //            fillMode: Image.PreserveAspectFit
+    //            anchors.centerIn: parent
+    //            opacity: 0.04
+    //        }
 
-//        Column {
-//            anchors.centerIn: parent
-//            spacing: 24
+    //        Column {
+    //            anchors.centerIn: parent
+    //            spacing: 24
 
-//            Label {
-//                text: qsTr("Source Code") + " : " +"<a href='https://github.com/yunusem/pardus-store'>GitHub</a>"
-//                font.pointSize: 12
-//                horizontalAlignment: Text.AlignHCenter
-//                verticalAlignment: Text.AlignVCenter
-//                onLinkActivated: Qt.openUrlExternally(link)
+    //            Label {
+    //                text: qsTr("Source Code") + " : " +"<a href='https://github.com/yunusem/pardus-store'>GitHub</a>"
+    //                font.pointSize: 12
+    //                horizontalAlignment: Text.AlignHCenter
+    //                verticalAlignment: Text.AlignVCenter
+    //                onLinkActivated: Qt.openUrlExternally(link)
 
-//                MouseArea {
-//                    anchors.fill: parent
-//                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-//                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-//                }
-//            }
+    //                MouseArea {
+    //                    anchors.fill: parent
+    //                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+    //                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+    //                }
+    //            }
 
-//            Label {
-//                font.pointSize: 12
-//                horizontalAlignment: Text.AlignHCenter
-//                verticalAlignment: Text.AlignVCenter
-//                text: qsTr("License") + " : " +"<a href='http://ozgurlisanslar.org.tr/gpl/gpl-v3/'>GPL v3</a>"
-//                onLinkActivated: Qt.openUrlExternally(link)
+    //            Label {
+    //                font.pointSize: 12
+    //                horizontalAlignment: Text.AlignHCenter
+    //                verticalAlignment: Text.AlignVCenter
+    //                text: qsTr("License") + " : " +"<a href='http://ozgurlisanslar.org.tr/gpl/gpl-v3/'>GPL v3</a>"
+    //                onLinkActivated: Qt.openUrlExternally(link)
 
-//                MouseArea {
-//                    anchors.fill: parent
-//                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-//                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-//                }
-//            }
+    //                MouseArea {
+    //                    anchors.fill: parent
+    //                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+    //                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+    //                }
+    //            }
 
-//            Label {
-//                font.pointSize: 12
-//                horizontalAlignment: Text.AlignHCenter
-//                verticalAlignment: Text.AlignVCenter
-//                text:qsTr("Version") + " : " + helper.version
-//            }
+    //            Label {
+    //                font.pointSize: 12
+    //                horizontalAlignment: Text.AlignHCenter
+    //                verticalAlignment: Text.AlignVCenter
+    //                text:qsTr("Version") + " : " + helper.version
+    //            }
 
-//            Label {
-//                font.pointSize: 12
-//                horizontalAlignment: Text.AlignHCenter
-//                verticalAlignment: Text.AlignVCenter
-//                text: qsTr("Leave comments on") + " : " +"<a href='http://forum.pardus.org.tr/t/pardus-magaza-pardus-store'>Pardus Forum</a>"
-//                onLinkActivated: Qt.openUrlExternally(link)
+    //            Label {
+    //                font.pointSize: 12
+    //                horizontalAlignment: Text.AlignHCenter
+    //                verticalAlignment: Text.AlignVCenter
+    //                text: qsTr("Leave comments on") + " : " +"<a href='http://forum.pardus.org.tr/t/pardus-magaza-pardus-store'>Pardus Forum</a>"
+    //                onLinkActivated: Qt.openUrlExternally(link)
 
-//                MouseArea {
-//                    anchors.fill: parent
-//                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-//                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-//                }
-//            }
-//        }
-//    }
+    //                MouseArea {
+    //                    anchors.fill: parent
+    //                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
+    //                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+    //                }
+    //            }
+    //        }
+    //    }
 
 
     Pane {
@@ -394,109 +396,279 @@ Rectangle {
             right: banner.right
         }
 
-        Label {
-            id: surveyHText
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-            }
-            text: qsTr("application survey")
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-            font.bold: true
-        }
+        StackView {
+            id: surveyStackView
+            anchors.fill: parent
+            clip: true
+            initialItem: Item {
+                Label {
+                    id: surveyHText
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                    text: qsTr("application survey")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.capitalization: Font.Capitalize
+                    font.bold: true
+                }
 
-        Label {
-            id: surveyText
-            enabled: false
-            width: parent.width - 20
-            anchors {
-                top: surveyHText.bottom
-                topMargin: 10
-                horizontalCenter: parent.horizontalCenter
+                Label {
+                    id: surveyText
+                    enabled: false
+                    width: parent.width - 20
+                    anchors {
+                        top: surveyHText.bottom
+                        topMargin: 10
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                    text: qsTr("Which application should be added to the store in next week ?")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                }
+
+                ButtonGroup {
+                    id: surveyButtonGroup
+                }
+
+                Column {
+                    anchors {
+                        top: surveyText.bottom
+                        topMargin: 12
+                        bottom: parent.bottom
+                        horizontalCenter: parent.horizontalCenter
+                    }
+
+
+                    Repeater {
+                        id: surveyRepeater
+                        model: surveyList
+                        Row {
+                            spacing: 6
+                            Label {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: surveyCounts[index]
+                                font.bold: true
+                                verticalAlignment: Text.AlignVCenter
+
+                                function updateValue() {
+                                    text = surveyCounts[index]
+                                }
+
+                                Component.onCompleted: {
+                                    countsChanged.connect(updateValue)
+                                }
+                            }
+
+                            RadioButton {
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.capitalization: Font.Capitalize
+                                onCheckedChanged: {
+                                    selectedIndex = index
+                                }
+                                ButtonGroup.group: surveyButtonGroup
+
+                                checked: (modelData === choice)
+                            }
+
+                            Image {
+                                id: surveyRadioIcon
+                                anchors.verticalCenter: parent.verticalCenter
+                                height: parent.height
+                                width: height
+                                source: "image://application/" + getCorrectName(modelData)
+                                verticalAlignment: Image.AlignVCenter
+                                fillMode: Image.PreserveAspectFit
+                                mipmap: true
+                                antialiasing: true
+                                smooth: true
+                            }
+
+                            Label {
+                                id: surveyRadioLabel
+                                anchors.verticalCenter: parent.verticalCenter
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                                font.capitalization: Font.Capitalize
+                                font.pointSize: 13
+                                text: getPrettyName(modelData)
+                                MouseArea {
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        surveySelectedApp = modelData
+                                        helper.getAppDetails(surveySelectedApp)
+                                        surveyStackView.push(surveyDetail)
+                                    }
+
+                                    onHoveredChanged: {
+                                        if(containsMouse) {
+                                            surveyRadioLabel.font.underline = true
+                                        } else {
+                                            surveyRadioLabel.font.underline = false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Button {
+                    id: surveyBtn
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        bottom: parent.bottom
+                    }
+                    Material.background: "#4C4C4C"
+                    width: surveyBtnLabel.width + 24
+                    Label {
+                        id: surveyBtnLabel
+                        anchors.centerIn: parent
+                        Material.foreground: "#ffcb08"
+                        text: (choice === "") ? qsTr("send") : qsTr("update")
+                        fontSizeMode: Text.HorizontalFit
+                        font.capitalization: Font.Capitalize
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+                    onClicked: {
+                        enabled = false
+                        if(surveyBtnLabel.text === qsTr("send")) {
+                            helper.surveyJoin(surveyList[selectedIndex],"join")
+                        } else {
+                            helper.surveyJoin(surveyList[selectedIndex],"update")
+                        }
+                    }
+                }
+
             }
-            text: qsTr("Which application should be added to the store in next week ?")
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
+
+            pushEnter: Transition {
+                enabled: animate
+                XAnimator {
+                    from: (surveyStackView.mirrored ? -1 : 1) * surveyStackView.width
+                    to: 0
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
+
+            pushExit: Transition {
+                enabled: animate
+                XAnimator {
+                    from: 0
+                    to: (surveyStackView.mirrored ? -1 : 1) * - surveyStackView.width
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
+
+            popEnter: Transition {
+                enabled: animate
+                XAnimator {
+                    from: (surveyStackView.mirrored ? -1 : 1) * - surveyStackView.width
+                    to: 0
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
+
+            popExit: Transition {
+                enabled: animate
+                XAnimator {
+                    from: 0
+                    to: (surveyStackView.mirrored ? -1 : 1) * surveyStackView.width
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+    }
+
+    Item {
+        id: surveyDetail
+        visible: false
+        Button {
+            id: surveyBackButton
+            z: 92
+            height: 54
+            width: height * 2 / 3
+            Material.background: "#4C4C4C"
+            anchors {
+                top: parent.top
+                topMargin: - 6
+                left: parent.left
+            }
+
+            Image {
+                width: parent.height - 24
+                anchors.centerIn: parent
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                smooth: true
+                source: "qrc:/images/back.svg"
+            }
+
+            onClicked: {
+                surveyStackView.pop(null)
+            }
         }
 
         Column {
             anchors {
-                top: surveyText.bottom
-                topMargin: 12
+                left: surveyBackButton.right
+                right: parent.right
+                rightMargin: surveyBackButton.width - 6
+                top: surveyBackButton.bottom
                 bottom: parent.bottom
-                horizontalCenter: parent.horizontalCenter
             }
 
-            Repeater {
-                id: surveyRepeater
-                model: surveyList
-                RadioButton {
-                    text: modelData
+            spacing: 24
+
+            Row {
+                id: surveyDetailHeader
+                spacing: 12
+                height: surveyBackButton.height
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Image {
+                    id:surveyAppIcon
+                    height: parent.height + 24
+                    width: height
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                    }
+                    verticalAlignment: Image.AlignVCenter
+                    fillMode: Image.PreserveAspectFit
+                    visible: true
+                    source: "image://application/" + getCorrectName(surveySelectedApp)
+                    mipmap: true
+                    antialiasing: true
+                    smooth: true
+                }
+
+                Label {
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                    }
+                    text: getPrettyName(surveySelectedApp)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
                     font.capitalization: Font.Capitalize
-                    onCheckedChanged: {
-                        selectedIndex = index
-                    }
-
-                    checked: (modelData === choice)
-
-                    Image {
-                        anchors {
-                            left: parent.right
-                        }
-
-                        height: parent.height
-                        width: height
-                        source: "image://application/" + getCorrectName(text)
-                    }
-
-                    Label {
-                        id: counterLabel
-                        anchors.right: parent.left
-                        anchors.rightMargin: 12
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: surveyCounts[index]
-                        font.bold: true
-                        verticalAlignment: Text.AlignVCenter
-
-                        function updateValue() {
-                            text = surveyCounts[index]
-                        }
-
-                        Component.onCompleted: {
-                            countsChanged.connect(updateValue)
-                        }
-                    }
+                    font.bold: true
+                    font.pointSize:24
                 }
             }
-        }
 
-        Button {
-            id: surveyBtn
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                bottom: parent.bottom
-            }
-            Material.background: "#2c2c2c"
-            width: surveyBtnLabel.width + 24
             Label {
-                id: surveyBtnLabel
-                anchors.centerIn: parent
-                Material.foreground: "#ffcb08"
-                text: (choice === "") ? qsTr("send") : qsTr("update")
-                fontSizeMode: Text.HorizontalFit
-                font.capitalization: Font.Capitalize
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
-            onClicked: {
-                enabled = false
-                if(surveyBtnLabel.text === qsTr("send")) {
-                    helper.surveyJoin(surveyList[selectedIndex],"join")
-                } else {
-                    helper.surveyJoin(surveyList[selectedIndex],"update")
-                }
+                id:surveyAppDescription
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width - 12
+                wrapMode: Text.WordWrap
+                text: app.description
             }
         }
     }

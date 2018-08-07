@@ -368,7 +368,7 @@ Rectangle {
 
                     }
                 }
-                onChildrenChanged: i = indicator
+                onChildrenChanged: i = indicator.index
 
 
 
