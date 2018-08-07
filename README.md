@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gokhanettin/pardus-store.png)](https://travis-ci.org/gokhanettin/pardus-store)
+[![Build Status](https://travis-ci.org/yunusem/pardus-store.svg?branch=master)](https://travis-ci.org/yunusem/pardus-store)
 
 # Pardus Store
 
