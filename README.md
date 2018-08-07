@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gokhanettin/pardus-store.png)](https://travis-ci.org/gokhanettin/pardus-store)
+
 # Pardus Store
 
 Pardus Store is an application store front-end for debian based operating systems.

@@ -1,0 +1,16 @@
+sudo: required
+
+language: cpp
+
+services:
+  - docker
+
+before_install:
+  - docker build -t pardus/pardus-store .
+  - docker run -d --name build pardus/pardus-store tail -f /dev/null
+
+install:
+  - docker exec build  /bin/sh -c 'cd /pardus-store; mk-build-deps -i -r -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y"'
+
+script:
+  - docker exec build /bin/sh -c 'cd /pardus-store; dpkg-buildpackage -b -uc'
