@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     qmlRegisterType<Helper>("ps.helper",1,0,"Helper");
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QGuiApplication::setWindowIcon(QIcon(":/images/icon.svg"));
     QGuiApplication app(argc, argv);
 
