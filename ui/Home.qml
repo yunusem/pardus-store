@@ -644,7 +644,7 @@ Rectangle {
                     verticalAlignment: Image.AlignVCenter
                     fillMode: Image.PreserveAspectFit
                     visible: true
-                    source: "image://application/" + getCorrectName(surveySelectedApp)
+                    source: surveySelectedApp !== "" ? "image://application/" + getCorrectName(surveySelectedApp) : "image://application/image-missing"
                     mipmap: true
                     antialiasing: true
                     smooth: true
