@@ -1,3 +1,21 @@
+pardus-store (0.2.1~beta1) unstable; urgency=medium
+
+  [ Gökhan Karabulut ]
+  * Add travis-ci
+  * Remove trailing new lines in Dockerfile
+
+  [ Yunusemre Şentürk ]
+  * Update travis url in README.md
+  * Update README.md and add screenshots
+
+  [ Emin Fedar ]
+  * HighDPIScaling Disabled edildi.
+
+  [ Yunusemre Şentürk ]
+  * Fix image load failure on initialisation of new Quick Look survey stack. Closes: #21
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Wed, 22 Aug 2018 11:39:16 +0300
+
 pardus-store (0.2.0~beta5) unstable; urgency=medium
 
   * Make survey applications detail discoverable
