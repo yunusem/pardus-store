@@ -1,3 +1,9 @@
+pardus-store (0.2.1~beta2) unstable; urgency=medium
+
+  * Re arrange welcome text anchors
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Mon, 27 Aug 2018 10:50:16 +0300
+
 pardus-store (0.2.1~beta1) unstable; urgency=medium
 
   [ Gökhan Karabulut ]
