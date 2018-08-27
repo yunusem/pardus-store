@@ -102,10 +102,9 @@ Rectangle {
         Label {
             id: bannerText
             anchors {
-                verticalCenter: parent.verticalCenter
-                verticalCenterOffset: - parent.height / 10
-                horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: parent.width / 10
+                verticalCenter: parent.verticalCenter                
+                right: parent.right
+                rightMargin: font.pointSize
             }
             smooth: true
             text: qsTr("welcome")
