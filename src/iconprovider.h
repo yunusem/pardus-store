@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QSize>
 
-#define default_icon_theme "pardus-xfce-icon-theme-dark"
+#define default_icon_theme "pardus"
 
 class IconProvider : public QQuickImageProvider
 {
