@@ -102,7 +102,7 @@ Rectangle {
         Label {
             id: bannerText
             anchors {
-                verticalCenter: parent.verticalCenter                
+                verticalCenter: parent.verticalCenter
                 right: parent.right
                 rightMargin: font.pointSize
             }
@@ -477,10 +477,10 @@ Rectangle {
                                 height: parent.height
                                 width: height
                                 source: "image://application/" + getCorrectName(modelData)
+                                sourceSize.width: width
+                                sourceSize.height: width
                                 verticalAlignment: Image.AlignVCenter
                                 fillMode: Image.PreserveAspectFit
-                                mipmap: true
-                                antialiasing: true
                                 smooth: true
                             }
 
@@ -606,7 +606,8 @@ Rectangle {
                 width: parent.height - 24
                 anchors.centerIn: parent
                 fillMode: Image.PreserveAspectFit
-                mipmap: true
+                sourceSize.width: width
+                sourceSize.height: width
                 smooth: true
                 source: "qrc:/images/back.svg"
             }
@@ -620,7 +621,7 @@ Rectangle {
             anchors {
                 left: surveyBackButton.right
                 right: parent.right
-                rightMargin: surveyBackButton.width - 6
+                rightMargin: surveyBackButton.width - 9
                 top: surveyBackButton.bottom
                 bottom: parent.bottom
             }
@@ -644,8 +645,8 @@ Rectangle {
                     fillMode: Image.PreserveAspectFit
                     visible: true
                     source: surveySelectedApp !== "" ? "image://application/" + getCorrectName(surveySelectedApp) : "image://application/image-missing"
-                    mipmap: true
-                    antialiasing: true
+                    sourceSize.width: width
+                    sourceSize.height: width
                     smooth: true
                 }
 
@@ -662,12 +663,25 @@ Rectangle {
                 }
             }
 
-            Label {
-                id:surveyAppDescription
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width - 12
-                wrapMode: Text.WordWrap
-                text: app.description
+            Flickable {
+                id: surveyAppDescriptionFlick
+                clip: true
+                width: parent.width - 6
+
+
+                //anchors.horizontalCenter: parent.horizontalCenter
+                height: survey.height - surveyDetailHeader.height - 96
+                //contentWidth: surveyAppDescription.width
+                contentHeight: surveyAppDescription.height
+                ScrollBar.vertical: ScrollBar { }
+                flickableDirection: Flickable.VerticalFlick
+                Label {
+                    id:surveyAppDescription
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    width: parent.width - 12
+                    wrapMode: Text.WordWrap
+                    text: app.description
+                }
             }
         }
     }
