@@ -1,3 +1,11 @@
+pardus-store (0.2.1~beta4) unstable; urgency=medium
+
+  * Use domain instead of static IP
+  * Fix Survey application detail oversized in frame
+  * Fix icons rendering issues
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Wed, 05 Dec 2018 15:17:18 +0300
+
 pardus-store (0.2.1~beta3) unstable; urgency=medium
 
   * Change icon theme dependency
