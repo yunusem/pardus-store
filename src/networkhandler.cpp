@@ -13,9 +13,9 @@
 #include <QTimer>
 #include <QDebug>
 
-#define MAIN_URL "http://193.140.98.197:5000"
-#define API_APPS_URL "http://193.140.98.197:5000/api/v1/apps/"
-#define API_SURVEY_URL "http://193.140.98.197:5000/api/v1/survey/"
+#define MAIN_URL "http://store.pardus.org.tr:5000"
+#define API_APPS_URL "http://store.pardus.org.tr:5000/api/v1/apps/"
+#define API_SURVEY_URL "http://store.pardus.org.tr:5000/api/v1/survey/"
 
 namespace {
 
