@@ -56,15 +56,15 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 height: categoryItemHeight - anchors.topMargin * 2
                 width: height
+                sourceSize.width: width
+                sourceSize.height: width
+                smooth: true
                 anchors {
                     top: parent.top
                     topMargin: 2
                     left: parent.left
                     leftMargin: width / 2
                 }
-                mipmap: true
-                smooth: true
-                antialiasing: true
             }
 
             Label {
@@ -92,7 +92,7 @@ Rectangle {
 
                     selectedCategory = name
                     forceActiveFocus()
-                }                
+                }
             }
         }
     }
@@ -127,15 +127,15 @@ Rectangle {
                     fillMode: Image.PreserveAspectFit
                     height: 36
                     width: height
+                    sourceSize.width: width
+                    sourceSize.height: width
+                    smooth: true
                     anchors {
                         top: parent.top
                         topMargin: 2
                         left: parent.left
                         leftMargin: width * 3 / 4
                     }
-                    mipmap: true
-                    smooth: true
-                    antialiasing: true
                 }
 
                 DropShadow {
@@ -193,7 +193,7 @@ Rectangle {
                 }
 
                 ListView {
-                    id: categoryListView                    
+                    id: categoryListView
                     clip: true
                     interactive: false
                     spacing: categoryItemListSpacing

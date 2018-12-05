@@ -89,18 +89,19 @@ Rectangle {
 
         Image {
             id:appBannerIcon
-            height: appBanner.height - 74
+            height: appBanner.height - 12
             width: height
+            sourceSize.width: width
+            sourceSize.height: width
             anchors {
                 left: parent.left
+                leftMargin: 6
                 verticalCenter: parent.verticalCenter
             }
             verticalAlignment: Image.AlignVCenter
             fillMode: Image.PreserveAspectFit
             visible: true
             source: applicationName == "" ? "": "image://application/" + getCorrectName(applicationName)
-            mipmap: true
-            antialiasing: true
             smooth: true
         }
 
@@ -113,8 +114,7 @@ Rectangle {
             samples: 17
             color: "#80000000"
             source: appBannerIcon
-            smooth: true
-            antialiasing: true
+            smooth: true            
         }
 
         Label {

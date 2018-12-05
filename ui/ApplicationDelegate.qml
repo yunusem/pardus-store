@@ -105,12 +105,12 @@ Item {
                 left: parent.left
                 verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
             }
-            height: (parent.height * 2 / 3 <= sourceSize.height * 3 / 2) ? parent.height * 2 / 3 : sourceSize.height * 3 / 2
+            height: parent.height * 2 / 3
             width: height
-            fillMode: Image.PreserveAspectFit
+            sourceSize.width: width
+            sourceSize.height: width
+            fillMode: Image.PreserveAspectFit            
             smooth: true
-            mipmap: true
-            antialiasing: true
             source: "image://application/" + getCorrectName(name)
 
             Behavior on anchors.verticalCenterOffset {
