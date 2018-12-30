@@ -16,6 +16,8 @@ public:
 private:
     QProcess *p;
     DpkgProgress *dpkg;
+    int m_percent;
+    QString m_status;
 
 signals:
     void finished(int code);    
@@ -25,6 +27,7 @@ public slots:
     void updateCache();
     void install(const QString &pkg);
     void remove(const QString &pkg);
+    bool terminate();
     void onFinished(int code);    
     QString getPolicy(const QString &pkg) const;
     QString getShow(const QString &pkg) const;

@@ -9,14 +9,15 @@
 #include "dpkg-progress.h"
 
 PackageHandler::PackageHandler(QObject *parent) : QObject(parent),
-    dpkg(nullptr)
+    dpkg(nullptr), m_percent(0), m_status("")
 {
     p = new QProcess();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert("LC_ALL","C");
     p->setEnvironment(env.toStringList());
     connect(p,SIGNAL(finished(int)),this,SIGNAL(finished(int)));
-    connect(p,SIGNAL(finished(int)),this, SLOT(onFinished(int)));    
+    connect(p,SIGNAL(finished(int)),this, SLOT(onFinished(int)));
+
 }
 
 PackageHandler::~PackageHandler()
@@ -39,8 +40,8 @@ void PackageHandler::install(const QString &pkg)
     if (statusFd >= 0) {
         cmd.append("-o APT::Status-Fd=%1 %2");
         cmd = cmd.arg(statusFd).arg(pkg);
-        QObject::connect(dpkg, &DpkgProgress::dpkgProgress,
-                         this, &PackageHandler::onDpkgProgress);
+        connect(dpkg, SIGNAL(dpkgProgress(QString,QString,int,QString)),
+                         this, SLOT(onDpkgProgress(QString,QString,int,QString)));
     } else {
         /* Unable to get progress information */
         delete dpkg;
@@ -63,6 +64,8 @@ void PackageHandler::onFinished(int)
 void PackageHandler::onDpkgProgress(const QString &status, const QString &pkg,
                                     int value, const QString &desc)
 {    
+    m_status = status;
+    m_percent = value;
     emit dpkgProgressStatus(status, pkg, value, desc);
 }
 
@@ -76,8 +79,8 @@ void PackageHandler::remove(const QString &pkg)
     if (statusFd >= 0) {
         cmd.append("-o APT::Status-Fd=%1 %2");
         cmd = cmd.arg(statusFd).arg(pkg);
-        QObject::connect(dpkg, &DpkgProgress::dpkgProgress,
-                         this, &PackageHandler::onDpkgProgress);
+        connect(dpkg, SIGNAL(dpkgProgress(QString,QString,int,QString)),
+                         this, SLOT(onDpkgProgress(QString,QString,int,QString)));
     } else {
         /* Unable to get progress information */
         delete dpkg;
@@ -86,6 +89,21 @@ void PackageHandler::remove(const QString &pkg)
         cmd = cmd.arg(pkg);
     }
     p->start(cmd);
+}
+
+bool PackageHandler::terminate()
+{
+    if(m_status == "dlstatus" && m_percent < 99) {
+        p->terminate();
+        if (dpkg) {
+            dpkg->disconnect();
+            dpkg->deleteLater();
+            dpkg = nullptr;
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
 
 QString PackageHandler::getPolicy(const QString &pkg) const

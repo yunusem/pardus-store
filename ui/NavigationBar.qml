@@ -20,8 +20,6 @@ Rectangle {
     property alias processOutput: processOutputLabel
     property alias packageName: processOutputLabel.packageName
     property alias condition: processOutputLabel.condition
-    property alias busyIndicator: busy
-    property alias processingIcon: appIconProcess
 
     ListModel {
         id: menuListModel
@@ -246,57 +244,14 @@ Rectangle {
     }
 
 
-    ProgressBarCircle {
-        id: busy
-        width: 85
-        height: width
-        colorBackground: "#EEEEEE"
-        thickness: 10
-        visible: true
-        opacity: isThereOnGoingProcess ? 1.0 : 0.0
-        anchors {
-            bottom: parent.bottom
-            left: parent.left
-        }
-        onOpacityChanged: {
-            if(opacity === 0.0) {
-                value = 0
-            }
-        }
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.InExpo
-                duration: 600
-            }
-        }
-    }
-
-    Image {
-        id: appIconProcess
-        enabled: false
-        anchors.centerIn: busy
-        opacity: isThereOnGoingProcess ? 1.0 : 0.0
-        width: 44
-        height: width
-
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.InExpo
-                duration: 600
-            }
-        }
-    }
-
     Label {
         id: processOutputLabel
         property string packageName: ""
         property string condition: ""
-        anchors {
-            verticalCenter: busy.verticalCenter
-            left: busy.right
-            right: parent.right
+        anchors {            
+            bottom: parent.bottom
+            bottomMargin: 12
+            horizontalCenter: parent.horizontalCenter
         }
         opacity: 1.0
         fontSizeMode: Text.VerticalFit
@@ -340,24 +295,5 @@ Rectangle {
                 }
             }
         }
-
     }
-
-    MouseArea {
-        id: outputMa
-        height: busy.height
-        width: parent.width
-        anchors {
-            left: parent.left
-            bottom: parent.bottom
-        }
-
-        hoverEnabled: true
-        onContainsMouseChanged: {
-            if(containsMouse && isThereOnGoingProcess) {
-                queueDialog.open()
-            }
-        }
-    }
-
 }

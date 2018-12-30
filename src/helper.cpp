@@ -67,8 +67,8 @@ unsigned int Helper::ratio() const
 void Helper::setRatio(const unsigned int &r)
 {
     if(r != m_ratio ) {
-        if(r >= 5) {
-            m_ratio = 4;
+        if(r >= 4) {
+            m_ratio = 3;
         } else if (r <= 1) {
             m_ratio = 2;
         } else {
@@ -83,7 +83,7 @@ void Helper::readSettings()
 {
     setAnimate(s->value("animate", true).toBool());
     setUpdate(s->value("update", true).toBool());
-    setRatio(s->value("ratio", 4).toUInt());
+    setRatio(s->value("ratio", 3).toUInt());
 }
 
 void Helper::writeSettings(const QString &key, const QVariant &value)
@@ -170,6 +170,11 @@ void Helper::remove(const QString &pkg)
 {
     p = true;
     ph->remove(pkg);
+}
+
+bool Helper::terminate()
+{
+    return ph->terminate();
 }
 
 void Helper::getAppList()

@@ -2,13 +2,19 @@
 
 Application::Application(const QString &name, const QString &version,
                          const QString &dsize, bool stat, bool inque,
-                         const QString &category, bool &non_free,
+                         const QString &category, bool &non_free, const QString &state,
                          const QString &description)
     :m_name(name), m_version(version), m_dsize(dsize), m_status(stat),
       m_in_queue(inque), m_category(category), m_non_free(non_free),
       m_description(description)
 {
-
+    if(state == "") {
+        if(m_status) {
+            m_state = "installed";
+        } else {
+            m_state = "get";
+        }
+    }
 }
 
 QString Application::name() const
@@ -36,6 +42,11 @@ bool Application::non_free() const
     return m_non_free;
 }
 
+QString Application::state() const
+{
+    return m_state;
+}
+
 QString Application::description() const
 {
     return m_description;
@@ -59,6 +70,11 @@ bool Application::in_queue() const
 void Application::setInQueue(bool b)
 {
     m_in_queue = b;
+}
+
+void Application::setState(const QString &state)
+{
+    m_state = state;
 }
 
 ApplicationListModel::ApplicationListModel(QObject *parent)
@@ -100,6 +116,7 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     case InQueueRole: return app.in_queue();
     case CategoryRole: return app.category();
     case NonFreeRole: return app.non_free();
+    case StateRole: return app.state();
     case DescriptionRole: return app.description();
     default: return QVariant();
     }
@@ -111,10 +128,19 @@ bool ApplicationListModel::setData(const QModelIndex &index, const QVariant &val
     if(index.row() < lst.size() && index.row() >= 0 ) {
 
         if(role == InstalledRole) {
-            lst[index.row()].setStatus(value.toBool());
-        } else if (role == InQueueRole) {
+            bool status = value.toBool();
+            lst[index.row()].setStatus(status);
+            if(status) {
+                lst[index.row()].setState("installed");
+            } else {
+                lst[index.row()].setState("get");
+            }
+        } else if(role == InQueueRole) {
             lst[index.row()].setInQueue(value.toBool());
+        } else if(role == StateRole) {
+            lst[index.row()].setState(value.toString());
         }
+
         dataChanged(index,index);
         return true;
     }
@@ -130,6 +156,7 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     roles[InQueueRole] = "inqueue";
     roles[CategoryRole] = "section";
     roles[NonFreeRole] = "nonfree";
+    roles[StateRole]= "delegatestate";
     roles[DescriptionRole] = "description";
     return roles;
 }

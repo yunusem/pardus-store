@@ -66,6 +66,7 @@ public:
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
+    Q_INVOKABLE bool terminate();
     Q_INVOKABLE void getAppList();
     Q_INVOKABLE void getAppDetails(const QString &pkg);
     Q_INVOKABLE void surveyCheck();

@@ -14,5 +14,6 @@
         <file>ui/Settings.qml</file>
         <file>ui/ProgressBarCircle.qml</file>
         <file>ui/ApplicationList.qml</file>
+        <file>ui/FadeAnimation.qml</file>
     </qresource>
 </RCC>

@@ -20,15 +20,19 @@ Rectangle {
     function startRemoving(appName, from) {
         if(appName !== "" && appName === applicationName && from === "detail") {
             updateStatusOfAppFromDetail(applicationName)
-            processQueue.push(applicationName + " " + app.installed)
-            updateQueue()
+            processQueue.push(applicationName + " " + app.installed)            
         }
+    }
+
+    function errorHappened() {
+        processButton.enabled = true
     }
 
     color: "transparent"
 
     Component.onCompleted: {
         confirmationRemoval.connect(startRemoving)
+        errorOccured.connect(errorHappened)
         detailAnimation.start()
     }
 
@@ -502,26 +506,13 @@ Rectangle {
             width: parent.width / 3            
 
             enabled: !applicationInTheQueue
-            Material.background: app.installed ? Material.Red : Material.Green
-            Material.foreground: Material.theme === Material.Dark ? "#3c3c3c" :"#fafafa"
+            Material.background: app.installed ? "#F44336" : "#4CAF50"
+            Material.foreground: "#FAFAFA"
             text: app.installed ? qsTr("remove") : qsTr("install")
-            property bool error: main.errorOccured
 
             anchors {
                 bottom: parent.bottom
                 right: parent.right
-            }
-
-            onErrorChanged: {
-                if(error) {
-                    enabled = true
-                }
-            }
-
-            onEnabledChanged: {
-                if(error && enabled) {
-                    error = false
-                }
             }
 
             onClicked: {

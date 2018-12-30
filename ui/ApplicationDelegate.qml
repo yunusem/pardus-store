@@ -2,7 +2,6 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
-import QtGraphicalEffects 1.0
 
 Item {
     width: gridView.cellWidth
@@ -10,58 +9,137 @@ Item {
 
     property bool applicationStatus: installed
     property bool applicationInQueue: inqueue
+    property int animationDuration: 330
+    property bool detailTextHovered: false
+    property string condition: processingCondition
+    property int percent: processingPercent
+    property bool processing: isThereOnGoingProcess
+
+    signal triggered
+
+    onPercentChanged: {
+        if(processingPackageName === name) {
+            processBarItem.value = percent
+        }
+    }
+
+    onTriggered: {
+        inqueue = true
+        processQueue.push(name + " " + installed)
+        if((processingPackageName !== name) && isThereOnGoingProcess) {
+            delegatestate = "inqueue"
+            stopButton.visible = true
+            stopButton.enabled = true
+        }
+    }
+
+    onProcessingChanged: {
+        if(processing) {
+            if(processingPackageName === name) {
+                delegatestate = "process"
+            } else {
+                if(inqueue) {
+                    delegatestate = "inqueue"
+                    stopButton.visible = true
+                    stopButton.enabled = true
+                }
+            }
+        }
+    }
+
 
     onApplicationInQueueChanged: {
-        if(app.name === name) {
-            app.hasProcessing = inqueue
-            processButton.enabled = !inqueue
+        if(name === app.name) {
+            app.hasProcessing = applicationInQueue
         }
     }
 
     onApplicationStatusChanged: {
         if(name === app.name) {
-            app.installed = installed
+            app.installed = applicationStatus
+        }
+    }
+
+    onConditionChanged: {
+        if(processingPackageName === name) {
+            if(condition === qsTr("removing")) {
+                processBarItem.colorCircle = "#F44336" //Red
+                stopButton.enabled = false
+                stopButton.visible = false
+            } else if(condition === qsTr("installing")) {
+                processBarItem.colorCircle = "#4CAF50" //Green
+                stopButton.enabled = false
+                stopButton.visible = true
+
+            } else if(condition === qsTr("downloading")) {
+                processBarItem.colorCircle = "#03A9F4" //Blue
+                stopButton.enabled = true
+                stopButton.visible = true
+            }
         }
     }
 
     function updateInQueue(appName) {
-        if(appName !== "") {
-            if(appName === name) {
-                inqueue = true
+        if(appName !== "" && appName === name) {
+            inqueue = true
+            if((processingPackageName !== name) && isThereOnGoingProcess) {
+                delegatestate = "inqueue"
+                stopButton.visible = true
+                stopButton.enabled = true
             }
         }
     }
 
     function operateRemoval(appName, from) {
         if(appName !== "" && appName === name && from === "delegate") {
-            processButton.enabled = false
-            inqueue = true
-            processQueue.push(name + " " + installed)
-            updateQueue()
+            triggered()
         }
+    }
+
+    function errorHappened() {
+        inqueue = false
+        delegatestate = installed ? "installed" : "get"
     }
 
     Component.onCompleted: {
         updateStatusOfAppFromDetail.connect(updateInQueue)
         confirmationRemoval.connect(operateRemoval)
+        errorOccured.connect(errorHappened)
         app.name = ""
     }
 
+
     Pane {
         id: applicationDelegateItem
-        z: delegateMouseArea.containsMouse ? 100 : 5
-        Material.elevation: delegateMouseArea.containsMouse ? 5 : 3
+        z: delegateMa.containsMouse ? 100 : 5
+        Material.elevation: delegateMa.containsMouse ? 5 : 3
         anchors {
             margins: 8
             fill: parent
         }
 
         MouseArea {
-            id: delegateMouseArea
+            id: delegateMa
+            width: parent.width + 24
+            height: parent.height + 24
             anchors.centerIn: parent
             hoverEnabled: true
-            width: applicationDelegateItem.width
-            height: applicationDelegateItem.height
+            cursorShape: detailTextHovered ? Qt.PointingHandCursor : Qt.ArrowCursor
+            onPositionChanged: {
+                var pos = detailsLabel.mapToItem(delegateMa,0,0)
+                var horLine = pos.x + detailsLabel.width
+                var verLine = pos.y + detailsLabel.height
+                if(pos.x <= mouse.x &&
+                        mouse.x <= horLine &&
+                        pos.y <= mouse.y &&
+                        mouse.y <= verLine) {
+                    detailTextHovered = true
+                } else {
+                    detailTextHovered = false
+
+                }
+            }
+
             onClicked: {
                 forceActiveFocus()
                 app.name = name
@@ -71,6 +149,7 @@ Item {
                 app.hasProcessing = inqueue
                 app.category = section
                 app.free = !nonfree
+                app.dstate = delegatestate
                 app.description = description
 
                 stackView.push(applicationDetail,
@@ -79,238 +158,385 @@ Item {
                                    "previous": categoryIcons[categories.indexOf(selectedCategory)]})
                 screenshotUrls = []
                 helper.getAppDetails(name)
-                //isSearching = false
             }
             onPressed: {
-                if(delegateMouseArea.containsMouse) {
+                if(delegateMa.containsMouse) {
                     applicationDelegateItem.Material.elevation = 0
-                    dropShadow.opacity = 0.0
                 }
             }
             onReleased: {
-                if(delegateMouseArea.containsMouse) {
+                if(delegateMa.containsMouse) {
                     applicationDelegateItem.Material.elevation = 5
                 } else {
                     applicationDelegateItem.Material.elevation = 3
                 }
-
-                dropShadow.opacity = 1.0
             }
         }
 
-        Image {
-            id:appIcon
+
+        Rectangle {
+            id: mfButton
+            width: 72
+            height: width
+            color: "transparent"
+            state: delegatestate
             anchors {
-                verticalCenter: parent.verticalCenter
+                top: parent.top
+                right: parent.right
+            }
+
+            MouseArea {
+                id: mfbMa
+                anchors {
+                    left: parent.left
+                    bottom: parent.bottom
+                }
+
+                width: parent.width + 12
+                height: parent.height + 12
+                hoverEnabled: true
+                //enabled: false
+                //propagateComposedEvents: true
+                //acceptedButtons: Qt.NoButton
+            }
+
+            Timer {
+                id: stateTimer
+                interval: 3000
+                onTriggered: {
+                    delegatestate = installed ? "installed": "get"
+                }
+            }
+
+            Button {
+                id: actionButton
+                anchors {
+                    right: parent.right
+                    verticalCenter: parent.verticalCenter
+                    verticalCenterOffset: -6
+                }
+
+                width: textLabel.width + 12
+                height: parent.height / 3 + 18
+                opacity: 0.0
+                visible: opacity > 0.0
+                Behavior on opacity {
+                    enabled: animate
+                    NumberAnimation { duration: animationDuration }
+                }
+                Behavior on width {
+                    enabled: animate
+                    NumberAnimation { duration: animationDuration / 2 }
+                }
+                Material.background: "#4CAF50"
+                hoverEnabled: true
+
+                property string lastprocessed: lastProcess
+
+                onLastprocessedChanged: {
+                    if(lastProcess.search(name) == 0) {
+                        var s = lastProcess.split(" ")
+                        if (s[1] === "true") {
+                            installed = false
+                        } else {
+                            installed = true
+                        }
+                        inqueue = false
+                        if(app.name === name) {
+                            app.hasProcessing = inqueue
+                            app.installed = installed
+                        }
+                    }
+                }
+
+                onClicked: {
+                    forceActiveFocus()
+                    stateTimer.stop()
+                    if(delegatestate == "get") {
+                        delegatestate = "check"
+                        stateTimer.start()
+                    } else if(delegatestate == "check") {
+                        triggered()
+                    } else if (delegatestate == "installed") {
+                        confirmationDialog.name = name
+                        confirmationDialog.from = "delegate"
+                        confirmationDialog.open()
+                    }
+                }
+
+                Label {
+                    id: textLabel
+                    //font.weight: Font.DemiBold
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.centerIn: parent
+                    Material.foreground: "#FAFAFA"
+                    opacity: parent.opacity
+                    visible: opacity > 0.0
+
+                    Behavior on text {
+                        FadeAnimation {
+                            duration: animationDuration
+                            target: textLabel
+                        }
+                    }
+
+                    font.pointSize: 10
+                }
+
+            }
+
+            BusyIndicator {
+                id: busyItem
+                width: parent.width
+                height: width
+                anchors.centerIn: parent
+                padding: 4
+                smooth: true
+                Material.accent: "#FFCB08"
+                opacity: 0.0
+                running: opacity > 0.0
+                visible: opacity > 0.0 ? true : false
+                Behavior on opacity {
+                    enabled: animate
+                    NumberAnimation { duration: animationDuration * 2 }
+                }
+            }
+
+            ProgressBarCircle {
+                id: processBarItem
+                width: parent.width + 12
+                height: width
+                anchors.centerIn: parent
+                colorBackground: "#111111"
+                colorCircle: "#4CAF50"
+                thickness: 5
+                opacity: 0.0
+                visible: opacity > 0.0
+                onOpacityChanged: {
+                    if(opacity === 0.0) {
+                        value = 0
+                    }
+                }
+
+                Behavior on opacity {
+                    enabled: animate
+                    NumberAnimation { duration: animationDuration * 2 }
+                }
+            }
+
+            Button {
+                id: stopButton
+                anchors.centerIn: parent
+                width: (parent.width - 12) / 3
+                height: width + 12
+                opacity: 0.0
+                visible: opacity > 0.0
+                Behavior on opacity {
+                    enabled: animate
+                    NumberAnimation { easing.type: Easing.InExpo; duration: animationDuration / 2 }
+                }
+                property string disqueuedApplication: ""
+                onClicked: {
+                    forceActiveFocus()
+                    if(delegatestate === "inqueue") {
+                        var i = processQueue.indexOf(name)
+                        disqueuedApplication = processQueue.splice(i, 1).toString()
+                        inqueue = false
+                        delegatestate = installed ? "installed" : "get"
+                    } else if (delegatestate === "process") {
+                        if(condition === qsTr("downloading")) {
+                            terminateProcessCalled = true
+                            if(helper.terminate()) {
+                                inqueue = false
+                                installed = false
+                            } else {
+                                terminateProcessCalled = false
+                                enabled = false
+                            }
+                        }
+                    }
+                }
+            }
+
+            states: [
+                State {
+                    name: "get"
+                    PropertyChanges {
+                        target: textLabel
+                        text: qsTr("GET")
+                    }
+
+                    PropertyChanges {
+                        target: actionButton
+                        opacity: 1.0
+                    }
+
+                },
+
+                State {
+                    name: "check"
+                    PropertyChanges {
+                        target: textLabel
+                        text: qsTr("INSTALL")
+
+                    }
+                    PropertyChanges {
+                        target: actionButton
+                        opacity: 1.0
+                    }
+
+                },
+
+                State {
+                    name: "inqueue"
+                    PropertyChanges {
+                        target: stopButton
+                        opacity: 1.0
+                    }
+                    PropertyChanges {
+                        target: busyItem
+                        opacity:1.0
+                    }
+                },
+
+                State {
+                    name: "process"
+                    PropertyChanges {
+                        target: stopButton
+                        opacity: 1.0
+                    }
+                    PropertyChanges {
+                        target: processBarItem
+                        opacity:1.0
+                    }
+                },
+
+                State {
+                    name: "installed"
+                    PropertyChanges {
+                        target: textLabel
+                        text: qsTr("REMOVE")
+                    }
+                    PropertyChanges {
+                        target: actionButton
+                        opacity: 1.0
+                        Material.background: "#F44336"
+                    }
+                }
+            ]
+        }
+
+        Rectangle {
+            id: appNameLabelContainer
+            width: parent.width - mfButton.width
+            height: mfButton.height - 12
+            anchors {
+                top: parent.top
                 left: parent.left
-                verticalCenterOffset: delegateMouseArea.containsMouse ? -27 : 0
             }
-            height: parent.height * 2 / 3
-            width: height
-            sourceSize.width: width
-            sourceSize.height: width
-            fillMode: Image.PreserveAspectFit            
-            smooth: true
-            source: "image://application/" + getCorrectName(name)
-
-            Behavior on anchors.verticalCenterOffset {
-                enabled: animate
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutExpo
-                }
+            color: "transparent"
+            Label {
+                id: appNameLabel
+                anchors.fill: parent
+                text: getPrettyName(name)
+                font.pointSize: parent.width / 12 > 0 ? parent.width / 12 : 9
+                wrapMode: Text.WordWrap
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.capitalization: Font.Capitalize
             }
         }
 
-        DropShadow {
-            id:dropShadow
-            anchors.fill: appIcon
-            horizontalOffset: 3
-            verticalOffset: 3
-            radius: 8
-            samples: 17
-            color: "#80000000"
-            source: appIcon
-        }
-
-
-
-        Button {
-            id: processButton
-            width: delegateMouseArea.containsMouse ? parent.width : parent.width / 3
-            height: delegateMouseArea.containsMouse ? 36 : 24
-            opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
+        Rectangle {
+            id: detailContainer
+            width: parent.width - appIconContainer.width
+            height: parent.height - mfButton.height
             anchors {
+                right: parent.right
+                rightMargin: -3
                 bottom: parent.bottom
+            }
+            color: "transparent"
+            opacity: delegateMa.containsMouse ? 1.0 : 0.0
+            visible: opacity > 0.0
+            Behavior on opacity {
+                enabled: animate
+                NumberAnimation { duration: animationDuration }
+            }
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 12
+                width: parent.width
+                Label {
+                    id: downloadSizeLabel
+                    width: parent.width
+                    Material.foreground: "#03A9F4"
+                    text: installed ? "" : (qsTr("Download size")+ "\n" + dsize)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                    font.pointSize: detailContainer.width / 12
+                }
+
+                Label {
+                    id: nonFreeLabel
+                    width: parent.width
+                    Material.foreground: "#E91E63"
+                    text: nonfree ? qsTr("Non Free") : ""
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                    font.pointSize: detailContainer.width / 12
+                }
+
+                Label {
+                    id: detailsLabel
+                    width: parent.width
+                    Material.foreground: detailTextHovered ? "#FFBC08":"#EEEEEE"
+                    text: qsTr("Click for details")
+                    font.underline: detailTextHovered
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                    font.pointSize: detailContainer.width / 12
+                }
+            }
+
+
+
+        }
+
+        Rectangle {
+            id: appIconContainer
+            height: parent.height - appNameLabelContainer.height - 3
+            width: height
+            anchors {
                 horizontalCenter: parent.horizontalCenter
+                horizontalCenterOffset: delegateMa.containsMouse ? - (parent.width - width) / 2 : 0
+                bottom: parent.bottom
             }
-            Material.background: installed ? Material.Red : Material.Green
-            Material.foreground: Material.theme === Material.Dark ? "#3c3c3c" :"#fafafa"
-            text: installed ? qsTr("remove") : qsTr("install")
-
-            enabled: !inqueue
-
-            property bool error: main.errorOccured
-            property string lastProcess: main.lastProcess
-            onErrorChanged: {
-                if(error) {
-                    enabled = true
-                }
-            }
-
-            onLastProcessChanged: {
-                if(lastProcess.search(name) == 0) {
-                    var s = lastProcess.split(" ")
-                    if (s[1] === "true") {
-                        installed = false
-                    } else {
-                        installed = true
-                    }
-                    enabled = true
-                    inqueue = false
-                    if(app.name === name) {
-                        app.hasProcessing = inqueue
-                        app.installed = installed
-                    }
-                }
-            }
-
-            onEnabledChanged: {
-                if(error && enabled) {
-                    error = false
-                }
-            }
-
-            onClicked: {
-                forceActiveFocus()
-                if (installed) {
-                    confirmationDialog.name = name
-                    confirmationDialog.from = "delegate"
-                    confirmationDialog.open()
-                } else {
-                    name = name
-                    processButton.enabled = false
-                    inqueue = true
-                    processQueue.push(name + " " + installed)
-                    updateQueue()
-                }
-            }
-
-            Behavior on opacity {
+            color: "transparent"
+            Behavior on anchors.horizontalCenterOffset {
                 enabled: animate
                 NumberAnimation {
-                    duration: 200
+                    duration: animationDuration
                     easing.type: Easing.OutExpo
                 }
             }
 
-            Behavior on width {
-                enabled: animate
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutExpo
+            Image {
+                id: appIcon
+                anchors.centerIn: parent
+                source: "image://application/" + getCorrectName(name)
+                sourceSize {
+                    width: parent.width
+                    height: parent.height
                 }
-            }
-
-            Behavior on height {
-                enabled: animate
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutExpo
-                }
+                smooth: true
             }
         }
 
-        Image {
-            id: installedIcon
-            anchors {
-                top: parent.top
-                right: parent.right
-            }
-            mipmap: true
-            smooth: true
-            width: 16
-            height: 16
-            source: "qrc:/images/installed.svg"
-            visible: installed
-        }
-
-        Label {
-            id: downloadSize
-            anchors {
-                top: parent.top
-                right: parent.right
-                left: appIcon.right
-                leftMargin: 3
-                bottom: appNameLabel.top
-                bottomMargin: downloadSize.font.pointSize / 2
-            }
-
-            Material.foreground: Material.Blue
-            text: installed ? "" : (qsTr("Download size")+ "\n" + dsize)
-            fontSizeMode: Text.VerticalFit
-            font.pointSize: gridView.cellWidth / 23
-            font.capitalization: Font.Capitalize
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            //wrapMode: Text.WordWrap
-            opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
-
-            Behavior on opacity {
-                enabled: animate
-                NumberAnimation {
-                    duration: 800
-                    easing.type: Easing.OutExpo
-                }
-            }
-
-        }
-
-        Label {
-            id: appNameLabel
-            anchors {
-                verticalCenter: parent.verticalCenter
-                verticalCenterOffset: delegateMouseArea.containsMouse ? - (appNameLabel.font.pointSize * 3 / 2) : 0
-                right: parent.right
-                left: appIcon.right
-                leftMargin: 3
-            }
-            text: getPrettyName(name)
-            font.pointSize: gridView.cellWidth / 23
-            wrapMode: Text.WordWrap
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-
-            Behavior on anchors.verticalCenterOffset {
-                enabled: animate
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutExpo
-                }
-            }
-        }
-
-        Label {
-            id: nonFreeBadge
-            property int offSetAdjuster: gridView.cellWidth < 250 ? 2 : 0
-            anchors {
-                top: appNameLabel.bottom
-                topMargin: nonFreeBadge.font.pointSize / 2 - nonFreeBadge.offSetAdjuster
-                horizontalCenter: appNameLabel.horizontalCenter
-            }
-            font.pointSize: gridView.cellWidth / 23
-            Material.foreground: Material.Red
-            text: nonfree ? "Non Free" : ""
-            opacity: delegateMouseArea.containsMouse ? 1.0 : 0.0
-
-            Behavior on opacity {
-                enabled: animate
-                NumberAnimation {
-                    duration: 800
-                    easing.type: Easing.OutExpo
-                }
-            }
-        }
     }
 }
