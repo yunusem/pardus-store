@@ -28,6 +28,10 @@ Pane {
         }
     }
 
+    onCurrentOptionChanged: {
+        exp.text = optionsModel[currentOption]
+    }
+
     Behavior on opacity {
         enabled: animate
         NumberAnimation {
@@ -52,7 +56,7 @@ Pane {
             Label {
                 text: qsTr("enable animations")
                 font.capitalization: Font.Capitalize
-                Material.foreground: row1Ma.containsMouse ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 0 ? "#FFCB08":"#fafafa"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -61,9 +65,8 @@ Pane {
                     anchors.fill: parent
                     hoverEnabled: true
                     onContainsMouseChanged: {
-                        if(row1Ma.containsMouse) {
-                            currentOption = 0
-                            exp.text = optionsModel[currentOption]
+                        if(containsMouse) {
+                            currentOption = 0                            
                         }
                     }
                 }
@@ -73,7 +76,13 @@ Pane {
                 enabled: true
                 anchors.verticalCenter: parent.verticalCenter
                 checked: animate
-                onCheckedChanged: {
+                hoverEnabled: true
+                onHoveredChanged: {
+                    if(hovered) {
+                        currentOption = 0
+                    }
+                }
+                onCheckedChanged: {                    
                     animate = checked
                 }
             }
@@ -86,7 +95,7 @@ Pane {
             Label {
                 text: qsTr("Change application list column count")
                 font.capitalization: Font.Capitalize
-                Material.foreground: row2Ma.containsMouse ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 1 ? "#FFCB08":"#fafafa"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -95,9 +104,8 @@ Pane {
                     anchors.fill: parent
                     hoverEnabled: true
                     onContainsMouseChanged: {
-                        if(row2Ma.containsMouse) {
+                        if(containsMouse) {
                             currentOption = 1
-                            exp.text = optionsModel[currentOption]
                         }
                     }
                 }
@@ -123,7 +131,6 @@ Pane {
                 onHoveredChanged: {
                     if(hovered) {
                         currentOption = 1
-                        exp.text = optionsModel[currentOption]
                     }
                 }
 
@@ -189,7 +196,7 @@ Pane {
             Label {
                 text: qsTr("update package manager cache on start")
                 font.capitalization: Font.Capitalize
-                Material.foreground: row3Ma.containsMouse ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 2 ? "#FFCB08":"#fafafa"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -198,9 +205,8 @@ Pane {
                     anchors.fill: parent
                     hoverEnabled: true
                     onContainsMouseChanged: {
-                        if(row3Ma.containsMouse) {
+                        if(containsMouse) {
                             currentOption = 2
-                            exp.text = optionsModel[currentOption]
                         }
                     }
                 }
@@ -209,19 +215,26 @@ Pane {
                 enabled: true
                 anchors.verticalCenter: parent.verticalCenter
                 checked: updateCache
-                onCheckedChanged: {
+                hoverEnabled: true
+                onHoveredChanged: {
+                    if(hovered) {
+                        currentOption = 2
+                    }
+                }
+                onCheckedChanged: {                    
                     updateCache = checked
                 }
             }
 
         }
+
         Row {
             id: row4
             spacing: 12
             Label {
                 text: qsTr("Correct package manager sources list")
                 font.capitalization: Font.Capitalize
-                Material.foreground: row4Ma.containsMouse ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 3 ? "#FFCB08":"#fafafa"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -230,9 +243,8 @@ Pane {
                     anchors.fill: parent
                     hoverEnabled: true
                     onContainsMouseChanged: {
-                        if(row4Ma.containsMouse) {
+                        if(containsMouse) {
                             currentOption = 3
-                            exp.text = optionsModel[currentOption]
                         }
                     }
                 }
@@ -242,7 +254,7 @@ Pane {
                 anchors.verticalCenter: parent.verticalCenter
                 Material.background: "#FFCB08"
                 hoverEnabled: true
-                enabled: ! corrected
+                enabled: !corrected
                 width: correctBtnLabel.width + 24
                 Label {
                     id: correctBtnLabel
@@ -260,13 +272,11 @@ Pane {
                 onHoveredChanged: {
                     if(hovered) {
                         currentOption = 3
-                        exp.text = optionsModel[currentOption]
                     }
                 }
             }
 
         }
-
 
     }
 
