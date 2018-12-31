@@ -14,7 +14,7 @@ Rectangle {
     property int categoryItemHeight: 30
     property int categoryItemListSpacing: 3
     property int menuItemHeight: 40
-    property int menuItemListSpacing: 4
+    property int menuItemListSpacing: 3
 
 
     property alias processOutput: processOutputLabel
@@ -243,14 +243,82 @@ Rectangle {
         spacing: menuItemListSpacing
     }
 
+    Item {
+        id: userContainer
+        width: parent.width
+        height: width / 3 - 12
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: processOutputLabel.top
+            bottomMargin: 6
+        }
+
+        Rectangle {
+            id: account
+            width: parent.width * 3 / 4 + 24
+            height: parent.height
+            color: "transparent"
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            MouseArea {
+                id: accountMa
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.WhatsThisCursor
+                ToolTip.text: qsTr("This section is under development")
+                ToolTip.delay: 1000
+                ToolTip.visible: containsMouse
+                ToolTip.timeout: 3000
+            }
+
+            Image {
+                id: accountImage
+                height: parent.height - 12
+                width: height
+                enabled: false
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                    leftMargin: 3
+                }
+                sourceSize {
+                    width: width
+                    height: height
+                }
+
+                source: "image://application/avatar-default"
+            }
+
+            Label {
+                id: accountNameLabel
+                enabled: false
+                width: parent.width - accountImage.width -6
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 11
+                wrapMode: Text.WordWrap
+                Material.foreground: "#FAFAFA"
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: accountImage.right
+                    leftMargin: 6
+                }
+                text: qsTr("Anonymus Account")
+            }
+        }
+
+    }
+
 
     Label {
         id: processOutputLabel
         property string packageName: ""
         property string condition: ""
-        anchors {            
+        anchors {
             bottom: parent.bottom
-            bottomMargin: 12
+            bottomMargin: 6
             horizontalCenter: parent.horizontalCenter
         }
         opacity: 1.0

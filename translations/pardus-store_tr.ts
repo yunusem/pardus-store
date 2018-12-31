@@ -286,16 +286,26 @@
     </message>
     <message>
         <location filename="../ui/NavigationBar.qml" line="270"/>
+        <source>This section is under development</source>
+        <translation>Bu kısım geliştirme aşamasındadır</translation>
+    </message>
+    <message>
+        <location filename="../ui/NavigationBar.qml" line="308"/>
+        <source>Anonymus Account</source>
+        <translation>Anonim Kullanıcı</translation>
+    </message>
+    <message>
+        <location filename="../ui/NavigationBar.qml" line="338"/>
         <source>installed</source>
         <translation>kuruldu</translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="270"/>
+        <location filename="../ui/NavigationBar.qml" line="338"/>
         <source>removed</source>
         <translation>kaldırıldı</translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="271"/>
+        <location filename="../ui/NavigationBar.qml" line="339"/>
         <source>is</source>
         <translation> </translation>
     </message>
@@ -334,72 +344,72 @@
         <translation>ayarlar</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="53"/>
+        <location filename="../ui/Settings.qml" line="57"/>
         <source>enable animations</source>
         <translation>animasyonları etkinleştir</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="190"/>
+        <location filename="../ui/Settings.qml" line="197"/>
         <source>update package manager cache on start</source>
         <translation>paket yöneticisi ön belleğini her açılışta güncelle</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="222"/>
+        <location filename="../ui/Settings.qml" line="235"/>
         <source>Correct package manager sources list</source>
         <translation>Paket yöneticisi kaynak listesini düzelt</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="250"/>
+        <location filename="../ui/Settings.qml" line="262"/>
         <source>correct</source>
         <translation>düzelt</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="87"/>
+        <location filename="../ui/Settings.qml" line="96"/>
         <source>Change application list column count</source>
         <translation>Uygulama listesi sütun sayısını değiştir</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="250"/>
+        <location filename="../ui/Settings.qml" line="262"/>
         <source>corrected</source>
         <translation>düzeltildi</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="290"/>
+        <location filename="../ui/Settings.qml" line="300"/>
         <source>Informing</source>
         <translation>Bilgilendirme</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="305"/>
+        <location filename="../ui/Settings.qml" line="315"/>
         <source>I have carefully read the explanation on the right and agree to proceed.</source>
         <translation>Sağdaki açıklamayı dikkatlice okudum ve devam edilmesini onaylıyorum.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="313"/>
+        <location filename="../ui/Settings.qml" line="323"/>
         <source>yes</source>
         <translation>evet</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="319"/>
+        <location filename="../ui/Settings.qml" line="329"/>
         <source>no</source>
         <translation>hayır</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="441"/>
+        <location filename="../ui/Settings.qml" line="451"/>
         <source>Currently selected</source>
         <translation>Seçilmiş olan</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="458"/>
+        <location filename="../ui/Settings.qml" line="468"/>
         <source>Controls the transitions animations. If you have low performance graphic card, disabling animation may give you more comfort.</source>
         <translation>Geçiş animasyonlarını denetler. Eğer düşük performanslı bir ekran kartınız varsa, animasyonları devre dışı bırakmak daha rahat bir kullanım sağlayabilir.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="460"/>
+        <location filename="../ui/Settings.qml" line="470"/>
         <source>Checks the system package manager&apos;s cache when Pardus-Store is started. Disabling this could speed up the starting process but if you do not use Pardus-Store often you should enable this option.</source>
         <translation>Pardus Mağaza başlatıldığında sistem paket yöneticisinin ön belleğini kontrol eder. Bunu devre dışı bırakmak başlama işlemini hızlandırabilir ama Pardus Mağazayı çok sık kullanmıyorsanız bu seçeneği etkinleştirmelisiniz.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="461"/>
+        <location filename="../ui/Settings.qml" line="471"/>
         <source>Corrects the system sources list that used by package manager. This process will revert all the changes have been done and will use Pardus Official Repository source addresses. Use with caution.</source>
         <translation>Paket yöneticisi tarafından kullanılan sistem kaynakları listesini düzeltir. Bu süreç, kaynak listesi üzerinde yapılan tüm değişiklikleri geri alacak ve Pardus Resmi paket deposu adreslerini kullanacaktır. Dikkatle kullanın.</translation>
     </message>
@@ -408,7 +418,7 @@
         <translation type="vanished">Çok yakında.</translation>
     </message>
     <message>
-        <location filename="../ui/Settings.qml" line="459"/>
+        <location filename="../ui/Settings.qml" line="469"/>
         <source>Controls the visual column count of applications list view.</source>
         <translation>Uygulamalar listesi görünümünün görsel sütun sayısını kontrol eder.</translation>
     </message>
