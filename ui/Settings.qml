@@ -105,14 +105,15 @@ Pane {
 
             Slider {
                 id: slider
+                property int count: to - from + 1
                 Material.foreground: "#fafafa"
                 anchors.top: parent.top
                 from: 2
-                to: 4
+                to: 3
                 value: ratio
                 stepSize: 1
                 snapMode: Slider.SnapAlways
-                width: 120
+                width: slider.count * 40
                 onValueChanged: {
                     ratio = value
                 }
@@ -137,9 +138,9 @@ Pane {
                         width: parent.width
                         height: 3
                         anchors.bottom: parent.bottom
-                        spacing: (parent.width - 3) / 2
+                        spacing: (parent.width - 3) / (slider.count - 1)
                         Repeater {
-                            model: 3
+                            model: slider.count
                             Rectangle {
                                 radius: 1
                                 height: 3
@@ -162,15 +163,14 @@ Pane {
                         width: parent.width
                         height: 3
                         anchors.bottom: parent.bottom
-                        spacing: (parent.width -15) / 2
+                        spacing: (parent.width - 3 - (slider.count -1) * 6) / (slider.count - 1)
                         Repeater {
                             id: r
-                            model: 3
+                            model: slider.count
                             Label {
                                 height: contentHeight
                                 Material.foreground: "#FAFAFA"
-                                text: index + slider.from
-                                //anchors.horizontalCenter: parent.horizontalCenter
+                                text: index + slider.from                                
                                 font.pointSize: 7
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignHCenter
@@ -377,10 +377,10 @@ Pane {
                     visible: currentOption === 1
 
                     Row {
-                        width: parent.width
+                        anchors.horizontalCenter: parent.horizontalCenter
                         spacing: 24
                         Repeater {
-                            model: 3
+                            model: slider.count
 
                             Column {
                                 spacing: 12
