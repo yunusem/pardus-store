@@ -7,20 +7,22 @@ import QtGraphicalEffects 1.0
 Rectangle {
     id:appDetail
     property string previous
-    property string current
-    property variant urls: screenshotUrls
-    property int length: urls.length
-    property int ind: 0
-    property int i: indicator.index
+    property string current    
+    property string appVersion
+    property string appDownloadSize
+    property string appCategory
+    property bool appNonfree
+    property string appDescription
+
+    property int length: urls.length    
+    property int ssindex: indicator.index
     property int detailTextSize : 12
+    property variant urls: screenshotUrls
 
-    property string applicationName: app.name
-    property bool applicationInTheQueue: app.hasProcessing
-
-    function startRemoving(appName, from) {
-        if(appName !== "" && appName === applicationName && from === "detail") {
-            updateStatusOfAppFromDetail(applicationName)
-            processQueue.push(applicationName + " " + app.installed)            
+    function startRemoving(name, from) {
+        if(name !== "" && name === selectedAppName && from === "detail") {
+            updateStatusOfAppFromDetail(selectedAppName)
+            processQueue.push(selectedAppName + " " + selectedAppInstalled)
         }
     }
 
@@ -28,53 +30,36 @@ Rectangle {
         processButton.enabled = true
     }
 
+    function appDescriptionSlot(desc) {
+        appDescription = desc
+    }
+
     color: "transparent"
+
+    onLengthChanged: {
+        lm.clear()
+        for(var c=0; c < length; c++) {
+            lm.append({"url" : urls[c]})
+        }
+    }
 
     Component.onCompleted: {
         confirmationRemoval.connect(startRemoving)
         errorOccured.connect(errorHappened)
-        detailAnimation.start()
+        appDescriptionReceived.connect(appDescriptionSlot)
+        helper.getAppDetails(selectedAppName)
+
+        console.log(selectedAppName, selectedAppInstalled)
     }
 
-    Button {
-        id: backBtn
-        z: 92
-        height: 54
-        width: height * 2 / 3
-        opacity: selectedCategory !== qsTr("home") ? 1.0 : 0.0
-        Material.background: "#2C2C2C"
-        anchors {
-            top: parent.top
-            topMargin: 6
-            left: parent.left
-            leftMargin: 8
-
-        }
-
-        Image {
-            id: backIcon
-            width: parent.height - 24
-            anchors.centerIn: parent
-            fillMode: Image.PreserveAspectFit
-            mipmap: true
-            smooth: true
-            source: "qrc:/images/back.svg"
-        }
-
-        onClicked: {
-            stackView.pop()
-
-        }
-
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 300
-            }
-        }
-
+    Component.onDestruction: {
+        selectedAppName = ""
+        selectedAppInqueue = false
+        selectedAppInstalled = false
+        selectedAppDelegatestate = "get"
     }
+
+
 
     ListModel {
         id: lm
@@ -86,10 +71,15 @@ Rectangle {
     Pane {
         id:appBanner
         width: parent.width - 108
-        height: parent.height / 4
+        height: 200
         Material.elevation: 3
         visible: true
-        y: 12
+        anchors {
+            top: parent.top
+            topMargin: 12
+            horizontalCenter: parent.horizontalCenter
+        }
+
 
         Image {
             id:appBannerIcon
@@ -105,7 +95,7 @@ Rectangle {
             verticalAlignment: Image.AlignVCenter
             fillMode: Image.PreserveAspectFit
             visible: true
-            source: applicationName == "" ? "": "image://application/" + getCorrectName(applicationName)
+            source: selectedAppName === "" ? "": "image://application/" + getCorrectName(selectedAppName)
             smooth: true
         }
 
@@ -123,7 +113,7 @@ Rectangle {
 
         Label {
             anchors.centerIn: parent
-            text: getPrettyName(applicationName)
+            text: getPrettyName(selectedAppName)
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
@@ -143,9 +133,9 @@ Rectangle {
         closePolicy: Popup.CloseOnPressOutside
         onClosed: {
             if (indicator.index == -1) {
-                i = length - 1
+                ssindex = length - 1
             } else {
-                i = indicator.index
+                ssindex = indicator.index
             }
 
             popupImage.source = ""
@@ -153,12 +143,12 @@ Rectangle {
         }
         onOpened: {
             if (indicator.index == -1) {
-                i = length - 1
+                ssindex = length - 1
             } else {
-                i = indicator.index
+                ssindex = indicator.index
             }
 
-            popupImage.source = urls[0] !== "none" && urls[0] ? urls[i] : ""
+            popupImage.source = urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
 
         }
 
@@ -169,7 +159,7 @@ Rectangle {
             anchors.centerIn: parent
             width: (parent.width - 140) >= sourceSize.width ? sourceSize.width :  parent.width - 140
             height: parent.height >= sourceSize.height ? sourceSize.height : parent.height
-            source: urls[0] !== "none" && urls[0] ? urls[i] : ""
+            source: urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
 
             BusyIndicator {
                 id: imageBusyInPopup
@@ -215,15 +205,15 @@ Rectangle {
 
                 hoverEnabled: true
                 onClicked:{
-                    i=i + 1
-                    if (i==length) {
-                        i = 0
+                    ssindex=ssindex + 1
+                    if (ssindex==length) {
+                        ssindex = 0
                     }
-                    popupImage.source = urls[i]
+                    popupImage.source = urls[ssindex]
 
 
                 }
-                onClipChanged: i = indicator.index
+                onClipChanged: ssindex = indicator.index
             }
             Image {
                 width: 64
@@ -255,12 +245,12 @@ Rectangle {
 
                 hoverEnabled: true
                 onClicked:{
-                    i= i - 1
-                    if (i==-1) {
+                    ssindex= ssindex - 1
+                    if (ssindex==-1) {
 
-                        i = length - 1
+                        ssindex = length - 1
                     }
-                    popupImage.source = urls[i]
+                    popupImage.source = urls[ssindex]
                 }
             }
 
@@ -279,7 +269,7 @@ Rectangle {
             id: btnClose
             width: 32
             height: 32
-            Material.background: "#2c2c2c"
+            Material.background: Material.primary
             Material.elevation: 10
 
             anchors {
@@ -291,6 +281,8 @@ Rectangle {
                 anchors.centerIn: parent
                 Material.foreground: "white"
                 text: "X"
+                font.weight: Font.DemiBold
+
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
@@ -372,7 +364,7 @@ Rectangle {
 
                     }
                 }
-                onChildrenChanged: i = indicator.index
+                onChildrenChanged: ssindex = indicator.index
 
 
 
@@ -409,12 +401,12 @@ Rectangle {
                 indicator.index = indexAt(contentX,contentY)
 
                 if (indicator.index == -1) {
-                    i = length - 1
+                    ssindex = length - 1
                 } else {
-                    i = indicator.index
+                    ssindex = indicator.index
                 }
 
-                popupImage.source = urls[0] !== "none" && urls[0] ? urls[i] : ""
+                popupImage.source = urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
 
             }
         }
@@ -447,7 +439,7 @@ Rectangle {
         Material.background: "#4C4C4C"
         Rectangle {
             id: disclamer
-            visible: !app.free
+            visible: appNonfree
             clip: true
             width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width
             height: disclamerMa.containsMouse ? processButton.height * 3 + 18 : processButton.height - 12
@@ -505,10 +497,10 @@ Rectangle {
             id: processButton
             width: parent.width / 3            
 
-            enabled: !applicationInTheQueue
-            Material.background: app.installed ? "#F44336" : "#4CAF50"
+            enabled: !selectedAppInqueue
+            Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"
             Material.foreground: "#FAFAFA"
-            text: app.installed ? qsTr("remove") : qsTr("install")
+            text: selectedAppInstalled ? qsTr("remove") : qsTr("install")
 
             anchors {
                 bottom: parent.bottom
@@ -516,13 +508,13 @@ Rectangle {
             }
 
             onClicked: {
-                if(app.installed) {
-                    confirmationDialog.name = app.name
+                if(selectedAppInstalled) {
+                    confirmationDialog.name = selectedAppName
                     confirmationDialog.from = "detail"
                     confirmationDialog.open()
                 } else {
-                    updateStatusOfAppFromDetail(applicationName)
-                    processQueue.push(applicationName + " " + app.installed)
+                    updateStatusOfAppFromDetail(selectedAppName)
+                    processQueue.push(selectedAppName + " " + selectedAppInstalled)
                     updateQueue()
                 }
             }
@@ -539,7 +531,7 @@ Rectangle {
             spacing: 3
             Label {
                 id: labelVersion
-                text:qsTr("version")+": " + app.version
+                text:qsTr("version")+": " + appVersion
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
@@ -547,8 +539,8 @@ Rectangle {
 
             Label {
                 id: labelDownloadSize
-                visible: !app.installed
-                text:qsTr("Download size")+": " + app.downloadSize
+                visible: !selectedAppInstalled
+                text:qsTr("Download size")+": " + appDownloadSize
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
@@ -556,7 +548,7 @@ Rectangle {
 
             Label {
                 id: labelCategory
-                text:qsTr("Category")+": " + categories[categoryIcons.indexOf(app.category)]
+                text:qsTr("Category")+": " + categories[categoryIcons.indexOf(appCategory)]
                 font.pointSize: detailTextSize
                 verticalAlignment: Text.AlignVCenter
                 font.capitalization: Font.Capitalize
@@ -582,7 +574,7 @@ Rectangle {
                 Label {
                     id: labelDescription
                     width: textPane.width - 30
-                    text: app.description == "" ? qsTr("no description found"): app.description
+                    text: appDescription === "" ? qsTr("no description found"): appDescription
                     fontSizeMode: Text.VerticalFit
                     wrapMode: Text.WordWrap
                     font.pointSize: detailTextSize
@@ -596,44 +588,46 @@ Rectangle {
 
     }
 
-    ParallelAnimation {
-        id: detailAnimation
+    Button {
+        id: backBtn
+        z: 92
+        height: 54
+        width: height * 2 / 3
+        opacity: selectedCategory !== qsTr("home") ? 1.0 : 0.0
+        Material.background: "#2C2C2C"
+        anchors {
+            top: parent.top
+            topMargin: 6
+            left: parent.left
+            leftMargin: 8
 
-
-        NumberAnimation {
-            target: appBanner
-            property: "x"
-            easing.type: Easing.OutExpo
-            duration: animate ? 1000 : 0
-            from: appBanner.width
-            to : 54
         }
 
-
-        NumberAnimation {
-            target: imagesPane
-            property: "y"
-            easing.type: Easing.OutExpo
-            duration: animate ? 1000 : 0
-            from: appDetail.height
-            to : appBanner.y + appBanner.height + 12
+        Image {
+            id: backIcon
+            width: parent.height - 24
+            anchors.centerIn: parent
+            fillMode: Image.PreserveAspectFit
+            mipmap: true
+            smooth: true
+            source: "qrc:/images/back.svg"
         }
+
+        onClicked: {
+            stackView.pop()
+
+        }
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
+        }
+
     }
 
-    onApplicationNameChanged: {
-        if(!detailAnimation.running) {
-            indicator.index = 0
-            i = indicator.index
-            detailAnimation.start()
-        }
-    }
-
-    onLengthChanged: {
-        lm.clear()
-        for(var i=0; i < length; i++) {
-            lm.append({"url" : urls[i]})
-        }
-    }
 
 }
 

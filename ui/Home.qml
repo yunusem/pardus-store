@@ -590,6 +590,15 @@ Rectangle {
     Item {
         id: surveyDetail
         visible: false
+        property string description
+        function descriptionArrived(desc) {
+            description = desc
+        }
+
+        Component.onCompleted: {
+            appDescriptionReceived.connect(descriptionArrived)
+        }
+
         Button {
             id: surveyBackButton
             z: 92
@@ -680,7 +689,7 @@ Rectangle {
                     //anchors.horizontalCenter: parent.horizontalCenter
                     width: parent.width - 12
                     wrapMode: Text.WordWrap
-                    text: app.description
+                    text: surveyDetail.description
                 }
             }
         }

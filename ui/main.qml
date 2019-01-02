@@ -11,30 +11,31 @@ ApplicationWindow {
     minimumWidth: 1150
     minimumHeight: minimumWidth * 3 / 5
     visible: true
-    title: "Pardus" + " " + qsTr("Store")
-    //flags: Qt.FramelessWindowHint
+    title: "Pardus" + " " + qsTr("Store")    
     color: "transparent"
 
+    property real navigationBarWidth: 215.625
+    property real processingPercent: 0
+
     property bool hasActiveFocus: false
-    property bool cacheIsUpToDate: false
-    property string popupText: ""
-    property string popupHeaderText: qsTr("Something went wrong!")
-    property variant screenshotUrls: []
+    property bool cacheIsUpToDate: false    
+    property bool isSearching: false
+    property bool expanded: false
     property bool isThereOnGoingProcess: false
     property bool terminateProcessCalled: false
-    property variant processQueue: []
+
+    property string popupText: ""
+    property string popupHeaderText: qsTr("Something went wrong!")
     property string lastProcess: ""
-
-    property string previousMenu: ""
-    property bool isSearching: false
-
-    property real navigationBarWidth: 215.625
-    property bool expanded: false
     property string selectedCategory: qsTr("all")
     property string selectedMenu: qsTr("home")
+    property string previousMenu: ""
 
+    property variant screenshotUrls: []
+    property variant processQueue: []
     property variant menus: [qsTr("home"), qsTr("categories"), qsTr("settings")]
     property variant menuIcons: ["home", "categories", "settings"]
+    property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
     property variant categories: [
         qsTr("all"),
         qsTr("internet"),
@@ -61,9 +62,7 @@ ApplicationWindow {
         "video",
         "chat",
         "others"]
-    property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
 
-    property real processingPercent: 0
     property alias processingPackageName: navigationBar.packageName
     property alias processingCondition: navigationBar.condition
     property alias processOutputLabel: navigationBar.processOutput
@@ -79,33 +78,12 @@ ApplicationWindow {
     signal surveyJoined()
     signal surveyJoinUpdated()
     signal errorOccured()
+    signal appDescriptionReceived(string desc)
 
-
-    Item {
-        id: app
-        property string name: ""
-        property string version: ""
-        property string downloadSize: ""
-        property bool installed: false
-        property bool hasProcessing: false
-        property string category: ""
-        property bool free: true
-        property string dstate: ""
-        property string description: ""
-
-        onNameChanged: {
-            if(name === "") {
-                version = ""
-                downloadSize: ""
-                installed = false
-                hasProcessing = false
-                category = ""
-                free = true
-                dstate = ""
-                description = ""
-            }
-        }
-    }
+    property bool selectedAppInstalled
+    property bool selectedAppInqueue
+    property string selectedAppName
+    property string selectedAppDelegatestate: "get"
 
     Pane {
         id: mainBackground
@@ -166,7 +144,6 @@ ApplicationWindow {
                 }
             }
         }
-
         onProcessingFinishedWithError: {
             processQueue.shift()
             isThereOnGoingProcess = false
@@ -208,7 +185,7 @@ ApplicationWindow {
             //console.log(processingPercent)
         }
         onDescriptionReceived: {
-            app.description = description
+            appDescriptionReceived(description)
         }
         onScreenshotReceived: {
             screenshotUrls = urls
@@ -405,7 +382,6 @@ ApplicationWindow {
     }
 
     onClosing: {
-
         if(isThereOnGoingProcess) {
             popupHeaderText = qsTr("Warning!")
             popupText = "Pardus " + qsTr("Store") + " " + qsTr("can not be closed while a process is ongoing.")
@@ -443,7 +419,6 @@ ApplicationWindow {
     onSelectedCategoryChanged: {
         applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
         if(stackView.currentItem.previous && stackView.currentItem.objectName === "detail") {
-
             stackView.pop()
         }
     }

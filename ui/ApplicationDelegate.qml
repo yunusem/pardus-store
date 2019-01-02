@@ -7,8 +7,9 @@ Item {
     width: gridView.cellWidth
     height: gridView.cellHeight
 
-    property bool applicationStatus: installed
-    property bool applicationInQueue: inqueue
+    property bool applicationInstalled: installed
+    property bool applicationInqueue: inqueue
+    property string applicationDelegatestate: delegatestate
     property int animationDuration: 330
     property bool detailTextHovered: false
     property string condition: processingCondition
@@ -48,15 +49,21 @@ Item {
     }
 
 
-    onApplicationInQueueChanged: {
-        if(name === app.name) {
-            app.hasProcessing = applicationInQueue
+    onApplicationInqueueChanged: {
+        if(name === selectedAppName) {
+            selectedAppInqueue = applicationInqueue
         }
     }
 
-    onApplicationStatusChanged: {
-        if(name === app.name) {
-            app.installed = applicationStatus
+    onApplicationInstalledChanged: {
+        if(name === selectedAppName) {
+            selectedAppInqueue = applicationInstalled
+        }
+    }
+
+    onApplicationDelegatestateChanged: {
+        if(name === selectedAppName) {
+            selectedAppDelegatestate = applicationDelegatestate
         }
     }
 
@@ -105,7 +112,6 @@ Item {
         updateStatusOfAppFromDetail.connect(updateInQueue)
         confirmationRemoval.connect(operateRemoval)
         errorOccured.connect(errorHappened)
-        app.name = ""
     }
 
 
@@ -142,20 +148,20 @@ Item {
 
             onClicked: {
                 forceActiveFocus()
-                app.name = name
-                app.version = version
-                app.downloadSize = dsize
-                app.installed = installed
-                app.hasProcessing = inqueue
-                app.category = section
-                app.free = !nonfree
-                app.dstate = delegatestate
-                app.description = description
 
-                stackView.push(applicationDetail,
-                               {objectName: "detail",
+                selectedAppName = name
+                selectedAppInstalled = installed
+                selectedAppInqueue = inqueue
+                selectedAppDelegatestate = delegatestate
+
+                stackView.push(applicationDetail, {
+                                   objectName: "detail",
                                    "current": name,
-                                   "previous": categoryIcons[categories.indexOf(selectedCategory)]})
+                                   "previous": categoryIcons[categories.indexOf(selectedCategory)],
+                                   "appVersion":version,
+                                   "appDownloadSize" : dsize,
+                                   "appCategory" : section,
+                                   "appNonfree" : nonfree})
                 screenshotUrls = []
                 helper.getAppDetails(name)
             }
@@ -242,9 +248,9 @@ Item {
                             installed = true
                         }
                         inqueue = false
-                        if(app.name === name) {
-                            app.hasProcessing = inqueue
-                            app.installed = installed
+                        if(selectedAppName === name) {
+                            selectedAppInqueue = inqueue
+                            selectedAppInstalled = installed
                         }
                     }
                 }
