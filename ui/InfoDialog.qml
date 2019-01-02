@@ -11,7 +11,7 @@ Popup {
     closePolicy: Popup.CloseOnPressOutside
     y: parent.height / 2 - height / 2
     x: parent.width / 2 - width / 2
-    Material.background: "#2c2c2c"
+    Material.background: Material.background
     Material.elevation: 2
 
     Column {

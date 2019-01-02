@@ -6,8 +6,7 @@ Pane {
     id: splash
     anchors.fill: parent
     z: 91
-    opacity: 1.0
-    Material.background: "#3c3c3c"
+    opacity: 1.0    
     property alias label: splashLabel
     property alias timer: splashTimer
     property alias busy: splashBusy

@@ -12,7 +12,7 @@ Item {
     property real arcEnd: value * (Math.PI * 1.5) / maximumValue
     property real thickness: 10
     property int animationDuration: 250
-    property string colorCircle: "#2c2c2c"
+    property string colorCircle: "#111111"
     property string colorBackground: "#aaaaaa"
 
     onArcEndChanged: canvas.requestPaint()
@@ -44,7 +44,7 @@ Item {
         smooth: true
         text: value.toFixed(0) + "%"
         font.pointSize: thickness * 20 / 9
-        color: value == 0 ? "#2c2c2c" : colorCircle
+        color: value == 0 ? "#111111" : colorCircle
     }
 
     Canvas {

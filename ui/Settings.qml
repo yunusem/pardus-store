@@ -10,7 +10,7 @@ Pane {
     property bool corrected: helper.corrected
     property int currentOption: 0
     property variant optionsModel: []
-    Material.background: "#4C4C4C"
+    Material.background: Material.primary
     Material.elevation: 3
     z: 92
     visible: selectedMenu === qsTr("settings")
@@ -261,7 +261,7 @@ Pane {
                     anchors.centerIn: parent
                     text: corrected ? qsTr("corrected"): qsTr("correct")
                     font.bold: true
-                    Material.foreground: "#2c2c2c"
+                    Material.foreground: Material.background
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     font.capitalization: Font.Capitalize
@@ -288,7 +288,7 @@ Pane {
         x: parent.width / 2 - width / 2
         y: parent.height / 2 - height / 2
         Material.elevation: 2
-        Material.background: "#2c2c2c"
+        Material.background: Material.background
         signal accepted
         signal rejected
 

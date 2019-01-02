@@ -8,7 +8,7 @@ Rectangle {
     width: navigationBarWidth
     height: parent.height
     z : 93
-    color: "#2C2C2C"
+    color: Material.background
 
     property alias currentIndex : menuListView.currentIndex
     property int categoryItemHeight: 30
@@ -113,7 +113,7 @@ Rectangle {
 
                 Rectangle {
                     id: bgRect
-                    color: "#4C4C4C"
+                    color: Material.primary
                     visible: name === selectedMenu
                     width: parent.width
                     height: parent.height

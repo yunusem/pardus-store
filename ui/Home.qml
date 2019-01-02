@@ -521,7 +521,7 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                         bottom: parent.bottom
                     }
-                    Material.background: "#4C4C4C"
+                    Material.background: Material.primary
                     width: surveyBtnLabel.width + 24
                     Label {
                         id: surveyBtnLabel
@@ -604,7 +604,7 @@ Rectangle {
             z: 92
             height: 54
             width: height * 2 / 3
-            Material.background: "#4C4C4C"
+            Material.background: Material.primary
             anchors {
                 top: parent.top
                 topMargin: - 6

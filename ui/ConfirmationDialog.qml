@@ -11,7 +11,7 @@ Popup {
     x: parent.width / 2 - width / 2
     y: parent.height / 2 - height / 2
     Material.elevation: 2
-    Material.background: "#2c2c2c"
+    Material.background: Material.background
     signal accepted
     signal rejected
     property alias content: contentLabel.text

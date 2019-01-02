@@ -48,8 +48,6 @@ Rectangle {
         errorOccured.connect(errorHappened)
         appDescriptionReceived.connect(appDescriptionSlot)
         helper.getAppDetails(selectedAppName)
-
-        console.log(selectedAppName, selectedAppInstalled)
     }
 
     Component.onDestruction: {
@@ -435,8 +433,7 @@ Rectangle {
         width: appBanner.width - imagesPane.width - 12
         x: imagesPane.width + imagesPane.x + 12
         y: appBanner.height + 24
-        clip: true
-        Material.background: "#4C4C4C"
+        clip: true        
         Rectangle {
             id: disclamer
             visible: appNonfree
@@ -480,7 +477,7 @@ Rectangle {
                 id: disclamerText
                 width: parent.width - 12
                 //enabled: disclamerMa.containsMouse
-                Material.foreground: "#2C2C2C"
+                Material.foreground: Material.background
                 text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
                                                                          qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
                 //horizontalAlignment: Text.AlignHCenter
@@ -594,7 +591,7 @@ Rectangle {
         height: 54
         width: height * 2 / 3
         opacity: selectedCategory !== qsTr("home") ? 1.0 : 0.0
-        Material.background: "#2C2C2C"
+        Material.background: Material.background
         anchors {
             top: parent.top
             topMargin: 6

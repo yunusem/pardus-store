@@ -85,10 +85,10 @@ ApplicationWindow {
     property string selectedAppName
     property string selectedAppDelegatestate: "get"
 
-    Pane {
+    Rectangle {
         id: mainBackground
         anchors.fill: parent
-        Material.background: "#4C4C4C"        
+        color: Material.primary
     }
 
     SplashScreen {

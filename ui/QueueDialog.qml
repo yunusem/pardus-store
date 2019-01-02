@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.0
 Popup {
     id: queue
     closePolicy: Popup.CloseOnPressOutside
-    Material.background: "#4C4C4C"
+    //Material.background: Material.primary
     Material.elevation: 3
     width: navigationBarWidth - 12
     z: 99
