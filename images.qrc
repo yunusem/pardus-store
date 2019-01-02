@@ -28,5 +28,6 @@
         <file>images/back.svg</file>
         <file>images/front.svg</file>
         <file>images/categories.svg</file>
+        <file>images/rating-stars.svg</file>
     </qresource>
 </RCC>

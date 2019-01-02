@@ -12,12 +12,22 @@ Rectangle {
     property string appDownloadSize
     property string appCategory
     property bool appNonfree
-    property string appDescription
+
+    property string description
+    property string sections : "game, misc"
+    property string maintainer: "Debian Games Team"
+    property string website : "http://play0ad.com/"
+    property string license : "GPLv3"
+    property double rating: 3.666666666
+    property int ratingTotal: 15
 
     property int length: urls.length    
     property int ssindex: indicator.index
     property int detailTextSize : 12
     property variant urls: screenshotUrls
+
+    property string textPrimaryColor: Material.foreground
+    property string textSecondaryColor: "#A9A9A9"
 
     function startRemoving(name, from) {
         if(name !== "" && name === selectedAppName && from === "detail") {
@@ -31,7 +41,7 @@ Rectangle {
     }
 
     function appDescriptionSlot(desc) {
-        appDescription = desc
+        description = desc
     }
 
     color: "transparent"
@@ -81,13 +91,13 @@ Rectangle {
 
         Image {
             id:appBannerIcon
-            height: appBanner.height - 12
+            height: appBanner.height
             width: height
             sourceSize.width: width
             sourceSize.height: width
             anchors {
                 left: parent.left
-                leftMargin: 6
+                //leftMargin: 6
                 verticalCenter: parent.verticalCenter
             }
             verticalAlignment: Image.AlignVCenter
@@ -97,27 +107,217 @@ Rectangle {
             smooth: true
         }
 
-        DropShadow {
-            id:dropShadowAppIcon
-            anchors.fill: appBannerIcon
-            horizontalOffset: 3
-            verticalOffset: 3
-            radius: 8
-            samples: 17
-            color: "#80000000"
-            source: appBannerIcon
-            smooth: true            
+        Rectangle {
+            id: appBannerNameContainer
+            color: "transparent"
+            height: parent.height * 4 / 7
+            width: parent.width * 4 / 5 - appBannerIcon.width
+            anchors {
+                top: parent.top
+                left: appBannerIcon.right
+                leftMargin: 12
+            }
+
+            Column {
+                anchors {
+                    fill: parent
+                }
+                spacing: 6
+                Label {
+                    id: appNameLabel
+                    text: selectedAppName
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    font.bold: true
+                    font.pointSize:24
+                }
+
+                Label {
+                    id: sectionsLabel
+                    text: sections
+                    color: textSecondaryColor
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    font.pointSize:11
+                }
+                Label {
+                    id: maintainerLabel
+                    text: maintainer
+                    Material.foreground: "#ddffcb08"
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    font.pointSize:9
+                }
+            }
+
+
         }
 
-        Label {
-            anchors.centerIn: parent
-            text: getPrettyName(selectedAppName)
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-            font.bold: true
-            font.pointSize:24
+        Rectangle {
+            id: appBanerRatingContainer
+            color: "transparent"
+            anchors {
+                top: appBannerNameContainer.bottom
+                topMargin: 12
+                left: appBannerIcon.right
+                leftMargin: 12
+                bottom: parent.bottom
+                right: parent.right
+            }
+
+            Label {
+                id: ratingLabel
+                text: rating.toFixed(1)
+                color: textSecondaryColor
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                font.capitalization: Font.Capitalize
+                font.weight: Font.DemiBold
+                font.pointSize:20
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                }
+            }
+
+            Rectangle {
+                color: "#111111"
+                width: 125
+                height: width / 5
+                anchors {
+                    verticalCenter: ratingLabel.verticalCenter
+                    left: ratingLabel.right
+                    leftMargin: 6
+                }
+
+                Rectangle {
+                    color: textSecondaryColor
+                    height: parent.height
+                    width: parent.width * rating / 5
+                }
+
+                Image {
+                    source: "qrc:/images/rating-stars.svg"
+                    anchors.fill: parent
+                    sourceSize {
+                        width: width
+                        height: height
+                    }
+                    Component.onCompleted: console.log(width)
+                }
+            }
+
+            Label {
+                id: ratingTotalLabel
+                text: ratingTotal + " " + qsTr("ratings")
+                color: textSecondaryColor
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                font.capitalization: Font.Capitalize
+                font.pointSize:10
+                anchors {
+                    left: parent.left
+                    top: ratingLabel.bottom
+                }
+            }
+
+
+            Pane {
+                id: disclamer
+                visible: appNonfree
+                clip: true
+                width: disclamerMa.containsMouse ? 500 : 150
+                height: disclamerMa.containsMouse ? parent.height : disclamerText.height + 24
+                Material.background: Material.accent
+                Material.elevation: 3
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+
+                }
+
+                MouseArea {
+                    id: disclamerMa
+                    width: parent.width + 24
+                    height: parent.height + 24
+                    anchors.centerIn: parent
+                    hoverEnabled: true
+                }
+
+                Behavior on height {
+                    enabled: animate
+                    NumberAnimation {
+                        easing.type: Easing.OutExpo
+                        duration: 150
+                    }
+                }
+
+                Behavior on width {
+                    enabled: animate
+                    NumberAnimation {
+                        easing.type: Easing.OutExpo
+                        duration: 50
+                    }
+                }
+
+                Label {
+                    id: disclamerText
+                    width: parent.width
+                    Material.foreground: "#2B2B2B"
+                    text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
+                                                                             qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
+                    //horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    fontSizeMode: Text.HorizontalFit
+
+                    wrapMode: Text.WordWrap
+                    anchors.centerIn: parent
+                }
+            }
         }
+
+        Rectangle {
+            id: appBannerActionContainer
+            color: "transparent"
+            anchors {
+                top: parent.top
+                right: parent.right
+                left:appBannerNameContainer.right
+                leftMargin: 12
+                bottom: appBannerNameContainer.bottom
+            }
+
+            Button {
+                id: processButton
+                width: parent.height
+
+                enabled: !selectedAppInqueue
+                Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"
+                Material.foreground: "#FAFAFA"
+                text: selectedAppInstalled ? qsTr("remove") : qsTr("install")
+
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: parent.right
+                }
+
+                onClicked: {
+                    if(selectedAppInstalled) {
+                        confirmationDialog.name = selectedAppName
+                        confirmationDialog.from = "detail"
+                        confirmationDialog.open()
+                    } else {
+                        updateStatusOfAppFromDetail(selectedAppName)
+                        processQueue.push(selectedAppName + " " + selectedAppInstalled)
+                        updateQueue()
+                    }
+                }
+            }
+        }
+
     }
 
     Popup {
@@ -433,96 +633,17 @@ Rectangle {
         width: appBanner.width - imagesPane.width - 12
         x: imagesPane.width + imagesPane.x + 12
         y: appBanner.height + 24
-        clip: true        
-        Rectangle {
-            id: disclamer
-            visible: appNonfree
-            clip: true
-            width: disclamerMa.containsMouse ? parent.width - processButton.width - 12 : processButton.width
-            height: disclamerMa.containsMouse ? processButton.height * 3 + 18 : processButton.height - 12
-            color: "#FFCB08"
-            radius: 2
-            z: 200
-            anchors {
-                bottom: parent.bottom
-                bottomMargin: 6
-                left: parent.left
-            }
+        clip: true
 
-            MouseArea {
-                id: disclamerMa
-                width: parent.width + 24
-                height: parent.height + 24
-                anchors.centerIn: parent
-                hoverEnabled: true
-            }
 
-            Behavior on height {
-                enabled: animate
-                NumberAnimation {
-                    easing.type: Easing.OutExpo
-                    duration: 150
-                }
-            }
 
-            Behavior on width {
-                enabled: animate
-                NumberAnimation {
-                    easing.type: Easing.OutExpo
-                    duration: 50
-                }
-            }
-
-            Label {
-                id: disclamerText
-                width: parent.width - 12
-                //enabled: disclamerMa.containsMouse
-                Material.foreground: Material.background
-                text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
-                                                                         qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
-                //horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                fontSizeMode: Text.HorizontalFit
-                wrapMode: Text.WordWrap
-                anchors.centerIn: parent
-                anchors.margins: 6
-
-            }
-        }
-
-        Button {
-            id: processButton
-            width: parent.width / 3            
-
-            enabled: !selectedAppInqueue
-            Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"
-            Material.foreground: "#FAFAFA"
-            text: selectedAppInstalled ? qsTr("remove") : qsTr("install")
-
-            anchors {
-                bottom: parent.bottom
-                right: parent.right
-            }
-
-            onClicked: {
-                if(selectedAppInstalled) {
-                    confirmationDialog.name = selectedAppName
-                    confirmationDialog.from = "detail"
-                    confirmationDialog.open()
-                } else {
-                    updateStatusOfAppFromDetail(selectedAppName)
-                    processQueue.push(selectedAppName + " " + selectedAppInstalled)
-                    updateQueue()
-                }
-            }
-        }
 
         Column {
             width: parent.width
             anchors {
                 top: parent.top
-                bottom: processButton.top
-                bottomMargin: 21
+                bottom: parent.bottom
+                bottomMargin: 24
             }
 
             spacing: 3
@@ -571,7 +692,7 @@ Rectangle {
                 Label {
                     id: labelDescription
                     width: textPane.width - 30
-                    text: appDescription === "" ? qsTr("no description found"): appDescription
+                    text: description === "" ? qsTr("no description found"): description
                     fontSizeMode: Text.VerticalFit
                     wrapMode: Text.WordWrap
                     font.pointSize: detailTextSize
