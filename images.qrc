@@ -29,5 +29,7 @@
         <file>images/front.svg</file>
         <file>images/categories.svg</file>
         <file>images/rating-stars.svg</file>
+        <file>images/email.svg</file>
+        <file>images/website.svg</file>
     </qresource>
 </RCC>

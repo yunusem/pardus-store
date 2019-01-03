@@ -7,23 +7,28 @@ import QtGraphicalEffects 1.0
 Rectangle {
     id:appDetail
     property string previous
-    property string current    
+    property string current
     property string appVersion
     property string appDownloadSize
     property string appCategory
     property bool appNonfree
 
     property string description
-    property string sections : "game, misc"
+    property string sections: "game, misc"
     property string maintainer: "Debian Games Team"
-    property string website : "http://play0ad.com/"
-    property string license : "GPLv3"
-    property double rating: 3.666666666
+    property string website: "http://play0ad.com/"
+    property string email: "pkg-games-devel@lists.alioth.debian.org"
+    property string license: "GPLv3"
+    property double ratingAverage: 3.33333332
+    property int rating: 0
+    property int prevRating: 0
     property int ratingTotal: 15
+    property bool voted: false
+    property int downloadCount: 27
 
-    property int length: urls.length    
-    property int ssindex: indicator.index
-    property int detailTextSize : 12
+    property int infoCellHeight: 70
+    property int length: urls.length
+    property int ssindex
     property variant urls: screenshotUrls
 
     property string textPrimaryColor: Material.foreground
@@ -51,6 +56,7 @@ Rectangle {
         for(var c=0; c < length; c++) {
             lm.append({"url" : urls[c]})
         }
+        screenshotsListView.update()
     }
 
     Component.onCompleted: {
@@ -97,7 +103,6 @@ Rectangle {
             sourceSize.height: width
             anchors {
                 left: parent.left
-                //leftMargin: 6
                 verticalCenter: parent.verticalCenter
             }
             verticalAlignment: Image.AlignVCenter
@@ -170,12 +175,12 @@ Rectangle {
 
             Label {
                 id: ratingLabel
-                text: rating.toFixed(1)
+                text: ratingAverage.toFixed(1)
                 color: textSecondaryColor
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 font.capitalization: Font.Capitalize
-                font.weight: Font.DemiBold
+                //font.weight: Font.DemiBold
                 font.pointSize:20
                 anchors {
                     left: parent.left
@@ -184,6 +189,7 @@ Rectangle {
             }
 
             Rectangle {
+                id: ratingRect
                 color: "#111111"
                 width: 125
                 height: width / 5
@@ -196,7 +202,14 @@ Rectangle {
                 Rectangle {
                     color: textSecondaryColor
                     height: parent.height
+                    width: parent.width * ratingAverage / 5
+                }
+
+                Rectangle {
+                    id: ratingHighLight
+                    height: parent.height
                     width: parent.width * rating / 5
+                    color: Material.accent
                 }
 
                 Image {
@@ -206,7 +219,40 @@ Rectangle {
                         width: width
                         height: height
                     }
-                    Component.onCompleted: console.log(width)
+                    MouseArea {
+                        id: ratingMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onEntered: {
+                            prevRating = rating
+                        }
+
+                        onPositionChanged: {
+                            var mx = mouse.x
+                            var w = ratingRect.width
+                            if(mx <= w / 5) {
+                                rating = 1
+                            } else if (mx <= (w * 2 / 5)) {
+                                rating = 2
+                            } else if (mx <= (w * 3 / 5)) {
+                                rating = 3
+                            } else if (mx <= (w * 4 / 5)) {
+                                rating = 4
+                            } else if (mx <= w) {
+                                rating = 5
+                            }
+                        }
+
+                        onExited: {
+                            if(!voted) {
+                                rating = prevRating
+                            }
+                        }
+                        onClicked: {
+                            voted = true
+                        }
+                    }
                 }
             }
 
@@ -217,12 +263,26 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 font.capitalization: Font.Capitalize
-                font.pointSize:10
+                font.pointSize:8
                 anchors {
                     left: parent.left
                     top: ratingLabel.bottom
                 }
             }
+
+            //            Label {
+            //                id: ratingIndividual
+            //                text: qsTr("Your rate")  + " " + rating
+            //                color: textSecondaryColor
+            //                verticalAlignment: Text.AlignVCenter
+            //                horizontalAlignment: Text.AlignRight
+            //                font.capitalization: Font.Capitalize
+            //                font.pointSize:10
+            //                anchors {
+            //                    right: ratingRect.right
+            //                    top: ratingLabel.bottom
+            //                }
+            //            }
 
 
             Pane {
@@ -320,6 +380,544 @@ Rectangle {
 
     }
 
+    Pane {
+        id: bottomBanner
+        clip: true
+        Material.elevation: 3
+        width: parent.width - 108
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: appBanner.bottom
+            bottom: parent.bottom
+            margins: 12
+        }
+
+        Flickable {
+            width: parent.width
+            height: parent.height
+            interactive: contentHeight > height
+            contentHeight: screenshotsListView.height +
+                           descriptionContainer.height +
+                           moreLabel.height +
+                           infoContainer.height +
+                           reviewContainer.height +
+                           changelogContainer.height + 48
+            flickableDirection: Flickable.VerticalFlick
+            clip: true
+
+            ListView {
+                id: screenshotsListView
+                interactive: count > 2
+                clip: true
+                orientation: Qt.Horizontal
+                width: parent.width
+                height: width * 9 / 32 + 12
+                anchors.top: parent.top
+                snapMode: ListView.SnapToItem
+                spacing: 12
+                cacheBuffer: width * 5
+                delegate: Item {
+                    width: bottomBanner.width / 2 - 18
+                    height: width * 9 / 16
+
+                    Image {
+                        id:ss
+                        visible: url != "none"
+                        anchors.fill: parent
+                        source: url === "none" ? "" : url
+                        fillMode: Image.PreserveAspectFit
+                        MouseArea{
+                            id:ssma
+                            anchors.fill:parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if(!screenshotsListView.moving) {
+                                    popupImagePreview.open()
+                                    ssindex = index
+                                }
+                            }
+                        }
+                    }
+
+                    Label {
+                        anchors.centerIn: parent
+                        text: qsTr("no screenshot found!")
+                        visible: url === "none"
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        font.capitalization: Font.Capitalize
+                        font.pointSize: 12
+                        enabled: false
+                    }
+
+                    BusyIndicator {
+                        id: imageBusy
+                        anchors.centerIn: parent
+                        running: url === "none" ? false : !ss.progress
+                    }
+                }
+                model: lm
+            }
+
+            Rectangle {
+                id: descriptionContainer
+                property bool expanded: false
+                anchors {
+                    top: screenshotsListView.bottom
+                    topMargin: 12
+                    left: parent.left
+                }
+                color: "transparent"
+                width: parent.width * 5 / 7
+                height:  expanded ? labelDescription.contentHeight : 82
+                Behavior on height {
+                    enabled: animate
+                    NumberAnimation {
+                        duration: 250
+                    }
+                }
+                clip: true
+
+                Label {
+                    id: labelDescription
+                    anchors.fill: parent
+                    text: description === "" ? qsTr("no description found"): description
+                    font.pointSize: 11
+                    verticalAlignment: Text.AlignTop
+                    horizontalAlignment: Text.AlignJustify
+                    elide: descriptionContainer.expanded ? Text.ElideNone : Text.ElideRight
+                    wrapMode: Text.WordWrap
+                    onContentHeightChanged: {
+                        if(descriptionContainer.expanded) {
+                            descriptionContainer.height = contentHeight
+                        }
+                    }
+                }
+            }
+
+            Label {
+                id: moreLabel
+                text: qsTr("more")
+                color: Material.accent
+                visible: labelDescription.truncated
+                font.underline: moreMa.containsMouse
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                anchors {
+                    right: descriptionContainer.right
+                    top: descriptionContainer.bottom
+                    topMargin: 3
+                }
+
+                MouseArea {
+                    id: moreMa
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        descriptionContainer.expanded = true
+                    }
+                }
+            }
+
+
+            Rectangle {
+                id: linksContainer
+                anchors {
+                    top: screenshotsListView.bottom
+                    topMargin: 12
+                    right: parent.right
+                    left: descriptionContainer.right
+                    leftMargin: 12
+                }
+                color: "transparent"
+                height: 82
+
+                Rectangle {
+                    id: websiteContainer
+                    width: websiteLabel.width + homepageIcon.width + 12
+                    height: 23
+                    anchors {
+                        top: parent.top
+                        right: parent.right
+                    }
+                    color: "transparent"
+
+                    MouseArea {
+                        id:websiteMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            helper.openUrl(website)
+                        }
+                    }
+
+                    Image {
+                        id: homepageIcon
+                        height: parent.height - 3
+                        width: height
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            right: parent.right
+                        }
+                        source: "qrc:images/website.svg"
+                        sourceSize{
+                            width: width
+                            height: height
+                        }
+                    }
+
+                    Label {
+                        id: websiteLabel
+                        property bool websiteVisible: false
+                        font.weight: Font.DemiBold
+                        text: qsTr("website")
+                        color: textSecondaryColor
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            right: homepageIcon.left
+                            rightMargin: 6
+                        }
+
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignRight
+                        font.capitalization: Font.Capitalize
+                        font.pointSize: 10
+                    }
+                }
+
+                Rectangle {
+                    id: mailContainer
+                    width: websiteLabel.width + homepageIcon.width + 12
+                    height: 23
+                    anchors {
+                        top: websiteContainer.bottom
+                        topMargin: 6
+                        right: parent.right
+                    }
+                    color: "transparent"
+
+                    MouseArea {
+                        id:mailMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            helper.openUrl("mailto:"+email)
+                        }
+                    }
+
+                    Image {
+                        id: mailIcon
+                        height: parent.height - 3
+                        width: height
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            right: parent.right
+                        }
+                        source: "qrc:images/email.svg"
+                        sourceSize{
+                            width: width
+                            height: height
+                        }
+                    }
+
+                    Label {
+                        id: mailLabel
+                        property bool websiteVisible: false
+                        font.weight: Font.DemiBold
+                        text: qsTr("e-mail")
+                        color: textSecondaryColor
+                        anchors {
+                            verticalCenter: parent.verticalCenter
+                            right: mailIcon.left
+                            rightMargin: 6
+                        }
+
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignRight
+                        font.capitalization: Font.Capitalize
+                        font.pointSize: 10
+                    }
+                }
+
+            }
+
+            Rectangle {
+                id: infoContainer
+                color: "transparent"
+                width: parent.width
+                height: infoGrid.height + infoLabel.height + 24
+                anchors {
+                    top: descriptionContainer.bottom
+                    topMargin: 24
+                }
+
+                Label {
+                    id: infoLabel
+                    text: qsTr("information")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    font.pointSize: 19
+                    font.weight: Font.DemiBold
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                    }
+                }
+
+                Grid {
+                    id: infoGrid
+                    width: parent.width
+                    columns: 3
+                    spacing: 12
+                    anchors {
+                        top: infoLabel.bottom
+                        topMargin: 12
+                    }
+
+                    Item {
+                        width: parent.width / 3 - 8
+                        height: infoCellHeight
+                        Column {
+                            anchors.fill: parent
+                            spacing: 3
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: qsTr("version")
+                                color: textSecondaryColor
+                                font.pointSize: 12
+                            }
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: appVersion
+                                font.pointSize: 12
+                                font.weight: Font.DemiBold
+                            }
+                        }
+                    }
+                    Item {
+                        width: parent.width / 3 - 8
+                        height: infoCellHeight
+                        Column {
+                            anchors.fill: parent
+                            spacing: 3
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: qsTr("Download size")
+                                color: textSecondaryColor
+                                font.pointSize: 12
+                            }
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: appDownloadSize
+                                font.pointSize: 12
+                                font.weight: Font.DemiBold
+                            }
+                        }
+                    }
+                    Item {
+                        width: parent.width / 3 - 8
+                        height: infoCellHeight
+                        Column {
+                            anchors.fill: parent
+                            spacing: 3
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: qsTr("type")
+                                color: textSecondaryColor
+                                font.pointSize: 12
+                            }
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: appNonfree ? qsTr("non-free") : qsTr("open source")
+                                font.pointSize: 12
+                                font.weight: Font.DemiBold
+                            }
+                        }
+                    }
+                    Item {
+                        width: parent.width / 3 - 8
+                        height: infoCellHeight
+                        Column {
+                            anchors.fill: parent
+                            spacing: 3
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: qsTr("category")
+                                color: textSecondaryColor
+                                font.pointSize: 12
+                            }
+                            Label {
+                                color: appCategoryMa.containsMouse ? Material.accent : Material.foreground
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: categories[categoryIcons.indexOf(appCategory)]
+                                font.pointSize: 12
+                                font.weight: Font.DemiBold
+                                MouseArea {
+                                    id: appCategoryMa
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        if(categoryIcons[categories.indexOf(selectedCategory)] === "all") {
+                                            selectedCategory = categories[categoryIcons.indexOf(appCategory)]
+                                        } else {
+                                            stackView.pop()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Item {
+                        width: parent.width / 3 - 8
+                        height: infoCellHeight
+                        Column {
+                            anchors.fill: parent
+                            spacing: 3
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: qsTr("license")
+                                color: textSecondaryColor
+                                font.pointSize: 12
+                            }
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: license
+                                font.pointSize: 12
+                                font.weight: Font.DemiBold
+                            }
+                        }
+                    }
+                    Item {
+                        width: parent.width / 3 - 8
+                        height: infoCellHeight
+                        Column {
+                            anchors.fill: parent
+                            spacing: 3
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: qsTr("download count")
+                                color: textSecondaryColor
+                                font.pointSize: 12
+                            }
+                            Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                font.capitalization: Font.Capitalize
+                                text: downloadCount
+                                font.pointSize: 12
+                                font.weight: Font.DemiBold
+                            }
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: reviewContainer
+                color: "transparent"
+                width: parent.width
+                height: reviewLabel.height + comingSoonLabel.height + 24
+                anchors {
+                    top: infoContainer.bottom
+                    topMargin: 24
+                }
+
+                Label {
+                    id: reviewLabel
+                    text: qsTr("reviews - ratings")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    font.pointSize: 19
+                    font.weight: Font.DemiBold
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                    }
+                }
+
+                Label {
+                    id: comingSoonLabel
+                    text: qsTr("coming soon") + " ..."
+                    enabled: false
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    anchors {
+                        top: reviewLabel.bottom
+                        left: parent.left
+                    }
+                }
+            }
+
+            Rectangle {
+                id: changelogContainer
+                color: "transparent"
+                width: parent.width
+                height: newsLabel.height + comingSoonLabel2.height + 24
+                anchors {
+                    top: reviewContainer.bottom
+                    topMargin: 24
+                }
+
+                Label {
+                    id: newsLabel
+                    text: qsTr("what is new")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    font.pointSize: 19
+                    font.weight: Font.DemiBold
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                    }
+                }
+
+                Label {
+                    id: comingSoonLabel2
+                    text: qsTr("coming soon") + " ..."
+                    enabled: false
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
+                    font.capitalization: Font.Capitalize
+                    anchors {
+                        top: newsLabel.bottom
+                        left: parent.left
+                    }
+                }
+            }
+        }
+
+    }
+
+
     Popup {
         id:popupImagePreview
         width: main.width - 12
@@ -330,33 +928,17 @@ Rectangle {
         y: 6
         closePolicy: Popup.CloseOnPressOutside
         onClosed: {
-            if (indicator.index == -1) {
-                ssindex = length - 1
-            } else {
-                ssindex = indicator.index
-            }
-
             popupImage.source = ""
-
         }
         onOpened: {
-            if (indicator.index == -1) {
-                ssindex = length - 1
-            } else {
-                ssindex = indicator.index
-            }
-
             popupImage.source = urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
-
         }
 
 
         Image {
             id:popupImage
             fillMode: Image.PreserveAspectFit
-            anchors.centerIn: parent
-            width: (parent.width - 140) >= sourceSize.width ? sourceSize.width :  parent.width - 140
-            height: parent.height >= sourceSize.height ? sourceSize.height : parent.height
+            anchors.fill: parent
             source: urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
 
             BusyIndicator {
@@ -377,7 +959,7 @@ Rectangle {
                 property: "opacity"
                 from: 0
                 to: 1.0
-                duration: 200
+                duration: 250
                 easing.type: Easing.InExpo
             }
 
@@ -386,6 +968,7 @@ Rectangle {
         Rectangle {
             width:75
             height: parent.height * 5 / 6
+            visible: length > 1
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
@@ -400,7 +983,7 @@ Rectangle {
             MouseArea {
                 id:nextMa
                 anchors.fill: parent
-
+                cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 onClicked:{
                     ssindex=ssindex + 1
@@ -419,13 +1002,13 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.centerIn: parent
                 source:"qrc:/images/front.svg"
-
             }
         }
 
         Rectangle {
             width:75
             height: parent.height * 5 / 6
+            visible: length > 1
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -440,7 +1023,7 @@ Rectangle {
             MouseArea {
                 id:prevMa
                 anchors.fill: parent
-
+                cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 onClicked:{
                     ssindex= ssindex - 1
@@ -469,7 +1052,6 @@ Rectangle {
             height: 32
             Material.background: Material.primary
             Material.elevation: 10
-
             anchors {
                 right: parent.right
                 top: parent.top
@@ -477,7 +1059,6 @@ Rectangle {
 
             Label {
                 anchors.centerIn: parent
-                Material.foreground: "white"
                 text: "X"
                 font.weight: Font.DemiBold
 
@@ -503,207 +1084,6 @@ Rectangle {
                 }
             }
         }
-    }
-
-    Pane {
-        id: imagesPane
-        Material.elevation : 3
-        width: parent.width * 19 / 32
-        height: parent.height - appBanner.height - 36
-        y: appBanner.y + appBanner.height + 12
-        x: 54
-        Label {
-            id: titleText
-            height: 36
-            anchors {
-                left: parent.left
-                top: parent.top
-            }
-
-            text: qsTr("screenshots")
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-            font.pointSize: 16
-            font.bold: true
-        }
-
-
-
-        ListView {
-            id: screenshotsLV
-
-            interactive: animate
-            spacing: 15
-            clip: true
-            orientation: Qt.Horizontal
-            width: parent.width
-            height: width * 9 / 16
-            anchors.centerIn: parent
-
-            model: lm
-            snapMode: ListView.SnapOneItem
-            delegate: Item {
-                width: screenshotsLV.width - 10
-                height: screenshotsLV.height - 10
-                Image {
-                    id:ss
-                    visible: url != "none"
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: url == "none" ? "" : url
-                    MouseArea{
-                        id:ssma
-                        anchors.fill:parent
-
-                        onClicked: {
-                            popupImagePreview.open()
-                        }
-
-                    }
-                }
-                onChildrenChanged: ssindex = indicator.index
-
-
-
-                DropShadow {
-                    id:dropShadow
-                    visible: ss.visible
-                    anchors.fill: ss
-                    horizontalOffset: 3
-                    verticalOffset: 3
-                    radius: 8
-                    samples: 17
-                    color: "#80000000"
-                    source: ss
-                }
-
-                Label {
-                    anchors.centerIn: parent
-                    text: qsTr("no screenshot found!")
-                    visible: url == "none"
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    font.capitalization: Font.Capitalize
-                    enabled: false
-                }
-
-                BusyIndicator {
-                    id: imageBusy
-                    anchors.centerIn: parent
-                    running: url == "none" ? 0 : !ss.progress
-                }
-            }
-
-            onMovementEnded: {
-                indicator.index = indexAt(contentX,contentY)
-
-                if (indicator.index == -1) {
-                    ssindex = length - 1
-                } else {
-                    ssindex = indicator.index
-                }
-
-                popupImage.source = urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
-
-            }
-        }
-
-        Label {
-            id: indicator
-            property int index: 0
-            visible: urls[0] !== "none"
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: screenshotsLV.bottom
-                topMargin: 6
-            }
-
-            text: (index == -1 ? lm.count.toString() : index + 1) + "/" + lm.count
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.Capitalize
-            enabled: false
-        }
-    }
-
-    Pane {
-        id:textPane
-        height: imagesPane.height
-        width: appBanner.width - imagesPane.width - 12
-        x: imagesPane.width + imagesPane.x + 12
-        y: appBanner.height + 24
-        clip: true
-
-
-
-
-        Column {
-            width: parent.width
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                bottomMargin: 24
-            }
-
-            spacing: 3
-            Label {
-                id: labelVersion
-                text:qsTr("version")+": " + appVersion
-                font.pointSize: detailTextSize
-                verticalAlignment: Text.AlignVCenter
-                font.capitalization: Font.Capitalize
-            }
-
-            Label {
-                id: labelDownloadSize
-                visible: !selectedAppInstalled
-                text:qsTr("Download size")+": " + appDownloadSize
-                font.pointSize: detailTextSize
-                verticalAlignment: Text.AlignVCenter
-                font.capitalization: Font.Capitalize
-            }
-
-            Label {
-                id: labelCategory
-                text:qsTr("Category")+": " + categories[categoryIcons.indexOf(appCategory)]
-                font.pointSize: detailTextSize
-                verticalAlignment: Text.AlignVCenter
-                font.capitalization: Font.Capitalize
-            }
-            Label {
-                id: labelDescriptionTitle
-                text:qsTr("Description")+": "
-                font.pointSize: detailTextSize
-                verticalAlignment: Text.AlignVCenter
-                font.capitalization: Font.Capitalize
-            }
-
-            Flickable {
-                id: flickable
-                width: parent.width
-                height: parent.height - labelVersion.height * 4
-                contentWidth: labelDescription.width
-                contentHeight: labelDescription.height
-                clip: true
-                ScrollBar.vertical: ScrollBar { }
-                flickableDirection: Flickable.VerticalFlick
-
-                Label {
-                    id: labelDescription
-                    width: textPane.width - 30
-                    text: description === "" ? qsTr("no description found"): description
-                    fontSizeMode: Text.VerticalFit
-                    wrapMode: Text.WordWrap
-                    font.pointSize: detailTextSize
-                    verticalAlignment: Text.AlignTop
-                    enabled: false
-                }
-            }
-
-        }
-
-
     }
 
     Button {

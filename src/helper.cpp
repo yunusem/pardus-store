@@ -220,6 +220,26 @@ void Helper::correctSourcesList()
     fh->correctSources();
 }
 
+void Helper::openUrl(const QString &url)
+{
+    QProcess p1;
+    QString user;
+    QString out;
+    QStringList args;
+    p1.start("who");
+    p1.waitForFinished(-1);
+    out = QString::fromLatin1(p1.readAllStandardOutput());
+    p1.close();
+
+    if(out.contains(":0")) {
+        QProcess p;
+        user = out.split(" ")[0];
+        args << "-u" << user << "--";
+        args << "xdg-open" << url;
+        p.execute("sudo",args);
+    }
+}
+
 void Helper::packageProcessFinished(int code)
 {
     if(code == 0) {

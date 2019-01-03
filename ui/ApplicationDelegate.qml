@@ -281,6 +281,7 @@ Item {
                     visible: opacity > 0.0
 
                     Behavior on text {
+                        enabled: animate
                         FadeAnimation {
                             duration: animationDuration
                             target: textLabel

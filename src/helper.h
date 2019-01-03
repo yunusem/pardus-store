@@ -76,6 +76,7 @@ public:
                                   const QString &content);
     Q_INVOKABLE QString getMainUrl() const;
     Q_INVOKABLE void correctSourcesList();
+    Q_INVOKABLE void openUrl(const QString &url);
 
 
 private:
