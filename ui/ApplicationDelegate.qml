@@ -160,10 +160,9 @@ Item {
                                    "previous": categoryIcons[categories.indexOf(selectedCategory)],
                                    "appVersion":version,
                                    "appDownloadSize" : dsize,
-                                   "appCategory" : section,
+                                   "appCategory" : category,
                                    "appNonfree" : nonfree})
-                screenshotUrls = []
-                helper.getAppDetails(name)
+                screenshotUrls = []                
             }
             onPressed: {
                 if(delegateMa.containsMouse) {

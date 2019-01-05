@@ -1,81 +1,5 @@
 #include "applicationlistmodel.h"
-
-Application::Application(const QString &name, const QString &version,
-                         const QString &dsize, bool stat, bool inque,
-                         const QString &category, bool &non_free, const QString &state,
-                         const QString &description)
-    :m_name(name), m_version(version), m_dsize(dsize), m_status(stat),
-      m_in_queue(inque), m_category(category), m_non_free(non_free),
-      m_description(description)
-{
-    if(state == "") {
-        if(m_status) {
-            m_state = "installed";
-        } else {
-            m_state = "get";
-        }
-    }
-}
-
-QString Application::name() const
-{
-    return m_name;
-}
-
-QString Application::version() const
-{
-    return m_version;
-}
-
-QString Application::download_size() const
-{
-    return m_dsize;
-}
-
-QString Application::category() const
-{
-    return m_category;
-}
-
-bool Application::non_free() const
-{
-    return m_non_free;
-}
-
-QString Application::state() const
-{
-    return m_state;
-}
-
-QString Application::description() const
-{
-    return m_description;
-}
-
-bool Application::status() const
-{
-    return m_status;
-}
-
-void Application::setStatus(bool stat)
-{
-    m_status = stat;
-}
-
-bool Application::in_queue() const
-{
-    return m_in_queue;
-}
-
-void Application::setInQueue(bool b)
-{
-    m_in_queue = b;
-}
-
-void Application::setState(const QString &state)
-{
-    m_state = state;
-}
+//#include "application.h"
 
 ApplicationListModel::ApplicationListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -111,13 +35,14 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case NameRole: return app.name();
     case VersionRole: return app.version();
-    case DownloadSizeRole: return app.download_size();
-    case InstalledRole: return app.status();
-    case InQueueRole: return app.in_queue();
+    case DownloadSizeRole: return app.downloadsize();
     case CategoryRole: return app.category();
-    case NonFreeRole: return app.non_free();
+    case PrettyNameRole: return app.prettyname();
+    case ExecRole: return app.exec();
     case StateRole: return app.state();
-    case DescriptionRole: return app.description();
+    case InstalledRole: return app.installed();
+    case InQueueRole: return app.inqueue();
+    case NonFreeRole: return app.nonfree();        
     default: return QVariant();
     }
     return QVariant();
@@ -129,7 +54,7 @@ bool ApplicationListModel::setData(const QModelIndex &index, const QVariant &val
 
         if(role == InstalledRole) {
             bool status = value.toBool();
-            lst[index.row()].setStatus(status);
+            lst[index.row()].setInstalled(status);
             if(status) {
                 lst[index.row()].setState("installed");
             } else {
@@ -152,12 +77,14 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     roles[NameRole] = "name";
     roles[VersionRole] = "version";
     roles[DownloadSizeRole] = "dsize";
+    roles[CategoryRole] = "category";
+    roles[PrettyNameRole] = "prettyname";
+    roles[ExecRole] = "exec";
+    roles[StateRole] = "delegatestate";
+    roles[RatingRole] = "rating";
     roles[InstalledRole] = "installed";
     roles[InQueueRole] = "inqueue";
-    roles[CategoryRole] = "section";
-    roles[NonFreeRole] = "nonfree";
-    roles[StateRole]= "delegatestate";
-    roles[DescriptionRole] = "description";
+    roles[NonFreeRole] = "nonfree";    
     return roles;
 }
 

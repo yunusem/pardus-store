@@ -589,7 +589,7 @@ Rectangle {
 
                 Rectangle {
                     id: mailContainer
-                    width: websiteLabel.width + homepageIcon.width + 12
+                    width: mailLabel.width + mailIcon.width + 12
                     height: 23
                     anchors {
                         top: websiteContainer.bottom

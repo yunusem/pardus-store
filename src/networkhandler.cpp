@@ -1,4 +1,5 @@
 #include "networkhandler.h"
+#include "application.h"
 #include "applicationdetail.h"
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -13,9 +14,10 @@
 #include <QTimer>
 #include <QDebug>
 
-#define MAIN_URL "http://store.pardus.org.tr:5000"
-#define API_APPS_URL "http://store.pardus.org.tr:5000/api/v1/apps/"
-#define API_SURVEY_URL "http://store.pardus.org.tr:5000/api/v1/survey/"
+#define MAIN_URL "http://0.0.0.0:5000" //"http://store.pardus.org.tr:5000"
+#define API_APPS_URL "http://0.0.0.0:5000/api/v2/apps/" //"http://store.pardus.org.tr:5000/api/v1/apps/"
+#define API_SURVEY_URL "http://0.0.0.0:5000/api/v1/survey/" //"http://store.pardus.org.tr:5000/api/v1/survey/"
+
 
 namespace {
 
@@ -80,9 +82,9 @@ void NetworkHandler::getApplicationList()
 }
 
 void NetworkHandler::getApplicationDetails(const QString &packageName)
-{
+{    
     QNetworkReply *reply;
-    QString url = QString(API_APPS_URL).append(packageName);
+    QString url = QString(MAIN_URL).append("/api/v2/apps/"+ packageName);
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
@@ -179,41 +181,43 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
     }
 
     auto obj = doc.object();
-    if (obj["status"].toString() == "400") {
-        qDebug() << obj["error"].toString();
+    auto status = obj.value("status").toInt(200);
+    if (status == 200) {
+        auto type = obj.value("response-type").toInt(-1);
+        if(type == -1) {
+            qDebug() << "Unknown response type";
+        } else {
+            switch (type) {
+            case 0:
+                parseAppsResponse(obj);
+                break;
+            case 1:
+                parseDetailsResponse(obj);
+                break;
+            case 2:
+                parseSurveyResponse(obj);
+                break;
+                //            case 3:
+                //                parseAppsResponse(obj);
+                //                break;
+            case 4:
+                parseRatingResponse(obj);
+                break;
+            case 5:
+                parseStatisticsResponse(obj);
+                break;
+            default: qDebug() << "Unhandeled response type: "<< type;
+                break;
+            }
+        }
+    } else {
+        qDebug() << "Status: " << status <<" Error: "<<  obj.value("error").toString();
         emit notFound();
         return;
     }
 
-    if (obj.contains("app-list")) {
-        QStringList apps;
-        QString item;
-        auto arr = obj["app-list"].toArray();
-        for(int i=0; i < arr.size(); i++) {
-            item = QString("");
-            item += QString(arr.at(i).toObject()["name"].toString()) + " ";
-            item += QString(arr.at(i).toObject()["category"].toString());
-            apps.append(item);
-        }
-        emit appListReceived(apps);
-    } else if (obj.contains("details")) {
-        QStringList ss;
-        QList<Description> descs;
-        QString appName = obj["name"].toString();
-        auto details = obj["details"].toObject();
-        QJsonArray screenshots = details["screenshots"].toArray();
-        for(int i=0; i < screenshots.size(); i++) {
-            if(screenshots.at(i).toString() != "") {
-                ss.append(QString(MAIN_URL).append(screenshots.at(i).toString()));
-            }
-        }
-        QJsonObject descObj = details["descriptions"].toObject();
-        foreach(const QString &key, descObj.keys()) {
-            QJsonValue value = descObj.value(key);
-            descs.append(Description(key,value.toString()));
-        }
-        emit appDetailsReceived(ApplicationDetail(appName,ss,descs));
-    } else if(obj.contains("survey-list")) {
+
+    if(obj.contains("survey-list")) {
         QStringList sl;
         QString ps;
         auto surveylist = obj["survey-list"].toObject();
@@ -233,6 +237,86 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
     }
 }
 
+void NetworkHandler::parseAppsResponse(const QJsonObject &obj)
+{
+    if (obj.keys().contains("app-list")) {
+        QJsonArray arr = obj.value("app-list").toArray();
+        QList<Application> apps;
+        QJsonObject appobj;
+        QHash<QString,QString> hash;
+        foreach (const QJsonValue &val, arr) {
+            appobj = val.toObject();
+            Application app(appobj.value("name").toString());
+            foreach (const QString &key, appobj.value("category").toObject().keys()) {
+                hash.insert(key,appobj.value("category").toObject().value(key).toString());
+            }
+            app.setCategory(hash);
+            hash.clear();
+            app.setNonfree(appobj.value("component").toString() == "non-free");
+            app.setExec(appobj.value("exec").toString());
+            foreach (const QString &key, appobj.value("prettyname").toObject().keys()) {
+                hash.insert(key,appobj.value("prettyname").toObject().value(key).toString());
+            }
+            app.setPrettyname(hash);
+            hash.clear();
+            app.setRating(appobj.value("rating").toDouble());
+            apps.append(app);
+        }
+        emit appListReceived(apps);
+    }
+}
+
+void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
+{
+    if (obj.keys().contains("details")) {
+        QJsonObject content = obj.value("details").toObject();
+        if(!content.isEmpty()) {
+            ApplicationDetail ad;
+            QList<Description> descriptionList;
+            QStringList screenshots;
+            QList<Section> sectionList;
+
+            ad.setChangelog(content.value("changelog").toString());
+            QJsonObject jo = content.value("descriptions").toObject();
+            foreach (const QString &lang, jo.keys()) {
+                descriptionList.append(Description(lang, jo.value(lang).toString()));
+            }
+            ad.setDescriptionList(descriptionList);
+            ad.setDownload(content.value("download").toInt(0));
+            ad.setLicense(content.value("license").toString());
+            ad.setMaintainer(content.value("maintainer").toObject().value("mail").toString(),
+                             content.value("maintainer").toObject().value("name").toString());
+            ad.setName(content.value("name").toString());
+            foreach (const QVariant var, content.value("screenshots").toArray().toVariantList()) {
+                screenshots.append(QString(MAIN_URL).append(var.toString()));
+            }
+            ad.setScreenshots(screenshots);
+            jo = content.value("section").toObject();
+            foreach (const QString &lang, jo.keys()) {
+                sectionList.append(Section(lang, jo.value(lang).toString()));
+            }
+            ad.setSections(sectionList);
+            ad.setWebsite(content.value("website").toString());
+            emit appDetailsReceived(ad);
+        }
+    }
+}
+
+void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
+{
+
+}
+
+void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
+{
+
+}
+
+void NetworkHandler::parseStatisticsResponse(const QJsonObject &obj)
+{
+
+}
+
 void NetworkHandler::onTimeout()
 {
     QTimer *timer;
@@ -245,3 +329,5 @@ void NetworkHandler::onTimeout()
     if (reply)
         reply->abort();
 }
+
+

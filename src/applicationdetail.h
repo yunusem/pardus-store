@@ -6,42 +6,74 @@
 #include <QList>
 
 class Description;
+class Section;
 
 class ApplicationDetail
 {
 public:
-    ApplicationDetail(const QString &appName,
-                      const QStringList &ssUrls,
-                      const QList<Description> &descs);
+    ApplicationDetail();
 
-    const QString &app() const;
-    const QStringList &screenshots() const;
-    const QList<Description> &descriptions() const;
+    QString changelog() const;
+    QString description() const;
+    unsigned int download() const;
+    QString license() const;
+    QString maintainerMail() const;
+    QString maintainerName() const;
+    QString name() const;
+    QStringList screenshots() const;
+    QString section() const;
+    QString website() const;
+
+    void setChangelog(const QString &changelog);
+    void setDescriptionList(const QList<Description> &descList);
+    void setDownload(const unsigned int &download);
+    void setLicense(const QString &license);
+    void setMaintainer(const QString &mail, const QString &name);
+    void setName(const QString &name);
+    void setScreenshots(const QStringList &screenshots);
+    void setSections(const QList<Section> &sections);
+    void setWebsite(const QString &website);
 
 private:
-    QString m_app;
-    QStringList m_screenshots;
+    QString m_changelog;
     QList<Description> m_descriptions;
-
+    unsigned int m_download;
+    QString m_license;
+    QString m_maintainer_mail;
+    QString m_maintainer_name;
+    QString m_name;
+    QStringList m_screenshots;
+    QList<Section> m_sections;
+    QString m_website;
 };
-
-inline const QString &ApplicationDetail::app() const { return m_app; }
-inline const QStringList &ApplicationDetail::screenshots() const { return m_screenshots; }
-inline const QList<Description> &ApplicationDetail::descriptions() const { return m_descriptions; }
 
 
 class Description
 {
 public:
     Description(const QString &lang, const QString &content);
-    const QString &language() const;
-    const QString &description() const;
+    QString language() const;
+    QString description() const;
 
 private:
     QString m_language, m_description;
 };
 
-inline const QString &Description::language() const { return m_language; }
-inline const QString &Description::description() const { return m_description; }
+inline QString Description::language() const { return m_language; }
+inline QString Description::description() const { return m_description; }
+
+class Section
+{
+public:
+    Section(const QString &lang, const QString &content);
+    QString language() const;
+    QString section() const;
+
+private:
+    QString m_language, m_section;
+};
+
+inline QString Section::language() const { return m_language; }
+inline QString Section::section() const { return m_section; }
 
 #endif // APPLICATIONDETAIL_H

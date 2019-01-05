@@ -3,55 +3,22 @@
 
 #include <QAbstractListModel>
 #include <QSortFilterProxyModel>
-#include <QString>
-#include <QList>
+#include <QHash>
 
-class Application
-{
-public:
-    Application(const QString &name,
-                const QString &version,
-                const QString &dsize,
-                bool stat,
-                bool inque,
-                const QString &category,
-                bool &non_free,
-                const QString &state = "",
-                const QString &description = "");
-    QString name() const;
-    QString version() const;
-    QString download_size() const;
-    bool status() const;
-    bool in_queue() const;
-    QString category() const;
-    bool non_free() const;
-    QString state() const;
-    QString description() const;
-    void setStatus(bool stat);
-    void setInQueue(bool b);
-    void setState(const QString& state);
-private:
-    QString m_name;
-    QString m_version;
-    QString m_dsize;
-    bool m_status;
-    bool m_in_queue;
-    QString m_category;
-    bool m_non_free;
-    QString m_state;
-    QString m_description;
-};
+#include "application.h"
 
 enum Roles {
     NameRole = Qt::UserRole +1,
     VersionRole,
     DownloadSizeRole,
+    CategoryRole,
+    PrettyNameRole,
+    ExecRole,
+    StateRole,
+    RatingRole,
     InstalledRole,
     InQueueRole,
-    CategoryRole,
-    NonFreeRole,
-    StateRole,
-    DescriptionRole,
+    NonFreeRole
 };
 
 class ApplicationListModel : public QAbstractListModel

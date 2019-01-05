@@ -2,6 +2,7 @@
 #define NETWORKHANDLER_H
 
 #include <QObject>
+#include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <map>
 
@@ -9,6 +10,7 @@ class QNetworkReply;
 class QTimer;
 class QStringList;
 class ApplicationDetail;
+class Application;
 
 class NetworkHandler : public QObject
 {
@@ -23,7 +25,7 @@ public:
     QString getMainUrl() const;
 
 signals:
-    void appListReceived(const QStringList &al);
+    void appListReceived(const QList<Application> &apps);
     void appDetailsReceived(const ApplicationDetail &ad);
     void surveyListReceived(const QString &mySelection, const QStringList &sl);
     void surveyJoinResultReceived(const QString &duty, const int &result);
@@ -36,6 +38,11 @@ private slots:
 private:
     QNetworkAccessManager m_nam;
     std::map<QNetworkReply *, QTimer *> m_timerMap;
+    void parseAppsResponse(const QJsonObject &obj);
+    void parseDetailsResponse(const QJsonObject &obj);
+    void parseRatingResponse(const QJsonObject &obj);
+    void parseSurveyResponse(const QJsonObject &obj);
+    void parseStatisticsResponse(const QJsonObject &obj);
     int m_timeoutDuration;
 };
 

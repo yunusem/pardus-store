@@ -86,8 +86,7 @@ private:
     bool m_corrected;
     FileHandler *fh;
     PackageHandler *ph;
-    QStringList l;
-    QStringList ldetail;
+    QList<Application> m_fakelist;
     ListCover lc;
     NetworkHandler *nh;
     QSettings *s;
@@ -101,7 +100,7 @@ private slots:
     void packageProcessFinished(int code);
     void packageProcessStatus(const QString &status, const QString &pkg,
                               int value, const QString &desc);
-    QStringList getDetails() const;    
+    void updateListUsingPackageManager();
     QString getLanguagePackage(const QString &pkg) const;
     void writeSettings(const QString &key, const QVariant &value);
     void getSelfVersion();
@@ -128,7 +127,7 @@ signals:
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);
-    void appListReceivedSlot(const QStringList &list);
+    void appListReceivedSlot(const QList<Application> &apps);
     void surveyListReceivedSlot(const QString &mySelection, const QStringList &sl);
     void surveyJoinResultReceived(const QString &duty, const int &result);
     void correctingFinishedSlot();

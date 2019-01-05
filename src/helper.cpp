@@ -1,8 +1,9 @@
 #include "helper.h"
+#include "application.h"
+#include "applicationdetail.h"
 #include "filehandler.h"
 #include "packagehandler.h"
 #include "networkhandler.h"
-#include "applicationdetail.h"
 #include <QLocale>
 #include <QProcess>
 #include <QRegExp>
@@ -22,7 +23,7 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("beta"), m
 
     connect(ph,SIGNAL(finished(int)),this,SLOT(packageProcessFinished(int)));
     connect(ph,SIGNAL(dpkgProgressStatus(QString,QString,int,QString)),this,SLOT(packageProcessStatus(QString,QString,int,QString)));
-    connect(nh,SIGNAL(appListReceived(QStringList)),this,SLOT(appListReceivedSlot(QStringList)));
+    connect(nh,SIGNAL(appListReceived(QList<Application>)),this,SLOT(appListReceivedSlot(QList<Application>)));
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
     connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
@@ -112,40 +113,9 @@ bool Helper::corrected() const
 }
 
 void Helper::fillTheList()
-{    
-    QStringList list;
-    for(int i = 0; i < l.length(); i++) {
-        list.append(l.at(i) + " " + ldetail.at(i));
-    }
-
-    QString line = "";
-    QString name = "";
-    QString version = "";
-    QString dsize = "";
-    bool stat = false;
-    QString category = "";
-    bool non_free = false;
-    foreach(line, list) {
-        QStringList params = line.split(" ");
-        name = params[0];
-        category = params[1];
-        version = params[2];
-        if (params[3] == "yes") {
-            stat = true;
-        } else {
-            stat = false;
-        }
-        if (params[4] == "yes") {
-            non_free = true;
-        } else {
-            non_free = false;
-        }
-        if(params[5] != "") {
-            dsize = params[5] + " " + params[6];
-        } else {
-            dsize = "";
-        }
-        lc.l->addData(Application(name,version,dsize,stat,false,category,non_free));
+{
+    for(int i = 0; i < m_fakelist.size(); i++) {
+        lc.l->addData(m_fakelist.at(i));
     }
     emit gatheringLocalDetailFinished();
 }
@@ -258,14 +228,14 @@ void Helper::packageProcessStatus(const QString &status, const QString &pkg, int
     emit processingStatus(status, value);
 }
 
-QStringList Helper::getDetails() const
+void Helper::updateListUsingPackageManager()
 {
     QMap<QString,QString> sizeList;
     QString apps;
-    for(int i = 0; i < l.length(); i++) {
-        sizeList.insert(l[i].split(" ").at(0),"");
-        apps += (l[i].split(" ").at(0));
-        if (i != (l.length() - 1)) {
+    for(int i = 0; i < m_fakelist.size(); i++) {
+        sizeList.insert(m_fakelist.at(i).name(),"");
+        apps += m_fakelist.at(i).name();
+        if (i != (m_fakelist.size() - 1)) {
             apps += " ";
         }
     }
@@ -298,37 +268,23 @@ QStringList Helper::getDetails() const
         }
     }
 
-    QStringList list;
-    int ix = 0;
-    QString app;
-    QString detail;
-    QString version;
-    QString installed;
-    QString non_free;
-    foreach (QString line, l) {
-        app = line.split(" ").at(0);
-        ix = output.indexOf(QRegExp(app + QString("*.*")));
-        installed = output.at(ix + 1).split(" ").last();
-        if (output.at(ix+5).indexOf("non-free") != -1) {
-            non_free = "yes";
-        } else {
-            non_free = "no";
-        }
-        if (installed.contains("none")) {
-            installed = "no";
-        } else {
-            installed = "yes";
-        }
 
-        version = output.at(ix + 2).split(" ").last();
-        detail += version + " ";
-        detail += installed + " ";
-        detail += non_free + " ";
-        detail += sizeList.value(app);
-        list.append(detail);
-        detail = "";
+    int ix = 0;
+    QString checkInstalled;
+
+    for(int i = 0; i< m_fakelist.size(); i++) {
+        ix = output.indexOf(QRegExp(m_fakelist[i].name() + QString("*.*")));
+        checkInstalled = output.at(ix + 1).split(" ").last();
+        if (checkInstalled.contains("none")) {
+            m_fakelist[i].setInstalled(false);
+            m_fakelist[i].setState("get");
+        } else {
+            m_fakelist[i].setInstalled(true);
+            m_fakelist[i].setState("installed");
+        }
+        m_fakelist[i].setVersion(output.at(ix + 2).split(" ").last());
+        m_fakelist[i].setDownloadsize(sizeList.value(m_fakelist[i].name()));
     }
-    return list;
 }
 
 QString Helper::getLanguagePackage(const QString &pkg) const
@@ -368,22 +324,7 @@ QString Helper::getLanguagePackage(const QString &pkg) const
 
 void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
 {
-    QLocale locale;
-    QString storeLocale = locale.name().split("_")[0];
-    QString l;
-    QString d;
-    for(int i=0; i< ad.descriptions().size(); i++) {
-        l = ad.descriptions().at(i).language();
-        if (l == "en") {
-            d = ad.descriptions().at(i).description();
-        } else if (l == storeLocale) {
-            if(ad.descriptions().at(i).description() != "") {
-                d = ad.descriptions().at(i).description();
-            }
-        }
-
-    }
-    emit descriptionReceived(d);
+    emit descriptionReceived(ad.description());
     emit screenshotReceived(ad.screenshots());
 }
 
@@ -398,11 +339,11 @@ void Helper::getSelfVersion()
     }
 }
 
-void Helper::appListReceivedSlot(const QStringList &list)
+void Helper::appListReceivedSlot(const QList<Application> &apps)
 {
-    l = list;
+    m_fakelist = apps;
     emit fetchingAppListFinished();
-    ldetail = this->getDetails();
+    this->updateListUsingPackageManager();
     this->getSelfVersion();
     this->fillTheList();
 }
