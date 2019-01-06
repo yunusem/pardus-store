@@ -13,23 +13,24 @@ Rectangle {
     property string appCategory
     property bool appNonfree
 
-    property string description
-    property string sections: "game, misc"
-    property string maintainer: "Debian Games Team"
-    property string website: "http://play0ad.com/"
-    property string email: "pkg-games-devel@lists.alioth.debian.org"
-    property string license: "GPLv3"
-    property double ratingAverage: 3.33333332
+    property string changelog : ""
+    property string description : ""
+    property string sections: ""
+    property string maintainer: ""
+    property string website: ""
+    property string email: ""
+    property string license: ""
+    property double ratingAverage: 0.0
     property int rating: 0
     property int prevRating: 0
     property int ratingTotal: 15
+    property int download: 0
     property bool voted: false
-    property int downloadCount: 27
 
     property int infoCellHeight: 70
     property int length: urls.length
     property int ssindex
-    property variant urls: screenshotUrls
+    property variant urls: ["none"]
 
     property string textPrimaryColor: Material.foreground
     property string textSecondaryColor: "#A9A9A9"
@@ -45,8 +46,22 @@ Rectangle {
         processButton.enabled = true
     }
 
-    function appDescriptionSlot(desc) {
+    function appDetailsSlot(c, desc, down, l, mm, mn, ss, sec, w) {
+        changelog = c
         description = desc
+        download = down
+        license = l
+        if(l === "") {
+            license = "GPLv2"
+        }
+        email = mm
+        maintainer = mn
+        urls = ss
+        if(ss.length === 0) {
+            urls = ["none"]
+        }
+        sections = sec
+        website = w
     }
 
     color: "transparent"
@@ -62,11 +77,14 @@ Rectangle {
     Component.onCompleted: {
         confirmationRemoval.connect(startRemoving)
         errorOccured.connect(errorHappened)
-        appDescriptionReceived.connect(appDescriptionSlot)
+        appDetailsReceived.connect(appDetailsSlot)
+        helper.detailsopened = true
         helper.getAppDetails(selectedAppName)
     }
 
     Component.onDestruction: {
+        helper.detailsopened = false
+        urls = ["none"]
         selectedAppName = ""
         selectedAppInqueue = false
         selectedAppInstalled = false
@@ -484,7 +502,7 @@ Rectangle {
                     text: description === "" ? qsTr("no description found"): description
                     font.pointSize: 11
                     verticalAlignment: Text.AlignTop
-                    horizontalAlignment: Text.AlignJustify
+                    horizontalAlignment: Text.AlignLeft
                     elide: descriptionContainer.expanded ? Text.ElideNone : Text.ElideRight
                     wrapMode: Text.WordWrap
                     onContentHeightChanged: {
@@ -829,7 +847,7 @@ Rectangle {
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
-                                text: downloadCount
+                                text: download
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
                             }

@@ -178,7 +178,6 @@ Item {
             }
         }
 
-
         Rectangle {
             id: mfButton
             width: 72
@@ -434,23 +433,76 @@ Item {
         }
 
         Rectangle {
-            id: appNameLabelContainer
-            width: parent.width - mfButton.width
-            height: mfButton.height - 12
+            id: openBtnContainer
+            color: "transparent"
+            width: visible ? runAppButton.width + 12 : 0
+            height: 72
+            visible: runAppButton.visible
             anchors {
                 top: parent.top
                 left: parent.left
+            }
+
+            Button {
+                id: runAppButton
+                Material.background: "#0784FC"
+                enabled: false
+                opacity: delegatestate === "installed" ? 1.0 : 0.0
+                visible: false//opacity > 0.0
+                width: runBtnText.width + 12
+                height: parent.height / 3 + 18
+                anchors {
+                    left: parent.left
+                    verticalCenter: parent.verticalCenter
+                    verticalCenterOffset: -6
+                }
+
+                Behavior on opacity {
+                    enabled: animate
+                    NumberAnimation { duration: animationDuration }
+                }
+
+                onClicked: {
+                    helper.runCommand(exec)
+                }
+
+                Label {
+                    id: runBtnText
+                    //font.weight: Font.DemiBold
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.centerIn: parent
+                    Material.foreground: "#FAFAFA"
+                    opacity: parent.opacity
+                    visible: opacity > 0.0
+
+                    text: qsTr("OPEN")
+                    font.pointSize: 10
+                }
+            }
+        }
+
+        Rectangle {
+            id: appNameLabelContainer
+            width: parent.width - mfButton.width - openBtnContainer.width
+            height: mfButton.height - 12
+            anchors {
+                top: parent.top
+                left: openBtnContainer.right
             }
             color: "transparent"
             Label {
                 id: appNameLabel
                 anchors.fill: parent
                 text: getPrettyName(name)
-                font.pointSize: parent.width / 12 > 0 ? parent.width / 12 : 9
+                fontSizeMode: Text.Fit
+                height: parent.height
+                font.pointSize: 20
                 wrapMode: Text.WordWrap
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.capitalization: Font.Capitalize
+                //font.pointSize: Text.VerticalFit
             }
         }
 

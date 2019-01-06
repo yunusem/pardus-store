@@ -31,7 +31,7 @@ ApplicationWindow {
     property string selectedMenu: qsTr("home")
     property string previousMenu: ""
 
-    property variant screenshotUrls: []
+    property variant screenshotUrls: ["none"]
     property variant processQueue: []
     property variant menus: [qsTr("home"), qsTr("categories"), qsTr("settings")]
     property variant menuIcons: ["home", "categories", "settings"]
@@ -78,7 +78,9 @@ ApplicationWindow {
     signal surveyJoined()
     signal surveyJoinUpdated()
     signal errorOccured()
-    signal appDescriptionReceived(string desc)
+    signal appDescriptionReceived(variant desc)
+    signal appDetailsReceived(variant c, variant desc, variant down, variant l,
+                              variant mm, variant mn, variant ss, variant sec, variant w)
 
     property bool selectedAppInstalled
     property bool selectedAppInqueue
@@ -183,23 +185,25 @@ ApplicationWindow {
             //busy.value = percent
             processingPercent = percent
             //console.log(processingPercent)
-        }
-        onDescriptionReceived: {
-            appDescriptionReceived(description)
-        }
-        onScreenshotReceived: {
-            screenshotUrls = urls
-            if(urls.length === 0) {
+        }        
+        onDetailsReceived: {
+            screenshotUrls = screenshots
+            if(screenshots.length === 0) {
                 screenshotUrls = ["none"]
             }
+            appDetailsReceived(changelog, description, download, license,
+                               mmail, mname, screenshots, section, website)
         }
-        onScreenshotNotFound: {
-            screenshotUrls = ["none"]
+
+        onReplyError: {
             if(splashScreen.visible) {
-                popupText = qsTr("Check your internet connection")
+                popupText = qsTr("Reason") + " : " + errorString +
+                        " \n" + qsTr("Suggestion") + " : " +
+                        qsTr("Check your internet connection")
                 infoDialog.open()
             }
         }
+
         onFetchingAppListFinished: {
             splashScreen.label.text = qsTr("Gathering local details.")
         }
