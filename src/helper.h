@@ -17,13 +17,10 @@ class Helper : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool processing
-               READ processing               
+               READ processing
                NOTIFY processingFinished
                NOTIFY processingFinishedWithError
                NOTIFY processingStatus
-               NOTIFY descriptionReceived
-               NOTIFY screenshotReceived
-               NOTIFY screenshotNotFound
                NOTIFY fetchingAppListFinished
                NOTIFY gatheringLocalDetailFinished
                NOTIFY surveyListReceived
@@ -51,6 +48,13 @@ class Helper : public QObject
                READ corrected
                NOTIFY correctingFinished
                NOTIFY correctingFinishedWithError)
+    Q_PROPERTY(bool erroronreply
+               READ erroronreply
+               NOTIFY replyError)
+    Q_PROPERTY(bool detailsopened
+               READ detailsopened
+               WRITE setDetailsopened
+               NOTIFY detailsReceived)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -63,6 +67,10 @@ public:
     QString choice() const;
     QString version() const;
     bool corrected() const;
+    bool erroronreply() const;
+    bool detailsopened () const;
+    void setDetailsopened(bool d);
+
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
     Q_INVOKABLE void remove(const QString &pkg);
@@ -77,6 +85,7 @@ public:
     Q_INVOKABLE QString getMainUrl() const;
     Q_INVOKABLE void correctSourcesList();
     Q_INVOKABLE void openUrl(const QString &url);
+    Q_INVOKABLE void runCommand(const QString &cmd);
 
 
 private:
@@ -84,6 +93,8 @@ private:
     QString c;
     QString v;
     bool m_corrected;
+    bool m_erroronreply;
+    bool m_detailsopened;
     FileHandler *fh;
     PackageHandler *ph;
     QList<Application> m_fakelist;
@@ -124,12 +135,18 @@ signals:
     void ratioChanged();
     void correctingFinished();
     void correctingFinishedWithError(const QString &errorString);
+    void replyError(const QString &errorString);
+    void detailsReceived(const QString &changelog, const QString &description,
+                         const unsigned int &download, const QString &license,
+                         const QString &mmail, const QString &mname,
+                         const QStringList &screenshots, const QString &section,
+                         const QString &website);
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);
     void appListReceivedSlot(const QList<Application> &apps);
     void surveyListReceivedSlot(const QString &mySelection, const QStringList &sl);
-    void surveyJoinResultReceived(const QString &duty, const int &result);
+    void surveyJoinResultReceivedSlot(const QString &duty, const int &result);
     void correctingFinishedSlot();
 };
 

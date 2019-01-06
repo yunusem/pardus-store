@@ -12,7 +12,8 @@
 
 #define CONFIG_PATH "/usr/share/pardus/pardus-store/config.ini"
 
-Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("beta"), m_corrected(false)
+Helper::Helper(QObject *parent) : QObject(parent),
+    p(false), c(""), v("beta"), m_corrected(false), m_erroronreply(false), m_detailsopened(false)
 {
     s = new QSettings(CONFIG_PATH, QSettings::IniFormat);
     readSettings();
@@ -25,9 +26,9 @@ Helper::Helper(QObject *parent) : QObject(parent), p(false), c(""), v("beta"), m
     connect(ph,SIGNAL(dpkgProgressStatus(QString,QString,int,QString)),this,SLOT(packageProcessStatus(QString,QString,int,QString)));
     connect(nh,SIGNAL(appListReceived(QList<Application>)),this,SLOT(appListReceivedSlot(QList<Application>)));
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
-    connect(nh,SIGNAL(notFound()),this,SIGNAL(screenshotNotFound()));
+    connect(nh,SIGNAL(replyError(QString)),this,SIGNAL(replyError(QString)));
     connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
-    connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceived(QString,int)));
+    connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceivedSlot(QString,int)));
     connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));
     connect(fh,SIGNAL(correctingSourcesFinishedWithError(QString)),this,SIGNAL(correctingFinishedWithError(QString)));
 }
@@ -110,6 +111,21 @@ QString Helper::version() const
 bool Helper::corrected() const
 {
     return m_corrected;
+}
+
+bool Helper::erroronreply() const
+{
+    return m_erroronreply;
+}
+
+bool Helper::detailsopened() const
+{
+    return m_detailsopened;
+}
+
+void Helper::setDetailsopened(bool d)
+{
+    m_detailsopened = d;
 }
 
 void Helper::fillTheList()
@@ -207,6 +223,28 @@ void Helper::openUrl(const QString &url)
         args << "-u" << user << "--";
         args << "xdg-open" << url;
         p.execute("sudo",args);
+    }
+}
+
+void Helper::runCommand(const QString &cmd)
+{
+    QProcess p1;
+    QString user;
+    QString out;
+    QStringList args;
+    p1.start("who");
+    p1.waitForFinished(-1);
+    out = QString::fromLatin1(p1.readAllStandardOutput());
+    p1.close();
+
+    QString command = cmd;
+    if(out.contains(":0")) {
+        QProcess p;
+        user = out.split(" ")[0];
+        args << "-u" << user << "--";
+        args << command.remove("\"").split(" ")[0];
+        p.startDetached("sudo", args);
+        qDebug() << p.error();
     }
 }
 
@@ -324,6 +362,9 @@ QString Helper::getLanguagePackage(const QString &pkg) const
 
 void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
 {
+    emit detailsReceived(ad.changelog(),ad.description(),ad.download(),ad.license(),
+                         ad.maintainerMail(),ad.maintainerName(),ad.screenshots(),
+                         ad.section(),ad.website());
     emit descriptionReceived(ad.description());
     emit screenshotReceived(ad.screenshots());
 }
@@ -355,7 +396,7 @@ void Helper::surveyListReceivedSlot(const QString &mySelection, const QStringLis
     emit surveyListReceived(sl);
 }
 
-void Helper::surveyJoinResultReceived(const QString &duty, const int &result)
+void Helper::surveyJoinResultReceivedSlot(const QString &duty, const int &result)
 {
     if (result == 1) {
         if(duty == "update") {

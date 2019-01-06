@@ -29,7 +29,7 @@ signals:
     void appDetailsReceived(const ApplicationDetail &ad);
     void surveyListReceived(const QString &mySelection, const QStringList &sl);
     void surveyJoinResultReceived(const QString &duty, const int &result);
-    void notFound();
+    void replyError(const QString &error);
 
 private slots:
     void replyFinished(QNetworkReply *);

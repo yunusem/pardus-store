@@ -165,18 +165,16 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
     }
 
     reply->deleteLater();
-    if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << reply->errorString();
-        emit notFound();
+    if (reply->error() != QNetworkReply::NoError) {        
+        emit replyError(reply->errorString());
         return;
     }
 
     auto data = reply->readAll();
     auto doc = QJsonDocument::fromJson(data);
 
-    if (doc.isNull()) {
-        qDebug("Not a json document!");
-        emit notFound();
+    if (doc.isNull()) {        
+        emit replyError("Not a json document!");
         return;
     }
 
@@ -185,7 +183,7 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
     if (status == 200) {
         auto type = obj.value("response-type").toInt(-1);
         if(type == -1) {
-            qDebug() << "Unknown response type";
+            emit replyError("Unknown response type");
         } else {
             switch (type) {
             case 0:
@@ -212,7 +210,7 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
         }
     } else {
         qDebug() << "Status: " << status <<" Error: "<<  obj.value("error").toString();
-        emit notFound();
+        emit replyError("Error from server : " + obj.value("error").toString());
         return;
     }
 
