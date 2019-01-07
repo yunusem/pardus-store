@@ -20,6 +20,7 @@ public:
 
     void getApplicationList();
     void getApplicationDetails(const QString &packageName);
+    void ratingControl(const QString &name, const unsigned int &rating);
     void surveyCheck();
     void surveyJoin(const QString &appName, const QString &duty);
     QString getMainUrl() const;
@@ -27,6 +28,9 @@ public:
 signals:
     void appListReceived(const QList<Application> &apps);
     void appDetailsReceived(const ApplicationDetail &ad);
+    void appRatingReceived(const double &average,
+                           const unsigned int &individual,
+                           const unsigned int &total);
     void surveyListReceived(const QString &mySelection, const QStringList &sl);
     void surveyJoinResultReceived(const QString &duty, const int &result);
     void replyError(const QString &error);

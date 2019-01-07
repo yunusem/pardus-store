@@ -93,6 +93,36 @@ void NetworkHandler::getApplicationDetails(const QString &packageName)
     timer->start(m_timeoutDuration);
 }
 
+void NetworkHandler::ratingControl(const QString &name, const unsigned int &rating)
+{
+    QString url(QString(MAIN_URL).append("/api/v2/rating"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject data;
+    QString mac;
+    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
+        auto flags = interface.flags();
+        if(flags.testFlag(QNetworkInterface::IsRunning) &&
+                !flags.testFlag(QNetworkInterface::IsLoopBack)) {
+            mac = interface.hardwareAddress();
+            break;
+        }
+    }
+
+    data.insert("mac", QJsonValue::fromVariant(mac));
+    data.insert("app", QJsonValue::fromVariant(name));
+    data.insert("rating", QJsonValue::fromVariant(rating));
+
+    QNetworkReply *reply;
+    QTimer *timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer->setSingleShot(true);
+    reply = m_nam.post(request, QJsonDocument(data).toJson());
+    timer_put(&m_timerMap, reply, timer);
+    timer->start(m_timeoutDuration);
+}
+
 void NetworkHandler::surveyCheck()
 {
     QUrl url(QString(API_SURVEY_URL).append("list"));
@@ -302,7 +332,12 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
 
 void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
 {
-
+    if(obj.keys().contains("avarage")) {
+        double avr = obj.value("avarage").toDouble();
+        unsigned int ind = obj.value("individual").toInt();
+        unsigned int tot = obj.value("total").toInt();
+        emit appRatingReceived(avr, ind, tot);
+    }
 }
 
 void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)

@@ -31,7 +31,6 @@ ApplicationWindow {
     property string selectedMenu: qsTr("home")
     property string previousMenu: ""
 
-    property variant screenshotUrls: ["none"]
     property variant processQueue: []
     property variant menus: [qsTr("home"), qsTr("categories"), qsTr("settings")]
     property variant menuIcons: ["home", "categories", "settings"]
@@ -80,7 +79,9 @@ ApplicationWindow {
     signal errorOccured()
     signal appDescriptionReceived(variant desc)
     signal appDetailsReceived(variant c, variant desc, variant down, variant l,
-                              variant mm, variant mn, variant ss, variant sec, variant w)
+                              variant mm, variant mn, variant ss, variant sec,
+                              variant w)
+    signal appRatingDetailsReceived(variant avg, variant ind, variant tot)
 
     property bool selectedAppInstalled
     property bool selectedAppInqueue
@@ -187,12 +188,12 @@ ApplicationWindow {
             //console.log(processingPercent)
         }        
         onDetailsReceived: {
-            screenshotUrls = screenshots
-            if(screenshots.length === 0) {
-                screenshotUrls = ["none"]
-            }
             appDetailsReceived(changelog, description, download, license,
                                mmail, mname, screenshots, section, website)
+        }
+
+        onRatingDetailReceived: {
+            appRatingDetailsReceived(average, individual, total)
         }
 
         onReplyError: {

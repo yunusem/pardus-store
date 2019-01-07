@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.0
 
 Popup {
     id: dialog
+    property string singleButtonText: qsTr("close")
     property bool settingsOrdered: false
     property bool settingsButtonOn: false
     width: parent.width / 3 - 48
@@ -74,7 +75,7 @@ Popup {
                 Material.foreground: "#fafafa"
 
                 Label {
-                    text: qsTr("close")
+                    text: singleButtonText
                     anchors.centerIn: parent
                     font.capitalization: Font.Capitalize
                 }
@@ -89,6 +90,7 @@ Popup {
     onClosed: {
         popupHeaderText = qsTr("Something went wrong!")
         popupText = ""
+        singleButtonText = qsTr("close")
         if(splashScreen.visible && !settingsOrdered) {
             main.close()
         }

@@ -161,8 +161,7 @@ Item {
                                    "appVersion":version,
                                    "appDownloadSize" : dsize,
                                    "appCategory" : category,
-                                   "appNonfree" : nonfree})
-                screenshotUrls = []                
+                                   "appNonfree" : nonfree})                                
             }
             onPressed: {
                 if(delegateMa.containsMouse) {
@@ -587,6 +586,7 @@ Item {
             Image {
                 id: appIcon
                 anchors.centerIn: parent
+                asynchronous: true
                 source: "image://application/" + getCorrectName(name)
                 sourceSize {
                     width: parent.width

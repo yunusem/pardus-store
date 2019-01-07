@@ -50,6 +50,7 @@ Rectangle {
 
             Image {
                 id: categoryItemIcon
+                asynchronous: true
                 source: "qrc:/images/" + icon + ".svg"
                 fillMode: Image.PreserveAspectFit
                 height: categoryItemHeight - anchors.topMargin * 2
@@ -121,6 +122,7 @@ Rectangle {
 
                 Image {
                     id: menuItemIcon
+                    asynchronous: true
                     source: "qrc:/images/" + icon + ".svg"
                     fillMode: Image.PreserveAspectFit
                     height: 36

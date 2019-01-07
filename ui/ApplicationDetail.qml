@@ -23,17 +23,19 @@ Rectangle {
     property double ratingAverage: 0.0
     property int rating: 0
     property int prevRating: 0
-    property int ratingTotal: 15
+    property int ratingTotal: 0
     property int download: 0
     property bool voted: false
 
     property int infoCellHeight: 70
-    property int length: urls.length
+    //property int length: urls ? urls.length : 0
     property int ssindex
-    property variant urls: ["none"]
+    property var urls
 
     property string textPrimaryColor: Material.foreground
     property string textSecondaryColor: "#A9A9A9"
+
+    color: "transparent"
 
     function startRemoving(name, from) {
         if(name !== "" && name === selectedAppName && from === "detail") {
@@ -56,19 +58,26 @@ Rectangle {
         }
         email = mm
         maintainer = mn
-        urls = ss
         if(ss.length === 0) {
             urls = ["none"]
+        } else {
+            urls = ss
         }
         sections = sec
         website = w
     }
 
-    color: "transparent"
+    function appRatingSlot(a, i, t) {
+        ratingAverage = a
+        rating = i
+        ratingTotal = t
+        voted = false
+        prevRating = rating
+    }
 
-    onLengthChanged: {
+    onUrlsChanged: {
         lm.clear()
-        for(var c=0; c < length; c++) {
+        for(var c = 0; c < urls.length; c++) {
             lm.append({"url" : urls[c]})
         }
         screenshotsListView.update()
@@ -78,12 +87,15 @@ Rectangle {
         confirmationRemoval.connect(startRemoving)
         errorOccured.connect(errorHappened)
         appDetailsReceived.connect(appDetailsSlot)
+        appRatingDetailsReceived.connect(appRatingSlot)
         helper.detailsopened = true
         helper.getAppDetails(selectedAppName)
+        helper.ratingControl(selectedAppName)
     }
 
     Component.onDestruction: {
         helper.detailsopened = false
+        popupImage.source = ""
         urls = ["none"]
         selectedAppName = ""
         selectedAppInqueue = false
@@ -123,6 +135,7 @@ Rectangle {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
             }
+            //asynchronous: true
             verticalAlignment: Image.AlignVCenter
             fillMode: Image.PreserveAspectFit
             visible: true
@@ -225,6 +238,7 @@ Rectangle {
 
                 Rectangle {
                     id: ratingHighLight
+                    visible: false
                     height: parent.height
                     width: parent.width * rating / 5
                     color: Material.accent
@@ -244,6 +258,7 @@ Rectangle {
                         cursorShape: Qt.PointingHandCursor
                         onEntered: {
                             prevRating = rating
+                            ratingHighLight.visible = true
                         }
 
                         onPositionChanged: {
@@ -266,9 +281,20 @@ Rectangle {
                             if(!voted) {
                                 rating = prevRating
                             }
+                            ratingHighLight.visible = false
                         }
                         onClicked: {
-                            voted = true
+                            if(selectedAppInstalled) {
+                                voted = true
+                                helper.ratingControl(selectedAppName,rating)
+                                voted = false
+                            } else {
+                                popupHeaderText = qsTr("Reminder")
+                                popupText = qsTr("First, you have to install") + " <strong>" +
+                                        selectedAppName + "</strong>"+" <br>" + qsTr("Then, you can vote.")
+                                infoDialog.singleButtonText = qsTr("ok")
+                                infoDialog.open()
+                            }
                         }
                     }
                 }
@@ -288,19 +314,32 @@ Rectangle {
                 }
             }
 
-            //            Label {
-            //                id: ratingIndividual
-            //                text: qsTr("Your rate")  + " " + rating
-            //                color: textSecondaryColor
-            //                verticalAlignment: Text.AlignVCenter
-            //                horizontalAlignment: Text.AlignRight
-            //                font.capitalization: Font.Capitalize
-            //                font.pointSize:10
-            //                anchors {
-            //                    right: ratingRect.right
-            //                    top: ratingLabel.bottom
-            //                }
-            //            }
+            Label {
+                id: ratingIndividual
+                visible: rating > 0
+                text: qsTr("Your rate")  + " : " + rating
+                color: ratingIndividualMa.containsMouse ? Material.accent : textSecondaryColor
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
+                font.capitalization: Font.Capitalize
+                font.pointSize:8
+                anchors {
+                    right: ratingRect.right
+                    top: ratingLabel.bottom
+                }
+                MouseArea {
+                    id: ratingIndividualMa
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onContainsMouseChanged: {
+                        if(containsMouse) {
+                            ratingHighLight.visible = true
+                        } else {
+                            ratingHighLight.visible = false
+                        }
+                    }
+                }
+            }
 
 
             Pane {
@@ -440,7 +479,7 @@ Rectangle {
 
                     Image {
                         id:ss
-                        visible: url != "none"
+                        visible: true
                         anchors.fill: parent
                         source: url === "none" ? "" : url
                         fillMode: Image.PreserveAspectFit
@@ -839,7 +878,7 @@ Rectangle {
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
-                                text: qsTr("download count")
+                                text: qsTr("Download count")
                                 color: textSecondaryColor
                                 font.pointSize: 12
                             }
@@ -949,7 +988,7 @@ Rectangle {
             popupImage.source = ""
         }
         onOpened: {
-            popupImage.source = urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
+            popupImage.source = urls ? urls[ssindex] : ""
         }
 
 
@@ -957,12 +996,12 @@ Rectangle {
             id:popupImage
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: urls[0] !== "none" && urls[0] ? urls[ssindex] : ""
+            source: urls ? urls[ssindex] : ""
 
             BusyIndicator {
                 id: imageBusyInPopup
                 anchors.centerIn: parent
-                running: urls[0] !== "none" ? 0 : !popupImage.progress
+                running: urls ? false : !popupImage.progress
             }
 
             onSourceChanged: {
@@ -986,7 +1025,7 @@ Rectangle {
         Rectangle {
             width:75
             height: parent.height * 5 / 6
-            visible: length > 1
+            visible: lm.count > 1
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
@@ -1005,7 +1044,7 @@ Rectangle {
                 hoverEnabled: true
                 onClicked:{
                     ssindex=ssindex + 1
-                    if (ssindex==length) {
+                    if (ssindex == lm.count) {
                         ssindex = 0
                     }
                     popupImage.source = urls[ssindex]
@@ -1026,7 +1065,7 @@ Rectangle {
         Rectangle {
             width:75
             height: parent.height * 5 / 6
-            visible: length > 1
+            visible: lm.count > 1
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -1047,7 +1086,7 @@ Rectangle {
                     ssindex= ssindex - 1
                     if (ssindex==-1) {
 
-                        ssindex = length - 1
+                        ssindex = lm.count - 1
                     }
                     popupImage.source = urls[ssindex]
                 }

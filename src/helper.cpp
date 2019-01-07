@@ -13,7 +13,9 @@
 #define CONFIG_PATH "/usr/share/pardus/pardus-store/config.ini"
 
 Helper::Helper(QObject *parent) : QObject(parent),
-    p(false), c(""), v("beta"), m_corrected(false), m_erroronreply(false), m_detailsopened(false)
+    p(false), c(""), v("beta"), m_corrected(false),
+    m_erroronreply(false), m_detailsopened(false),
+    m_rating(0)
 {
     s = new QSettings(CONFIG_PATH, QSettings::IniFormat);
     readSettings();
@@ -27,6 +29,7 @@ Helper::Helper(QObject *parent) : QObject(parent),
     connect(nh,SIGNAL(appListReceived(QList<Application>)),this,SLOT(appListReceivedSlot(QList<Application>)));
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(replyError(QString)),this,SIGNAL(replyError(QString)));
+    connect(nh,SIGNAL(appRatingReceived(double,uint,uint)),this,SIGNAL(ratingDetailReceived(double,uint,uint)));
     connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceivedSlot(QString,int)));
     connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));
@@ -128,6 +131,11 @@ void Helper::setDetailsopened(bool d)
     m_detailsopened = d;
 }
 
+unsigned int Helper::rating()
+{
+    return m_rating;
+}
+
 void Helper::fillTheList()
 {
     for(int i = 0; i < m_fakelist.size(); i++) {
@@ -171,6 +179,11 @@ void Helper::getAppList()
 void Helper::getAppDetails(const QString &pkg)
 {  
     nh->getApplicationDetails(pkg);
+}
+
+void Helper::ratingControl(const QString &name, const unsigned int &rating)
+{
+    nh->ratingControl(name,rating);
 }
 
 void Helper::surveyCheck()
