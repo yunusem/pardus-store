@@ -254,11 +254,16 @@ void Helper::runCommand(const QString &cmd)
     if(out.contains(":0")) {
         QProcess p;
         user = out.split(" ")[0];
+        args << "-i";
         args << "-u" << user << "--";
-        args << command.remove("\"").split(" ")[0];
+        args << command.split(" ");
         p.startDetached("sudo", args);
-        qDebug() << p.error();
     }
+}
+
+void Helper::sendStatistics(const QString &appname)
+{
+    nh->sendApplicationInstalled(appname);
 }
 
 void Helper::packageProcessFinished(int code)

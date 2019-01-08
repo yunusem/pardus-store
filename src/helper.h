@@ -91,7 +91,7 @@ public:
     Q_INVOKABLE void correctSourcesList();
     Q_INVOKABLE void openUrl(const QString &url);
     Q_INVOKABLE void runCommand(const QString &cmd);
-
+    Q_INVOKABLE void sendStatistics(const QString &appname);
 
 private:
     bool p;
