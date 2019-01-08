@@ -86,6 +86,7 @@ ApplicationWindow {
     property bool selectedAppInstalled
     property bool selectedAppInqueue
     property string selectedAppName
+    property string selectedAppPrettyName
     property string selectedAppDelegatestate: "get"
     property string selectedAppExecute
 

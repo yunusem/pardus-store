@@ -150,10 +150,12 @@ Item {
                 forceActiveFocus()
 
                 selectedAppName = name
-                selectedAppInstalled = installed
-                selectedAppInqueue = inqueue
+                selectedAppPrettyName = prettyname
+
                 selectedAppDelegatestate = delegatestate
                 selectedAppExecute = exec
+                selectedAppInstalled = installed
+                selectedAppInqueue = inqueue
                 stackView.push(applicationDetail, {
                                    objectName: "detail",
                                    "current": name,
@@ -499,7 +501,7 @@ Item {
             Label {
                 id: appNameLabel
                 anchors.fill: parent
-                text: getPrettyName(name)
+                text: prettyname
                 fontSizeMode: Text.Fit
                 height: parent.height
                 font.pointSize: 18

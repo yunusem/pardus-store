@@ -100,6 +100,7 @@ Rectangle {
         popupImage.source = ""
         urls = ["none"]
         selectedAppName = ""
+        selectedAppPrettyName = ""
         selectedAppInqueue = false
         selectedAppInstalled = false
         selectedAppDelegatestate = "get"
@@ -164,7 +165,7 @@ Rectangle {
                 spacing: 6
                 Label {
                     id: appNameLabel
-                    text: selectedAppName
+                    text: selectedAppPrettyName
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
                     font.capitalization: Font.Capitalize
@@ -631,6 +632,9 @@ Rectangle {
                         onClicked: {
                             helper.openUrl(website)
                         }
+                        ToolTip.text: website
+                        ToolTip.delay: 800
+                        ToolTip.visible: containsMouse
                     }
 
                     Image {
@@ -686,6 +690,9 @@ Rectangle {
                         onClicked: {
                             helper.openUrl("mailto:"+email)
                         }
+                        ToolTip.text: email
+                        ToolTip.delay: 800
+                        ToolTip.visible: containsMouse
                     }
 
                     Image {
