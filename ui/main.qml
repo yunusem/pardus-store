@@ -87,6 +87,7 @@ ApplicationWindow {
     property bool selectedAppInqueue
     property string selectedAppName
     property string selectedAppDelegatestate: "get"
+    property string selectedAppExecute
 
     Rectangle {
         id: mainBackground

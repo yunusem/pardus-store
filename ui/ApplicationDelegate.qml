@@ -15,7 +15,7 @@ Item {
     property string condition: processingCondition
     property int percent: processingPercent
     property bool processing: isThereOnGoingProcess
-
+    property bool installingFromHere
     signal triggered
 
     onPercentChanged: {
@@ -57,7 +57,7 @@ Item {
 
     onApplicationInstalledChanged: {
         if(name === selectedAppName) {
-            selectedAppInqueue = applicationInstalled
+            selectedAppInstalled = applicationInstalled
         }
     }
 
@@ -153,7 +153,7 @@ Item {
                 selectedAppInstalled = installed
                 selectedAppInqueue = inqueue
                 selectedAppDelegatestate = delegatestate
-
+                selectedAppExecute = exec
                 stackView.push(applicationDetail, {
                                    objectName: "detail",
                                    "current": name,
@@ -161,7 +161,7 @@ Item {
                                    "appVersion":version,
                                    "appDownloadSize" : dsize,
                                    "appCategory" : category,
-                                   "appNonfree" : nonfree})                                
+                                   "appNonfree" : nonfree})
             }
             onPressed: {
                 if(delegateMa.containsMouse) {
@@ -243,6 +243,7 @@ Item {
                             installed = false
                         } else {
                             installed = true
+                            helper.sendStatistics(name)
                         }
                         inqueue = false
                         if(selectedAppName === name) {
@@ -434,20 +435,25 @@ Item {
         Rectangle {
             id: openBtnContainer
             color: "transparent"
-            width: visible ? runAppButton.width + 12 : 0
+            width: runAppButton.opacity > 0.0 ? runAppButton.width + 12 : 0
             height: 72
-            visible: runAppButton.visible
+            visible: true
             anchors {
                 top: parent.top
                 left: parent.left
             }
 
+            Behavior on width {
+                enabled: animate
+                NumberAnimation { duration: animationDuration / 2 }
+            }
+
             Button {
                 id: runAppButton
-                Material.background: "#0784FC"
-                enabled: false
-                opacity: delegatestate === "installed" ? 1.0 : 0.0
-                visible: false//opacity > 0.0
+                Material.background: Material.accent
+                enabled: true
+                opacity: (delegatestate === "installed" && delegateMa.containsMouse) ? 1.0 : 0.0
+                visible: opacity > 0.0 //delegateMa.containsMouse
                 width: runBtnText.width + 12
                 height: parent.height / 3 + 18
                 anchors {
@@ -471,7 +477,7 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     anchors.centerIn: parent
-                    Material.foreground: "#FAFAFA"
+                    color: "#2B2B2B"
                     opacity: parent.opacity
                     visible: opacity > 0.0
 
@@ -496,12 +502,11 @@ Item {
                 text: getPrettyName(name)
                 fontSizeMode: Text.Fit
                 height: parent.height
-                font.pointSize: 20
+                font.pointSize: 18
                 wrapMode: Text.WordWrap
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.capitalization: Font.Capitalize
-                //font.pointSize: Text.VerticalFit
             }
         }
 

@@ -45,7 +45,9 @@ Rectangle {
     }
 
     function errorHappened() {
-        processButton.enabled = true
+        if(processButton) {
+            processButton.enabled = true
+        }
     }
 
     function appDetailsSlot(c, desc, down, l, mm, mn, ss, sec, w) {
@@ -101,6 +103,7 @@ Rectangle {
         selectedAppInqueue = false
         selectedAppInstalled = false
         selectedAppDelegatestate = "get"
+        selectedAppExecute = ""
     }
 
 
@@ -409,7 +412,7 @@ Rectangle {
 
             Button {
                 id: processButton
-                width: parent.height
+                width: parent.height * 2 / 3
 
                 enabled: !selectedAppInqueue
                 Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"
@@ -431,6 +434,26 @@ Rectangle {
                         processQueue.push(selectedAppName + " " + selectedAppInstalled)
                         updateQueue()
                     }
+                }
+            }
+
+            Button {
+                id: openButton
+                width: parent.height / 3 + 24
+                visible: selectedAppInstalled
+                enabled: selectedAppInstalled
+                Material.background: "#FFCB08"
+                Material.foreground: "#2B2B2B"
+                text: qsTr("OPEN")
+
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    right: processButton.left
+                    rightMargin: 12
+                }
+
+                onClicked: {
+                    helper.runCommand(selectedAppExecute)
                 }
             }
         }
