@@ -21,6 +21,7 @@ public:
     void getApplicationList();
     void getApplicationDetails(const QString &packageName);
     void ratingControl(const QString &name, const unsigned int &rating);
+    void sendApplicationInstalled(const QString &name);
     void surveyCheck();
     void surveyJoin(const QString &appName, const QString &duty);
     QString getMainUrl() const;
@@ -42,12 +43,14 @@ private slots:
 private:
     QNetworkAccessManager m_nam;
     std::map<QNetworkReply *, QTimer *> m_timerMap;
+    int m_timeoutDuration;
+    QString m_macId;
     void parseAppsResponse(const QJsonObject &obj);
     void parseDetailsResponse(const QJsonObject &obj);
     void parseRatingResponse(const QJsonObject &obj);
     void parseSurveyResponse(const QJsonObject &obj);
     void parseStatisticsResponse(const QJsonObject &obj);
-    int m_timeoutDuration;
+
 };
 
 #endif // NETWORKHANDLER_H

@@ -68,6 +68,15 @@ NetworkHandler::NetworkHandler(int msec, QObject *parent) : QObject(parent),
     }
     connect(&m_nam, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(replyFinished(QNetworkReply*)));
+
+    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
+        auto flags = interface.flags();
+        if(flags.testFlag(QNetworkInterface::IsRunning) &&
+                !flags.testFlag(QNetworkInterface::IsLoopBack)) {
+            m_macId = interface.hardwareAddress();
+            break;
+        }
+    }
 }
 
 void NetworkHandler::getApplicationList()
@@ -100,19 +109,28 @@ void NetworkHandler::ratingControl(const QString &name, const unsigned int &rati
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject data;
-    QString mac;
-    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
-        auto flags = interface.flags();
-        if(flags.testFlag(QNetworkInterface::IsRunning) &&
-                !flags.testFlag(QNetworkInterface::IsLoopBack)) {
-            mac = interface.hardwareAddress();
-            break;
-        }
-    }
-
-    data.insert("mac", QJsonValue::fromVariant(mac));
+    data.insert("mac", QJsonValue::fromVariant(m_macId));
     data.insert("app", QJsonValue::fromVariant(name));
     data.insert("rating", QJsonValue::fromVariant(rating));
+
+    QNetworkReply *reply;
+    QTimer *timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer->setSingleShot(true);
+    reply = m_nam.post(request, QJsonDocument(data).toJson());
+    timer_put(&m_timerMap, reply, timer);
+    timer->start(m_timeoutDuration);
+}
+
+void NetworkHandler::sendApplicationInstalled(const QString &name)
+{
+    QString url(QString(MAIN_URL).append("/api/v2/statistics"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject data;
+    data.insert("mac", QJsonValue::fromVariant(m_macId));
+    data.insert("app", QJsonValue::fromVariant(name));
 
     QNetworkReply *reply;
     QTimer *timer = new QTimer();
@@ -130,17 +148,7 @@ void NetworkHandler::surveyCheck()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject data;
-    QString mac;
-    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
-        auto flags = interface.flags();
-        if(flags.testFlag(QNetworkInterface::IsRunning) &&
-                !flags.testFlag(QNetworkInterface::IsLoopBack)) {
-            mac = interface.hardwareAddress();
-            break;
-        }
-    }
-
-    data.insert("mac",QJsonValue::fromVariant(mac));
+    data.insert("mac",QJsonValue::fromVariant(m_macId));
 
     QNetworkReply *reply;
     QTimer *timer = new QTimer();
@@ -158,17 +166,7 @@ void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject data;
-    QString mac;
-    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
-        auto flags = interface.flags();
-        if(flags.testFlag(QNetworkInterface::IsRunning) &&
-                !flags.testFlag(QNetworkInterface::IsLoopBack)) {
-            mac = interface.hardwareAddress();
-            break;
-        }
-    }
-
-    data.insert("mac",QJsonValue::fromVariant(mac));
+    data.insert("mac",QJsonValue::fromVariant(m_macId));
     data.insert("app",QJsonValue::fromVariant(appName));
     data.insert("duty",QJsonValue::fromVariant(duty));
 
@@ -332,22 +330,31 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
 
 void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
 {
-    if(obj.keys().contains("avarage")) {
-        double avr = obj.value("avarage").toDouble();
-        unsigned int ind = obj.value("individual").toInt();
-        unsigned int tot = obj.value("total").toInt();
-        emit appRatingReceived(avr, ind, tot);
+    if(obj.keys().contains("rating")) {
+        QJsonObject content = obj.value("rating").toObject();
+        if(!content.isEmpty()) {
+            double avr = content.value("avarage").toDouble();
+            unsigned int ind = content.value("individual").toInt();
+            unsigned int tot = content.value("total").toInt();
+            emit appRatingReceived(avr, ind, tot);
+        }
     }
 }
 
 void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
 {
-
+    Q_UNUSED(obj);
 }
 
 void NetworkHandler::parseStatisticsResponse(const QJsonObject &obj)
 {
-
+    if(obj.keys().contains("statistics")) {
+        QJsonObject content = obj.value("statistics").toObject();
+        if(!content.isEmpty()) {
+            unsigned int count = content.value("count").toInt();
+            Q_UNUSED(count);
+        }
+    }
 }
 
 void NetworkHandler::onTimeout()
