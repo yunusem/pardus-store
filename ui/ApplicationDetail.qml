@@ -13,8 +13,10 @@ Rectangle {
     property string appCategory
     property bool appNonfree
 
-    property string changelog : ""
-    property string description : ""
+    property var changelogLatest: [" * Fix bilmemne.", " * Dont use sanane"]
+    property string changelogHistory: "aşgkşakdg\nadgşlbnaldgk\nladkbgnslbkjasdglb\nagljbljb"
+    property string changelogDate: "05 Dec 2018 15:17:18 +0300"
+    property string description: ""
     property string sections: ""
     property string maintainer: ""
     property string website: ""
@@ -25,10 +27,10 @@ Rectangle {
     property int prevRating: 0
     property int ratingTotal: 0
     property int download: 0
+    property int timestamp: 1544012238
     property bool voted: false
 
     property int infoCellHeight: 70
-    //property int length: urls ? urls.length : 0
     property int ssindex
     property var urls
 
@@ -50,8 +52,11 @@ Rectangle {
         }
     }
 
-    function appDetailsSlot(c, desc, down, l, mm, mn, ss, sec, w) {
-        changelog = c
+    function appDetailsSlot(chl, chh, chd, t, desc, down, l, mm, mn, ss, sec, w) {
+        changelogLatest = chl
+        changelogHistory = chh
+        changelogDate = chd
+        timestamp = t
         description = desc
         download = down
         license = l
@@ -75,6 +80,33 @@ Rectangle {
         ratingTotal = t
         voted = false
         prevRating = rating
+    }
+
+    function timeSince(stamp) {
+        var date = new Date(Date.now() - stamp / 1000)
+        var seconds = Math.floor((new Date() - date))
+
+        var interval = Math.floor(seconds / 31536000)
+        if (interval > 1) {
+            return interval + " " + qsTr("years")
+        }
+        interval = Math.floor(seconds / 2592000)
+        if (interval > 1) {
+            return interval + " " + qsTr("months")
+        }
+        interval = Math.floor(seconds / 86400)
+        if (interval > 1) {
+            return interval + " " + qsTr("days")
+        }
+        interval = Math.floor(seconds / 3600)
+        if (interval > 1) {
+            return interval + " " + qsTr("hours")
+        }
+        interval = Math.floor(seconds / 60)
+        if (interval > 1) {
+            return interval + " " + qsTr("minutes")
+        }
+        return Math.floor(seconds) + " " + qsTr("seconds")
     }
 
     onUrlsChanged: {
@@ -106,8 +138,6 @@ Rectangle {
         selectedAppDelegatestate = "get"
         selectedAppExecute = ""
     }
-
-
 
     ListModel {
         id: lm
@@ -967,7 +997,7 @@ Rectangle {
                 id: changelogContainer
                 color: "transparent"
                 width: parent.width
-                height: newsLabel.height + comingSoonLabel2.height + 24
+                height: newsLabel.height + latestRect.height + 24
                 anchors {
                     top: reviewContainer.bottom
                     topMargin: 24
@@ -987,16 +1017,27 @@ Rectangle {
                     }
                 }
 
-                Label {
-                    id: comingSoonLabel2
-                    text: qsTr("coming soon") + " ..."
-                    enabled: false
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    font.capitalization: Font.Capitalize
+                Rectangle {
+                    id: latestRect
+                    color: "black"
+                    width: parent.width * 7 / 8
+                    height: 50
                     anchors {
                         top: newsLabel.bottom
-                        left: parent.left
+                        topMargin: 12
+                    }
+                    Column {
+                        spacing: 3
+                        Repeater {
+                            model: changelogLatest
+                            delegate: Label {
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                text: modelData
+                                //color: textSecondaryColor
+                                font.pointSize: 12
+                            }
+                        }
                     }
                 }
             }

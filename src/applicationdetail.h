@@ -7,13 +7,37 @@
 
 class Description;
 class Section;
+class Changelog
+{
+public:
+    Changelog(const QStringList &latest, const QString &history,
+              const QString &date, const unsigned int &timestamp);
+    Changelog();
+    QStringList latest() const;
+    QString history() const;
+    QString date() const;
+    unsigned int timestamp() const;
+
+private:
+    QStringList m_latest;
+    QString m_history, m_date;
+    unsigned int m_timestamp;
+};
+
+inline QStringList Changelog::latest() const { return m_latest; }
+inline QString Changelog::history() const { return m_history; }
+inline QString Changelog::date() const { return m_date; }
+inline unsigned int Changelog::timestamp() const { return m_timestamp; }
 
 class ApplicationDetail
 {
 public:
     ApplicationDetail();
 
-    QString changelog() const;
+    QStringList changelogLatest() const;
+    QString changelogHistory() const;
+    QString changelogDate() const;
+    unsigned int changelogTimestamp() const;
     QString description() const;
     unsigned int download() const;
     QString license() const;
@@ -24,7 +48,7 @@ public:
     QString section() const;
     QString website() const;
 
-    void setChangelog(const QString &changelog);
+    void setChangelog(const Changelog &changelog);
     void setDescriptionList(const QList<Description> &descList);
     void setDownload(const unsigned int &download);
     void setLicense(const QString &license);
@@ -35,7 +59,7 @@ public:
     void setWebsite(const QString &website);
 
 private:
-    QString m_changelog;
+    Changelog m_changelog;
     QList<Description> m_descriptions;
     unsigned int m_download;
     QString m_license;
@@ -75,5 +99,7 @@ private:
 
 inline QString Section::language() const { return m_language; }
 inline QString Section::section() const { return m_section; }
+
+
 
 #endif // APPLICATIONDETAIL_H

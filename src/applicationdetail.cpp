@@ -3,7 +3,7 @@
 
 ApplicationDetail::ApplicationDetail()
 {
-    m_name = "";
+    m_name = "";    
     m_descriptions = QList<Description>();
     m_download = 0;
     m_license = "";
@@ -14,9 +14,24 @@ ApplicationDetail::ApplicationDetail()
     m_website = "";
 }
 
-QString ApplicationDetail::changelog() const
+QStringList ApplicationDetail::changelogLatest() const
 {
-    return m_changelog;
+    return m_changelog.latest();
+}
+
+QString ApplicationDetail::changelogHistory() const
+{
+    return m_changelog.history();
+}
+
+QString ApplicationDetail::changelogDate() const
+{
+    return m_changelog.date();
+}
+
+unsigned int ApplicationDetail::changelogTimestamp() const
+{
+    return m_changelog.timestamp();
 }
 
 QString ApplicationDetail::description() const
@@ -93,7 +108,7 @@ QString ApplicationDetail::website() const
     return m_website;
 }
 
-void ApplicationDetail::setChangelog(const QString &changelog)
+void ApplicationDetail::setChangelog(const Changelog &changelog)
 {
     m_changelog = changelog;
 }
@@ -151,4 +166,17 @@ Section::Section(const QString &lang, const QString &content):
 
 }
 
+Changelog::Changelog(const QStringList &latest, const QString &history,
+                     const QString &date, const unsigned int &timestamp):
+    m_latest(latest), m_history(history), m_date(date), m_timestamp(timestamp)
+{
 
+}
+
+Changelog::Changelog()
+{
+    m_latest = QStringList();
+    m_history = "";
+    m_date = "";
+    m_timestamp = 0;
+}

@@ -36,7 +36,8 @@ QString Application::category() const
     QLocale systemLocale;
     QString locale = systemLocale.name().split("_")[0];
     QString category = m_category.value("en");
-    if(m_category.keys().contains(locale)) {
+    if(m_category.keys().contains(locale) &&
+            m_category.value(locale) != "") {
         category = m_category.value(locale);
     }
     return category;
@@ -47,7 +48,8 @@ QString Application::prettyname() const
     QLocale systemLocale;
     QString locale = systemLocale.name().split("_")[0];
     QString prettyname = m_prettyname.value("en");
-    if(m_prettyname.keys().contains(locale)) {
+    if(m_prettyname.keys().contains(locale) &&
+            m_prettyname.value(locale) != "") {
         prettyname = m_prettyname.value(locale);
     }
     return prettyname;

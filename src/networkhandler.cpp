@@ -193,7 +193,7 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
     }
 
     reply->deleteLater();
-    if (reply->error() != QNetworkReply::NoError) {        
+    if (reply->error() != QNetworkReply::NoError) {
         emit replyError(reply->errorString());
         return;
     }
@@ -201,7 +201,7 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
     auto data = reply->readAll();
     auto doc = QJsonDocument::fromJson(data);
 
-    if (doc.isNull()) {        
+    if (doc.isNull()) {
         emit replyError("Not a json document!");
         return;
     }
@@ -223,9 +223,9 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
             case 2:
                 parseSurveyResponse(obj);
                 break;
-                //            case 3:
-                //                parseAppsResponse(obj);
-                //                break;
+            case 3:
+                parseHomeResponse(obj);
+                break;
             case 4:
                 parseRatingResponse(obj);
                 break;
@@ -241,7 +241,6 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
         emit replyError("Error from server : " + obj.value("error").toString());
         return;
     }
-
 
     if(obj.contains("survey-list")) {
         QStringList sl;
@@ -299,11 +298,17 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
         if(!content.isEmpty()) {
             ApplicationDetail ad;
             QList<Description> descriptionList;
-            QStringList screenshots;
+            QStringList sl;
             QList<Section> sectionList;
 
-            ad.setChangelog(content.value("changelog").toString());
-            QJsonObject jo = content.value("descriptions").toObject();
+            QJsonObject jo = content.value("changelog").toObject();
+            foreach (const QVariant var, content.value("latest").toArray().toVariantList()) {
+                sl.append(QString(MAIN_URL).append(var.toString()));
+            }
+            ad.setChangelog(Changelog(sl,jo.value("history").toString(),jo.value("date").toString(),
+                                      jo.value("timestamp").toInt()));
+            sl.clear();
+            jo = content.value("descriptions").toObject();
             foreach (const QString &lang, jo.keys()) {
                 descriptionList.append(Description(lang, jo.value(lang).toString()));
             }
@@ -314,9 +319,9 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
                              content.value("maintainer").toObject().value("name").toString());
             ad.setName(content.value("name").toString());
             foreach (const QVariant var, content.value("screenshots").toArray().toVariantList()) {
-                screenshots.append(QString(MAIN_URL).append(var.toString()));
+                sl.append(QString(MAIN_URL).append(var.toString()));
             }
-            ad.setScreenshots(screenshots);
+            ad.setScreenshots(sl);
             jo = content.value("section").toObject();
             foreach (const QString &lang, jo.keys()) {
                 sectionList.append(Section(lang, jo.value(lang).toString()));
@@ -342,6 +347,11 @@ void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
 }
 
 void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
+{
+    Q_UNUSED(obj);
+}
+
+void NetworkHandler::parseHomeResponse(const QJsonObject &obj)
 {
     Q_UNUSED(obj);
 }

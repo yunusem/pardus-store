@@ -11,14 +11,14 @@ ApplicationWindow {
     minimumWidth: 1150
     minimumHeight: minimumWidth * 3 / 5
     visible: true
-    title: "Pardus" + " " + qsTr("Store")    
+    title: "Pardus" + " " + qsTr("Store")
     color: "transparent"
 
     property real navigationBarWidth: 215.625
     property real processingPercent: 0
 
     property bool hasActiveFocus: false
-    property bool cacheIsUpToDate: false    
+    property bool cacheIsUpToDate: false
     property bool isSearching: false
     property bool expanded: false
     property bool isThereOnGoingProcess: false
@@ -78,7 +78,8 @@ ApplicationWindow {
     signal surveyJoinUpdated()
     signal errorOccured()
     signal appDescriptionReceived(variant desc)
-    signal appDetailsReceived(variant c, variant desc, variant down, variant l,
+    signal appDetailsReceived(variant cl, variant ch, variant cd, variant ct,
+                              variant desc, variant down, variant l,
                               variant mm, variant mn, variant ss, variant sec,
                               variant w)
     signal appRatingDetailsReceived(variant avg, variant ind, variant tot)
@@ -168,29 +169,26 @@ ApplicationWindow {
                 infoDialog.open()
                 errorOccured()
             } else {
-              terminateProcessCalled = false
+                terminateProcessCalled = false
             }
         }
+
         onProcessingStatus: {
             if(condition === "pmstatus") {
                 if(processingCondition === qsTr("removing")) {
-                    //busy.colorCircle = "#EF9A9A" //Material.color(Material.Red)
                 } else if(processingCondition === qsTr("downloading")) {
-                    //busy.colorCircle = "#A5D6A7" //Material.color(Material.Green)
                     processingCondition = qsTr("installing")
                 }
 
             } else if (condition === "dlstatus") {
                 processingCondition = qsTr("downloading")
-                //busy.colorCircle = "#90CAF9" //Material.color(Material.Blue)
             }
-
-            //busy.value = percent
             processingPercent = percent
-            //console.log(processingPercent)
-        }        
+        }
+
         onDetailsReceived: {
-            appDetailsReceived(changelog, description, download, license,
+            appDetailsReceived(changeloglatest, changeloghistory, changelogdate,
+                               timestamp, description, download, license,
                                mmail, mname, screenshots, section, website)
         }
 
@@ -210,10 +208,12 @@ ApplicationWindow {
         onFetchingAppListFinished: {
             splashScreen.label.text = qsTr("Gathering local details.")
         }
+
         onGatheringLocalDetailFinished: {
             splashScreen.label.text = qsTr("Fetching survey data.")
             surveyCheck()
         }
+
         onSurveyListReceived: {
             gotSurveyList(list)
             if(splashScreen.visible) {
@@ -222,10 +222,12 @@ ApplicationWindow {
                 splashScreen.busy.running = false
             }
         }
+
         onSurveyJoinSuccess: {
             surveyJoined()
             surveyCheck()
         }
+
         onSurveyJoinUpdateSuccess: {
             surveyJoinUpdated()
             surveyCheck()
@@ -238,6 +240,7 @@ ApplicationWindow {
             infoDialog.settingsButtonOn = false
             infoDialog.open()
         }
+
         onCorrectingFinishedWithError: {
             settings.corrected = helper.corrected
             popupText = qsTr("Show this result to the maintainer.") + "\n\n\"" + errorString + "\""
@@ -250,10 +253,9 @@ ApplicationWindow {
         id: stackView
         clip: true
         width: main.width - navigationBarWidth
-        height: main.height //* 14 / 15
+        height: main.height
         anchors {
             verticalCenter: parent.verticalCenter
-            //bottom: parent.bottom
             right: parent.right
         }
 
@@ -316,7 +318,7 @@ ApplicationWindow {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            if(processQueue.length > 0 && !isThereOnGoingProcess) {                
+            if(processQueue.length > 0 && !isThereOnGoingProcess) {
                 var s = processQueue[0].split(" ")
                 var appName = s[0]
                 var duty = s[1]
@@ -328,7 +330,7 @@ ApplicationWindow {
                 } else {
                     processingCondition = qsTr("downloading")
                     helper.install(appName)
-                }                
+                }
             }
         }
     }

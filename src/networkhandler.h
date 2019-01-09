@@ -46,9 +46,10 @@ private:
     int m_timeoutDuration;
     QString m_macId;
     void parseAppsResponse(const QJsonObject &obj);
-    void parseDetailsResponse(const QJsonObject &obj);
-    void parseRatingResponse(const QJsonObject &obj);
+    void parseDetailsResponse(const QJsonObject &obj);    
     void parseSurveyResponse(const QJsonObject &obj);
+    void parseHomeResponse(const QJsonObject &obj);
+    void parseRatingResponse(const QJsonObject &obj);
     void parseStatisticsResponse(const QJsonObject &obj);
 
 };

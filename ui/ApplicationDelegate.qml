@@ -593,7 +593,7 @@ Item {
             Image {
                 id: appIcon
                 anchors.centerIn: parent
-                asynchronous: true
+                //asynchronous: true
                 source: "image://application/" + getCorrectName(name)
                 sourceSize {
                     width: parent.width
