@@ -42,12 +42,13 @@ Rectangle {
 
     Component {
         id: categoryItemDelegate
-        Item {
+        Rectangle {
             id:categoryItemWrapper
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width * 3 / 4
             height: categoryItemHeight
-
+            color: categoryMa.containsMouse ? "#15ffffff" : "#00ffffff"
+            radius: 2
             Image {
                 id: categoryItemIcon
                 asynchronous: true
@@ -78,12 +79,13 @@ Rectangle {
                 color: name === selectedCategory ? "#FFCB08" : "#FAFAFA"
                 font.capitalization: Font.Capitalize
                 text: name
-                fontSizeMode: Text.HorizontalFit
+                fontSizeMode: Text.HorizontalFit                
             }
 
             MouseArea {
                 id: categoryMa
                 anchors.fill: parent
+                hoverEnabled: true
                 onClicked: {
                     if(name === selectedCategory && applicationModel.getFilterString() !== "") {
                         applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
@@ -91,6 +93,15 @@ Rectangle {
 
                     selectedCategory = name
                     forceActiveFocus()
+                }
+                onPressed: {
+                    categoryItemLabel.scale = 0.95
+                }
+                onPressAndHold: {
+                    categoryItemLabel.scale = 0.95
+                }
+                onReleased: {
+                    categoryItemLabel.scale = 1
                 }
             }
         }
@@ -177,6 +188,15 @@ Rectangle {
                         } else {
                             expanded = false
                         }
+                    }
+                    onPressed: {
+                        menuItemLabel.scale = 0.95
+                    }
+                    onPressAndHold: {
+                        menuItemLabel.scale = 0.95
+                    }
+                    onReleased: {
+                        menuItemLabel.scale = 1
                     }
                 }
             }
