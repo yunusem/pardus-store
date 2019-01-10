@@ -16,9 +16,21 @@ Rectangle {
     property string choice : helper.choice
     property int selectedIndex: 0
     property string editorsAppName: "chromium"
-    property string mostAppName: "spotify-client"
+    //property string mostAppName: "spotify-client"
     property real cellWidth: 308
     property real cellHeight: 150
+
+    property double epaRating: 3.2
+    property int epaDownloadCount: 54
+    property string epaName: "gdebi"
+
+    property double mdaRating: 4.466666666
+    property int mdaDownloadCount: 112
+    property string mdaName: "spotify-client"
+
+    property double mraRating: 4.8999999
+    property int mraDownloadCount: 11
+    property string mraName: "pidgin"
 
     signal joined()
     signal updated()
@@ -121,8 +133,6 @@ Rectangle {
 
     Item {
         id: suggester
-        height: parent.height - banner.height - 12
-        width: editorApp.width
         anchors {
             top: banner.bottom
             topMargin: 12
@@ -130,24 +140,18 @@ Rectangle {
         }
 
         Pane {
-            id: editorApp
-            Material.elevation: editorBadgeMa.containsMouse ? 10 : 5
-            width: editorsImage.width > 0 ? editorsImage.width : cellWidth
-            height: editorsImage.height > 0 ? editorsImage.height : cellHeight
+            id: editorsApp
+            Material.elevation: editorsAppMa.containsMouse ? 10 : 5
+            height: (survey.height - 24) / 3
+            width: height * 2.479740413
             anchors {
                 top: parent.top
+                //topMargin: 12
                 left: parent.left
             }
 
-            Behavior on Material.elevation {
-                enabled: animate
-                NumberAnimation {
-                    duration: 33
-                }
-            }
-
             MouseArea {
-                id: editorBadgeMa
+                id: editorsAppMa
                 hoverEnabled: true
                 anchors.centerIn: parent
                 width: parent.width + 24
@@ -158,62 +162,148 @@ Rectangle {
                     expanded = true
                     selectedMenu = qsTr("categories")
                     forceActiveFocus()
-                    applicationModel.setFilterString(editorsAppName, true)
-
+                    applicationModel.setFilterString(epaName, true)
                 }
-
                 onPressed: {
-                    if(editorBadgeMa.containsMouse) {
-                        editorApp.Material.elevation = 0
+                    if(containsMouse) {
+                        editorsApp.Material.elevation = 0
                     }
                 }
                 onPressAndHold: {
-                    if(editorBadgeMa.containsMouse) {
-                        editorApp.Material.elevation = 0
+                    if(containsMouse) {
+                        editorsApp.Material.elevation = 0
                     }
                 }
                 onReleased: {
-                    if(editorBadgeMa.containsMouse) {
-                        editorApp.Material.elevation = 10
+                    if(containsMouse) {
+                        editorsApp.Material.elevation = 10
                     } else {
-                        editorApp.Material.elevation = 5
+                        editorsApp.Material.elevation = 5
                     }
                 }
             }
 
+
             Image {
-                id:editorsImage
-                source: helper.getMainUrl() + "/screenshots/editor.png"
+                id:editorsAppImage
+                source: "image://application/" + getCorrectName(epaName)
                 anchors {
-                    centerIn: parent
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
                 }
-                layer.enabled: true
-                layer.smooth: true
-                layer.effect: OpacityMask {
-                    maskSource: Item {
-                        width: editorsImage.width
-                        height: editorsImage.height
-                        Rectangle {
-                            anchors.centerIn: parent
-                            width: editorsImage.width
-                            height: editorsImage.height
-                            radius: 2
-                        }
-                    }
+
+                height: parent.height
+                width: height
+                fillMode: Image.PreserveAspectFit
+                sourceSize {
+                    width: width
+                    height: height
                 }
             }
 
             Label {
-                id: editorsLabel
-                enabled: editorBadgeMa.containsMouse
-                Material.foreground: "#ffcb08"
-                text: qsTr("Editor's Pick")
-                font.bold: true
+                id: epaTitle
                 verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignRight
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: parent.height > 100 ? parent.height / 12 : 10
                 anchors {
-                    bottom: parent.bottom
+                    top: parent.top
+                    left: editorsAppImage.right
+                    leftMargin: 12
                     right: parent.right
+                }
+
+                Material.foreground: Material.accent
+                text: qsTr("Editor's Pick")
+
+            }
+
+            Column {
+                spacing: 6
+                anchors {
+                    top: epaTitle.bottom
+                    topMargin: 12
+                    left: editorsAppImage.right
+                    leftMargin: 12
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+
+                Label {
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    width: parent.width
+                    font.capitalization: Font.Capitalize
+                    text: getPrettyName(epaName)
+                    wrapMode: Text.WordWrap
+                    font.pointSize: editorsApp.height > 100 ? editorsApp.height / 10 : 10
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: mdaRatingLabel.contentHeight + 6
+                    color: "transparent"
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        Image {
+                            height: parent.height - 6
+                            width: height
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            source: "qrc:/images/star.svg"
+                            sourceSize {
+                                width: width
+                                height: height
+                            }
+                        }
+
+                        Label {
+                            id: epaRatingLabel
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            text: epaRating.toFixed(1)
+                            font.pointSize: editorsApp.height > 100 ? editorsApp.height / 12 : 10
+                        }
+                    }
+                }
+                Rectangle {
+                    width: parent.width
+                    height: epaRatingLabel.contentHeight + 6
+                    color: "transparent"
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        Image {
+                            height: parent.height - 6
+                            width: height
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            source: "qrc:/images/download.svg"
+                            sourceSize {
+                                width: width
+                                height: height
+                            }
+                        }
+
+                        Label {
+                            id: epaDownloadLabel
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            text: epaDownloadCount
+                            font.pointSize: editorsApp.height > 100 ? editorsApp.height / 12 : 10
+                        }
+                    }
                 }
             }
         }
@@ -221,19 +311,12 @@ Rectangle {
         Pane {
             id: mostDownloadedApp
             Material.elevation: mostDownloadedAppMa.containsMouse ? 10 : 5
-            width: mostDownloadedImage.width > 0 ? mostDownloadedImage.width : cellWidth
-            height: mostDownloadedImage.height > 0 ? mostDownloadedImage.height : cellHeight
+            height: (survey.height - 24) / 3
+            width: height * 2.479740413
             anchors {
-                top: editorApp.bottom
+                top: editorsApp.bottom
                 topMargin: 12
                 left: parent.left
-            }
-
-            Behavior on Material.elevation {
-                enabled: animate
-                NumberAnimation {
-                    duration: 33
-                }
             }
 
             MouseArea {
@@ -248,20 +331,20 @@ Rectangle {
                     expanded = true
                     selectedMenu = qsTr("categories")
                     forceActiveFocus()
-                    applicationModel.setFilterString(mostAppName, true)
+                    applicationModel.setFilterString(mdaName, true)
                 }
                 onPressed: {
-                    if(mostDownloadedAppMa.containsMouse) {
+                    if(containsMouse) {
                         mostDownloadedApp.Material.elevation = 0
                     }
                 }
                 onPressAndHold: {
-                    if(mostDownloadedAppMa.containsMouse) {
+                    if(containsMouse) {
                         mostDownloadedApp.Material.elevation = 0
                     }
                 }
                 onReleased: {
-                    if(mostDownloadedAppMa.containsMouse) {
+                    if(containsMouse) {
                         mostDownloadedApp.Material.elevation = 10
                     } else {
                         mostDownloadedApp.Material.elevation = 5
@@ -272,40 +355,312 @@ Rectangle {
 
             Image {
                 id:mostDownloadedImage
-                source:  helper.getMainUrl() + "/screenshots/most.png"
+                source: "image://application/" + getCorrectName(mdaName)
                 anchors {
-                    centerIn: parent
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
                 }
-                layer.enabled: true
-                layer.smooth: true
-                layer.effect: OpacityMask {
-                    maskSource: Item {
-                        width: mostDownloadedImage.width
-                        height: mostDownloadedImage.height
-                        Rectangle {
-                            anchors.centerIn: parent
-                            width: mostDownloadedImage.width
-                            height: mostDownloadedImage.height
-                            radius: 2
+
+                height: parent.height
+                width: height
+                fillMode: Image.PreserveAspectFit
+                sourceSize {
+                    width: width
+                    height: height
+                }
+            }
+
+            Label {
+                id: mdaTitle
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: parent.height > 100 ? parent.height / 12 : 10
+                anchors {
+                    top: parent.top
+                    left: mostDownloadedImage.right
+                    leftMargin: 12
+                    right: parent.right
+                }
+
+                Material.foreground: Material.accent
+                text: qsTr("Most Downloaded App")
+
+            }
+
+            Column {
+                spacing: 6
+                anchors {
+                    top: mdaTitle.bottom
+                    topMargin: 12
+                    left: mostDownloadedImage.right
+                    leftMargin: 12
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+
+                Label {
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    width: parent.width
+                    font.capitalization: Font.Capitalize
+                    text: getPrettyName(mdaName)
+                    wrapMode: Text.WordWrap
+                    font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 10 : 10
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: mdaRatingLabel.contentHeight + 6
+                    color: "transparent"
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        Image {
+                            height: parent.height - 6
+                            width: height
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            source: "qrc:/images/star.svg"
+                            sourceSize {
+                                width: width
+                                height: height
+                            }
+                        }
+
+                        Label {
+                            id: mdaRatingLabel
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            text: mdaRating.toFixed(1)
+                            font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 12 : 10
+                        }
+                    }
+                }
+                Rectangle {
+                    width: parent.width
+                    height: mdaRatingLabel.contentHeight + 6
+                    color: "transparent"
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        Image {
+                            height: parent.height - 6
+                            width: height
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            source: "qrc:/images/download.svg"
+                            sourceSize {
+                                width: width
+                                height: height
+                            }
+                        }
+
+                        Label {
+                            id: mdaDownloadLabel
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            text: mdaDownloadCount
+                            font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 12 : 10
+                        }
+                    }
+                }
+            }
+        }
+
+        Pane {
+            id: mostRatedApp
+            Material.elevation: mostRatedAppMa.containsMouse ? 10 : 5
+            height: (survey.height - 24) / 3
+            width: height * 2.479740413
+            anchors {
+                top: mostDownloadedApp.bottom
+                topMargin: 12
+                left: parent.left
+            }
+
+            MouseArea {
+                id: mostRatedAppMa
+                hoverEnabled: true
+                anchors.centerIn: parent
+                width: parent.width + 24
+                height: parent.height + 24
+
+                onClicked: {
+                    selectedCategory = qsTr("all")
+                    expanded = true
+                    selectedMenu = qsTr("categories")
+                    forceActiveFocus()
+                    applicationModel.setFilterString(mraName, true)
+                }
+                onPressed: {
+                    if(containsMouse) {
+                        mostRatedApp.Material.elevation = 0
+                    }
+                }
+                onPressAndHold: {
+                    if(containsMouse) {
+                        mostRatedApp.Material.elevation = 0
+                    }
+                }
+                onReleased: {
+                    if(containsMouse) {
+                        mostRatedApp.Material.elevation = 10
+                    } else {
+                        mostRatedApp.Material.elevation = 5
+                    }
+                }
+            }
+
+
+            Image {
+                id:mostRatedAppImage
+                source: "image://application/" + getCorrectName(mraName)
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: parent.left
+                }
+
+                height: parent.height
+                width: height
+                fillMode: Image.PreserveAspectFit
+                sourceSize {
+                    width: width
+                    height: height
+                }
+            }
+
+            Label {
+                id: mraTitle
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: parent.height > 100 ? parent.height / 12 : 10
+                anchors {
+                    top: parent.top
+                    left: mostRatedAppImage.right
+                    leftMargin: 12
+                    right: parent.right
+                }
+
+                Material.foreground: Material.accent
+                text: qsTr("Most Rated App")
+
+            }
+
+            Column {
+                spacing: 6
+                anchors {
+                    top: mraTitle.bottom
+                    topMargin: 12
+                    left: mostRatedAppImage.right
+                    leftMargin: 12
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+
+                Label {
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    width: parent.width
+                    font.capitalization: Font.Capitalize
+                    text: getPrettyName(mraName)
+                    font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 10 : 10
+                    wrapMode: Text.WordWrap
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: mdaRatingLabel.contentHeight + 6
+                    color: "transparent"
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        Image {
+                            height: parent.height - 6
+                            width: height
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            source: "qrc:/images/star.svg"
+                            sourceSize {
+                                width: width
+                                height: height
+                            }
+                        }
+
+                        Label {
+                            id: mraRatingLabel
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            text: mraRating.toFixed(1)
+                            font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 12 : 10
+                        }
+                    }
+                }
+                Rectangle {
+                    width: parent.width
+                    height: mraRatingLabel.contentHeight + 6
+                    color: "transparent"
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 6
+                        Image {
+                            height: parent.height - 6
+                            width: height
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            source: "qrc:/images/download.svg"
+                            sourceSize {
+                                width: width
+                                height: height
+                            }
+                        }
+
+                        Label {
+                            id: mraDownloadLabel
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                            }
+                            text: mraDownloadCount
+                            font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 12 : 10
                         }
                     }
                 }
             }
 
-            Label {
-                id: mostDownloadedAppLabel
-                enabled: mostDownloadedAppMa.containsMouse
-                Material.foreground: "#ffcb08"
-                text: qsTr("Most Downloaded App")
-                font.bold: true
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignRight
-                anchors {
-                    bottom: parent.bottom
-                    right: parent.right
-                }
-            }
+            //            Label {
+            //                id: mostDownloadedAppLabel
+            //                enabled: mostDownloadedAppMa.containsMouse
+            //                Material.foreground: "#ffcb08"
+            //                text: qsTr("Most Downloaded App")
+            //                font.bold: true
+            //                verticalAlignment: Text.AlignVCenter
+            //                horizontalAlignment: Text.AlignRight
+            //                anchors {
+            //                    bottom: parent.bottom
+            //                    right: parent.right
+            //                }
+            //            }
         }
+
+
     }
 
     //    Item {
@@ -387,7 +742,7 @@ Rectangle {
     Pane {
         id: survey
         height: parent.height - banner.height - 36
-        width: 512.375
+        width: 450
         Material.elevation: 3
         anchors {
             top: banner.bottom

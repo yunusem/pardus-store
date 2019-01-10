@@ -31,5 +31,6 @@
         <file>images/rating-stars.svg</file>
         <file>images/email.svg</file>
         <file>images/website.svg</file>
+        <file>images/download.svg</file>
     </qresource>
 </RCC>
