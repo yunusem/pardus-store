@@ -143,7 +143,8 @@ signals:
     void correctingFinishedWithError(const QString &errorString);
     void replyError(const QString &errorString);
     void detailsReceived(const QStringList &changeloglatest, const QString &changeloghistory,
-                         const unsigned int &timestamp, const QString &description,
+                         const unsigned int &timestamp, const QString &copyright,
+                         const QString &description,
                          const unsigned int &download, const QString &license,
                          const QString &mmail, const QString &mname, const QStringList &screenshots,
                          const QString &section, const QString &website);

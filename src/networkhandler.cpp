@@ -308,6 +308,7 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
             ad.setChangelog(Changelog(sl,jo.value("history").toString(),
                                       jo.value("timestamp").toInt()));
             sl.clear();
+            ad.setCopyright(content.value("copyright").toString());
             jo = content.value("descriptions").toObject();
             foreach (const QString &lang, jo.keys()) {
                 descriptionList.append(Description(lang, jo.value(lang).toString()));

@@ -3,7 +3,8 @@
 
 ApplicationDetail::ApplicationDetail()
 {
-    m_name = "";    
+    m_name = "";
+    m_copyright = "";
     m_descriptions = QList<Description>();
     m_download = 0;
     m_license = "";
@@ -27,6 +28,11 @@ QString ApplicationDetail::changelogHistory() const
 unsigned int ApplicationDetail::changelogTimestamp() const
 {
     return m_changelog.timestamp();
+}
+
+QString ApplicationDetail::copyright() const
+{
+    return m_copyright;
 }
 
 QString ApplicationDetail::description() const
@@ -106,6 +112,11 @@ QString ApplicationDetail::website() const
 void ApplicationDetail::setChangelog(const Changelog &changelog)
 {
     m_changelog = changelog;
+}
+
+void ApplicationDetail::setCopyright(const QString &copyright)
+{
+    m_copyright = copyright;
 }
 
 void ApplicationDetail::setDescriptionList(const QList<Description> &descList)

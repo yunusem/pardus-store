@@ -36,6 +36,7 @@ public:
     QString changelogHistory() const;
     QString changelogDate() const;
     unsigned int changelogTimestamp() const;
+    QString copyright() const;
     QString description() const;
     unsigned int download() const;
     QString license() const;
@@ -47,6 +48,7 @@ public:
     QString website() const;
 
     void setChangelog(const Changelog &changelog);
+    void setCopyright(const QString &copyright);
     void setDescriptionList(const QList<Description> &descList);
     void setDownload(const unsigned int &download);
     void setLicense(const QString &license);
@@ -58,6 +60,7 @@ public:
 
 private:
     Changelog m_changelog;
+    QString m_copyright;
     QList<Description> m_descriptions;
     unsigned int m_download;
     QString m_license;

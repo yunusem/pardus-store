@@ -21,6 +21,7 @@ Rectangle {
     property string website: ""
     property string email: ""
     property string license: ""
+    property string copyright: ""
     property double ratingAverage: 0.0
     property int rating: 0
     property int prevRating: 0
@@ -29,6 +30,7 @@ Rectangle {
     property int timestamp: 0
     property bool voted: false
 
+    property string popupExemineText: ""
     property int infoCellHeight: 60
     property int ssindex
     property var urls
@@ -52,12 +54,13 @@ Rectangle {
         }
     }
 
-    function appDetailsSlot(chl, chh, t, desc, down, l, mm, mn, ss, sec, w) {
+    function appDetailsSlot(chl, chh, t, cp, desc, down, l, mm, mn, ss, sec, w) {
         changelogLatest = chl
         changelogHistory = chh
         timestamp = t
         description = desc
         download = down
+        copyright = cp
         license = l
         if(l === "") {
             license = "GPLv2"
@@ -927,6 +930,19 @@ Rectangle {
                                 text: license
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
+                                color: (licenseMa.containsMouse && copyright != "") ? Material.accent : Material.foreground
+                                MouseArea {
+                                    id: licenseMa
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: copyright != "" ? Qt.PointingHandCursor: Qt.ArrowCursor
+                                    onClicked: {
+                                        if(copyright != "") {
+                                            popupExemineText = copyright
+                                            popupExemine.open()
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1106,7 +1122,8 @@ Rectangle {
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 if(changelogLatest.length != 0) {
-                                    popupChangelogHistory.open()
+                                    popupExemineText = changelogHistory
+                                    popupExemine.open()
                                 }
                             }
                         }
@@ -1160,15 +1177,17 @@ Rectangle {
     }
 
     Popup {
-        id: popupChangelogHistory
+        id: popupExemine
         width : parent.width - 108
         height: parent.height - 24
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-
         MouseArea {
             anchors.fill: parent
             cursorShape: Qt.ArrowCursor
+        }
+        onClosed: {
+            popupExemineText = ""
         }
 
         Rectangle {
@@ -1186,14 +1205,14 @@ Rectangle {
                 width: parent.width
                 height: parent.height
                 interactive: contentHeight > height
-                contentHeight: popupHistoryLabel.contentHeight
+                contentHeight: contentLabel.contentHeight
                 flickableDirection: Flickable.VerticalFlick
                 clip: true
 
                 Label {
-                    id: popupHistoryLabel
+                    id: contentLabel
                     anchors.fill: parent
-                    text: changelogHistory
+                    text: popupExemineText
                     font.pointSize: 11
                     verticalAlignment: Text.AlignTop
                     horizontalAlignment: Text.AlignLeft
@@ -1235,7 +1254,7 @@ Rectangle {
                     parent.Material.elevation = 2
                 }
                 onClicked: {
-                    popupChangelogHistory.close()
+                    popupExemine.close()
                 }
             }
         }

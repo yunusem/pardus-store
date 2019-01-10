@@ -78,7 +78,7 @@ ApplicationWindow {
     signal surveyJoinUpdated()
     signal errorOccured()
     signal appDescriptionReceived(variant desc)
-    signal appDetailsReceived(variant cl, variant ch, variant ct,
+    signal appDetailsReceived(variant cl, variant ch, variant ct, variant cp,
                               variant desc, variant down, variant l,
                               variant mm, variant mn, variant ss, variant sec,
                               variant w)
@@ -187,7 +187,7 @@ ApplicationWindow {
         }
 
         onDetailsReceived: {
-            appDetailsReceived(changeloglatest, changeloghistory, timestamp, description,
+            appDetailsReceived(changeloglatest, changeloghistory, timestamp, copyright, description,
                                download, license, mmail, mname, screenshots, section, website)
         }
 
