@@ -1028,7 +1028,7 @@ Rectangle {
                 color: "transparent"
                 width: parent.width
                 height: newsLabel.height + 30 + ((latestRect.height > changelogHistoryContainer.height) ?
-                                                     latestRect.height : changelogHistoryContainer.height)
+                                                     latestRect.height + 15 : changelogHistoryContainer.height)
                 anchors {
                     top: reviewContainer.bottom
                     topMargin: 24
@@ -1217,6 +1217,16 @@ Rectangle {
                     verticalAlignment: Text.AlignTop
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.WordWrap
+                }
+
+                ScrollBar.vertical: ScrollBar {
+                    hoverEnabled: true
+                    active: hovered || pressed
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width - 36
+                    anchors.right: parent.right
+                    anchors.rightMargin: -36
+                    anchors.bottom: parent.bottom
                 }
             }
         }
