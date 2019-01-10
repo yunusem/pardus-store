@@ -58,153 +58,197 @@
 <context>
     <name>ApplicationDetail</name>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1182"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1386"/>
         <source>home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="525"/>
+        <location filename="../ui/ApplicationDetail.qml" line="560"/>
         <source>no screenshot found!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="391"/>
+        <location filename="../ui/ApplicationDetail.qml" line="425"/>
         <source>Disclaimer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="309"/>
+        <location filename="../ui/ApplicationDetail.qml" line="343"/>
         <source>ratings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="296"/>
+        <location filename="../ui/ApplicationDetail.qml" line="95"/>
+        <source>years</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="99"/>
+        <source>months</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="103"/>
+        <source>days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="107"/>
+        <source>hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="111"/>
+        <source>minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="113"/>
+        <source>seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="330"/>
         <source>Reminder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="297"/>
+        <location filename="../ui/ApplicationDetail.qml" line="331"/>
         <source>First, you have to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="298"/>
+        <location filename="../ui/ApplicationDetail.qml" line="332"/>
         <source>Then, you can vote.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="299"/>
+        <location filename="../ui/ApplicationDetail.qml" line="333"/>
         <source>ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="324"/>
+        <location filename="../ui/ApplicationDetail.qml" line="343"/>
+        <source>not enough rating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="358"/>
         <source>Your rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="392"/>
+        <location filename="../ui/ApplicationDetail.qml" line="426"/>
         <source>This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="421"/>
+        <location filename="../ui/ApplicationDetail.qml" line="455"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="421"/>
+        <location filename="../ui/ApplicationDetail.qml" line="455"/>
         <source>install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="448"/>
+        <location filename="../ui/ApplicationDetail.qml" line="482"/>
         <source>OPEN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="581"/>
+        <location filename="../ui/ApplicationDetail.qml" line="616"/>
         <source>more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="659"/>
+        <location filename="../ui/ApplicationDetail.qml" line="693"/>
         <source>website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="693"/>
-        <source>Send e-mail to Pardus package maintainer</source>
+        <location filename="../ui/ApplicationDetail.qml" line="1036"/>
+        <source>no changelog data found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="718"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1058"/>
+        <source>changelog history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="1085"/>
+        <source>ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="751"/>
         <source>e-mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="747"/>
+        <location filename="../ui/ApplicationDetail.qml" line="780"/>
         <source>information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="779"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1118"/>
         <source>version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="802"/>
+        <location filename="../ui/ApplicationDetail.qml" line="812"/>
         <source>Download size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="826"/>
+        <location filename="../ui/ApplicationDetail.qml" line="836"/>
         <source>type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="834"/>
+        <location filename="../ui/ApplicationDetail.qml" line="844"/>
         <source>non-free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="834"/>
+        <location filename="../ui/ApplicationDetail.qml" line="844"/>
         <source>open source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="850"/>
+        <location filename="../ui/ApplicationDetail.qml" line="860"/>
         <source>category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="888"/>
+        <location filename="../ui/ApplicationDetail.qml" line="898"/>
         <source>license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="912"/>
+        <location filename="../ui/ApplicationDetail.qml" line="922"/>
         <source>Download count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="941"/>
+        <location filename="../ui/ApplicationDetail.qml" line="951"/>
         <source>reviews - ratings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="955"/>
-        <location filename="../ui/ApplicationDetail.qml" line="993"/>
+        <location filename="../ui/ApplicationDetail.qml" line="965"/>
         <source>coming soon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="979"/>
+        <location filename="../ui/ApplicationDetail.qml" line="990"/>
         <source>what is new</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="565"/>
+        <location filename="../ui/ApplicationDetail.qml" line="600"/>
         <source>no description found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -300,39 +344,39 @@
 <context>
     <name>NavigationBar</name>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="106"/>
-        <location filename="../ui/NavigationBar.qml" line="174"/>
+        <location filename="../ui/NavigationBar.qml" line="117"/>
+        <location filename="../ui/NavigationBar.qml" line="185"/>
         <source>categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="89"/>
-        <location filename="../ui/NavigationBar.qml" line="176"/>
+        <location filename="../ui/NavigationBar.qml" line="91"/>
+        <location filename="../ui/NavigationBar.qml" line="187"/>
         <source>all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="272"/>
+        <location filename="../ui/NavigationBar.qml" line="292"/>
         <source>This section is under development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="310"/>
+        <location filename="../ui/NavigationBar.qml" line="330"/>
         <source>Anonymus Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="340"/>
+        <location filename="../ui/NavigationBar.qml" line="360"/>
         <source>installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="340"/>
+        <location filename="../ui/NavigationBar.qml" line="360"/>
         <source>removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/NavigationBar.qml" line="341"/>
+        <location filename="../ui/NavigationBar.qml" line="361"/>
         <source>is</source>
         <translation type="unfinished"></translation>
     </message>
@@ -458,8 +502,8 @@
     <name>main</name>
     <message>
         <location filename="../ui/main.qml" line="14"/>
-        <location filename="../ui/main.qml" line="144"/>
-        <location filename="../ui/main.qml" line="394"/>
+        <location filename="../ui/main.qml" line="145"/>
+        <location filename="../ui/main.qml" line="395"/>
         <source>Store</source>
         <translation type="unfinished"></translation>
     </message>
@@ -477,8 +521,8 @@
     <message>
         <location filename="../ui/main.qml" line="30"/>
         <location filename="../ui/main.qml" line="39"/>
-        <location filename="../ui/main.qml" line="410"/>
-        <location filename="../ui/main.qml" line="427"/>
+        <location filename="../ui/main.qml" line="411"/>
+        <location filename="../ui/main.qml" line="428"/>
         <source>all</source>
         <translation type="unfinished"></translation>
     </message>
@@ -548,95 +592,95 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="178"/>
+        <location filename="../ui/main.qml" line="179"/>
         <location filename="../ui/main.qml" line="184"/>
-        <location filename="../ui/main.qml" line="329"/>
+        <location filename="../ui/main.qml" line="330"/>
         <source>downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="214"/>
+        <location filename="../ui/main.qml" line="212"/>
         <source>Fetching survey data.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="236"/>
+        <location filename="../ui/main.qml" line="237"/>
         <source>Informing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="243"/>
+        <location filename="../ui/main.qml" line="245"/>
         <source>Show this result to the maintainer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="442"/>
+        <location filename="../ui/main.qml" line="443"/>
         <source>Fetching application list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="132"/>
+        <location filename="../ui/main.qml" line="133"/>
         <source>removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="134"/>
+        <location filename="../ui/main.qml" line="135"/>
         <source>installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="142"/>
+        <location filename="../ui/main.qml" line="143"/>
         <source>Package process is complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="161"/>
+        <location filename="../ui/main.qml" line="162"/>
         <source>Another application is using package manager. Please wait or discard the other application and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="164"/>
+        <location filename="../ui/main.qml" line="165"/>
         <source>Pardus Store should be run with root privileges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="166"/>
+        <location filename="../ui/main.qml" line="167"/>
         <source>Pardus Store detected some broken sources for the package manager.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="166"/>
+        <location filename="../ui/main.qml" line="167"/>
         <source>Please fix it manually or use Pardus Store&apos;s settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="203"/>
+        <location filename="../ui/main.qml" line="200"/>
         <source>Reason</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="204"/>
+        <location filename="../ui/main.qml" line="201"/>
         <source>Suggestion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="205"/>
+        <location filename="../ui/main.qml" line="202"/>
         <source>Check your internet connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="211"/>
+        <location filename="../ui/main.qml" line="208"/>
         <source>Gathering local details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="220"/>
+        <location filename="../ui/main.qml" line="219"/>
         <source>Done.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="176"/>
-        <location filename="../ui/main.qml" line="326"/>
+        <location filename="../ui/main.qml" line="178"/>
+        <location filename="../ui/main.qml" line="327"/>
         <source>removing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -646,17 +690,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="237"/>
+        <location filename="../ui/main.qml" line="238"/>
         <source>Correcting of system package manager sources list is done. You can now restart Pardus Store.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="393"/>
+        <location filename="../ui/main.qml" line="394"/>
         <source>Warning!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="394"/>
+        <location filename="../ui/main.qml" line="395"/>
         <source>can not be closed while a process is ongoing.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -11,22 +11,20 @@ class Changelog
 {
 public:
     Changelog(const QStringList &latest, const QString &history,
-              const QString &date, const unsigned int &timestamp);
+              const unsigned int &timestamp);
     Changelog();
     QStringList latest() const;
     QString history() const;
-    QString date() const;
     unsigned int timestamp() const;
 
 private:
     QStringList m_latest;
-    QString m_history, m_date;
+    QString m_history;
     unsigned int m_timestamp;
 };
 
 inline QStringList Changelog::latest() const { return m_latest; }
 inline QString Changelog::history() const { return m_history; }
-inline QString Changelog::date() const { return m_date; }
 inline unsigned int Changelog::timestamp() const { return m_timestamp; }
 
 class ApplicationDetail

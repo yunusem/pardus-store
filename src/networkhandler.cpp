@@ -305,7 +305,7 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
             foreach (const QVariant var, content.value("latest").toArray().toVariantList()) {
                 sl.append(QString(MAIN_URL).append(var.toString()));
             }
-            ad.setChangelog(Changelog(sl,jo.value("history").toString(),jo.value("date").toString(),
+            ad.setChangelog(Changelog(sl,jo.value("history").toString(),
                                       jo.value("timestamp").toInt()));
             sl.clear();
             jo = content.value("descriptions").toObject();

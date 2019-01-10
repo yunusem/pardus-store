@@ -13,9 +13,8 @@ Rectangle {
     property string appCategory
     property bool appNonfree
 
-    property var changelogLatest: [" * Fix bilmemne.", " * Dont use sanane"]
-    property string changelogHistory: "aşgkşakdg\nadgşlbnaldgk\nladkbgnslbkjasdglb\nagljbljb"
-    property string changelogDate: "05 Dec 2018 15:17:18 +0300"
+    property var changelogLatest: []
+    property string changelogHistory: ""
     property string description: ""
     property string sections: ""
     property string maintainer: ""
@@ -27,15 +26,16 @@ Rectangle {
     property int prevRating: 0
     property int ratingTotal: 0
     property int download: 0
-    property int timestamp: 1544012238
+    property int timestamp: 0
     property bool voted: false
 
-    property int infoCellHeight: 70
+    property int infoCellHeight: 60
     property int ssindex
     property var urls
 
     property string textPrimaryColor: Material.foreground
     property string textSecondaryColor: "#A9A9A9"
+    property string seperatorColor: "#21ffffff"
 
     color: "transparent"
 
@@ -52,10 +52,9 @@ Rectangle {
         }
     }
 
-    function appDetailsSlot(chl, chh, chd, t, desc, down, l, mm, mn, ss, sec, w) {
+    function appDetailsSlot(chl, chh, t, desc, down, l, mm, mn, ss, sec, w) {
         changelogLatest = chl
         changelogHistory = chh
-        changelogDate = chd
         timestamp = t
         description = desc
         download = down
@@ -80,6 +79,12 @@ Rectangle {
         ratingTotal = t
         voted = false
         prevRating = rating
+    }
+
+    function getDate(stamp) {
+        var date = new Date()
+        date.setSeconds(stamp / 1000)
+        return date.toString()
     }
 
     function timeSince(stamp) {
@@ -336,7 +341,7 @@ Rectangle {
 
             Label {
                 id: ratingTotalLabel
-                text: ratingTotal + " " + qsTr("ratings")
+                text: ratingTotal === 0 ? qsTr("not enough rating") : ratingTotal + " " + qsTr("ratings")
                 color: textSecondaryColor
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
@@ -494,8 +499,9 @@ Rectangle {
     Pane {
         id: bottomBanner
         clip: true
-        Material.elevation: 3
-        width: parent.width - 108
+        //Material.elevation: 3
+        width: parent.width - 84
+        Material.background: Material.primary
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: appBanner.bottom
@@ -512,7 +518,7 @@ Rectangle {
                            moreLabel.height +
                            infoContainer.height +
                            reviewContainer.height +
-                           changelogContainer.height + 48
+                           changelogContainer.height + 54
             flickableDirection: Flickable.VerticalFlick
             clip: true
 
@@ -537,6 +543,20 @@ Rectangle {
                         anchors.fill: parent
                         source: url === "none" ? "" : url
                         fillMode: Image.PreserveAspectFit
+                        layer.enabled: true
+                        layer.smooth: true
+                        layer.effect: OpacityMask {
+                            maskSource: Item {
+                                width: ss.width
+                                height: ss.height
+                                Rectangle {
+                                    anchors.centerIn: parent
+                                    width: ss.width
+                                    height: ss.height
+                                    radius: 5
+                                }
+                            }
+                        }
                         MouseArea{
                             id:ssma
                             anchors.fill:parent
@@ -631,6 +651,11 @@ Rectangle {
                 }
             }
 
+            Seperator {
+                anchors.top: moreLabel.bottom
+                anchors.bottom: infoContainer.top
+                lineColor: seperatorColor
+            }
 
             Rectangle {
                 id: linksContainer
@@ -767,7 +792,7 @@ Rectangle {
                 width: parent.width
                 height: infoGrid.height + infoLabel.height + 24
                 anchors {
-                    top: descriptionContainer.bottom
+                    top: moreLabel.bottom
                     topMargin: 24
                 }
 
@@ -795,30 +820,7 @@ Rectangle {
                         topMargin: 12
                     }
 
-                    Item {
-                        width: parent.width / 3 - 8
-                        height: infoCellHeight
-                        Column {
-                            anchors.fill: parent
-                            spacing: 3
-                            Label {
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                font.capitalization: Font.Capitalize
-                                text: qsTr("version")
-                                color: textSecondaryColor
-                                font.pointSize: 12
-                            }
-                            Label {
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                font.capitalization: Font.Capitalize
-                                text: appVersion
-                                font.pointSize: 12
-                                font.weight: Font.DemiBold
-                            }
-                        }
-                    }
+
                     Item {
                         width: parent.width / 3 - 8
                         height: infoCellHeight
@@ -955,6 +957,12 @@ Rectangle {
                 }
             }
 
+            Seperator {
+                anchors.top: infoContainer.bottom
+                anchors.bottom: reviewContainer.top
+                lineColor: seperatorColor
+            }
+
             Rectangle {
                 id: reviewContainer
                 color: "transparent"
@@ -993,11 +1001,18 @@ Rectangle {
                 }
             }
 
+            Seperator {
+                anchors.top: reviewContainer.bottom
+                anchors.bottom: changelogContainer.top
+                lineColor: seperatorColor
+            }
+
             Rectangle {
                 id: changelogContainer
                 color: "transparent"
                 width: parent.width
-                height: newsLabel.height + latestRect.height + 24
+                height: newsLabel.height + 30 + ((latestRect.height > changelogHistoryContainer.height) ?
+                                                     latestRect.height : changelogHistoryContainer.height)
                 anchors {
                     top: reviewContainer.bottom
                     topMargin: 24
@@ -1019,32 +1034,212 @@ Rectangle {
 
                 Rectangle {
                     id: latestRect
-                    color: "black"
-                    width: parent.width * 7 / 8
-                    height: 50
+                    color: "transparent"
+                    width: parent.width * 3 / 4
+                    height: latestColumn.height
                     anchors {
                         top: newsLabel.bottom
                         topMargin: 12
                     }
                     Column {
+                        id: latestColumn
+                        width: parent.width
                         spacing: 3
                         Repeater {
+                            id: changelogRepeater
                             model: changelogLatest
                             delegate: Label {
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
+                                wrapMode: Text.WordWrap
                                 text: modelData
-                                //color: textSecondaryColor
-                                font.pointSize: 12
+                                color: textSecondaryColor
+                                font.pointSize: 11
                             }
+                            onModelChanged: {
+                                update()
+                            }
+                        }
+
+                        Label {
+                            visible: changelogLatest.length == 0
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            wrapMode: Text.WordWrap
+                            text: qsTr("no changelog data found")
+                            font.capitalization: Font.Capitalize
+                            enabled: changelogLatest.length != 0
                         }
                     }
                 }
+
+                Rectangle {
+                    id: changelogHistoryContainer
+                    anchors {
+                        top: newsLabel.bottom
+                        topMargin: 12
+                        right: parent.right
+                        left: latestRect.right
+                        leftMargin: 12
+                    }
+                    color: "transparent"
+                    height: 82
+
+                    Label {
+                        id: historyLabel
+                        text: qsTr("changelog history")
+                        Material.foreground: Material.accent
+                        anchors {
+                            right: parent.right
+                            top: parent.top
+                        }
+                        enabled: changelogLatest.length != 0
+                        font.weight: historyLabelMa.containsMouse ? Font.DemiBold : Font.Normal
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignRight
+                        font.capitalization: Font.Capitalize
+                        font.pointSize: 11
+                        MouseArea {
+                            id: historyLabelMa
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if(changelogLatest.length != 0) {
+                                    popupChangelogHistory.open()
+                                }
+                            }
+                        }
+                    }
+
+                    Label {
+                        id: timeAgoLabel
+                        text: timeSince(timestamp) + " " + qsTr("ago")
+                        color: textSecondaryColor
+                        anchors {
+                            right: parent.right
+                            top: historyLabel.bottom
+                            topMargin: 6
+                        }
+                        visible: timestamp != 0
+                        font.underline: timeAgoLabelMa.containsMouse
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignRight
+                        font.pointSize: 10
+                        MouseArea {
+                            id: timeAgoLabelMa
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            ToolTip.text: getDate(timestamp)
+                            ToolTip.delay: 500
+                            ToolTip.visible: containsMouse
+                        }
+                    }
+
+
+                    Label {
+                        id: versionLabel
+                        anchors {
+                            right: parent.right
+                            top: timeAgoLabel.bottom
+                            topMargin: 3
+                        }
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignRight
+                        font.capitalization: Font.Capitalize
+                        text: qsTr("version") + " " + appVersion
+                        color: textSecondaryColor
+                        font.pointSize: 10
+                    }
+
+                }
             }
+
         }
 
     }
 
+    Popup {
+        id: popupChangelogHistory
+        width : parent.width - 108
+        height: parent.height - 24
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.ArrowCursor
+        }
+
+        Rectangle {
+            id: historyContainer
+            color: "transparent"
+            width: parent.width - 24
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                bottom: parent.bottom
+                margins: 12
+            }
+
+            Flickable {
+                width: parent.width
+                height: parent.height
+                interactive: contentHeight > height
+                contentHeight: popupHistoryLabel.contentHeight
+                flickableDirection: Flickable.VerticalFlick
+                clip: true
+
+                Label {
+                    id: popupHistoryLabel
+                    anchors.fill: parent
+                    text: changelogHistory
+                    font.pointSize: 11
+                    verticalAlignment: Text.AlignTop
+                    horizontalAlignment: Text.AlignLeft
+                    wrapMode: Text.WordWrap
+                }
+            }
+        }
+
+        Pane {
+            id: closeBtn
+            width: 32
+            height: 32
+            Material.background: Material.primary
+            Material.elevation: 10
+            anchors {
+                right: parent.right
+                top: parent.top
+            }
+
+            Label {
+                anchors.centerIn: parent
+                text: "X"
+                font.weight: Font.DemiBold
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            MouseArea {
+                width: 32
+                height: 32
+                hoverEnabled: true
+                anchors.centerIn: parent
+                onPressed: {
+                    if (containsMouse) {
+                        parent.Material.elevation = 0
+                    }
+                }
+                onReleased: {
+                    parent.Material.elevation = 2
+                }
+                onClicked: {
+                    popupChangelogHistory.close()
+                }
+            }
+        }
+    }
 
     Popup {
         id:popupImagePreview
@@ -1198,14 +1393,15 @@ Rectangle {
                 id: closePopupBtnMa
                 width: 32
                 height: 32
+                hoverEnabled: true
                 anchors.centerIn: parent
                 onPressed: {
-                    if (closePopupBtnMa.containsMouse) {
-                        closePopupBtnMa.Material.elevation = 0
+                    if (containsMouse) {
+                        parent.Material.elevation = 0
                     }
                 }
                 onReleased: {
-                    closePopupBtnMa.Material.elevation = 2
+                    parent.Material.elevation = 2
                 }
                 onClicked: {
                     popupImagePreview.close()
@@ -1254,6 +1450,4 @@ Rectangle {
 
     }
 
-
 }
-

@@ -290,9 +290,9 @@ Rectangle {
                 hoverEnabled: true
                 cursorShape: Qt.WhatsThisCursor
                 ToolTip.text: qsTr("This section is under development")
-                ToolTip.delay: 1000
+                ToolTip.delay: 500
                 ToolTip.visible: containsMouse
-                ToolTip.timeout: 3000
+                ToolTip.timeout: 5000
             }
 
             Image {

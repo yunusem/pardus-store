@@ -381,8 +381,7 @@ QString Helper::getLanguagePackage(const QString &pkg) const
 void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
 {
     emit detailsReceived(ad.changelogLatest(), ad.changelogHistory(),
-                         ad.changelogDate(), ad.changelogTimestamp(),
-                         ad.description(),ad.download(),ad.license(),
+                         ad.changelogTimestamp(), ad.description(),ad.download(),ad.license(),
                          ad.maintainerMail(),ad.maintainerName(),ad.screenshots(),
                          ad.section(),ad.website());
     emit descriptionReceived(ad.description());
