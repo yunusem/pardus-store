@@ -15,9 +15,6 @@
 #include <QDebug>
 
 #define MAIN_URL "http://0.0.0.0:5000" //"http://store.pardus.org.tr:5000"
-#define API_APPS_URL "http://0.0.0.0:5000/api/v2/apps/" //"http://store.pardus.org.tr:5000/api/v1/apps/"
-#define API_SURVEY_URL "http://0.0.0.0:5000/api/v1/survey/" //"http://store.pardus.org.tr:5000/api/v1/survey/"
-
 
 namespace {
 
@@ -85,7 +82,7 @@ void NetworkHandler::getApplicationList()
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
-    reply = m_nam.get(QNetworkRequest(QUrl(API_APPS_URL)));
+    reply = m_nam.get(QNetworkRequest(QUrl(QString(MAIN_URL).append("/api/v2/apps/"))));
     timer_put(&m_timerMap, reply, timer);
     timer->start(m_timeoutDuration);
 }
@@ -143,7 +140,7 @@ void NetworkHandler::sendApplicationInstalled(const QString &name)
 
 void NetworkHandler::surveyCheck()
 {
-    QUrl url(QString(API_SURVEY_URL).append("list"));
+    QUrl url(QString(MAIN_URL).append("/api/v1/survey/list"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -161,7 +158,7 @@ void NetworkHandler::surveyCheck()
 
 void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
 {
-    QUrl url(QString(API_SURVEY_URL).append("join"));
+    QUrl url(QString(MAIN_URL).append("/api/v1/survey/join"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -240,26 +237,7 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
         qDebug() << "Status: " << status <<" Error: "<<  obj.value("error").toString();
         emit replyError("Error from server : " + obj.value("error").toString());
         return;
-    }
-
-    if(obj.contains("survey-list")) {
-        QStringList sl;
-        QString ps;
-        auto surveylist = obj["survey-list"].toObject();
-        ps = surveylist["individual"].toString();
-        QJsonArray counts = surveylist["counts"].toArray();
-        for(int i=0; i< counts.size();i++) {
-            QString app = counts.at(i).toObject()["app"].toString();
-            int count = counts.at(i).toObject()["count"].toInt();
-            sl.append(app + " " + QString::number(count));
-        }
-        emit surveyListReceived(ps, sl);
-    } else if(obj.contains("survey-join")) {
-        auto surveyjoin = obj["survey-join"].toObject();
-        QString duty = surveyjoin["duty"].toString();
-        int result = surveyjoin["result"].toInt();
-        emit surveyJoinResultReceived(duty, result);
-    }
+    }    
 }
 
 void NetworkHandler::parseAppsResponse(const QJsonObject &obj)
@@ -302,8 +280,8 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
             QList<Section> sectionList;
 
             QJsonObject jo = content.value("changelog").toObject();
-            foreach (const QVariant var, content.value("latest").toArray().toVariantList()) {
-                sl.append(QString(MAIN_URL).append(var.toString()));
+            foreach (const QVariant var, jo.value("latest").toArray().toVariantList()) {
+                sl.append(var.toString());
             }
             ad.setChangelog(Changelog(sl,jo.value("history").toString(),
                                       jo.value("timestamp").toInt()));
@@ -349,7 +327,20 @@ void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
 
 void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
 {
-    Q_UNUSED(obj);
+    if(obj.keys().contains("survey-list")) {
+        QStringList sl;
+        QJsonObject content = obj.value("survey-list").toObject();
+        QJsonArray counts = content["counts"].toArray();
+        for(int i=0; i< counts.size();i++) {
+            sl.append(counts.at(i).toObject().value("app").toString() + " " +
+                      QString::number(counts.at(i).toObject().value("count").toInt()));
+        }
+        emit surveyListReceived(content.value("individual").toString(), sl);
+    } else if(obj.keys().contains("survey-join")) {
+        QJsonObject content = obj.value("survey-join").toObject();
+        emit surveyJoinResultReceived(content.value("duty").toString(),
+                                      content.value("result").toInt());
+    }
 }
 
 void NetworkHandler::parseHomeResponse(const QJsonObject &obj)
