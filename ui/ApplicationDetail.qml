@@ -85,36 +85,46 @@ Rectangle {
     }
 
     function getDate(stamp) {
-        var date = new Date()
-        date.setSeconds(stamp / 1000)
+        var date = new Date(stamp * 1000)
         return date.toString()
     }
 
     function timeSince(stamp) {
-        var date = new Date(Date.now() - stamp / 1000)
-        var seconds = Math.floor((new Date() - date))
+        console.log(stamp)
+        var current = new Date(Date.now())
+        var previous = new Date(stamp * 1000)
 
-        var interval = Math.floor(seconds / 31536000)
-        if (interval > 1) {
-            return interval + " " + qsTr("years")
+        var msPerMinute = 60 * 1000
+        var msPerHour = msPerMinute * 60
+        var msPerDay = msPerHour * 24
+        var msPerMonth = msPerDay * 30
+        var msPerYear = msPerDay * 365
+
+        var elapsed = current - previous;
+
+        if (elapsed < msPerMinute) {
+            return Math.round(elapsed/1000) + " " + qsTr("seconds")
         }
-        interval = Math.floor(seconds / 2592000)
-        if (interval > 1) {
-            return interval + " " + qsTr("months")
+
+        else if (elapsed < msPerHour) {
+            return Math.round(elapsed/msPerMinute) + " " + qsTr("minutes")
         }
-        interval = Math.floor(seconds / 86400)
-        if (interval > 1) {
-            return interval + " " + qsTr("days")
+
+        else if (elapsed < msPerDay ) {
+            return Math.round(elapsed/msPerHour ) + " " + qsTr("hours")
         }
-        interval = Math.floor(seconds / 3600)
-        if (interval > 1) {
-            return interval + " " + qsTr("hours")
+
+        else if (elapsed < msPerMonth) {
+            return Math.round(elapsed/msPerDay) + " " + qsTr("days")
         }
-        interval = Math.floor(seconds / 60)
-        if (interval > 1) {
-            return interval + " " + qsTr("minutes")
+
+        else if (elapsed < msPerYear) {
+            return Math.round(elapsed/msPerMonth) + " " + qsTr("months")
         }
-        return Math.floor(seconds) + " " + qsTr("seconds")
+
+        else {
+            return Math.round(elapsed/msPerYear ) + " " + qsTr("years")
+        }
     }
 
     onUrlsChanged: {
