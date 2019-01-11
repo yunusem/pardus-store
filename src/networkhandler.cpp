@@ -317,10 +317,16 @@ void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
     if(obj.keys().contains("rating")) {
         QJsonObject content = obj.value("rating").toObject();
         if(!content.isEmpty()) {
-            double avr = content.value("avarage").toDouble();
+            QList<int> rates;
+            for(int i = 0; i < 5; i++) {rates.append(0);}
+            double avr = content.value("average").toDouble();
             unsigned int ind = content.value("individual").toInt();
             unsigned int tot = content.value("total").toInt();
-            emit appRatingReceived(avr, ind, tot);
+            QJsonObject jo = content.value("rates").toObject();
+            foreach (const QString &key, jo.keys()) {
+                rates[key.toUInt() -1] = jo.value(key).toInt();
+            }
+            emit appRatingReceived(avr, ind, tot, rates);
         }
     }
 }

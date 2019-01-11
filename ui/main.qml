@@ -82,7 +82,7 @@ ApplicationWindow {
                               variant desc, variant down, variant l,
                               variant mm, variant mn, variant ss, variant sec,
                               variant w)
-    signal appRatingDetailsReceived(variant avg, variant ind, variant tot)
+    signal appRatingDetailsReceived(variant avg, variant ind, variant tot, variant rs)
 
     property bool selectedAppInstalled
     property bool selectedAppInqueue
@@ -192,7 +192,7 @@ ApplicationWindow {
         }
 
         onRatingDetailReceived: {
-            appRatingDetailsReceived(average, individual, total)
+            appRatingDetailsReceived(average, individual, total, rates)
         }
 
         onReplyError: {

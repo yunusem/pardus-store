@@ -150,7 +150,8 @@ signals:
                          const QString &section, const QString &website);
     void ratingDetailReceived(const double &average,
                               const unsigned int &individual,
-                              const unsigned int &total);
+                              const unsigned int &total,
+                              const QList<int> &rates);
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);

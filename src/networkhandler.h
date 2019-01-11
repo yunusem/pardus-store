@@ -31,7 +31,8 @@ signals:
     void appDetailsReceived(const ApplicationDetail &ad);
     void appRatingReceived(const double &average,
                            const unsigned int &individual,
-                           const unsigned int &total);
+                           const unsigned int &total,
+                           const QList<int> &rates);
     void surveyListReceived(const QString &mySelection, const QStringList &sl);
     void surveyJoinResultReceived(const QString &duty, const int &result);
     void replyError(const QString &error);

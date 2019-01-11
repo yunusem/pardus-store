@@ -70,7 +70,7 @@
 <context>
     <name>ApplicationDetail</name>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1437"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1640"/>
         <source>home</source>
         <translation>ana sayfa</translation>
     </message>
@@ -79,122 +79,129 @@
         <translation type="vanished">ekran görüntüleri</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="578"/>
+        <location filename="../ui/ApplicationDetail.qml" line="594"/>
         <source>no screenshot found!</source>
         <translation>ekran görüntüsü bulunamadı!</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="429"/>
+        <location filename="../ui/ApplicationDetail.qml" line="445"/>
         <source>Disclaimer</source>
         <translation>Sorumluluk Reddi</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="99"/>
+        <location filename="../ui/ApplicationDetail.qml" line="129"/>
         <source>years</source>
         <translation>yıl</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="103"/>
+        <location filename="../ui/ApplicationDetail.qml" line="125"/>
         <source>months</source>
         <translation>ay</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="107"/>
+        <location filename="../ui/ApplicationDetail.qml" line="121"/>
         <source>days</source>
         <translation>gün</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="111"/>
+        <location filename="../ui/ApplicationDetail.qml" line="117"/>
         <source>hours</source>
         <translation>saat</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="115"/>
+        <location filename="../ui/ApplicationDetail.qml" line="113"/>
         <source>minutes</source>
         <translation>dakika</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="117"/>
+        <location filename="../ui/ApplicationDetail.qml" line="109"/>
         <source>seconds</source>
         <translation>saniye</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="334"/>
+        <location filename="../ui/ApplicationDetail.qml" line="350"/>
         <source>Reminder</source>
         <translation>Hatırlatma</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="335"/>
+        <location filename="../ui/ApplicationDetail.qml" line="351"/>
         <source>First, you have to install</source>
         <translation>Önce, şu uygulamayı yüklemeniz gerekiyor</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="336"/>
+        <location filename="../ui/ApplicationDetail.qml" line="352"/>
         <source>Then, you can vote.</source>
         <translation>Sonra, oy kullanabilirsiniz.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="337"/>
+        <location filename="../ui/ApplicationDetail.qml" line="353"/>
         <source>ok</source>
         <translation>tamam</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="347"/>
+        <location filename="../ui/ApplicationDetail.qml" line="363"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1157"/>
         <source>ratings</source>
         <translation>oylama</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="347"/>
+        <location filename="../ui/ApplicationDetail.qml" line="363"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1157"/>
         <source>not enough rating</source>
         <translation>yeterli oylama yok</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="362"/>
+        <location filename="../ui/ApplicationDetail.qml" line="378"/>
         <source>Your rate</source>
         <translation>Oyunuz</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="430"/>
+        <location filename="../ui/ApplicationDetail.qml" line="446"/>
         <source>This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.</source>
         <translation>Bu uygulama Pardus non-free paket depolarından sunulmaktadır, dolayısıyla İŞLETİM SİSTEMİ nin uygulamanın sağlığı ile bir ilgisi yoktur. Dikkate alarak yükleyiniz.</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="459"/>
+        <location filename="../ui/ApplicationDetail.qml" line="475"/>
         <source>remove</source>
         <translation>kaldır</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="459"/>
+        <location filename="../ui/ApplicationDetail.qml" line="475"/>
         <source>install</source>
         <translation>kur</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="486"/>
+        <location filename="../ui/ApplicationDetail.qml" line="502"/>
         <source>OPEN</source>
         <translation>AÇ</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="634"/>
+        <location filename="../ui/ApplicationDetail.qml" line="650"/>
         <source>more</source>
         <translation>devamı</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="717"/>
+        <location filename="../ui/ApplicationDetail.qml" line="733"/>
         <source>website</source>
         <translation>internet sitesi</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1085"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1185"/>
+        <source>last applied review</source>
+        <translation>son yapılan yorum</translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="1304"/>
         <source>no changelog data found</source>
         <translation>değişim verisi bulunamadı</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1106"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1244"/>
         <source>changelog history</source>
         <translation>değişim tarihçesi</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1134"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1327"/>
         <source>ago</source>
         <translation>önce</translation>
     </message>
@@ -203,52 +210,52 @@
         <translation type="vanished">Pardus paket yöneticisine e-posta gönder</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="775"/>
+        <location filename="../ui/ApplicationDetail.qml" line="791"/>
         <source>e-mail</source>
         <translation>e-posta</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="804"/>
+        <location filename="../ui/ApplicationDetail.qml" line="820"/>
         <source>information</source>
         <translation>malumat</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1167"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1360"/>
         <source>version</source>
         <translation>versiyon</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="836"/>
+        <location filename="../ui/ApplicationDetail.qml" line="852"/>
         <source>Download size</source>
         <translation>İndirme boyutu</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="860"/>
+        <location filename="../ui/ApplicationDetail.qml" line="876"/>
         <source>type</source>
         <translation>tip</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="868"/>
+        <location filename="../ui/ApplicationDetail.qml" line="884"/>
         <source>non-free</source>
         <translation>özgür değil</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="868"/>
+        <location filename="../ui/ApplicationDetail.qml" line="884"/>
         <source>open source</source>
         <translation>açık kaynak</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="884"/>
+        <location filename="../ui/ApplicationDetail.qml" line="900"/>
         <source>category</source>
         <translation>kategori</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="922"/>
+        <location filename="../ui/ApplicationDetail.qml" line="938"/>
         <source>license</source>
         <translation>lisans</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="959"/>
+        <location filename="../ui/ApplicationDetail.qml" line="975"/>
         <source>Download count</source>
         <translation>İndirme sayısı</translation>
     </message>
@@ -257,17 +264,17 @@
         <translation type="vanished">indirme sayısı</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="994"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1010"/>
         <source>reviews - ratings</source>
         <translation>yorumlar - oylamalar</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1008"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1198"/>
         <source>coming soon</source>
         <translation>pek yakında</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1039"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1230"/>
         <source>what is new</source>
         <translation>yenilikler</translation>
     </message>
@@ -280,7 +287,7 @@
         <translation type="vanished">Tanım</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="618"/>
+        <location filename="../ui/ApplicationDetail.qml" line="634"/>
         <source>no description found</source>
         <translation>tanım bulunamadı</translation>
     </message>

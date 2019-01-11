@@ -7,13 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   fill="#FFFFFF"
-   height="48"
-   viewBox="0 0 24 24"
    width="48"
+   height="48"
+   viewBox="0 0 48 48"
    version="1.1"
    id="svg6"
-   sodipodi:docname="star.svg"
+   sodipodi:docname="baseline-star_rate-18px.svg"
    inkscape:version="0.92.1 r15371">
   <metadata
      id="metadata12">
@@ -38,20 +37,20 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1248"
-     inkscape:window-height="673"
+     inkscape:window-width="1255"
+     inkscape:window-height="749"
      id="namedview8"
      showgrid="false"
-     inkscape:zoom="4.9166667"
-     inkscape:cx="1.9322034"
-     inkscape:cy="24"
-     inkscape:window-x="2492"
-     inkscape:window-y="441"
+     inkscape:zoom="3.2777778"
+     inkscape:cx="21.171324"
+     inkscape:cy="-0.50464179"
+     inkscape:window-x="2536"
+     inkscape:window-y="346"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg6" />
   <path
-     d="M 11.9885,0.5 C 5.6405,0.5 0.5,5.652 0.5,12 0.5,18.348 5.6405,23.5 11.9885,23.5 18.348,23.5 23.5,18.348 23.5,12 23.5,5.652 18.348,0.5 11.9885,0.5 Z M 16.8645,18.9 12,15.9675 7.1355,18.9 8.4235,13.3685 4.134,9.654 9.792,9.171 12,3.95 l 2.208,5.2095 5.658,0.483 -4.2895,3.7145 z"
-     id="path4"
-     style="fill:#e4e4e4;stroke-width:1.14999998;fill-opacity:1"
-     inkscape:connector-curvature="0" />
+     d="M 24.000001,35.650079 38.221667,46 32.778333,29.286794 47,19.166868 H 29.558332 L 24.000001,1.917 18.441667,19.166868 H 1 L 15.221667,29.286794 9.7783337,46 Z"
+     id="path2"
+     inkscape:connector-curvature="0"
+     style="stroke-width:3.83331871;fill:#e4e4e4;fill-opacity:1" />
 </svg>

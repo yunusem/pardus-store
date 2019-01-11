@@ -58,197 +58,204 @@
 <context>
     <name>ApplicationDetail</name>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1437"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1640"/>
         <source>home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="578"/>
+        <location filename="../ui/ApplicationDetail.qml" line="594"/>
         <source>no screenshot found!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="429"/>
+        <location filename="../ui/ApplicationDetail.qml" line="445"/>
         <source>Disclaimer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="347"/>
+        <location filename="../ui/ApplicationDetail.qml" line="363"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1157"/>
         <source>ratings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="99"/>
+        <location filename="../ui/ApplicationDetail.qml" line="129"/>
         <source>years</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="103"/>
+        <location filename="../ui/ApplicationDetail.qml" line="125"/>
         <source>months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="107"/>
+        <location filename="../ui/ApplicationDetail.qml" line="121"/>
         <source>days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="111"/>
+        <location filename="../ui/ApplicationDetail.qml" line="117"/>
         <source>hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="115"/>
+        <location filename="../ui/ApplicationDetail.qml" line="113"/>
         <source>minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="117"/>
+        <location filename="../ui/ApplicationDetail.qml" line="109"/>
         <source>seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="334"/>
+        <location filename="../ui/ApplicationDetail.qml" line="350"/>
         <source>Reminder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="335"/>
+        <location filename="../ui/ApplicationDetail.qml" line="351"/>
         <source>First, you have to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="336"/>
+        <location filename="../ui/ApplicationDetail.qml" line="352"/>
         <source>Then, you can vote.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="337"/>
+        <location filename="../ui/ApplicationDetail.qml" line="353"/>
         <source>ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="347"/>
+        <location filename="../ui/ApplicationDetail.qml" line="363"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1157"/>
         <source>not enough rating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="362"/>
+        <location filename="../ui/ApplicationDetail.qml" line="378"/>
         <source>Your rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="430"/>
+        <location filename="../ui/ApplicationDetail.qml" line="446"/>
         <source>This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="459"/>
+        <location filename="../ui/ApplicationDetail.qml" line="475"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="459"/>
+        <location filename="../ui/ApplicationDetail.qml" line="475"/>
         <source>install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="486"/>
+        <location filename="../ui/ApplicationDetail.qml" line="502"/>
         <source>OPEN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="634"/>
+        <location filename="../ui/ApplicationDetail.qml" line="650"/>
         <source>more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="717"/>
+        <location filename="../ui/ApplicationDetail.qml" line="733"/>
         <source>website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1085"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1185"/>
+        <source>last applied review</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/ApplicationDetail.qml" line="1304"/>
         <source>no changelog data found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1106"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1244"/>
         <source>changelog history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1134"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1327"/>
         <source>ago</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="775"/>
+        <location filename="../ui/ApplicationDetail.qml" line="791"/>
         <source>e-mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="804"/>
+        <location filename="../ui/ApplicationDetail.qml" line="820"/>
         <source>information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1167"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1360"/>
         <source>version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="836"/>
+        <location filename="../ui/ApplicationDetail.qml" line="852"/>
         <source>Download size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="860"/>
+        <location filename="../ui/ApplicationDetail.qml" line="876"/>
         <source>type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="868"/>
+        <location filename="../ui/ApplicationDetail.qml" line="884"/>
         <source>non-free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="868"/>
+        <location filename="../ui/ApplicationDetail.qml" line="884"/>
         <source>open source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="884"/>
+        <location filename="../ui/ApplicationDetail.qml" line="900"/>
         <source>category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="922"/>
+        <location filename="../ui/ApplicationDetail.qml" line="938"/>
         <source>license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="959"/>
+        <location filename="../ui/ApplicationDetail.qml" line="975"/>
         <source>Download count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="994"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1010"/>
         <source>reviews - ratings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1008"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1198"/>
         <source>coming soon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="1039"/>
+        <location filename="../ui/ApplicationDetail.qml" line="1230"/>
         <source>what is new</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDetail.qml" line="618"/>
+        <location filename="../ui/ApplicationDetail.qml" line="634"/>
         <source>no description found</source>
         <translation type="unfinished"></translation>
     </message>

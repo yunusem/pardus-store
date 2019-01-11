@@ -29,7 +29,7 @@ Helper::Helper(QObject *parent) : QObject(parent),
     connect(nh,SIGNAL(appListReceived(QList<Application>)),this,SLOT(appListReceivedSlot(QList<Application>)));
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(replyError(QString)),this,SIGNAL(replyError(QString)));
-    connect(nh,SIGNAL(appRatingReceived(double,uint,uint)),this,SIGNAL(ratingDetailReceived(double,uint,uint)));
+    connect(nh,SIGNAL(appRatingReceived(double,uint,uint,QList<int>)),this,SIGNAL(ratingDetailReceived(double,uint,uint,QList<int>)));
     connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceivedSlot(QString,int)));
     connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));

@@ -13,7 +13,7 @@ Rectangle {
     property string appCategory
     property bool appNonfree
 
-    property var changelogLatest: []
+
     property string changelogHistory: ""
     property string description: ""
     property string sections: ""
@@ -34,6 +34,8 @@ Rectangle {
     property int infoCellHeight: 60
     property int ssindex
     property var urls
+    property var changelogLatest: []
+    property var rates: []
 
     property string textPrimaryColor: Material.foreground
     property string textSecondaryColor: "#A9A9A9"
@@ -76,7 +78,8 @@ Rectangle {
         website = w
     }
 
-    function appRatingSlot(a, i, t) {
+    function appRatingSlot(a, i, t, r) {
+        rates = r
         ratingAverage = a
         rating = i
         ratingTotal = t
@@ -90,40 +93,43 @@ Rectangle {
     }
 
     function timeSince(stamp) {
-        console.log(stamp)
-        var current = new Date(Date.now())
-        var previous = new Date(stamp * 1000)
+        if(stamp !== 0) {
+            var current = new Date(Date.now())
+            var previous = new Date(stamp * 1000)
 
-        var msPerMinute = 60 * 1000
-        var msPerHour = msPerMinute * 60
-        var msPerDay = msPerHour * 24
-        var msPerMonth = msPerDay * 30
-        var msPerYear = msPerDay * 365
+            var msPerMinute = 60 * 1000
+            var msPerHour = msPerMinute * 60
+            var msPerDay = msPerHour * 24
+            var msPerMonth = msPerDay * 30
+            var msPerYear = msPerDay * 365
 
-        var elapsed = current - previous;
+            var elapsed = current - previous;
 
-        if (elapsed < msPerMinute) {
-            return Math.round(elapsed/1000) + " " + qsTr("seconds")
-        }
+            if (elapsed < msPerMinute) {
+                return Math.round(elapsed/1000) + " " + qsTr("seconds")
+            }
 
-        else if (elapsed < msPerHour) {
-            return Math.round(elapsed/msPerMinute) + " " + qsTr("minutes")
-        }
+            else if (elapsed < msPerHour) {
+                return Math.round(elapsed/msPerMinute) + " " + qsTr("minutes")
+            }
 
-        else if (elapsed < msPerDay ) {
-            return Math.round(elapsed/msPerHour ) + " " + qsTr("hours")
-        }
+            else if (elapsed < msPerDay ) {
+                return Math.round(elapsed/msPerHour ) + " " + qsTr("hours")
+            }
 
-        else if (elapsed < msPerMonth) {
-            return Math.round(elapsed/msPerDay) + " " + qsTr("days")
-        }
+            else if (elapsed < msPerMonth) {
+                return Math.round(elapsed/msPerDay) + " " + qsTr("days")
+            }
 
-        else if (elapsed < msPerYear) {
-            return Math.round(elapsed/msPerMonth) + " " + qsTr("months")
-        }
+            else if (elapsed < msPerYear) {
+                return Math.round(elapsed/msPerMonth) + " " + qsTr("months")
+            }
 
-        else {
-            return Math.round(elapsed/msPerYear ) + " " + qsTr("years")
+            else {
+                return Math.round(elapsed/msPerYear ) + " " + qsTr("years")
+            }
+        } else {
+            return ""
         }
     }
 
@@ -993,7 +999,7 @@ Rectangle {
                 id: reviewContainer
                 color: "transparent"
                 width: parent.width
-                height: reviewLabel.height + comingSoonLabel.height + 24
+                height: reviewLabel.height + speratedRatingContainer.height + 12
                 anchors {
                     top: infoContainer.bottom
                     topMargin: 24
@@ -1013,18 +1019,193 @@ Rectangle {
                     }
                 }
 
-                Label {
-                    id: comingSoonLabel
-                    text: qsTr("coming soon") + " ..."
-                    enabled: false
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    font.capitalization: Font.Capitalize
+                Rectangle {
+                    id: speratedRatingContainer
+                    color: "transparent"
+                    width: parent.width
+                    height: 250
                     anchors {
                         top: reviewLabel.bottom
-                        left: parent.left
+                        topMargin: 12
+                        right: parent.right
+                    }
+
+                    Rectangle {
+                        id: starsContainer
+                        color: "transparent"
+                        anchors {
+                            top: parent.top
+                            left: parent.horizontalCenter
+                            right: parent.right
+                        }
+                        height: 60
+
+                        Rectangle {
+                            id: starsRect
+                            height: parent.height
+                            width: height
+                            color: "transparent"
+                            anchors {
+                                top: parent.top
+                                left: parent.left
+                                leftMargin: 12
+                            }
+                            Column {
+                                spacing: starsRect.height / 24
+                                anchors.fill: parent
+                                Repeater {
+                                    model: 5
+                                    delegate: Rectangle {
+                                        property int ind: index
+                                        height: starsRect.height / 6
+                                        width: starsRect.width
+                                        color: "transparent"
+                                        radius: 2
+                                        Row {
+                                            property int ind: parent.ind
+                                            anchors.right: parent.right
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            spacing: starsRect.height / 24
+                                            Repeater {
+                                                model: (5 - parent.ind)
+                                                delegate: Image {
+                                                    height: starsRect.height / 6
+                                                    width: height
+                                                    sourceSize {
+                                                        width: width
+                                                        height: height
+                                                    }
+                                                    source: "qrc:/images/star.svg"
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            id: starValuesRect
+                            height: parent.height
+                            anchors {
+                                left: starsRect.right
+                                leftMargin: 12
+                                right: parent.right
+                            }
+                            color: "transparent"
+
+                            Column {
+                                spacing: starValuesRect.height / 24
+                                Repeater {
+                                    model: 5
+                                    delegate: Rectangle {
+                                        id: starValueLineDelegate
+                                        property int ind: index
+                                        width: starValuesRect.width
+                                        height: starValuesRect.height / 6
+                                        color: "transparent"
+
+                                        Rectangle {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            color: "#20ffffff"
+                                            width: parent.width
+                                            height: 5
+                                            radius: 2
+
+                                            Rectangle {
+                                                id: starValue
+                                                height: parent.height
+                                                width: rates[4 - starValueLineDelegate.ind] * parent.width / ratingTotal
+                                                radius: 2
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: bigRatingContainer
+                        height: 60
+                        color: "transparent"
+                        anchors {
+                            top: parent.top
+                            left: parent.left
+                            right: parent.horizontalCenter
+                            rightMargin: 6
+                        }
+
+                        Label {
+                            height: parent.height + 24
+
+                            anchors {
+                                left: parent.left
+                                verticalCenter: parent.verticalCenter
+                            }
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            fontSizeMode: Text.VerticalFit
+                            font.pointSize: 100
+                            font.weight: Font.DemiBold
+                            text: ratingAverage.toFixed(1)
+                            color: textSecondaryColor
+                        }
+
+                        Label {
+                            text: ratingTotal === 0 ? qsTr("not enough rating") : ratingTotal + " " + qsTr("ratings")
+                            color: textSecondaryColor
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignRight
+                            font.capitalization: Font.Capitalize
+                            font.pointSize:10
+                            anchors {
+                                right: parent.right
+                                bottom: parent.bottom
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: reviewDelegateContainer
+                        color: "#25ffffff"
+                        radius: 5
+                        anchors {
+                            top: bigRatingContainer.bottom
+                            topMargin: 12
+                            left: parent.left
+                            right: parent.horizontalCenter
+                            rightMargin: 6
+                            bottom: parent.bottom
+                            bottomMargin: 12
+                        }
+
+                        Label {
+                            text: qsTr("last applied review")
+                            enabled: false
+                            width: parent.width
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            anchors.margins: 6
+                        }
+
+                        Label {
+                            id: comingSoonLabel
+                            text: qsTr("coming soon") + " ..."
+                            enabled: false
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.capitalization: Font.Capitalize
+                            anchors.centerIn: parent
+                        }
                     }
                 }
+
+
             }
 
             Seperator {
@@ -1055,6 +1236,34 @@ Rectangle {
                     anchors {
                         top: parent.top
                         left: parent.left
+                    }
+                }
+
+                Label {
+                    id: historyLabel
+                    text: qsTr("changelog history")
+                    Material.foreground: Material.accent
+                    anchors {
+                        right: parent.right
+                        bottom: newsLabel.bottom
+                    }
+                    enabled: changelogLatest.length != 0
+                    font.weight: historyLabelMa.containsMouse ? Font.DemiBold : Font.Normal
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignRight
+                    font.capitalization: Font.Capitalize
+                    font.pointSize: 11
+                    MouseArea {
+                        id: historyLabelMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if(changelogLatest.length != 0) {
+                                popupExemineText = changelogHistory
+                                popupExemine.open()
+                            }
+                        }
                     }
                 }
 
@@ -1111,33 +1320,7 @@ Rectangle {
                     color: "transparent"
                     height: 82
 
-                    Label {
-                        id: historyLabel
-                        text: qsTr("changelog history")
-                        Material.foreground: Material.accent
-                        anchors {
-                            right: parent.right
-                            top: parent.top
-                        }
-                        enabled: changelogLatest.length != 0
-                        font.weight: historyLabelMa.containsMouse ? Font.DemiBold : Font.Normal
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignRight
-                        font.capitalization: Font.Capitalize
-                        font.pointSize: 11
-                        MouseArea {
-                            id: historyLabelMa
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                if(changelogLatest.length != 0) {
-                                    popupExemineText = changelogHistory
-                                    popupExemine.open()
-                                }
-                            }
-                        }
-                    }
+
 
                     Label {
                         id: timeAgoLabel
@@ -1145,8 +1328,8 @@ Rectangle {
                         color: textSecondaryColor
                         anchors {
                             right: parent.right
-                            top: historyLabel.bottom
-                            topMargin: 6
+                            top: parent.top
+                            //topMargin: 6
                         }
                         visible: timestamp != 0
                         font.underline: timeAgoLabelMa.containsMouse
