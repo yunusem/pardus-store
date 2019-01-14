@@ -117,8 +117,8 @@ Item {
 
     Pane {
         id: applicationDelegateItem
-        z: delegateMa.containsMouse ? 100 : 5
-        Material.elevation: delegateMa.containsMouse ? 5 : 3
+        z: delegateMa.containsMouse ? 1000 : 5
+        Material.elevation: delegateMa.containsMouse ? 10 : 3
         Material.background: backgroundColor
         anchors {
             margins: 8
@@ -173,9 +173,18 @@ Item {
             }
             onReleased: {
                 if(delegateMa.containsMouse) {
-                    applicationDelegateItem.Material.elevation = 5
+                    applicationDelegateItem.Material.elevation = 10
                 } else {
                     applicationDelegateItem.Material.elevation = 3
+                }
+            }
+            onContainsMouseChanged: {
+                if(containsMouse) {
+                    applicationDelegateItem.Material.elevation = 10
+                    applicationDelegateItem.z = 1000
+                } else {
+                    applicationDelegateItem.Material.elevation = 3
+                    applicationDelegateItem.z = 5
                 }
             }
         }
@@ -339,6 +348,7 @@ Item {
                 height: width + 12
                 opacity: 0.0
                 visible: opacity > 0.0
+                Material.background: primaryColor
                 Behavior on opacity {
                     enabled: animate
                     NumberAnimation { easing.type: Easing.InExpo; duration: animationDuration / 2 }
