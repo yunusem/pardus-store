@@ -1,3 +1,44 @@
+pardus-store (0.3.0~beta1) unstable; urgency=medium
+
+  * Bump the version 0.3.0
+  * Update Delegate visual design and remove common progressbar
+  * Update settings for new delegate design column count
+  * Make settings options highlighted for better navigation
+  * Add account section on Navigation bar for future development as disabled
+  * Fix gridview margins to adapt with new detail page
+  * Define default colors in conf
+  * Change application detail argument mechanism for new detail page
+  * Change some static colors into global variable
+  * Prepare banner for misc. details and rating
+  * Prepare detail frontend for new backend api
+  * Change handling application lists mechanism in backend
+  * Make backend even faster when evaluating server reply
+  * Change signal handling in details page and add open application mechanism as disabled for now
+  * Implement rating system and make it functional
+  * Fix several checking for MAC ID and handle app installed reply
+  * Update Turkish translations
+  * Handle statistics in helper and fix open app backend
+  * Implement open apps externally and make it functional
+  * Add tooltip on links section and Make app banner name pretty
+  * Prepare backend for changelog frontend
+  * Take scale action in menu over clicks in order to help navigation
+  * Finilize changelog detail frontend
+  * Add copyright exemination mechanism in detail
+  * Add scrollbar into exemine popup
+  * Change Home screen for dynamic data
+  * Fix parsing issue on details
+  * Fix datetime displaying wrong date
+  * Prepare review&rating frontend
+  * Refactor whole color related variables and Add Light theme functionality. Closes: #26
+  * Make default theme dark
+  * Fix delegate elevation problem
+  * Make home screen backend and frontend functional
+  * Disable survey for the next dynamic survey commit
+  * Update main URL
+  * Update translation
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Mon, 14 Jan 2019 17:49:52 +0300
+
 pardus-store (0.2.1~beta4) unstable; urgency=medium
 
   * Use domain instead of static IP
