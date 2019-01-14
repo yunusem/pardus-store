@@ -37,9 +37,7 @@ Rectangle {
     property var changelogLatest: []
     property var rates: []
 
-    property string textPrimaryColor: Material.foreground
-    property string textSecondaryColor: "#A9A9A9"
-    property string seperatorColor: "#21ffffff"
+    property string seperatorColor: dark ? "#21ffffff" : "#21000000"
 
     color: "transparent"
 
@@ -174,8 +172,10 @@ Rectangle {
         id:appBanner
         width: parent.width - 108
         height: 200
-        Material.elevation: 3
+        Material.elevation: 10
+        Material.background: backgroundColor
         visible: true
+        z: bottomBanner.z + 1
         anchors {
             top: parent.top
             topMargin: 12
@@ -225,12 +225,13 @@ Rectangle {
                     font.capitalization: Font.Capitalize
                     font.bold: true
                     font.pointSize:24
+                    Material.foreground: textColor
                 }
 
                 Label {
                     id: sectionsLabel
                     text: sections
-                    color: textSecondaryColor
+                    Material.foreground: secondaryTextColor
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
                     font.capitalization: Font.Capitalize
@@ -239,7 +240,7 @@ Rectangle {
                 Label {
                     id: maintainerLabel
                     text: maintainer
-                    Material.foreground: "#ddffcb08"
+                    Material.foreground: "#dd" + accentColor.substring(1)
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
                     font.capitalization: Font.Capitalize
@@ -265,7 +266,7 @@ Rectangle {
             Label {
                 id: ratingLabel
                 text: ratingAverage.toFixed(1)
-                color: textSecondaryColor
+                color: secondaryTextColor
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 font.capitalization: Font.Capitalize
@@ -279,7 +280,7 @@ Rectangle {
 
             Rectangle {
                 id: ratingRect
-                color: "#111111"
+                color: dark ? "#111111" : "#ddffffff"
                 width: 125
                 height: width / 5
                 anchors {
@@ -289,7 +290,7 @@ Rectangle {
                 }
 
                 Rectangle {
-                    color: textSecondaryColor
+                    color: secondaryTextColor
                     height: parent.height
                     width: parent.width * ratingAverage / 5
                 }
@@ -299,11 +300,11 @@ Rectangle {
                     visible: false
                     height: parent.height
                     width: parent.width * rating / 5
-                    color: Material.accent
+                    color: accentColor
                 }
 
                 Image {
-                    source: "qrc:/images/rating-stars.svg"
+                    source: "qrc:/images/rating-stars" + (dark ? ".svg" : "-light.svg")
                     anchors.fill: parent
                     sourceSize {
                         width: width
@@ -361,7 +362,7 @@ Rectangle {
             Label {
                 id: ratingTotalLabel
                 text: ratingTotal === 0 ? qsTr("not enough rating") : ratingTotal + " " + qsTr("ratings")
-                color: textSecondaryColor
+                color: secondaryTextColor
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 font.capitalization: Font.Capitalize
@@ -376,7 +377,7 @@ Rectangle {
                 id: ratingIndividual
                 visible: rating > 0
                 text: qsTr("Your rate")  + " : " + rating
-                color: ratingIndividualMa.containsMouse ? Material.accent : textSecondaryColor
+                color: ratingIndividualMa.containsMouse ? accentColor : secondaryTextColor
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight
                 font.capitalization: Font.Capitalize
@@ -406,7 +407,7 @@ Rectangle {
                 clip: true
                 width: disclamerMa.containsMouse ? 500 : 150
                 height: disclamerMa.containsMouse ? parent.height : disclamerText.height + 24
-                Material.background: Material.accent
+                Material.background: accentColor
                 Material.elevation: 3
                 anchors {
                     verticalCenter: parent.verticalCenter
@@ -441,10 +442,10 @@ Rectangle {
                 Label {
                     id: disclamerText
                     width: parent.width
-                    Material.foreground: "#2B2B2B"
+                    Material.foreground: oppositeTextColor
                     text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
                                                                              qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
-                    //horizontalAlignment: Text.AlignHCenter
+
                     verticalAlignment: Text.AlignVCenter
                     fontSizeMode: Text.HorizontalFit
 
@@ -471,7 +472,7 @@ Rectangle {
 
                 enabled: !selectedAppInqueue
                 Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"
-                Material.foreground: "#FAFAFA"
+                Material.foreground: textColor
                 text: selectedAppInstalled ? qsTr("remove") : qsTr("install")
 
                 anchors {
@@ -497,8 +498,8 @@ Rectangle {
                 width: parent.height / 3 + 24
                 visible: selectedAppInstalled
                 enabled: selectedAppInstalled
-                Material.background: "#FFCB08"
-                Material.foreground: "#2B2B2B"
+                Material.background: accentColor
+                Material.foreground: oppositeTextColor
                 text: qsTr("OPEN")
 
                 anchors {
@@ -518,9 +519,8 @@ Rectangle {
     Pane {
         id: bottomBanner
         clip: true
-        //Material.elevation: 3
         width: parent.width - 84
-        Material.background: Material.primary
+        Material.background: backgroundColor
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: appBanner.bottom
@@ -632,6 +632,7 @@ Rectangle {
                     id: labelDescription
                     anchors.fill: parent
                     text: description === "" ? qsTr("no description found"): description
+                    Material.foreground: textColor
                     font.pointSize: 11
                     verticalAlignment: Text.AlignTop
                     horizontalAlignment: Text.AlignLeft
@@ -648,7 +649,7 @@ Rectangle {
             Label {
                 id: moreLabel
                 text: qsTr("more")
-                color: Material.accent
+                color: accentColor
                 visible: labelDescription.truncated
                 font.underline: moreMa.containsMouse
                 verticalAlignment: Text.AlignVCenter
@@ -719,7 +720,7 @@ Rectangle {
                             verticalCenter: parent.verticalCenter
                             right: parent.right
                         }
-                        source: "qrc:images/website.svg"
+                        source: "qrc:images/website" + (dark ? ".svg" : "-dark.svg")
                         sourceSize{
                             width: width
                             height: height
@@ -731,7 +732,7 @@ Rectangle {
                         property bool websiteVisible: false
                         font.weight: Font.DemiBold
                         text: qsTr("website")
-                        color: textSecondaryColor
+                        color: secondaryTextColor
                         anchors {
                             verticalCenter: parent.verticalCenter
                             right: homepageIcon.left
@@ -777,7 +778,7 @@ Rectangle {
                             verticalCenter: parent.verticalCenter
                             right: parent.right
                         }
-                        source: "qrc:images/email.svg"
+                        source: "qrc:images/email" + (dark ? ".svg" : "-dark.svg")
                         sourceSize{
                             width: width
                             height: height
@@ -789,7 +790,7 @@ Rectangle {
                         property bool websiteVisible: false
                         font.weight: Font.DemiBold
                         text: qsTr("e-mail")
-                        color: textSecondaryColor
+                        color: secondaryTextColor
                         anchors {
                             verticalCenter: parent.verticalCenter
                             right: mailIcon.left
@@ -818,6 +819,7 @@ Rectangle {
                 Label {
                     id: infoLabel
                     text: qsTr("information")
+                    color: textColor
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
                     font.capitalization: Font.Capitalize
@@ -850,7 +852,7 @@ Rectangle {
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
                                 text: qsTr("Download size")
-                                color: textSecondaryColor
+                                color: secondaryTextColor
                                 font.pointSize: 12
                             }
                             Label {
@@ -858,6 +860,7 @@ Rectangle {
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
                                 text: appDownloadSize
+                                color: textColor
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
                             }
@@ -874,7 +877,7 @@ Rectangle {
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
                                 text: qsTr("type")
-                                color: textSecondaryColor
+                                color: secondaryTextColor
                                 font.pointSize: 12
                             }
                             Label {
@@ -884,6 +887,7 @@ Rectangle {
                                 text: appNonfree ? qsTr("non-free") : qsTr("open source")
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
+                                color: textColor
                             }
                         }
                     }
@@ -898,11 +902,11 @@ Rectangle {
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
                                 text: qsTr("category")
-                                color: textSecondaryColor
+                                color: secondaryTextColor
                                 font.pointSize: 12
                             }
                             Label {
-                                color: appCategoryMa.containsMouse ? Material.accent : Material.foreground
+                                color: appCategoryMa.containsMouse ? accentColor : textColor
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
@@ -936,7 +940,7 @@ Rectangle {
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
                                 text: qsTr("license")
-                                color: textSecondaryColor
+                                color: secondaryTextColor
                                 font.pointSize: 12
                             }
                             Label {
@@ -946,7 +950,7 @@ Rectangle {
                                 text: license
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
-                                color: (licenseMa.containsMouse && copyright != "") ? Material.accent : Material.foreground
+                                color: (licenseMa.containsMouse && copyright != "") ? accentColor : textColor
                                 MouseArea {
                                     id: licenseMa
                                     anchors.fill: parent
@@ -973,7 +977,7 @@ Rectangle {
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
                                 text: qsTr("Download count")
-                                color: textSecondaryColor
+                                color: secondaryTextColor
                                 font.pointSize: 12
                             }
                             Label {
@@ -983,6 +987,7 @@ Rectangle {
                                 text: download
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
+                                color: textColor
                             }
                         }
                     }
@@ -1008,6 +1013,7 @@ Rectangle {
                 Label {
                     id: reviewLabel
                     text: qsTr("reviews - ratings")
+                    color: textColor
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
                     font.capitalization: Font.Capitalize
@@ -1075,7 +1081,7 @@ Rectangle {
                                                         width: width
                                                         height: height
                                                     }
-                                                    source: "qrc:/images/star.svg"
+                                                    source: "qrc:/images/star" + (dark ? ".svg" : "-dark.svg")
                                                 }
                                             }
                                         }
@@ -1108,7 +1114,7 @@ Rectangle {
 
                                         Rectangle {
                                             anchors.verticalCenter: parent.verticalCenter
-                                            color: "#20ffffff"
+                                            color: shadedBackgroundColor
                                             width: parent.width
                                             height: 5
                                             radius: 2
@@ -1116,6 +1122,7 @@ Rectangle {
                                             Rectangle {
                                                 id: starValue
                                                 height: parent.height
+                                                color: textColor
                                                 width: rates[4 - starValueLineDelegate.ind] * parent.width / ratingTotal
                                                 radius: 2
                                             }
@@ -1138,7 +1145,7 @@ Rectangle {
                         }
 
                         Label {
-                            height: parent.height + 24
+                            height: parent.height + 48
 
                             anchors {
                                 left: parent.left
@@ -1150,12 +1157,12 @@ Rectangle {
                             font.pointSize: 100
                             font.weight: Font.DemiBold
                             text: ratingAverage.toFixed(1)
-                            color: textSecondaryColor
+                            color: secondaryTextColor
                         }
 
                         Label {
                             text: ratingTotal === 0 ? qsTr("not enough rating") : ratingTotal + " " + qsTr("ratings")
-                            color: textSecondaryColor
+                            color: secondaryTextColor
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignRight
                             font.capitalization: Font.Capitalize
@@ -1169,7 +1176,7 @@ Rectangle {
 
                     Rectangle {
                         id: reviewDelegateContainer
-                        color: "#25ffffff"
+                        color: shadedBackgroundColor
                         radius: 5
                         anchors {
                             top: bigRatingContainer.bottom
@@ -1185,6 +1192,7 @@ Rectangle {
                             text: qsTr("last applied review")
                             enabled: false
                             width: parent.width
+                            Material.theme: dark ? Material.Dark : Material.Light
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignLeft
                             font.capitalization: Font.Capitalize
@@ -1197,6 +1205,7 @@ Rectangle {
                             id: comingSoonLabel
                             text: qsTr("coming soon") + " ..."
                             enabled: false
+                            Material.theme: dark ? Material.Dark : Material.Light
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignLeft
                             font.capitalization: Font.Capitalize
@@ -1228,6 +1237,7 @@ Rectangle {
                 Label {
                     id: newsLabel
                     text: qsTr("what is new")
+                    color: textColor
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
                     font.capitalization: Font.Capitalize
@@ -1242,7 +1252,7 @@ Rectangle {
                 Label {
                     id: historyLabel
                     text: qsTr("changelog history")
-                    Material.foreground: Material.accent
+                    Material.foreground: accentColor
                     anchors {
                         right: parent.right
                         bottom: newsLabel.bottom
@@ -1288,7 +1298,7 @@ Rectangle {
                                 horizontalAlignment: Text.AlignLeft
                                 wrapMode: Text.WordWrap
                                 text: modelData
-                                color: textSecondaryColor
+                                color: secondaryTextColor
                                 font.pointSize: 11
                             }
                             onModelChanged: {
@@ -1325,7 +1335,7 @@ Rectangle {
                     Label {
                         id: timeAgoLabel
                         text: timeSince(timestamp) + " " + qsTr("ago")
-                        color: textSecondaryColor
+                        color: secondaryTextColor
                         anchors {
                             right: parent.right
                             top: parent.top
@@ -1358,7 +1368,7 @@ Rectangle {
                         horizontalAlignment: Text.AlignRight
                         font.capitalization: Font.Capitalize
                         text: qsTr("version") + " " + appVersion
-                        color: textSecondaryColor
+                        color: secondaryTextColor
                         font.pointSize: 10
                     }
 
@@ -1428,7 +1438,7 @@ Rectangle {
             id: closeBtn
             width: 32
             height: 32
-            Material.background: Material.primary
+            Material.background: primaryColor
             Material.elevation: 10
             anchors {
                 right: parent.right
@@ -1478,6 +1488,8 @@ Rectangle {
         onOpened: {
             popupImage.source = urls ? urls[ssindex] : ""
         }
+
+        Material.background: backgroundColor
 
 
         Image {
@@ -1595,7 +1607,7 @@ Rectangle {
             id: btnClose
             width: 32
             height: 32
-            Material.background: Material.primary
+            Material.background: primaryColor
             Material.elevation: 10
             anchors {
                 right: parent.right
@@ -1638,7 +1650,7 @@ Rectangle {
         height: 54
         width: height * 2 / 3
         opacity: selectedCategory !== qsTr("home") ? 1.0 : 0.0
-        Material.background: Material.background
+        Material.background: "#515151"
         anchors {
             top: parent.top
             topMargin: 6

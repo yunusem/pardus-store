@@ -10,7 +10,7 @@ Pane {
     property bool corrected: helper.corrected
     property int currentOption: 0
     property variant optionsModel: []
-    Material.background: Material.primary
+    Material.background: backgroundColor
     Material.elevation: 3
     z: 92
     visible: selectedMenu === qsTr("settings")
@@ -56,7 +56,7 @@ Pane {
             Label {
                 text: qsTr("enable animations")
                 font.capitalization: Font.Capitalize
-                Material.foreground: currentOption == 0 ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 0 ? accentColor : textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -85,6 +85,8 @@ Pane {
                 onCheckedChanged: {                    
                     animate = checked
                 }
+                Material.theme: dark ? Material.Dark : Material.Light
+                Material.accent: accentColor
             }
 
         }
@@ -95,7 +97,7 @@ Pane {
             Label {
                 text: qsTr("Change application list column count")
                 font.capitalization: Font.Capitalize
-                Material.foreground: currentOption == 1 ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 1 ? accentColor : textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -114,7 +116,8 @@ Pane {
             Slider {
                 id: slider
                 property int count: to - from + 1
-                Material.foreground: "#fafafa"
+                Material.foreground: textColor
+                Material.accent: accentColor
                 anchors.top: parent.top
                 from: 2
                 to: 3
@@ -176,7 +179,7 @@ Pane {
                             model: slider.count
                             Label {
                                 height: contentHeight
-                                Material.foreground: "#FAFAFA"
+                                color: textColor
                                 text: index + slider.from                                
                                 font.pointSize: 7
                                 verticalAlignment: Text.AlignVCenter
@@ -196,7 +199,7 @@ Pane {
             Label {
                 text: qsTr("update package manager cache on start")
                 font.capitalization: Font.Capitalize
-                Material.foreground: currentOption == 2 ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 2 ? accentColor:textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -224,6 +227,8 @@ Pane {
                 onCheckedChanged: {                    
                     updateCache = checked
                 }
+                Material.theme: dark ? Material.Dark : Material.Light
+                Material.accent: accentColor
             }
 
         }
@@ -234,7 +239,7 @@ Pane {
             Label {
                 text: qsTr("Correct package manager sources list")
                 font.capitalization: Font.Capitalize
-                Material.foreground: currentOption == 3 ? "#FFCB08":"#fafafa"
+                Material.foreground: currentOption == 3 ? accentColor:textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -252,7 +257,7 @@ Pane {
             Button {
                 id: correctBtn
                 anchors.verticalCenter: parent.verticalCenter
-                Material.background: "#FFCB08"
+                Material.background: accentColor
                 hoverEnabled: true
                 enabled: !corrected
                 width: correctBtnLabel.width + 24
@@ -261,7 +266,7 @@ Pane {
                     anchors.centerIn: parent
                     text: corrected ? qsTr("corrected"): qsTr("correct")
                     font.bold: true
-                    Material.foreground: Material.background
+                    Material.foreground: oppositeTextColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     font.capitalization: Font.Capitalize
@@ -274,6 +279,45 @@ Pane {
                         currentOption = 3
                     }
                 }
+            }
+        }
+
+        Row {
+            id: row5
+            spacing: 12
+            Label {
+                text: qsTr("use dark theme")
+                font.capitalization: Font.Capitalize
+                Material.foreground: currentOption == 4 ? accentColor : textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
+                MouseArea {
+                    id: row5Ma
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: {
+                        if(containsMouse) {
+                            currentOption = 4
+                        }
+                    }
+                }
+            }
+            Switch {
+                enabled: true
+                anchors.verticalCenter: parent.verticalCenter
+                checked: dark
+                hoverEnabled: true
+                onHoveredChanged: {
+                    if(hovered) {
+                        currentOption = 4
+                    }
+                }
+                onCheckedChanged: {
+                    dark = checked
+                }
+                Material.theme: dark ? Material.Dark : Material.Light
+                Material.accent: accentColor
             }
 
         }
@@ -288,7 +332,7 @@ Pane {
         x: parent.width / 2 - width / 2
         y: parent.height / 2 - height / 2
         Material.elevation: 2
-        Material.background: Material.background
+        Material.background: backgroundColor
         signal accepted
         signal rejected
 
@@ -299,7 +343,7 @@ Pane {
             Label {
                 text: qsTr("Informing");
                 anchors.horizontalCenter: parent.horizontalCenter
-                Material.foreground: "#fafafa"
+                Material.foreground: textColor
                 wrapMode: Text.WordWrap
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -307,7 +351,7 @@ Pane {
             }
 
             Label {
-                Material.foreground: "#fafafa"
+                Material.foreground: textColor
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
@@ -321,14 +365,14 @@ Pane {
 
                 Button {
                     text: qsTr("yes")
-                    Material.background: "#3c3c3c"
-                    Material.foreground: "#fafafa"
+                    Material.background: backgroundColor
+                    Material.foreground: textColor
                     onClicked: popupConfirmCorrect.accepted()
                 }
                 Button {
                     text: qsTr("no")
-                    Material.background: "#3c3c3c"
-                    Material.foreground: "#fafafa"
+                    Material.background: backgroundColor
+                    Material.foreground: textColor
                     onClicked: popupConfirmCorrect.rejected()
                 }
             }
@@ -353,7 +397,7 @@ Pane {
         radius: 2
         color: "transparent"
         border.width: 1
-        border.color: "#FFCB08"
+        border.color: accentColor
 
         Item {
             id: explanationHolder
@@ -371,7 +415,7 @@ Pane {
                     width: parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
                     height: contentHeight
-                    Material.foreground: "#fafafa"
+                    Material.foreground: textColor
                     text: optionsModel[currentOption] ? optionsModel[currentOption] : ""
                     font.pointSize: 15
                     verticalAlignment: Text.AlignVCenter
@@ -398,7 +442,7 @@ Pane {
 
                                 Label {
                                     height: contentHeight
-                                    Material.foreground: (ratio - slider.from) === index ? "#FFCB08" : "#FAFAFA"
+                                    Material.foreground: (ratio - slider.from) === index ? accentColor : textColor
                                     text: index + slider.from
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     font.pointSize: 15
@@ -411,7 +455,7 @@ Pane {
                                     property int count : index
                                     width: (explanationVisual.width - 48) / 3
                                     height: width * 3 / 4
-                                    border.color: (ratio - slider.from) === index ? "#FFCB08" : "#FAFAFA"
+                                    border.color: (ratio - slider.from) === index ? accentColor : textColor
                                     border.width: 1
                                     radius: 2
                                     color: "transparent"
@@ -435,7 +479,7 @@ Pane {
                                                 width: parent.width - 3
                                                 height: parent.height - 3
                                                 anchors.centerIn: parent
-                                                color: "#FAFAFA"
+                                                color: textColor
                                                 radius: 2
                                             }
                                         }
@@ -447,7 +491,7 @@ Pane {
                                     width: parent.width
                                     wrapMode: Text.WordWrap
                                     visible: (ratio - slider.from) === index
-                                    Material.foreground: "#FFCB08"
+                                    Material.foreground: accentColor
                                     text: qsTr("Currently selected")
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     //font.pointSize: 9
@@ -469,6 +513,7 @@ Pane {
         optionsModel.push(qsTr("Controls the visual column count of applications list view."))
         optionsModel.push(qsTr("Checks the system package manager's cache when Pardus-Store is started. Disabling this could speed up the starting process but if you do not use Pardus-Store often you should enable this option."))
         optionsModel.push(qsTr("Corrects the system sources list that used by package manager. This process will revert all the changes have been done and will use Pardus Official Repository source addresses. Use with caution."))
+        optionsModel.push(qsTr("Change theme"))
 
     }
 }

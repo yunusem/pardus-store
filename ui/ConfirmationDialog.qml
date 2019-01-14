@@ -11,7 +11,7 @@ Popup {
     x: parent.width / 2 - width / 2
     y: parent.height / 2 - height / 2
     Material.elevation: 2
-    Material.background: Material.background
+    Material.background: backgroundColor
     signal accepted
     signal rejected
     property alias content: contentLabel.text
@@ -25,7 +25,7 @@ Popup {
             bottom: imageContainer.top
             bottomMargin: 12
         }
-        Material.foreground: "#fafafa"
+        Material.foreground: textColor
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
@@ -54,7 +54,7 @@ Popup {
 
         Label {
             id: iconLabel
-            Material.foreground: "#fafafa"
+            Material.foreground: textColor
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -74,15 +74,15 @@ Popup {
         Button {
             id: acceptButton
             text: qsTr("yes")
-            Material.background: "#3c3c3c"
-            Material.foreground: "#fafafa"
+            Material.background: backgroundColor
+            Material.foreground: textColor
             onClicked: dialog.accepted()
         }
         Button {
             id: rejectButton
             text: qsTr("no")
-            Material.background: "#3c3c3c"
-            Material.foreground: "#fafafa"
+            Material.background: backgroundColor
+            Material.foreground: textColor
             onClicked: dialog.rejected()
         }
     }

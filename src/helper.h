@@ -41,6 +41,10 @@ class Helper : public QObject
                READ ratio
                WRITE setRatio
                NOTIFY ratioChanged)
+    Q_PROPERTY(bool usedark
+               READ usedark
+               WRITE setUsedark
+               NOTIFY usedarkChanged)
     Q_PROPERTY(QString version
                READ version
                NOTIFY versionChanged)
@@ -67,6 +71,8 @@ public:
     void setUpdate(bool u);
     unsigned int ratio() const;
     void setRatio(const unsigned int &r);
+    bool usedark() const;
+    void setUsedark(bool d);
     QString choice() const;
     QString version() const;
     bool corrected() const;
@@ -111,6 +117,7 @@ private:
     bool m_animate;
     bool m_update;
     unsigned int m_ratio;
+    bool m_usedark;
     void readSettings();
 
 private slots:
@@ -139,6 +146,7 @@ signals:
     void animateChanged();
     void updateChanged();
     void ratioChanged();
+    void usedarkChanged();
     void correctingFinished();
     void correctingFinishedWithError(const QString &errorString);
     void replyError(const QString &errorString);

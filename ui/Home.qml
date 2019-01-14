@@ -121,7 +121,7 @@ Rectangle {
             smooth: true
             text: qsTr("welcome")
 
-            Material.foreground: "#fafafa"
+            Material.foreground: "#E4E4E4"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.capitalization: Font.Capitalize
@@ -142,6 +142,7 @@ Rectangle {
         Pane {
             id: editorsApp
             Material.elevation: editorsAppMa.containsMouse ? 10 : 5
+            Material.background: backgroundColor
             height: (survey.height - 24) / 3
             width: height * 2.479740413
             anchors {
@@ -213,7 +214,7 @@ Rectangle {
                     right: parent.right
                 }
 
-                Material.foreground: Material.accent
+                color: accentColor
                 text: qsTr("Editor's Pick")
 
             }
@@ -235,6 +236,7 @@ Rectangle {
                     width: parent.width
                     font.capitalization: Font.Capitalize
                     text: getPrettyName(epaName)
+                    color: textColor
                     wrapMode: Text.WordWrap
                     font.pointSize: editorsApp.height > 100 ? editorsApp.height / 10 : 10
                 }
@@ -252,7 +254,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            source: "qrc:/images/star.svg"
+                            source: "qrc:/images/star" + (dark ? ".svg" : "-dark.svg")
                             sourceSize {
                                 width: width
                                 height: height
@@ -264,6 +266,7 @@ Rectangle {
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignLeft
                             font.capitalization: Font.Capitalize
+                            color: textColor
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
@@ -285,7 +288,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            source: "qrc:/images/download.svg"
+                            source: "qrc:/images/download" + (dark ? ".svg" : "-dark.svg")
                             sourceSize {
                                 width: width
                                 height: height
@@ -300,6 +303,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
+                            color: textColor
                             text: epaDownloadCount
                             font.pointSize: editorsApp.height > 100 ? editorsApp.height / 12 : 10
                         }
@@ -311,6 +315,7 @@ Rectangle {
         Pane {
             id: mostDownloadedApp
             Material.elevation: mostDownloadedAppMa.containsMouse ? 10 : 5
+            Material.background: backgroundColor
             height: (survey.height - 24) / 3
             width: height * 2.479740413
             anchors {
@@ -382,7 +387,7 @@ Rectangle {
                     right: parent.right
                 }
 
-                Material.foreground: Material.accent
+                color: accentColor
                 text: qsTr("Most Downloaded App")
 
             }
@@ -404,6 +409,7 @@ Rectangle {
                     width: parent.width
                     font.capitalization: Font.Capitalize
                     text: getPrettyName(mdaName)
+                    color: textColor
                     wrapMode: Text.WordWrap
                     font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 10 : 10
                 }
@@ -421,7 +427,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            source: "qrc:/images/star.svg"
+                            source: "qrc:/images/star" + (dark ? ".svg" : "-dark.svg")
                             sourceSize {
                                 width: width
                                 height: height
@@ -436,6 +442,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
+                            color: textColor
                             text: mdaRating.toFixed(1)
                             font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 12 : 10
                         }
@@ -454,7 +461,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            source: "qrc:/images/download.svg"
+                            source: "qrc:/images/download" + (dark ? ".svg" : "-dark.svg")
                             sourceSize {
                                 width: width
                                 height: height
@@ -469,6 +476,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
+                            color: textColor
                             text: mdaDownloadCount
                             font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 12 : 10
                         }
@@ -480,6 +488,7 @@ Rectangle {
         Pane {
             id: mostRatedApp
             Material.elevation: mostRatedAppMa.containsMouse ? 10 : 5
+            Material.background: backgroundColor
             height: (survey.height - 24) / 3
             width: height * 2.479740413
             anchors {
@@ -551,7 +560,7 @@ Rectangle {
                     right: parent.right
                 }
 
-                Material.foreground: Material.accent
+                color: accentColor
                 text: qsTr("Most Rated App")
 
             }
@@ -575,6 +584,7 @@ Rectangle {
                     text: getPrettyName(mraName)
                     font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 10 : 10
                     wrapMode: Text.WordWrap
+                    color: textColor
                 }
 
                 Rectangle {
@@ -590,7 +600,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            source: "qrc:/images/star.svg"
+                            source: "qrc:/images/star" + (dark ? ".svg" : "-dark.svg")
                             sourceSize {
                                 width: width
                                 height: height
@@ -605,6 +615,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
+                            color: textColor
                             text: mraRating.toFixed(1)
                             font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 12 : 10
                         }
@@ -623,7 +634,7 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
-                            source: "qrc:/images/download.svg"
+                            source: "qrc:/images/download" + (dark ? ".svg" : "-dark.svg")
                             sourceSize {
                                 width: width
                                 height: height
@@ -638,29 +649,14 @@ Rectangle {
                             anchors {
                                 verticalCenter: parent.verticalCenter
                             }
+                            color: textColor
                             text: mraDownloadCount
                             font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 12 : 10
                         }
                     }
                 }
             }
-
-            //            Label {
-            //                id: mostDownloadedAppLabel
-            //                enabled: mostDownloadedAppMa.containsMouse
-            //                Material.foreground: "#ffcb08"
-            //                text: qsTr("Most Downloaded App")
-            //                font.bold: true
-            //                verticalAlignment: Text.AlignVCenter
-            //                horizontalAlignment: Text.AlignRight
-            //                anchors {
-            //                    bottom: parent.bottom
-            //                    right: parent.right
-            //                }
-            //            }
         }
-
-
     }
 
     //    Item {
@@ -744,6 +740,7 @@ Rectangle {
         height: parent.height - banner.height - 36
         width: 450
         Material.elevation: 3
+        Material.background: backgroundColor
         anchors {
             top: banner.bottom
             topMargin: 12
@@ -764,6 +761,7 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.capitalization: Font.Capitalize
+                    color: textColor
                     font.bold: true
                 }
 
@@ -776,6 +774,7 @@ Rectangle {
                         topMargin: 10
                         horizontalCenter: parent.horizontalCenter
                     }
+                    Material.theme: dark ? Material.Dark : Material.Light
                     text: qsTr("Which application should be added to the store in next week ?")
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -803,6 +802,7 @@ Rectangle {
                             Label {
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: surveyCounts[index]
+                                color: textColor
                                 font.bold: true
                                 verticalAlignment: Text.AlignVCenter
 
@@ -818,6 +818,8 @@ Rectangle {
                             RadioButton {
                                 anchors.verticalCenter: parent.verticalCenter
                                 font.capitalization: Font.Capitalize
+                                Material.theme: dark ? Material.Dark : Material.Light
+                                Material.accent: accentColor
                                 onCheckedChanged: {
                                     selectedIndex = index
                                 }
@@ -846,6 +848,7 @@ Rectangle {
                                 horizontalAlignment: Text.AlignHCenter
                                 font.capitalization: Font.Capitalize
                                 font.pointSize: 13
+                                Material.foreground: textColor
                                 text: getPrettyName(modelData)
                                 MouseArea {
                                     anchors.fill: parent
@@ -876,12 +879,13 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                         bottom: parent.bottom
                     }
-                    Material.background: Material.primary
+                    Material.theme: dark ? Material.Dark : Material.Light
+                    Material.background: primaryColor
                     width: surveyBtnLabel.width + 24
                     Label {
                         id: surveyBtnLabel
                         anchors.centerIn: parent
-                        Material.foreground: "#ffcb08"
+                        Material.foreground: "#e4e4e4"
                         text: (choice === "") ? qsTr("send") : qsTr("update")
                         fontSizeMode: Text.HorizontalFit
                         font.capitalization: Font.Capitalize
@@ -959,7 +963,7 @@ Rectangle {
             z: 92
             height: 54
             width: height * 2 / 3
-            Material.background: Material.primary
+            Material.background: primaryColor
             anchors {
                 top: parent.top
                 topMargin: - 6

@@ -12,7 +12,7 @@ Popup {
     closePolicy: Popup.CloseOnPressOutside
     y: parent.height / 2 - height / 2
     x: parent.width / 2 - width / 2
-    Material.background: Material.background
+    Material.background: backgroundColor
     Material.elevation: 2
 
     Column {
@@ -24,7 +24,7 @@ Popup {
             anchors {
                 horizontalCenter: parent.horizontalCenter
             }
-            Material.foreground: "#fafafa"
+            Material.foreground: textColor
 
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
@@ -37,7 +37,7 @@ Popup {
             text: popupText
             width: parent.width
 
-            Material.foreground: "#fafafa"
+            Material.foreground: textColor
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
@@ -51,8 +51,8 @@ Popup {
                 id: setBtn
                 visible: settingsButtonOn
                 width: setBtnLabel.width + 24
-                Material.background: "#3c3c3c"
-                Material.foreground: "#fafafa"
+                Material.background: backgroundColor
+                Material.foreground: textColor
                 Label {
                     id: setBtnLabel
                     text: qsTr("settings")
@@ -71,8 +71,8 @@ Popup {
             Button {
                 id: closeBtn
 
-                Material.background: "#3c3c3c"
-                Material.foreground: "#fafafa"
+                Material.background: backgroundColor
+                Material.foreground: textColor
 
                 Label {
                     text: singleButtonText

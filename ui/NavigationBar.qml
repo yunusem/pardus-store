@@ -8,7 +8,7 @@ Rectangle {
     width: navigationBarWidth
     height: parent.height
     z : 93
-    color: Material.background
+    color: "#fa464646"
 
     property alias currentIndex : menuListView.currentIndex
     property int categoryItemHeight: 30
@@ -76,10 +76,10 @@ Rectangle {
                     right: parent.right
                     rightMargin: 2
                 }
-                color: name === selectedCategory ? "#FFCB08" : "#FAFAFA"
+                color: name === selectedCategory ? accentColor : "#E4E4E4"
                 font.capitalization: Font.Capitalize
                 text: name
-                fontSizeMode: Text.HorizontalFit                
+                fontSizeMode: Text.HorizontalFit
             }
 
             MouseArea {
@@ -125,8 +125,8 @@ Rectangle {
 
                 Rectangle {
                     id: bgRect
-                    color: Material.primary
-                    visible: name === selectedMenu
+                    color: name === selectedMenu ? backgroundColor : "transparent"
+                    visible: true
                     width: parent.width
                     height: parent.height
                 }
@@ -134,7 +134,7 @@ Rectangle {
                 Image {
                     id: menuItemIcon
                     asynchronous: true
-                    source: "qrc:/images/" + icon + ".svg"
+                    source: "qrc:/images/" + icon + ((bgRect.color == "#f0f0f0") ? "-dark.svg" : ".svg")
                     fillMode: Image.PreserveAspectFit
                     height: 36
                     width: height
@@ -149,17 +149,17 @@ Rectangle {
                     }
                 }
 
-                DropShadow {
-                    id:ds
-                    visible: true
-                    anchors.fill: menuItemIcon
-                    horizontalOffset: 3
-                    verticalOffset: 3
-                    radius: 8
-                    samples: 17
-                    color: "#ff000000"
-                    source: menuItemIcon
-                }
+                //                DropShadow {
+                //                    id:ds
+                //                    visible: true
+                //                    anchors.fill: menuItemIcon
+                //                    horizontalOffset: 3
+                //                    verticalOffset: 3
+                //                    radius: 8
+                //                    samples: 17
+                //                    color: "#ff000000"
+                //                    source: menuItemIcon
+                //                }
 
                 Label {
                     id: menuItemLabel
@@ -170,7 +170,8 @@ Rectangle {
                         right: parent.right
                         rightMargin: 2
                     }
-                    color: name === selectedMenu ? "#FFCB08" : "#FAFAFA"
+                    color: name === selectedMenu ? accentColor : "#E4E4E4"
+                    font.bold: name === selectedMenu
                     font.capitalization: Font.Capitalize
                     text: name
                     fontSizeMode: Text.HorizontalFit
@@ -321,7 +322,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 11
                 wrapMode: Text.WordWrap
-                Material.foreground: "#FAFAFA"
+                Material.foreground: secondaryTextColor
                 anchors {
                     verticalCenter: parent.verticalCenter
                     left: accountImage.right

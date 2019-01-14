@@ -7,13 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="256"
-   viewBox="0 0 128 128"
    width="256"
+   height="256"
+   viewBox="0 0 256 256"
    version="1.1"
    id="svg6"
-   sodipodi:docname="graphics.svg"
-   style="fill:#ffffff"
+   sodipodi:docname="email-dark.svg"
    inkscape:version="0.92.1 r15371">
   <metadata
      id="metadata12">
@@ -39,19 +38,19 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1138"
+     inkscape:window-height="1172"
      id="namedview8"
      showgrid="false"
-     inkscape:zoom="3.4766083"
-     inkscape:cx="12.572015"
-     inkscape:cy="56.396904"
-     inkscape:window-x="1920"
+     inkscape:zoom="2.4583333"
+     inkscape:cx="-26.045199"
+     inkscape:cy="63.335226"
+     inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg6" />
   <path
-     d="M 16.800001,16.8 H 58.099999 V 5 H 16.800001 C 10.31,5 5,10.31 5,16.8 V 58.1 H 16.800001 Z M 52.199999,69.9 28.600001,99.4 H 99.4 L 81.7,75.8 69.722999,91.789 Z M 93.5,43.35 c 0,-4.897 -3.953,-8.85 -8.85,-8.85 -4.897,0 -8.850001,3.953 -8.850001,8.85 0,4.897001 3.953001,8.85 8.850001,8.85 4.897,0 8.85,-3.952999 8.85,-8.85 z M 111.2,5 H 69.899999 V 16.8 H 111.2 V 58.1 H 123 V 16.8 C 123,10.31 117.69,5 111.2,5 Z m 0,106.2 H 69.899999 V 123 H 111.2 c 6.49,0 11.8,-5.31 11.8,-11.8 V 69.9 H 111.2 Z M 16.800001,69.9 H 5 v 41.3 c 0,6.49 5.31,11.8 11.800001,11.8 H 58.099999 V 111.2 H 16.800001 Z"
-     id="path2"
+     d="M 222.4,33.2 H 33.6 C 20.62,33.2 10.118,43.82 10.118,56.8 L 10,198.4 c 0,12.98 10.62,23.6 23.6,23.6 h 188.8 c 12.98,0 23.6,-10.62 23.6,-23.6 V 56.8 C 246,43.82 235.38,33.2 222.4,33.2 Z m 0,165.2 H 33.6 v -118 l 94.4,59 94.4,-59 z M 128,115.8 33.6,56.8 h 188.8 z"
+     id="path4"
      inkscape:connector-curvature="0"
-     style="fill:#e4e4e4;stroke-width:5.9000001;fill-opacity:1" />
+     style="stroke-width:11.80000019;fill:#686868;fill-opacity:1" />
 </svg>

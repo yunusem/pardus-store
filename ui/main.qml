@@ -91,10 +91,28 @@ ApplicationWindow {
     property string selectedAppDelegatestate: "get"
     property string selectedAppExecute
 
+    property alias dark: helper.usedark
+    property string backgroundColor: dark ? "#2B2B2B" : "#F0F0F0"
+    property string oppsiteBackgroundColor: "#6B6B6B"
+    property string shadedBackgroundColor: dark ? "#17E4E4E4" : "#172B2B2B"
+    property string primaryColor: "#464646"
+    property string secondaryColor: "#686868"
+    property string accentColor: dark ? "#FFCB08" : "#F4B43F"
+    property string textColor: dark ? "#E4E4E4" : "#DD2B2B2B"
+    property string secondaryTextColor: dark ? "#A9A9A9" : "#686868"
+    property string oppositeTextColor: "#2B2B2B"
+
+
     Rectangle {
         id: mainBackground
-        anchors.fill: parent
-        color: Material.primary
+        anchors {
+            left: navigationBar.right
+            right: parent.right
+            top: parent.top
+            bottom: parent.bottom
+        }
+
+        color: backgroundColor
     }
 
     SplashScreen {
@@ -303,7 +321,7 @@ ApplicationWindow {
 
     NavigationBar {
         id: navigationBar
-        visible: splashScreen.opacity < 0.7
+        visible: splashScreen.opacity < 0.9
     }
 
     Settings {

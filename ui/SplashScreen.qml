@@ -9,7 +9,10 @@ Pane {
     opacity: 1.0    
     property alias label: splashLabel
     property alias timer: splashTimer
-    property alias busy: splashBusy
+    property alias busy: splashBusy    
+
+    Material.background: backgroundColor
+
     Timer {
         id: splashTimer
         interval: 800
@@ -59,7 +62,7 @@ Pane {
         smooth: false
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        Material.foreground: "#ffcb08"
+        Material.foreground: accentColor
         font.pointSize: 42
         font.capitalization: Font.Capitalize
         font.family: pardusFont.name
@@ -89,7 +92,7 @@ Pane {
 
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        Material.foreground: "#fafafa"
+        Material.foreground: textColor
     }
 
     BusyIndicator {
@@ -100,7 +103,7 @@ Pane {
         anchors.left: splashLabel.right
         anchors.leftMargin: 20
         running: true
-        Material.accent: "#FFCB08"
+        Material.accent: accentColor
     }
 
     Component.onCompleted: {

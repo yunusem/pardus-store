@@ -52,6 +52,6 @@
   <path
      d="M 10,37 H 37 V 10 H 10 Z m 40.5,81 h 27 V 91 h -27 z M 10,118 H 37 V 91 H 10 Z m 0,-40.5 h 27 v -27 H 10 Z m 40.5,0 h 27 v -27 h -27 z M 91,10 v 27 h 27 V 10 Z M 50.5,37 h 27 V 10 h -27 z M 91,77.5 h 27 v -27 H 91 Z m 0,40.5 h 27 V 91 H 91 Z"
      id="path2"
-     style="fill:#fafafa;stroke-width:6.75;fill-opacity:1"
+     style="fill:#e4e4e4;stroke-width:6.75;fill-opacity:1"
      inkscape:connector-curvature="0" />
 </svg>

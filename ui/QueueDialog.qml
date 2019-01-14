@@ -27,7 +27,7 @@ Popup {
     Label {
         id: queuePopupTitle
         text: qsTr("queue")
-        Material.foreground: "#ffcb08"
+        Material.foreground: accentColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         verticalAlignment: Text.AlignVCenter

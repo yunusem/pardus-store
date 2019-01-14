@@ -52,6 +52,6 @@
   <path
      d="M 111.2,5 H 16.8 C 10.31,5 5.059,10.31 5.059,16.8 L 5,123 28.6,99.4 h 82.6 c 6.49,0 11.8,-5.31 11.8,-11.8 V 16.8 C 123,10.31 117.69,5 111.2,5 Z M 40.4,75.8 H 28.6 V 64 h 11.8 z m 0,-17.7 H 28.6 V 46.3 h 11.8 z m 0,-17.7 H 28.6 V 28.6 H 40.4 Z M 81.7,75.8 H 52.2 V 64 H 81.7 Z M 99.4,58.1 H 52.2 V 46.3 h 47.2 z m 0,-17.7 H 52.2 V 28.6 h 47.2 z"
      id="path4"
-     style="fill:#fafafa;stroke-width:5.9000001;fill-opacity:1"
+     style="fill:#e4e4e4;stroke-width:5.9000001;fill-opacity:1"
      inkscape:connector-curvature="0" />
 </svg>

@@ -7,6 +7,7 @@
 #include <QQmlContext>
 #include <QTranslator>
 #include <QLocale>
+#include <QFont>
 #include <QIcon>
 #include <QDebug>
 
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("pardus");
     app.setOrganizationDomain("www.pardus.org.tr");
     app.setApplicationName("pardus-store");
-
+    app.setFont(QFont("Noto Sans"));
     ApplicationListModel listModel;
     ListCover::setInstance(&listModel);
     FilterProxyModel filterModel;

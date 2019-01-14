@@ -119,6 +119,7 @@ Item {
         id: applicationDelegateItem
         z: delegateMa.containsMouse ? 100 : 5
         Material.elevation: delegateMa.containsMouse ? 5 : 3
+        Material.background: backgroundColor
         anchors {
             margins: 8
             fill: parent
@@ -272,11 +273,10 @@ Item {
 
                 Label {
                     id: textLabel
-                    //font.weight: Font.DemiBold
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     anchors.centerIn: parent
-                    Material.foreground: "#FAFAFA"
+                    Material.foreground: textColor
                     opacity: parent.opacity
                     visible: opacity > 0.0
 
@@ -300,7 +300,7 @@ Item {
                 anchors.centerIn: parent
                 padding: 4
                 smooth: true
-                Material.accent: "#FFCB08"
+                Material.accent: accentColor
                 opacity: 0.0
                 running: opacity > 0.0
                 visible: opacity > 0.0 ? true : false
@@ -452,10 +452,10 @@ Item {
 
             Button {
                 id: runAppButton
-                Material.background: Material.accent
+                Material.background: accentColor
                 enabled: true
                 opacity: (delegatestate === "installed" && delegateMa.containsMouse) ? 1.0 : 0.0
-                visible: opacity > 0.0 //delegateMa.containsMouse
+                visible: opacity > 0.0
                 width: runBtnText.width + 12
                 height: parent.height / 3 + 18
                 anchors {
@@ -475,11 +475,10 @@ Item {
 
                 Label {
                     id: runBtnText
-                    //font.weight: Font.DemiBold
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     anchors.centerIn: parent
-                    color: "#2B2B2B"
+                    color: oppositeTextColor
                     opacity: parent.opacity
                     visible: opacity > 0.0
 
@@ -502,6 +501,7 @@ Item {
                 id: appNameLabel
                 anchors.fill: parent
                 text: prettyname
+                color: textColor
                 fontSizeMode: Text.Fit
                 height: parent.height
                 font.pointSize: 18
@@ -558,7 +558,7 @@ Item {
                 Label {
                     id: detailsLabel
                     width: parent.width
-                    Material.foreground: detailTextHovered ? "#FFBC08":"#EEEEEE"
+                    Material.foreground: detailTextHovered ? accentColor : textColor
                     text: qsTr("Click for details")
                     font.underline: detailTextHovered
                     verticalAlignment: Text.AlignVCenter

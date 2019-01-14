@@ -84,11 +84,26 @@ void Helper::setRatio(const unsigned int &r)
     }
 }
 
+bool Helper::usedark() const
+{
+    return m_usedark;
+}
+
+void Helper::setUsedark(bool d)
+{
+    if( d != m_usedark) {
+        m_usedark = d;
+        writeSettings("dark-theme", m_usedark);
+        emit usedarkChanged();
+    }
+}
+
 void Helper::readSettings()
 {
     setAnimate(s->value("animate", true).toBool());
     setUpdate(s->value("update", true).toBool());
     setRatio(s->value("ratio", 3).toUInt());
+    setUsedark(s->value("dark-theme", false).toBool());
 }
 
 void Helper::writeSettings(const QString &key, const QVariant &value)

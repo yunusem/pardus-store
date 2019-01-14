@@ -8,16 +8,15 @@ Item {
     height: 32
     property int searchBarBorderWidth: 1
     property int radiusValue: 3
-    property int marginValue: 22
-    property string textColor: Material.foreground
-    property string searchBarColor: Material.primary
+    property int marginValue: 22    
+    property string searchBarColor: backgroundColor
 
     Rectangle {
         id: searchBarBorder
         width: parent.width
         height: parent.height
         radius: container.radiusValue
-        color: searchText.focus ? "#FFCB08" : "#6B6B6B"
+        color: searchText.focus ? accentColor : oppsiteBackgroundColor
 
         anchors.centerIn: parent
 
@@ -42,13 +41,15 @@ Item {
             TextInput {
                 id: searchText
                 width: parent.width - clearIcon.width - container.marginValue
-                color: container.textColor
+                color: textColor
                 font.pointSize: 16
                 horizontalAlignment: Text.AlignHCenter
                 clip: true
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
-                anchors.leftMargin: container.marginValue
+                anchors.leftMargin: 12
+                anchors.right: clearIcon.left
+                anchors.rightMargin: 6
 
                 onActiveFocusChanged: {
                     if(activeFocus && searchBarMa.containsMouse) {
@@ -74,17 +75,15 @@ Item {
 
             Image {
                 id: clearIcon                
-                height: searchText.height
+                height: searchText.height - 12
                 width: height
-                source: "qrc:/images/back.svg"
-                smooth: true
-                antialiasing: true
-                mipmap: true
+                sourceSize: Qt.size(width,height)
+                source: "qrc:/images/clear" + (dark ? ".svg" : "-dark.svg")
                 visible: searchText.text
 
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                anchors.leftMargin: container.marginValue
+                anchors.rightMargin: 3
 
                 MouseArea {
                     id: maClear
@@ -104,19 +103,18 @@ Item {
             height: searchBar.height - 10
             width: height
             visible: !searchText.text
-            source: "qrc:/images/search.svg"
-            smooth: true
-            mipmap: true
-            antialiasing: true
+            source: "qrc:/images/search" + (dark ? ".svg" : "-dark.svg")
+            sourceSize: Qt.size(width, height)
             anchors{
                 left: parent.left
-                leftMargin: 12
+                leftMargin: 8
                 verticalCenter: parent.verticalCenter
             }
         }
 
         Label {
             id: placeHolder
+            Material.theme: dark ? Material.Dark : Material.Light
             enabled: false
             height: searchBar.height
             visible: !searchText.text

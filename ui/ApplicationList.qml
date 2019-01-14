@@ -66,6 +66,7 @@ Page {
                 anchors.leftMargin: gridView.width - scrollBarWidth - 12
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
+                Material.theme: dark ? Material.Dark : Material.Light
             }
         }
     }

@@ -32,5 +32,16 @@
         <file>images/email.svg</file>
         <file>images/website.svg</file>
         <file>images/download.svg</file>
+        <file>images/settings-dark.svg</file>
+        <file>images/categories-dark.svg</file>
+        <file>images/home-dark.svg</file>
+        <file>images/search-dark.svg</file>
+        <file>images/download-dark.svg</file>
+        <file>images/star-dark.svg</file>
+        <file>images/rating-stars-light.svg</file>
+        <file>images/clear-dark.svg</file>
+        <file>images/clear.svg</file>
+        <file>images/website-dark.svg</file>
+        <file>images/email-dark.svg</file>
     </qresource>
 </RCC>
