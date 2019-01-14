@@ -15,7 +15,7 @@
 #include <QTimer>
 #include <QDebug>
 
-#define MAIN_URL "http://0.0.0.0:5000" //"http://store.pardus.org.tr:5000"
+#define MAIN_URL "http://store.pardus.org.tr:5000"
 
 namespace {
 
@@ -367,10 +367,10 @@ void NetworkHandler::parseHomeResponse(const QJsonObject &obj)
     if(obj.keys().contains("home")) {
         QJsonObject content = obj.value("home").toObject();
         QHash<QString,QString> hash;
-        QString name, ename, dname, rname;
-        QString epname, dpname, rpname;
-        unsigned int d, ed, dd, rd;
-        double r, er, dr, rr;
+        QString name, ename, dname, rname = "";
+        QString epname, dpname, rpname = "";
+        unsigned int d, ed, dd, rd = 0;
+        double r, er, dr, rr = 0.0;
         QLocale systemLocale;
         QString locale = systemLocale.name().split("_")[0];
 
