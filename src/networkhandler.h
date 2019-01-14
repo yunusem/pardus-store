@@ -18,9 +18,10 @@ class NetworkHandler : public QObject
 public:
     explicit NetworkHandler(int msec = 10000, QObject *parent = 0);
 
-    void getApplicationList();
+    void getApplicationList();    
     void getApplicationDetails(const QString &packageName);
     void ratingControl(const QString &name, const unsigned int &rating);
+    void getHomeDetails();
     void sendApplicationInstalled(const QString &name);
     void surveyCheck();
     void surveyJoin(const QString &appName, const QString &duty);
@@ -33,6 +34,10 @@ signals:
                            const unsigned int &individual,
                            const unsigned int &total,
                            const QList<int> &rates);
+    void homeDetailsReceived(const QString &ename, const QString &epname, const unsigned int &ecount, const double &erating,
+                             const QString &dname, const QString &dpname, const unsigned int &dcount, const double &drating,
+                             const QString &rname, const QString &rpname, const unsigned int &rcount, const double &rrating);
+
     void surveyListReceived(const QString &mySelection, const QStringList &sl);
     void surveyJoinResultReceived(const QString &duty, const int &result);
     void replyError(const QString &error);

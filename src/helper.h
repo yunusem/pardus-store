@@ -62,6 +62,9 @@ class Helper : public QObject
     Q_PROPERTY(unsigned int rating
                READ rating
                NOTIFY ratingDetailReceived)
+    Q_PROPERTY(bool homeLoaded
+               READ homeLoaded
+               NOTIFY homeReceived)
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -80,6 +83,7 @@ public:
     bool detailsopened () const;
     void setDetailsopened(bool d);
     unsigned int rating();
+    bool homeLoaded();
 
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
@@ -88,6 +92,7 @@ public:
     Q_INVOKABLE void getAppList();
     Q_INVOKABLE void getAppDetails(const QString &pkg);
     Q_INVOKABLE void ratingControl(const QString &name, const unsigned int &rating = 0);
+    Q_INVOKABLE void getHomeScreenDetails();
     Q_INVOKABLE void surveyCheck();
     Q_INVOKABLE void surveyJoin(const QString &appName, const QString &duty);
     Q_INVOKABLE void systemNotify(const QString &pkg,
@@ -107,6 +112,7 @@ private:
     bool m_erroronreply;
     bool m_detailsopened;
     unsigned int m_rating;
+    bool m_homeloaded;
     FileHandler *fh;
     PackageHandler *ph;
     QList<Application> m_fakelist;
@@ -160,6 +166,9 @@ signals:
                               const unsigned int &individual,
                               const unsigned int &total,
                               const QList<int> &rates);
+    void homeReceived(const QString &ename, const QString &epname, const unsigned int &ecount, const double &erating,
+                      const QString &dname, const QString &dpname, const unsigned int &dcount, const double &drating,
+                      const QString &rname, const QString &rpname, const unsigned int &rcount, const double &rrating);
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);

@@ -83,6 +83,9 @@ ApplicationWindow {
                               variant mm, variant mn, variant ss, variant sec,
                               variant w)
     signal appRatingDetailsReceived(variant avg, variant ind, variant tot, variant rs)
+    signal homeDetailsReceived(variant ename, variant epname, variant edc, variant er,
+                               variant dname, variant dpname, variant ddc, variant dr,
+                               variant rname, variant rpname, variant rdc, variant rr)
 
     property bool selectedAppInstalled
     property bool selectedAppInqueue
@@ -211,6 +214,12 @@ ApplicationWindow {
 
         onRatingDetailReceived: {
             appRatingDetailsReceived(average, individual, total, rates)
+        }
+
+        onHomeReceived: {
+            homeDetailsReceived(ename, epname, ecount, erating,
+                                dname, dpname, dcount, drating,
+                                rname, rpname, rcount, rrating)
         }
 
         onReplyError: {

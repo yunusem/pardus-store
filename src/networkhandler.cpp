@@ -11,6 +11,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QLocale>
 #include <QTimer>
 #include <QDebug>
 
@@ -115,6 +116,18 @@ void NetworkHandler::ratingControl(const QString &name, const unsigned int &rati
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
     reply = m_nam.post(request, QJsonDocument(data).toJson());
+    timer_put(&m_timerMap, reply, timer);
+    timer->start(m_timeoutDuration);
+}
+
+void NetworkHandler::getHomeDetails()
+{
+    QNetworkReply *reply;
+    QString url = QString(MAIN_URL).append("/api/v2/home");
+    QTimer *timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer->setSingleShot(true);
+    reply = m_nam.get(QNetworkRequest(QUrl(url)));
     timer_put(&m_timerMap, reply, timer);
     timer->start(m_timeoutDuration);
 }
@@ -237,7 +250,7 @@ void NetworkHandler::replyFinished(QNetworkReply *reply)
         qDebug() << "Status: " << status <<" Error: "<<  obj.value("error").toString();
         emit replyError("Error from server : " + obj.value("error").toString());
         return;
-    }    
+    }
 }
 
 void NetworkHandler::parseAppsResponse(const QJsonObject &obj)
@@ -351,7 +364,54 @@ void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
 
 void NetworkHandler::parseHomeResponse(const QJsonObject &obj)
 {
-    Q_UNUSED(obj);
+    if(obj.keys().contains("home")) {
+        QJsonObject content = obj.value("home").toObject();
+        QHash<QString,QString> hash;
+        QString name, ename, dname, rname;
+        QString epname, dpname, rpname;
+        unsigned int d, ed, dd, rd;
+        double r, er, dr, rr;
+        QLocale systemLocale;
+        QString locale = systemLocale.name().split("_")[0];
+
+        foreach (const QString &key, content.keys()) {
+            QJsonObject jo = content.value(key).toObject();
+            if(!jo.isEmpty() && jo.keys().contains("prettyname")) {
+                foreach (const QString &subkey, jo.value("prettyname").toObject().keys()) {
+                    hash.insert(subkey,jo.value("prettyname").toObject().value(subkey).toString());
+                }
+
+                name = jo.value("appname").toString();
+                d = jo.value("downloadcount").toInt();
+                r = jo.value("rating").toDouble();
+                if(key == "editor"){
+                    epname = hash.value("en");
+                    ename = name;
+                    ed = d;
+                    er = r;
+                }else if(key == "mostdownloaded"){
+                    dpname = hash.value("en");
+                    dname = name;
+                    dd = d;
+                    dr = r;
+                }else if(key == "mostrated"){
+                    rpname = hash.value("en");
+                    rname = name;
+                    rd = d;
+                    rr = r;
+                }
+
+                if(hash.keys().contains(locale) && hash.value(locale) != "") {
+                    if(key == "editor") epname = hash.value(locale);
+                    else if(key == "mostdownloaded") dpname = hash.value(locale);
+                    else if(key == "mostrated") rpname = hash.value(locale);
+                }
+                hash.clear();
+            }
+        }
+
+        emit homeDetailsReceived(ename,epname,ed,er,dname,dpname,dd,dr,rname,rpname,rd,rr);
+    }
 }
 
 void NetworkHandler::parseStatisticsResponse(const QJsonObject &obj)

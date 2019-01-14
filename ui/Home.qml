@@ -15,22 +15,24 @@ Rectangle {
     property string surveySelectedApp: ""
     property string choice : helper.choice
     property int selectedIndex: 0
-    property string editorsAppName: "chromium"
-    //property string mostAppName: "spotify-client"
+
     property real cellWidth: 308
     property real cellHeight: 150
 
-    property double epaRating: 3.2
-    property int epaDownloadCount: 54
-    property string epaName: "gdebi"
+    property double epaRating: 0.0
+    property int epaDownloadCount: 0
+    property string epaName: ""
+    property string epaPrettyName: ""
 
-    property double mdaRating: 4.466666666
-    property int mdaDownloadCount: 112
-    property string mdaName: "spotify-client"
+    property double mdaRating: 0.0
+    property int mdaDownloadCount: 0
+    property string mdaName: ""
+    property string mdaPrettyName: ""
 
-    property double mraRating: 4.8999999
-    property int mraDownloadCount: 11
-    property string mraName: "pidgin"
+    property double mraRating: 0.0
+    property int mraDownloadCount: 0
+    property string mraName: ""
+    property string mraPrettyName: ""
 
     signal joined()
     signal updated()
@@ -49,6 +51,23 @@ Rectangle {
         countsChanged()
     }
 
+    function homeDetailsSlot(en, epn, ec, er, dn, dpn, dc, dr, rn, rpn, rc, rr) {
+        epaName = en
+        epaPrettyName = epn
+        epaDownloadCount = ec
+        epaRating = er
+
+        mdaName = dn
+        mdaPrettyName = dpn
+        mdaDownloadCount = dc
+        mdaRating = dr
+
+        mraName = rn
+        mraPrettyName = rpn
+        mraDownloadCount = rc
+        mraRating = rr
+    }
+
     onJoined: {
         surveyBtn.enabled = true
     }
@@ -58,9 +77,11 @@ Rectangle {
     }
 
     Component.onCompleted: {
+        helper.getHomeScreenDetails();
         gotSurveyList.connect(fillSurveyList)
         surveyJoined.connect(joined)
         surveyJoinUpdated.connect(updated)
+        homeDetailsReceived.connect(homeDetailsSlot)
     }
 
 
@@ -235,9 +256,9 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     font.capitalization: Font.Capitalize
-                    text: getPrettyName(epaName)
+                    text: epaPrettyName
                     color: textColor
-                    wrapMode: Text.WordWrap
+                    fontSizeMode: Text.HorizontalFit
                     font.pointSize: editorsApp.height > 100 ? editorsApp.height / 10 : 10
                 }
 
@@ -408,9 +429,9 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     font.capitalization: Font.Capitalize
-                    text: getPrettyName(mdaName)
+                    text: mdaPrettyName
                     color: textColor
-                    wrapMode: Text.WordWrap
+                    fontSizeMode: Text.HorizontalFit
                     font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 10 : 10
                 }
 
@@ -581,9 +602,9 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     font.capitalization: Font.Capitalize
-                    text: getPrettyName(mraName)
+                    text: mraPrettyName
                     font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 10 : 10
-                    wrapMode: Text.WordWrap
+                    fontSizeMode: Text.HorizontalFit
                     color: textColor
                 }
 

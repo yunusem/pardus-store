@@ -15,7 +15,7 @@
 Helper::Helper(QObject *parent) : QObject(parent),
     p(false), c(""), v("beta"), m_corrected(false),
     m_erroronreply(false), m_detailsopened(false),
-    m_rating(0)
+    m_rating(0), m_homeloaded(true)
 {
     s = new QSettings(CONFIG_PATH, QSettings::IniFormat);
     readSettings();
@@ -30,6 +30,8 @@ Helper::Helper(QObject *parent) : QObject(parent),
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(replyError(QString)),this,SIGNAL(replyError(QString)));
     connect(nh,SIGNAL(appRatingReceived(double,uint,uint,QList<int>)),this,SIGNAL(ratingDetailReceived(double,uint,uint,QList<int>)));
+    connect(nh,SIGNAL(homeDetailsReceived(QString,QString,uint,double,QString,QString,uint,double,QString,QString,uint,double)),
+            this, SIGNAL(homeReceived(QString,QString,uint,double,QString,QString,uint,double,QString,QString,uint,double)));
     connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceivedSlot(QString,int)));
     connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));
@@ -151,6 +153,11 @@ unsigned int Helper::rating()
     return m_rating;
 }
 
+bool Helper::homeLoaded()
+{
+    return m_homeloaded;
+}
+
 void Helper::fillTheList()
 {
     for(int i = 0; i < m_fakelist.size(); i++) {
@@ -199,6 +206,11 @@ void Helper::getAppDetails(const QString &pkg)
 void Helper::ratingControl(const QString &name, const unsigned int &rating)
 {
     nh->ratingControl(name,rating);
+}
+
+void Helper::getHomeScreenDetails()
+{
+    nh->getHomeDetails();
 }
 
 void Helper::surveyCheck()
