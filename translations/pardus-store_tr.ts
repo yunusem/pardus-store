@@ -15,37 +15,37 @@
     </message>
     <message>
         <location filename="../ui/ApplicationDelegate.qml" line="81"/>
-        <location filename="../ui/ApplicationDelegate.qml" line="355"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="365"/>
         <source>downloading</source>
         <translation>indiriliyor</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="374"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="384"/>
         <source>GET</source>
         <translation>KUR</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="388"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="398"/>
         <source>INSTALL</source>
         <translation>YÜKLE</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="426"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="436"/>
         <source>REMOVE</source>
         <translation>KALDIR</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="485"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="495"/>
         <source>OPEN</source>
         <translation>AÇ</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="551"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="561"/>
         <source>Non Free</source>
         <translation>Özgür Değil</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="562"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="572"/>
         <source>Click for details</source>
         <translation>Detaylar için tıklayınız</translation>
     </message>
@@ -58,7 +58,7 @@
         <translation type="vanished">kur</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="540"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="550"/>
         <source>Download size</source>
         <translation>İndirme boyutu</translation>
     </message>
@@ -355,38 +355,55 @@
         <translation type="vanished">Pardus Mağaza&apos; ya hoş geldiniz</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="122"/>
+        <location filename="../ui/Home.qml" line="145"/>
         <source>welcome</source>
         <translation>hoş geldiniz</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="162"/>
-        <location filename="../ui/Home.qml" line="335"/>
-        <location filename="../ui/Home.qml" line="508"/>
+        <location filename="../ui/Home.qml" line="186"/>
+        <location filename="../ui/Home.qml" line="360"/>
+        <location filename="../ui/Home.qml" line="535"/>
         <source>all</source>
         <translation>tümü</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="164"/>
-        <location filename="../ui/Home.qml" line="337"/>
-        <location filename="../ui/Home.qml" line="510"/>
+        <location filename="../ui/Home.qml" line="188"/>
+        <location filename="../ui/Home.qml" line="362"/>
+        <location filename="../ui/Home.qml" line="537"/>
         <source>categories</source>
         <translation>kategoriler</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="218"/>
+        <location filename="../ui/Home.qml" line="243"/>
         <source>Editor&apos;s Pick</source>
         <translation>Editörün Seçimi</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="391"/>
+        <location filename="../ui/Home.qml" line="262"/>
+        <location filename="../ui/Home.qml" line="437"/>
+        <location filename="../ui/Home.qml" line="612"/>
+        <source>no valid data found</source>
+        <translation>geçerli veri bulunamadı</translation>
+    </message>
+    <message>
+        <location filename="../ui/Home.qml" line="417"/>
         <source>Most Downloaded App</source>
         <translation>En Çok İndirilen Uygulama</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="564"/>
+        <location filename="../ui/Home.qml" line="592"/>
         <source>Most Rated App</source>
         <translation>Oylaması En Yüksek Uygulama</translation>
+    </message>
+    <message>
+        <location filename="../ui/Home.qml" line="789"/>
+        <source>dynamic survey</source>
+        <translation>dinamik anket</translation>
+    </message>
+    <message>
+        <location filename="../ui/Home.qml" line="808"/>
+        <source>Upgrading</source>
+        <translation>Güncelleniyor</translation>
     </message>
     <message>
         <source>Source Code</source>
@@ -405,23 +422,21 @@
         <translation type="vanished">Düşüncelerinizi şurda belirtin</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="760"/>
         <source>application survey</source>
-        <translation>uygulama anketi</translation>
+        <translation type="vanished">uygulama anketi</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="778"/>
         <source>Which application should be added to the store in next week ?</source>
-        <translation>Gelecek hafta mağazaya hangi uygulama eklenmeli ?</translation>
+        <translation type="vanished">Gelecek hafta mağazaya hangi uygulama eklenmeli ?</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="889"/>
-        <location filename="../ui/Home.qml" line="897"/>
+        <location filename="../ui/Home.qml" line="920"/>
+        <location filename="../ui/Home.qml" line="928"/>
         <source>send</source>
         <translation>gönder</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="889"/>
+        <location filename="../ui/Home.qml" line="920"/>
         <source>update</source>
         <translation>güncelle</translation>
     </message>
@@ -611,7 +626,7 @@
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../ui/SplashScreen.qml" line="108"/>
+        <location filename="../ui/SplashScreen.qml" line="111"/>
         <source>Updating package manager cache.</source>
         <translation>Paket yöneticisi ön belleği güncelleniyor.</translation>
     </message>
@@ -682,8 +697,8 @@
     <name>main</name>
     <message>
         <location filename="../ui/main.qml" line="14"/>
-        <location filename="../ui/main.qml" line="163"/>
-        <location filename="../ui/main.qml" line="413"/>
+        <location filename="../ui/main.qml" line="166"/>
+        <location filename="../ui/main.qml" line="422"/>
         <source>Store</source>
         <translation>Mağaza</translation>
     </message>
@@ -701,8 +716,8 @@
     <message>
         <location filename="../ui/main.qml" line="30"/>
         <location filename="../ui/main.qml" line="39"/>
-        <location filename="../ui/main.qml" line="429"/>
-        <location filename="../ui/main.qml" line="446"/>
+        <location filename="../ui/main.qml" line="438"/>
+        <location filename="../ui/main.qml" line="455"/>
         <source>all</source>
         <translation>tümü</translation>
     </message>
@@ -772,7 +787,7 @@
         <translation>ayarlar</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="256"/>
+        <location filename="../ui/main.qml" line="265"/>
         <source>Correcting of system package manager sources list is done. You can now restart Pardus Store.</source>
         <translation>Sistem paketi yöneticisi kaynak listesi düzeltilmesi tamamlandı. Artık Pardus Mağaza&apos; yı yeniden başlatabilirsiniz.</translation>
     </message>
@@ -781,7 +796,7 @@
         <translation type="vanished">Paket yöneticisi ön belleği güncelleniyor.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="461"/>
+        <location filename="../ui/main.qml" line="470"/>
         <source>Fetching application list.</source>
         <translation>Uygulama listesi getiriliyor.</translation>
     </message>
@@ -790,12 +805,12 @@
         <translation type="vanished">kuyruk</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="151"/>
+        <location filename="../ui/main.qml" line="154"/>
         <source>removed</source>
         <translation>kaldırıldı</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="153"/>
+        <location filename="../ui/main.qml" line="156"/>
         <source>installed</source>
         <translation>kuruldu</translation>
     </message>
@@ -804,17 +819,17 @@
         <translation type="vanished"> </translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="161"/>
+        <location filename="../ui/main.qml" line="164"/>
         <source>Package process is complete</source>
         <translation>Paket süreci tamamlandı</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="180"/>
+        <location filename="../ui/main.qml" line="183"/>
         <source>Another application is using package manager. Please wait or discard the other application and try again.</source>
         <translation>Başka bir uygulama paket yöneticisini kullanıyor. Lütfen bekleyiniz ya da diğer uygulamayı kapatıp yeniden deneyiniz.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="183"/>
+        <location filename="../ui/main.qml" line="186"/>
         <source>Pardus Store should be run with root privileges</source>
         <translation>Pardus Mağaza root yetkileri ile çalıştırılmalıdır</translation>
     </message>
@@ -823,80 +838,80 @@
         <translation type="obsolete">Pardus Mağaza paket yöneticisi için gerekli kaynakların bazılarının bozuk olduğunu tespit etti.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="197"/>
-        <location filename="../ui/main.qml" line="202"/>
-        <location filename="../ui/main.qml" line="348"/>
+        <location filename="../ui/main.qml" line="200"/>
+        <location filename="../ui/main.qml" line="205"/>
+        <location filename="../ui/main.qml" line="357"/>
         <source>downloading</source>
         <translation>indiriliyor</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="220"/>
+        <location filename="../ui/main.qml" line="229"/>
         <source>Check your internet connection</source>
         <translation>İnternet bağlantınızı kontrol ediniz</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="226"/>
+        <location filename="../ui/main.qml" line="235"/>
         <source>Gathering local details.</source>
         <translation>Yerel detaylar toplanıyor.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="230"/>
+        <location filename="../ui/main.qml" line="239"/>
         <source>Fetching survey data.</source>
         <translation>Anket verileri getiriliyor.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="237"/>
+        <location filename="../ui/main.qml" line="246"/>
         <source>Done.</source>
         <translation>Tamamlandı.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="196"/>
-        <location filename="../ui/main.qml" line="345"/>
+        <location filename="../ui/main.qml" line="199"/>
+        <location filename="../ui/main.qml" line="354"/>
         <source>removing</source>
         <translation>kaldırılıyor</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="185"/>
+        <location filename="../ui/main.qml" line="188"/>
         <source>Pardus Store detected some broken sources for the package manager.</source>
         <translation>Pardus Mağaza paket yöneticisinin kullandığı kaynakların bazılarının bozuk olduğunu tespit etti.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="185"/>
+        <location filename="../ui/main.qml" line="188"/>
         <source>Please fix it manually or use Pardus Store&apos;s settings.</source>
         <translation>Lütfen elle düzeltin ya da Pardus Mağazanın ayarlarını kullanın.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="198"/>
+        <location filename="../ui/main.qml" line="201"/>
         <source>installing</source>
         <translation>kuruluyor</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="218"/>
+        <location filename="../ui/main.qml" line="227"/>
         <source>Reason</source>
         <translation>Sebep</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="219"/>
+        <location filename="../ui/main.qml" line="228"/>
         <source>Suggestion</source>
         <translation>Öneri</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="255"/>
+        <location filename="../ui/main.qml" line="264"/>
         <source>Informing</source>
         <translation>Bilgilendirme</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="263"/>
+        <location filename="../ui/main.qml" line="272"/>
         <source>Show this result to the maintainer.</source>
         <translation>Bu sonucu geliştiriciye bildirin.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="412"/>
+        <location filename="../ui/main.qml" line="421"/>
         <source>Warning!</source>
         <translation>Uyarı!</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="413"/>
+        <location filename="../ui/main.qml" line="422"/>
         <source>can not be closed while a process is ongoing.</source>
         <translation>bir süreç devam ederken kapatılamaz.</translation>
     </message>

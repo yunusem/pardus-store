@@ -45,8 +45,10 @@ Rectangle {
             surveyList.push(sl[i].split(" ")[0].toString())
             surveyCounts.push(sl[i].split(" ")[1])
         }
-        if (surveyRepeater.model[0] !== surveyList[0]) {
-            surveyRepeater.model = surveyList
+        if(surveyRepeater.model) {
+            if (surveyRepeater.model[0] !== surveyList[0]) {
+                surveyRepeater.model = surveyList
+            }
         }
         countsChanged()
     }
@@ -164,7 +166,7 @@ Rectangle {
             id: editorsApp
             Material.elevation: editorsAppMa.containsMouse ? 10 : 5
             Material.background: backgroundColor
-            height: (survey.height - 24) / 3
+            height: (root.height - banner.height - 60) / 3
             width: height * 2.479740413
             anchors {
                 top: parent.top
@@ -180,11 +182,13 @@ Rectangle {
                 height: parent.height + 24
 
                 onClicked: {
-                    selectedCategory = qsTr("all")
-                    expanded = true
-                    selectedMenu = qsTr("categories")
-                    forceActiveFocus()
-                    applicationModel.setFilterString(epaName, true)
+                    if(epaPrettyName !== "") {
+                        selectedCategory = qsTr("all")
+                        expanded = true
+                        selectedMenu = qsTr("categories")
+                        forceActiveFocus()
+                        applicationModel.setFilterString(epaName, true)
+                    }
                 }
                 onPressed: {
                     if(containsMouse) {
@@ -237,7 +241,6 @@ Rectangle {
 
                 color: accentColor
                 text: qsTr("Editor's Pick")
-
             }
 
             Column {
@@ -256,7 +259,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     font.capitalization: Font.Capitalize
-                    text: epaPrettyName
+                    text: epaPrettyName === "" ? qsTr("no valid data found") : epaPrettyName
                     color: textColor
                     fontSizeMode: Text.HorizontalFit
                     font.pointSize: editorsApp.height > 100 ? editorsApp.height / 10 : 10
@@ -337,7 +340,7 @@ Rectangle {
             id: mostDownloadedApp
             Material.elevation: mostDownloadedAppMa.containsMouse ? 10 : 5
             Material.background: backgroundColor
-            height: (survey.height - 24) / 3
+            height: (root.height - banner.height - 60) / 3
             width: height * 2.479740413
             anchors {
                 top: editorsApp.bottom
@@ -353,11 +356,13 @@ Rectangle {
                 height: parent.height + 24
 
                 onClicked: {
-                    selectedCategory = qsTr("all")
-                    expanded = true
-                    selectedMenu = qsTr("categories")
-                    forceActiveFocus()
-                    applicationModel.setFilterString(mdaName, true)
+                    if(mdaPrettyName !== "") {
+                        selectedCategory = qsTr("all")
+                        expanded = true
+                        selectedMenu = qsTr("categories")
+                        forceActiveFocus()
+                        applicationModel.setFilterString(mdaName, true)
+                    }
                 }
                 onPressed: {
                     if(containsMouse) {
@@ -429,7 +434,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     font.capitalization: Font.Capitalize
-                    text: mdaPrettyName
+                    text: mdaPrettyName  === "" ? qsTr("no valid data found") : mdaPrettyName
                     color: textColor
                     fontSizeMode: Text.HorizontalFit
                     font.pointSize: mostDownloadedApp.height > 100 ? mostDownloadedApp.height / 10 : 10
@@ -510,7 +515,7 @@ Rectangle {
             id: mostRatedApp
             Material.elevation: mostRatedAppMa.containsMouse ? 10 : 5
             Material.background: backgroundColor
-            height: (survey.height - 24) / 3
+            height: (root.height - banner.height - 60) / 3
             width: height * 2.479740413
             anchors {
                 top: mostDownloadedApp.bottom
@@ -526,11 +531,13 @@ Rectangle {
                 height: parent.height + 24
 
                 onClicked: {
-                    selectedCategory = qsTr("all")
-                    expanded = true
-                    selectedMenu = qsTr("categories")
-                    forceActiveFocus()
-                    applicationModel.setFilterString(mraName, true)
+                    if(mraPrettyName  !== "") {
+                        selectedCategory = qsTr("all")
+                        expanded = true
+                        selectedMenu = qsTr("categories")
+                        forceActiveFocus()
+                        applicationModel.setFilterString(mraName, true)
+                    }
                 }
                 onPressed: {
                     if(containsMouse) {
@@ -602,7 +609,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     font.capitalization: Font.Capitalize
-                    text: mraPrettyName
+                    text: mraPrettyName  === "" ? qsTr("no valid data found") : mraPrettyName
                     font.pointSize: mostRatedApp.height > 100 ? mostRatedApp.height / 10 : 10
                     fontSizeMode: Text.HorizontalFit
                     color: textColor
@@ -778,7 +785,8 @@ Rectangle {
                     anchors {
                         horizontalCenter: parent.horizontalCenter
                     }
-                    text: qsTr("application survey")
+                    //text: qsTr("application survey")
+                    text: qsTr("dynamic survey")
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.capitalization: Font.Capitalize
@@ -796,7 +804,8 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                     }
                     Material.theme: dark ? Material.Dark : Material.Light
-                    text: qsTr("Which application should be added to the store in next week ?")
+                    //text: qsTr("Which application should be added to the store in next week ?")
+                    text: qsTr("Upgrading") + " ..."
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
@@ -817,7 +826,7 @@ Rectangle {
 
                     Repeater {
                         id: surveyRepeater
-                        model: surveyList
+                        //model: surveyList
                         Row {
                             spacing: 6
                             Label {
@@ -900,6 +909,7 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                         bottom: parent.bottom
                     }
+                    enabled: false
                     Material.theme: dark ? Material.Dark : Material.Light
                     Material.background: primaryColor
                     width: surveyBtnLabel.width + 24
