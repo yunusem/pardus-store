@@ -103,7 +103,7 @@ void Helper::readSettings()
     setAnimate(s->value("animate", true).toBool());
     setUpdate(s->value("update", true).toBool());
     setRatio(s->value("ratio", 3).toUInt());
-    setUsedark(s->value("dark-theme", false).toBool());
+    setUsedark(s->value("dark-theme", true).toBool());
 }
 
 void Helper::writeSettings(const QString &key, const QVariant &value)
