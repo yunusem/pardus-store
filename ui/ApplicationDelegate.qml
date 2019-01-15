@@ -536,7 +536,7 @@ Item {
             visible: opacity > 0.0
             Behavior on opacity {
                 enabled: animate
-                NumberAnimation { duration: animationDuration / 2 }
+                NumberAnimation { duration: animationDuration / 3 }
             }
 
             Column {
@@ -594,14 +594,12 @@ Item {
             height: parent.height - appNameLabelContainer.height - 3
             width: parent.width * 3 / 5
             anchors {
-                //horizontalCenter: parent.horizontalCenter
-                //horizontalCenterOffset: delegateMa.containsMouse ? - (parent.width - width) / 2 : 0
                 bottom: parent.bottom
                 left: parent.left
                 leftMargin: delegateMa.containsMouse ? 0 : (parent.width - width) / 2
             }
             color: "transparent"
-            Behavior on anchors.horizontalCenterOffset {
+            Behavior on anchors.leftMargin {
                 enabled: animate
                 NumberAnimation {
                     duration: animationDuration

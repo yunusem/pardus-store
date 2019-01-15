@@ -18,6 +18,18 @@ Page {
 
         color: "transparent"
 
+        Label {
+            id: notFoundLabel
+            font.pointSize: 15
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            text: qsTr("no match found")
+            font.capitalization: Font.Capitalize
+            Material.foreground: accentColor
+            Material.theme: dark ? Material.Dark : Material.Light
+            anchors.centerIn: parent
+            visible: gridView.count === 0
+        }
 
         GridView {
             id: gridView

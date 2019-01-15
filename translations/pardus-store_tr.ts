@@ -40,12 +40,12 @@
         <translation>AÇ</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="559"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="566"/>
         <source>Non Free</source>
         <translation>Özgür Değil</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="570"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="582"/>
         <source>Click for details</source>
         <translation>Detaylar için tıklayınız</translation>
     </message>
@@ -58,7 +58,7 @@
         <translation type="vanished">kur</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="548"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="555"/>
         <source>Download size</source>
         <translation>İndirme boyutu</translation>
     </message>
@@ -306,6 +306,11 @@
         <source>all</source>
         <translation type="vanished">tümü</translation>
     </message>
+    <message>
+        <location filename="../ui/ApplicationList.qml" line="26"/>
+        <source>no match found</source>
+        <translation>eşleşme bulunamadı</translation>
+    </message>
 </context>
 <context>
     <name>BottomDock</name>
@@ -361,47 +366,47 @@
     </message>
     <message>
         <location filename="../ui/Home.qml" line="186"/>
-        <location filename="../ui/Home.qml" line="360"/>
-        <location filename="../ui/Home.qml" line="535"/>
+        <location filename="../ui/Home.qml" line="358"/>
+        <location filename="../ui/Home.qml" line="531"/>
         <source>all</source>
         <translation>tümü</translation>
     </message>
     <message>
         <location filename="../ui/Home.qml" line="188"/>
-        <location filename="../ui/Home.qml" line="362"/>
-        <location filename="../ui/Home.qml" line="537"/>
+        <location filename="../ui/Home.qml" line="360"/>
+        <location filename="../ui/Home.qml" line="533"/>
         <source>categories</source>
         <translation>kategoriler</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="243"/>
+        <location filename="../ui/Home.qml" line="242"/>
         <source>Editor&apos;s Pick</source>
         <translation>Editörün Seçimi</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="262"/>
-        <location filename="../ui/Home.qml" line="437"/>
-        <location filename="../ui/Home.qml" line="612"/>
+        <location filename="../ui/Home.qml" line="260"/>
+        <location filename="../ui/Home.qml" line="433"/>
+        <location filename="../ui/Home.qml" line="606"/>
         <source>no valid data found</source>
         <translation>geçerli veri bulunamadı</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="417"/>
+        <location filename="../ui/Home.qml" line="414"/>
         <source>Most Downloaded App</source>
         <translation>En Çok İndirilen Uygulama</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="592"/>
+        <location filename="../ui/Home.qml" line="587"/>
         <source>Most Rated App</source>
         <translation>Oylaması En Yüksek Uygulama</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="789"/>
+        <location filename="../ui/Home.qml" line="783"/>
         <source>dynamic survey</source>
         <translation>dinamik anket</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="808"/>
+        <location filename="../ui/Home.qml" line="802"/>
         <source>Upgrading</source>
         <translation>Güncelleniyor</translation>
     </message>
@@ -430,13 +435,13 @@
         <translation type="vanished">Gelecek hafta mağazaya hangi uygulama eklenmeli ?</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="920"/>
-        <location filename="../ui/Home.qml" line="928"/>
+        <location filename="../ui/Home.qml" line="914"/>
+        <location filename="../ui/Home.qml" line="922"/>
         <source>send</source>
         <translation>gönder</translation>
     </message>
     <message>
-        <location filename="../ui/Home.qml" line="920"/>
+        <location filename="../ui/Home.qml" line="914"/>
         <source>update</source>
         <translation>güncelle</translation>
     </message>
@@ -516,7 +521,7 @@
         <translation>kategoriler</translation>
     </message>
     <message>
-        <location filename="../ui/SearchBar.qml" line="121"/>
+        <location filename="../ui/SearchBar.qml" line="122"/>
         <source>Search an application</source>
         <translation>Bir uygulama arayın</translation>
     </message>

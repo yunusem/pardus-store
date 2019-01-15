@@ -59,6 +59,7 @@ Item {
                         selectedMenu = qsTr("categories")
                         selectedCategory = qsTr("all")
                         expanded = true
+                        applicationModel.setFilterString(searchText.text.trim(), true)
                     }
 
                 }
