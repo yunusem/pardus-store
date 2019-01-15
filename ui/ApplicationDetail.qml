@@ -403,10 +403,11 @@ Rectangle {
 
             Pane {
                 id: disclamer
+                property bool hover : false
                 visible: appNonfree
                 clip: true
-                width: disclamerMa.containsMouse ? 500 : 150
-                height: disclamerMa.containsMouse ? parent.height : disclamerText.height + 24
+                width: hover ? 500 : 150
+                height: hover ? parent.height : disclamerText.height + 24
                 Material.background: accentColor
                 Material.elevation: 3
                 anchors {
@@ -421,6 +422,23 @@ Rectangle {
                     height: parent.height + 24
                     anchors.centerIn: parent
                     hoverEnabled: true
+                    onContainsMouseChanged: {
+                        if(containsMouse) {
+                            disclamer.hover = containsMouse
+                            disctimer.stop()
+                        } else {
+                            disctimer.start()
+                        }
+                    }
+                }
+
+                Timer {
+                    id: disctimer
+                    interval: 800
+                    repeat: false
+                    onTriggered: {
+                        disclamer.hover = false
+                    }
                 }
 
                 Behavior on height {
@@ -435,7 +453,7 @@ Rectangle {
                     enabled: animate
                     NumberAnimation {
                         easing.type: Easing.OutExpo
-                        duration: 50
+                        duration: 200
                     }
                 }
 
@@ -443,12 +461,11 @@ Rectangle {
                     id: disclamerText
                     width: parent.width
                     Material.foreground: oppositeTextColor
-                    text: qsTr("Disclaimer") + (disclamerMa.containsMouse ? (" : " +
-                                                                             qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
+                    text: qsTr("Disclaimer") + (disclamer.hover ? (" : " +
+                                                                   qsTr("This application served from Pardus non-free package repositories, so that the OS has nothing to do with the health of the application. Install with caution.")) : " !")
 
                     verticalAlignment: Text.AlignVCenter
                     fontSizeMode: Text.HorizontalFit
-
                     wrapMode: Text.WordWrap
                     anchors.centerIn: parent
                 }
