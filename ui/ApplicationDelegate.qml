@@ -69,16 +69,16 @@ Item {
 
     onConditionChanged: {
         if(processingPackageName === name) {
-            if(condition === qsTr("removing")) {
+            if(condition === qsTr("Removing")) {
                 processBarItem.colorCircle = "#F44336" //Red
                 stopButton.enabled = false
                 stopButton.visible = false
-            } else if(condition === qsTr("installing")) {
+            } else if(condition === qsTr("Installing")) {
                 processBarItem.colorCircle = "#4CAF50" //Green
                 stopButton.enabled = false
                 stopButton.visible = true
 
-            } else if(condition === qsTr("downloading")) {
+            } else if(condition === qsTr("Downloading")) {
                 processBarItem.colorCircle = "#03A9F4" //Blue
                 stopButton.enabled = true
                 stopButton.visible = true
@@ -362,7 +362,7 @@ Item {
                         inqueue = false
                         delegatestate = installed ? "installed" : "get"
                     } else if (delegatestate === "process") {
-                        if(condition === qsTr("downloading")) {
+                        if(condition === qsTr("Downloading")) {
                             terminateProcessCalled = true
                             if(helper.terminate()) {
                                 inqueue = false
@@ -542,6 +542,7 @@ Item {
             Column {
                 anchors {
                     top: parent.top
+                    topMargin: 12
                     left: parent.left
                     right: parent.right
                     bottom: detailsLabel.top

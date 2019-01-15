@@ -351,10 +351,10 @@ ApplicationWindow {
                 processingPackageName = appName
                 isThereOnGoingProcess = true
                 if (duty === "true") {
-                    processingCondition = qsTr("removing")
+                    processingCondition = qsTr("Removing")
                     helper.remove(appName)
                 } else {
-                    processingCondition = qsTr("downloading")
+                    processingCondition = qsTr("Downloading")
                     helper.install(appName)
                 }
             }

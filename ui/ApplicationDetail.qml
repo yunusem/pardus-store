@@ -183,6 +183,8 @@ Rectangle {
         }
 
 
+
+
         Image {
             id:appBannerIcon
             height: appBanner.height
@@ -495,6 +497,86 @@ Rectangle {
                 anchors {
                     verticalCenter: parent.verticalCenter
                     right: parent.right
+                }
+
+                ProgressBar {
+                    id: processButtonProgressBar
+                    property int percent: processingPercent
+                    property string condition: processingCondition
+                    property string progressColor
+
+                    width: parent.width
+                    height: parent.height
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        verticalCenterOffset: 6
+                    }
+
+                    to: 100
+                    background: Rectangle {
+                        implicitHeight: parent.height - 12
+                        implicitWidth: parent.width
+                        radius: 2
+                        color: backgroundColor
+                    }
+
+                    contentItem: Rectangle {
+                        implicitWidth: parent.width
+                        implicitHeight: parent.height
+                        color: backgroundColor
+                        Rectangle {
+                            width: processButtonProgressBar.visualPosition * parent.width
+                            height: parent.height - 12
+                            radius: 2
+                            color: processButtonProgressBar.progressColor
+                        }
+
+                        Label {
+                            font.pointSize: 12
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            color: dark ? "#FAFAFA" : "#111111"
+                            visible: processButtonProgressBar.value > 0
+                            text: "%" + processButtonProgressBar.value.toFixed(0)
+                            anchors {
+                                verticalCenter: parent.verticalCenter
+                                horizontalCenter: parent.horizontalCenter
+                                verticalCenterOffset: -6
+                            }
+                        }
+                    }
+
+                    onPercentChanged: {
+                        if(selectedAppName === processingPackageName) {
+                            value = percent
+                        }
+                    }
+
+                    onConditionChanged: {
+                        if(processingPackageName === selectedAppName) {
+                            if(condition === qsTr("Removing")) {
+                                progressColor = "#F44336" //Red
+                            } else if(condition === qsTr("Installing")) {
+                                progressColor = "#4CAF50" //Green
+                            } else if(condition === qsTr("Downloading")) {
+                                progressColor = "#03A9F4" //Blue
+                            }
+                        }
+                    }
+
+                    Behavior on value {
+                        enabled: animate
+                        NumberAnimation {
+                            duration: 100
+                        }
+                    }
+
+                    visible: (selectedAppName === processingPackageName) && isThereOnGoingProcess
+                    onVisibleChanged: {
+                        if(!visible) {
+                            value = 0
+                        }
+                    }
                 }
 
                 onClicked: {
@@ -965,6 +1047,8 @@ Rectangle {
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
                                 text: license
+                                width: parent.width
+                                wrapMode: Text.WordWrap
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
                                 color: (licenseMa.containsMouse && copyright != "") ? accentColor : textColor
