@@ -222,11 +222,13 @@ Rectangle {
                 Label {
                     id: appNameLabel
                     text: selectedAppPrettyName
+                    width: parent.width - 12
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignLeft
                     font.capitalization: Font.Capitalize
                     font.bold: true
                     font.pointSize:24
+                    fontSizeMode: Text.HorizontalFit
                     Material.foreground: textColor
                 }
 
