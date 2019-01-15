@@ -8,8 +8,8 @@ import ps.helper 1.0
 
 ApplicationWindow {
     id: main
-    minimumWidth: 1150
-    minimumHeight: minimumWidth * 3 / 5
+    minimumWidth: 1024
+    minimumHeight: 711
     visible: true
     title: "Pardus" + " " + qsTr("Store")
     color: "transparent"
@@ -196,13 +196,13 @@ ApplicationWindow {
 
         onProcessingStatus: {
             if(condition === "pmstatus") {
-                if(processingCondition === qsTr("removing")) {
-                } else if(processingCondition === qsTr("downloading")) {
-                    processingCondition = qsTr("installing")
+                if(processingCondition === qsTr("Removing")) {
+                } else if(processingCondition === qsTr("Downloading")) {
+                    processingCondition = qsTr("Installing")
                 }
 
             } else if (condition === "dlstatus") {
-                processingCondition = qsTr("downloading")
+                processingCondition = qsTr("Downloading")
             }
             processingPercent = percent
         }

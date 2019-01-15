@@ -40,12 +40,12 @@
         <translation>AÇ</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="561"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="559"/>
         <source>Non Free</source>
         <translation>Özgür Değil</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="572"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="570"/>
         <source>Click for details</source>
         <translation>Detaylar için tıklayınız</translation>
     </message>
@@ -58,7 +58,7 @@
         <translation type="vanished">kur</translation>
     </message>
     <message>
-        <location filename="../ui/ApplicationDelegate.qml" line="550"/>
+        <location filename="../ui/ApplicationDelegate.qml" line="548"/>
         <source>Download size</source>
         <translation>İndirme boyutu</translation>
     </message>
@@ -838,8 +838,6 @@
         <translation type="obsolete">Pardus Mağaza paket yöneticisi için gerekli kaynakların bazılarının bozuk olduğunu tespit etti.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="200"/>
-        <location filename="../ui/main.qml" line="205"/>
         <location filename="../ui/main.qml" line="357"/>
         <source>downloading</source>
         <translation>indiriliyor</translation>
@@ -848,6 +846,22 @@
         <location filename="../ui/main.qml" line="229"/>
         <source>Check your internet connection</source>
         <translation>İnternet bağlantınızı kontrol ediniz</translation>
+    </message>
+    <message>
+        <location filename="../ui/main.qml" line="199"/>
+        <source>Removing</source>
+        <translation>Kaldırılıyor</translation>
+    </message>
+    <message>
+        <location filename="../ui/main.qml" line="200"/>
+        <location filename="../ui/main.qml" line="205"/>
+        <source>Downloading</source>
+        <translation>İndiriliyor</translation>
+    </message>
+    <message>
+        <location filename="../ui/main.qml" line="201"/>
+        <source>Installing</source>
+        <translation>Kuruluyor</translation>
     </message>
     <message>
         <location filename="../ui/main.qml" line="235"/>
@@ -865,7 +879,6 @@
         <translation>Tamamlandı.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="199"/>
         <location filename="../ui/main.qml" line="354"/>
         <source>removing</source>
         <translation>kaldırılıyor</translation>
@@ -881,9 +894,8 @@
         <translation>Lütfen elle düzeltin ya da Pardus Mağazanın ayarlarını kullanın.</translation>
     </message>
     <message>
-        <location filename="../ui/main.qml" line="201"/>
         <source>installing</source>
-        <translation>kuruluyor</translation>
+        <translation type="vanished">kuruluyor</translation>
     </message>
     <message>
         <location filename="../ui/main.qml" line="227"/>

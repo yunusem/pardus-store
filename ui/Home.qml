@@ -167,7 +167,7 @@ Rectangle {
             Material.elevation: editorsAppMa.containsMouse ? 10 : 5
             Material.background: backgroundColor
             height: (root.height - banner.height - 60) / 3
-            width: height * 2.479740413
+            width: height * 2.45
             anchors {
                 top: parent.top
                 //topMargin: 12
@@ -231,11 +231,10 @@ Rectangle {
                 id: epaTitle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                font.pointSize: parent.height > 100 ? parent.height / 12 : 10
+                font.pointSize: parent.height > 100 ? parent.height / 13 : 10
                 anchors {
                     top: parent.top
                     left: editorsAppImage.right
-                    leftMargin: 12
                     right: parent.right
                 }
 
@@ -249,7 +248,6 @@ Rectangle {
                     top: epaTitle.bottom
                     topMargin: 12
                     left: editorsAppImage.right
-                    leftMargin: 12
                     right: parent.right
                     bottom: parent.bottom
                 }
@@ -341,7 +339,7 @@ Rectangle {
             Material.elevation: mostDownloadedAppMa.containsMouse ? 10 : 5
             Material.background: backgroundColor
             height: (root.height - banner.height - 60) / 3
-            width: height * 2.479740413
+            width: height * 2.45
             anchors {
                 top: editorsApp.bottom
                 topMargin: 12
@@ -405,11 +403,10 @@ Rectangle {
                 id: mdaTitle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                font.pointSize: parent.height > 100 ? parent.height / 12 : 10
+                font.pointSize: parent.height > 100 ? parent.height / 13 : 10
                 anchors {
                     top: parent.top
                     left: mostDownloadedImage.right
-                    leftMargin: 12
                     right: parent.right
                 }
 
@@ -424,7 +421,6 @@ Rectangle {
                     top: mdaTitle.bottom
                     topMargin: 12
                     left: mostDownloadedImage.right
-                    leftMargin: 12
                     right: parent.right
                     bottom: parent.bottom
                 }
@@ -516,7 +512,7 @@ Rectangle {
             Material.elevation: mostRatedAppMa.containsMouse ? 10 : 5
             Material.background: backgroundColor
             height: (root.height - banner.height - 60) / 3
-            width: height * 2.479740413
+            width: height * 2.45
             anchors {
                 top: mostDownloadedApp.bottom
                 topMargin: 12
@@ -580,11 +576,10 @@ Rectangle {
                 id: mraTitle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                font.pointSize: parent.height > 100 ? parent.height / 12 : 10
+                font.pointSize: parent.height > 100 ? parent.height / 13 : 10
                 anchors {
                     top: parent.top
                     left: mostRatedAppImage.right
-                    leftMargin: 12
                     right: parent.right
                 }
 
@@ -599,7 +594,6 @@ Rectangle {
                     top: mraTitle.bottom
                     topMargin: 12
                     left: mostRatedAppImage.right
-                    leftMargin: 12
                     right: parent.right
                     bottom: parent.bottom
                 }
@@ -766,7 +760,7 @@ Rectangle {
     Pane {
         id: survey
         height: parent.height - banner.height - 36
-        width: 450
+        width: banner.width > 900 ? 450 : 289.927
         Material.elevation: 3
         Material.background: backgroundColor
         anchors {

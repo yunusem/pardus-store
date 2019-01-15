@@ -536,13 +536,18 @@ Item {
             visible: opacity > 0.0
             Behavior on opacity {
                 enabled: animate
-                NumberAnimation { duration: animationDuration }
+                NumberAnimation { duration: animationDuration / 2 }
             }
 
             Column {
-                anchors.centerIn: parent
-                spacing: 12
-                width: parent.width
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    bottom: detailsLabel.top
+                    bottomMargin: 3
+                }
+
                 Label {
                     id: downloadSizeLabel
                     width: parent.width
@@ -551,7 +556,7 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
-                    font.pointSize: detailContainer.width / 12
+                    font.pointSize: detailContainer.height / 13
                 }
 
                 Label {
@@ -562,34 +567,38 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
-                    font.pointSize: detailContainer.width / 12
-                }
-
-                Label {
-                    id: detailsLabel
-                    width: parent.width
-                    Material.foreground: detailTextHovered ? accentColor : textColor
-                    text: qsTr("Click for details")
-                    font.underline: detailTextHovered
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    wrapMode: Text.WordWrap
-                    font.pointSize: detailContainer.width / 12
+                    font.pointSize: detailContainer.height / 13
                 }
             }
 
+            Label {
+                id: detailsLabel
+                width: parent.width
+                anchors {
+                    bottom: parent.bottom
+                }
 
+                Material.foreground: detailTextHovered ? accentColor : textColor
+                text: qsTr("Click for details")
+                font.underline: detailTextHovered
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                font.pointSize: detailContainer.height / 13
+            }
 
         }
 
         Rectangle {
             id: appIconContainer
             height: parent.height - appNameLabelContainer.height - 3
-            width: height
+            width: parent.width * 3 / 5
             anchors {
-                horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: delegateMa.containsMouse ? - (parent.width - width) / 2 : 0
+                //horizontalCenter: parent.horizontalCenter
+                //horizontalCenterOffset: delegateMa.containsMouse ? - (parent.width - width) / 2 : 0
                 bottom: parent.bottom
+                left: parent.left
+                leftMargin: delegateMa.containsMouse ? 0 : (parent.width - width) / 2
             }
             color: "transparent"
             Behavior on anchors.horizontalCenterOffset {
@@ -606,8 +615,8 @@ Item {
                 //asynchronous: true
                 source: "image://application/" + getCorrectName(name)
                 sourceSize {
-                    width: parent.width
-                    height: parent.height
+                    width: parent.width > parent.height ? parent.height : parent.width
+                    height: parent.width > parent.height ? parent.height : parent.width
                 }
                 smooth: true
             }
