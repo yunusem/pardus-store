@@ -33,6 +33,11 @@ QString Application::downloadsize() const
 
 QString Application::category() const
 {
+    return m_category.value("en");
+}
+
+QString Application::categoryLocal() const
+{
     QLocale systemLocale;
     QString locale = systemLocale.name().split("_")[0];
     QString category = m_category.value("en");

@@ -171,6 +171,7 @@ ApplicationWindow {
                 }
             }
         }
+
         onProcessingFinishedWithError: {
             processQueue.shift()
             isThereOnGoingProcess = false
@@ -272,6 +273,10 @@ ApplicationWindow {
             popupText = qsTr("Show this result to the maintainer.") + "\n\n\"" + errorString + "\""
             infoDialog.settingsButtonOn = false
             infoDialog.open()
+        }
+
+        onCategorylistChanged: {
+            console.log(categorylist)
         }
     }
 
@@ -395,26 +400,7 @@ ApplicationWindow {
             return appName.split("-")[1]
         }
         return appName
-    }
-
-    function getPrettyName(appName) {
-        switch(appName) {
-        case "skypeforlinux":
-            return "skype"
-        case "gnome-boxes":
-            return "boxes"
-        case "gnome-builder":
-            return "builder"
-        case "slack-desktop":
-            return "slack"
-        case "spotify-client":
-            return "spotify"
-        case "virtualbox-5.1":
-            return "virtualbox"
-        default:
-            return appName.replace("-", " ")
-        }
-    }
+    }    
 
     onClosing: {
         if(isThereOnGoingProcess) {

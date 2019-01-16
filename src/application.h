@@ -14,6 +14,7 @@ public:
     QString version() const;
     QString downloadsize() const;
     QString category() const;
+    QString categoryLocal() const;
     QString prettyname() const;
     QString exec() const;
     QString state() const;

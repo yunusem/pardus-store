@@ -158,6 +158,11 @@ bool Helper::homeLoaded()
     return m_homeloaded;
 }
 
+QStringList Helper::categorylist() const
+{
+    return m_categories;
+}
+
 void Helper::fillTheList()
 {
     for(int i = 0; i < m_fakelist.size(); i++) {
@@ -291,6 +296,11 @@ void Helper::runCommand(const QString &cmd)
 void Helper::sendStatistics(const QString &appname)
 {
     nh->sendApplicationInstalled(appname);
+}
+
+QString Helper::getCategoryLocal(const QString &c) const
+{
+    return m_categorieswithlocal.value(c);
 }
 
 void Helper::packageProcessFinished(int code)
@@ -429,6 +439,14 @@ void Helper::getSelfVersion()
 void Helper::appListReceivedSlot(const QList<Application> &apps)
 {
     m_fakelist = apps;
+    for(int i = 0; i< m_fakelist.length(); i++) {
+        if(!m_categories.contains(m_fakelist[i].category())) {
+            m_categories.append(m_fakelist[i].category());
+            m_categorieswithlocal.insert(m_fakelist[i].category(),m_fakelist[i].categoryLocal());
+        }
+    }
+    m_categories.sort();
+    emit categorylistChanged();
     emit fetchingAppListFinished();
     this->updateListUsingPackageManager();
     this->getSelfVersion();

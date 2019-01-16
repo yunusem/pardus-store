@@ -2,6 +2,7 @@
 #define HELPER_H
 
 #include <QObject>
+#include <QHash>
 #include <QStringList>
 #include <QString>
 #include <QVariant>
@@ -65,6 +66,8 @@ class Helper : public QObject
     Q_PROPERTY(bool homeLoaded
                READ homeLoaded
                NOTIFY homeReceived)
+    Q_PROPERTY(QStringList categorylist READ categorylist NOTIFY categorylistChanged)
+
 public:
     explicit Helper(QObject *parent = 0);
     bool processing() const;
@@ -84,6 +87,7 @@ public:
     void setDetailsopened(bool d);
     unsigned int rating();
     bool homeLoaded();
+    QStringList categorylist() const;
 
     Q_INVOKABLE void updateCache();
     Q_INVOKABLE void install(const QString &pkg);
@@ -103,6 +107,7 @@ public:
     Q_INVOKABLE void openUrl(const QString &url);
     Q_INVOKABLE void runCommand(const QString &cmd);
     Q_INVOKABLE void sendStatistics(const QString &appname);
+    Q_INVOKABLE QString getCategoryLocal(const QString &c) const;
 
 private:
     bool p;
@@ -125,6 +130,8 @@ private:
     unsigned int m_ratio;
     bool m_usedark;
     void readSettings();
+    QStringList m_categories;
+    QHash<QString,QString> m_categorieswithlocal;
 
 private slots:
     void packageProcessFinished(int code);
@@ -169,6 +176,7 @@ signals:
     void homeReceived(const QString &ename, const QString &epname, const unsigned int &ecount, const double &erating,
                       const QString &dname, const QString &dpname, const unsigned int &dcount, const double &drating,
                       const QString &rname, const QString &rpname, const unsigned int &rcount, const double &rrating);
+    void categorylistChanged();
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);

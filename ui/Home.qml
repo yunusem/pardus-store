@@ -873,7 +873,7 @@ Rectangle {
                                 font.capitalization: Font.Capitalize
                                 font.pointSize: 13
                                 Material.foreground: textColor
-                                text: getPrettyName(modelData)
+                                text: modelData
                                 MouseArea {
                                     anchors.fill: parent
                                     hoverEnabled: true
@@ -1047,7 +1047,7 @@ Rectangle {
                     anchors {
                         verticalCenter: parent.verticalCenter
                     }
-                    text: getPrettyName(surveySelectedApp)
+                    text: surveySelectedApp
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.capitalization: Font.Capitalize
