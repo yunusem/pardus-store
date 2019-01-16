@@ -1011,7 +1011,7 @@ Rectangle {
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
                                 font.capitalization: Font.Capitalize
-                                text: categories[categoryIcons.indexOf(appCategory)]
+                                text: helper.getCategoryLocal(appCategory)
                                 font.pointSize: 12
                                 font.weight: Font.DemiBold
                                 MouseArea {
@@ -1020,8 +1020,8 @@ Rectangle {
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: {
-                                        if(categoryIcons[categories.indexOf(selectedCategory)] === "all") {
-                                            selectedCategory = categories[categoryIcons.indexOf(appCategory)]
+                                        if(selectedCategory === "all") {
+                                            selectedCategory = appCategory
                                         } else {
                                             stackView.pop()
                                         }
@@ -1752,7 +1752,7 @@ Rectangle {
         z: 92
         height: 54
         width: height * 2 / 3
-        opacity: selectedCategory !== qsTr("home") ? 1.0 : 0.0
+        opacity: 1.0
         Material.background: "#515151"
         anchors {
             top: parent.top
@@ -1774,7 +1774,6 @@ Rectangle {
 
         onClicked: {
             stackView.pop()
-
         }
 
         Behavior on opacity {

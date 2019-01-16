@@ -27,40 +27,14 @@ ApplicationWindow {
     property string popupText: ""
     property string popupHeaderText: qsTr("Something went wrong!")
     property string lastProcess: ""
-    property string selectedCategory: qsTr("all")
-    property string selectedMenu: qsTr("home")
+    property string selectedCategory: "all"
+    property string selectedMenu: "home"
     property string previousMenu: ""
 
-    property variant processQueue: []
-    property variant menus: [qsTr("home"), qsTr("categories"), qsTr("settings")]
-    property variant menuIcons: ["home", "categories", "settings"]
+    property variant processQueue: []  
+    property variant menuList: {"home": qsTr("home"), "categories": qsTr("categories"), "settings": qsTr("settings")}
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
-    property variant categories: [
-        qsTr("all"),
-        qsTr("internet"),
-        qsTr("office"),
-        qsTr("development"),
-        qsTr("reading"),
-        qsTr("graphics"),
-        qsTr("game"),
-        qsTr("music"),
-        qsTr("system"),
-        qsTr("video"),
-        qsTr("chat"),
-        qsTr("others")]
-    property variant categoryIcons: [
-        "all",
-        "internet",
-        "office",
-        "development",
-        "reading",
-        "graphics",
-        "game",
-        "music",
-        "system",
-        "video",
-        "chat",
-        "others"]
+    property variant categories: []    
 
     property alias processingPackageName: navigationBar.packageName
     property alias processingCondition: navigationBar.condition
@@ -77,6 +51,7 @@ ApplicationWindow {
     signal surveyJoined()
     signal surveyJoinUpdated()
     signal errorOccured()
+    signal categoriesFilled()
     signal appDescriptionReceived(variant desc)
     signal appDetailsReceived(variant cl, variant ch, variant ct, variant cp,
                               variant desc, variant down, variant l,
@@ -276,7 +251,11 @@ ApplicationWindow {
         }
 
         onCategorylistChanged: {
-            console.log(categorylist)
+            categories.push("all")
+            for(var i = 0; i < categorylist.length; i++){
+                categories.push(categorylist[i])
+            }
+            categoriesFilled()            
         }
     }
 
@@ -414,14 +393,14 @@ ApplicationWindow {
     }
 
     onSelectedMenuChanged: {
-        var m = menuIcons[menus.indexOf(selectedMenu)]
-        var c = categoryIcons[categories.indexOf(selectedCategory)]
+        var m = selectedMenu
+        var c = selectedCategory
         var current = stackView.currentItem.current
         var name = stackView.currentItem.objectName
 
         if(m !== "categories") {
             if(applicationModel.getFilterString() !== "") {
-                applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
+                applicationModel.setFilterString(selectedCategory === "all" ? "" : selectedCategory, false)
             }
         }
 
@@ -438,7 +417,7 @@ ApplicationWindow {
     }
 
     onSelectedCategoryChanged: {
-        applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
+        applicationModel.setFilterString(selectedCategory === "all" ? "" : selectedCategory, false)
         if(stackView.currentItem.previous && stackView.currentItem.objectName === "detail") {
             stackView.pop()
         }

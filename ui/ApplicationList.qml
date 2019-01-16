@@ -36,7 +36,7 @@ Page {
             clip: true
             cellWidth: (width - scrollBarWidth) / ratio
             cellHeight: height / ratio
-
+            cacheBuffer: height * 5
             visible: true
             interactive: count > 15 ? true : false
             snapMode: GridView.SnapToRow

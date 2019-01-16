@@ -440,13 +440,17 @@ void Helper::appListReceivedSlot(const QList<Application> &apps)
 {
     m_fakelist = apps;
     for(int i = 0; i< m_fakelist.length(); i++) {
-        if(!m_categories.contains(m_fakelist[i].category())) {
+        if(!m_categories.contains(m_fakelist[i].category()) && m_fakelist[i].category() != "") {
             m_categories.append(m_fakelist[i].category());
             m_categorieswithlocal.insert(m_fakelist[i].category(),m_fakelist[i].categoryLocal());
         }
     }
     m_categories.sort();
-    emit categorylistChanged();
+    if(m_categories.contains("others")) {
+        m_categories.removeAt(m_categories.indexOf("others"));
+        m_categories.append("others");
+    }
+        emit categorylistChanged();
     emit fetchingAppListFinished();
     this->updateListUsingPackageManager();
     this->getSelfVersion();

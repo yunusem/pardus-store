@@ -13,7 +13,7 @@ Pane {
     Material.background: backgroundColor
     Material.elevation: 3
     z: 92
-    visible: selectedMenu === qsTr("settings")
+    visible: selectedMenu === "settings"
     width: stackView.width
     height: stackView.height
     anchors.centerIn: stackView

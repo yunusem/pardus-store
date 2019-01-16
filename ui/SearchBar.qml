@@ -56,8 +56,8 @@ Item {
                         if(stackView.depth === 3) {
                             stackView.pop()
                         }
-                        selectedMenu = qsTr("categories")
-                        selectedCategory = qsTr("all")
+                        selectedMenu = "categories"
+                        selectedCategory = "all"
                         expanded = true
                         applicationModel.setFilterString(searchText.text.trim(), true)
                     }

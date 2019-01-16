@@ -102,7 +102,7 @@ Rectangle {
             id: bannerImage
             width: parent.width + 24
             height: parent.height + 24
-            source: helper.getMainUrl() + "/screenshots/banner.png"
+            source: helper.getMainUrl() + "/files/screenshots/banner.png"
             anchors {
                 centerIn: parent
             }
@@ -183,9 +183,9 @@ Rectangle {
 
                 onClicked: {
                     if(epaPrettyName !== "") {
-                        selectedCategory = qsTr("all")
+                        selectedCategory = "all"
                         expanded = true
-                        selectedMenu = qsTr("categories")
+                        selectedMenu = "categories"
                         forceActiveFocus()
                         applicationModel.setFilterString(epaName, true)
                     }
@@ -355,9 +355,9 @@ Rectangle {
 
                 onClicked: {
                     if(mdaPrettyName !== "") {
-                        selectedCategory = qsTr("all")
+                        selectedCategory = "all"
                         expanded = true
-                        selectedMenu = qsTr("categories")
+                        selectedMenu = "categories"
                         forceActiveFocus()
                         applicationModel.setFilterString(mdaName, true)
                     }
@@ -528,9 +528,9 @@ Rectangle {
 
                 onClicked: {
                     if(mraPrettyName  !== "") {
-                        selectedCategory = qsTr("all")
+                        selectedCategory = "all"
                         expanded = true
-                        selectedMenu = qsTr("categories")
+                        selectedMenu = "categories"
                         forceActiveFocus()
                         applicationModel.setFilterString(mraName, true)
                     }

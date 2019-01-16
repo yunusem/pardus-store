@@ -160,7 +160,7 @@ Item {
                 stackView.push(applicationDetail, {
                                    objectName: "detail",
                                    "current": name,
-                                   "previous": categoryIcons[categories.indexOf(selectedCategory)],
+                                   "previous": selectedCategory,
                                    "appVersion":version,
                                    "appDownloadSize" : dsize,
                                    "appCategory" : category,

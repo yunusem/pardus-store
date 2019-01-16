@@ -21,6 +21,12 @@ Rectangle {
     property alias packageName: processOutputLabel.packageName
     property alias condition: processOutputLabel.condition
 
+    function categoriesReceived() {
+        for (var i = 0; i < categories.length; i++) {
+            categoryListModel.append({"name" : categories[i]})
+        }
+    }
+
     ListModel {
         id: menuListModel
     }
@@ -30,15 +36,16 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        for (var i = 0; i < categories.length; i++) {
-            categoryListModel.append({"name" : categories[i], "icon" : categoryIcons[i]})
+        categoriesFilled.connect(categoriesReceived)
+        var cnt = 0;
+        var index = 1;
+        for (var key in menuList) {
+            index = (key === "home") ? cnt : 1
+            menuListModel.append({"name" : key, "localname": menuList[key]})
+            cnt = cnt + 1
         }
-        for (i = 0; i < menus.length; i++) {
-            menuListModel.append({"name" : menus[i], "icon" : menuIcons[i]})
-        }
+        menuListModel.move(index,0,1)
     }
-
-
 
     Component {
         id: categoryItemDelegate
@@ -52,7 +59,7 @@ Rectangle {
             Image {
                 id: categoryItemIcon
                 asynchronous: true
-                source: "qrc:/images/" + icon + ".svg"
+                source: ((name === "all") ? "qrc:/images/" : (helper.getMainUrl() + "/files/categoryicons/")) + name + ".svg"
                 fillMode: Image.PreserveAspectFit
                 height: categoryItemHeight - anchors.topMargin * 2
                 width: height
@@ -64,6 +71,14 @@ Rectangle {
                     topMargin: 2
                     left: parent.left
                     leftMargin: width / 2
+                }
+                onStatusChanged: {
+                    if(name == "test") {
+                        if(status == Image.Error) {
+                            console.log("Error occured")
+                        }
+                    }
+
                 }
             }
 
@@ -78,7 +93,7 @@ Rectangle {
                 }
                 color: name === selectedCategory ? accentColor : "#E4E4E4"
                 font.capitalization: Font.Capitalize
-                text: name
+                text: name === "all" ? qsTr("all") :helper.getCategoryLocal(name)
                 fontSizeMode: Text.HorizontalFit
             }
 
@@ -88,7 +103,7 @@ Rectangle {
                 hoverEnabled: true
                 onClicked: {
                     if(name === selectedCategory && applicationModel.getFilterString() !== "") {
-                        applicationModel.setFilterString(selectedCategory === qsTr("all") ? "" : categoryIcons[categories.indexOf(selectedCategory)], false)
+                        applicationModel.setFilterString(selectedCategory === "all" ? "" : name, false)
                     }
 
                     selectedCategory = name
@@ -114,7 +129,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             width: navi.width
             height: menuItemHeight
-            state: ((name === qsTr("categories")) && expanded) ? "expanded" : ""
+            state: ((name === "categories") && expanded) ? "expanded" : ""
 
 
             Item {
@@ -134,7 +149,7 @@ Rectangle {
                 Image {
                     id: menuItemIcon
                     asynchronous: true
-                    source: "qrc:/images/" + icon + ((bgRect.color == "#f0f0f0") ? "-dark.svg" : ".svg")
+                    source: "qrc:/images/" + name + ((bgRect.color == "#f0f0f0") ? "-dark.svg" : ".svg")
                     fillMode: Image.PreserveAspectFit
                     height: 36
                     width: height
@@ -149,18 +164,6 @@ Rectangle {
                     }
                 }
 
-                //                DropShadow {
-                //                    id:ds
-                //                    visible: true
-                //                    anchors.fill: menuItemIcon
-                //                    horizontalOffset: 3
-                //                    verticalOffset: 3
-                //                    radius: 8
-                //                    samples: 17
-                //                    color: "#ff000000"
-                //                    source: menuItemIcon
-                //                }
-
                 Label {
                     id: menuItemLabel
                     anchors {
@@ -173,7 +176,7 @@ Rectangle {
                     color: name === selectedMenu ? accentColor : "#E4E4E4"
                     font.bold: name === selectedMenu
                     font.capitalization: Font.Capitalize
-                    text: name
+                    text: localname
                     fontSizeMode: Text.HorizontalFit
                 }
 
@@ -183,9 +186,9 @@ Rectangle {
                     onClicked: {
                         forceActiveFocus()
                         selectedMenu = name
-                        if(selectedMenu === qsTr("categories")) {
+                        if(selectedMenu === "categories") {
                             expanded = !expanded
-                            selectedCategory = qsTr("all")
+                            selectedCategory = "all"
                         } else {
                             expanded = false
                         }
