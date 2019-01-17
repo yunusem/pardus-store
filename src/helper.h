@@ -70,6 +70,7 @@ class Helper : public QObject
 
 public:
     explicit Helper(QObject *parent = 0);
+    ~Helper();
     bool processing() const;
     bool animate() const;
     void setAnimate(bool a);
@@ -79,6 +80,10 @@ public:
     void setRatio(const unsigned int &r);
     bool usedark() const;
     void setUsedark(bool d);
+    QString url() const;
+    QString port() const;
+    void setUrl(const QString &u);
+    void setPort(const QString &p);
     QString choice() const;
     QString version() const;
     bool corrected() const;
@@ -129,6 +134,8 @@ private:
     bool m_update;
     unsigned int m_ratio;
     bool m_usedark;
+    QString m_url;
+    QString m_port;
     void readSettings();
     QStringList m_categories;
     QHash<QString,QString> m_categorieswithlocal;

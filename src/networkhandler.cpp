@@ -5,8 +5,9 @@
 #include <QNetworkRequest>
 #include <QUrl>
 #include <QNetworkInterface>
-#include <QNetworkProxyFactory>
 #include <QNetworkProxy>
+#include <QNetworkProxyFactory>
+#include <QNetworkProxyQuery>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -14,8 +15,6 @@
 #include <QLocale>
 #include <QTimer>
 #include <QDebug>
-
-#define MAIN_URL "http://store.pardus.org.tr:5000"
 
 namespace {
 
@@ -54,11 +53,12 @@ QNetworkReply *reply_get(std::map<QNetworkReply *, QTimer *> *m, QTimer *t)
 }
 }
 
-NetworkHandler::NetworkHandler(int msec, QObject *parent) : QObject(parent),
-    m_timeoutDuration(msec)
+NetworkHandler::NetworkHandler(const QString &url, const QString &port, int msec,
+                               QObject *parent) : QObject(parent), m_timeoutDuration(msec)
 {
-    QNetworkProxyQuery npq(QUrl(MAIN_URL));
-    QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+    m_mainUrl = url.trimmed() + ":" + port.trimmed();
+    QNetworkProxyQuery *npq = new QNetworkProxyQuery(QUrl(m_mainUrl));
+    QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(*npq);
     foreach ( QNetworkProxy p, listOfProxies ) {
         if(p.hostName() != "") {
             m_nam.setProxy(p);
@@ -83,7 +83,7 @@ void NetworkHandler::getApplicationList()
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
-    reply = m_nam.get(QNetworkRequest(QUrl(QString(MAIN_URL).append("/api/v2/apps/"))));
+    reply = m_nam.get(QNetworkRequest(QUrl(m_mainUrl + QString("/api/v2/apps/"))));
     timer_put(&m_timerMap, reply, timer);
     timer->start(m_timeoutDuration);
 }
@@ -91,7 +91,7 @@ void NetworkHandler::getApplicationList()
 void NetworkHandler::getApplicationDetails(const QString &packageName)
 {    
     QNetworkReply *reply;
-    QString url = QString(MAIN_URL).append("/api/v2/apps/"+ packageName);
+    QString url = m_mainUrl + QString("/api/v2/apps/"+ packageName);
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
@@ -102,7 +102,7 @@ void NetworkHandler::getApplicationDetails(const QString &packageName)
 
 void NetworkHandler::ratingControl(const QString &name, const unsigned int &rating)
 {
-    QString url(QString(MAIN_URL).append("/api/v2/rating"));
+    QString url(m_mainUrl + QString("/api/v2/rating"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -123,7 +123,7 @@ void NetworkHandler::ratingControl(const QString &name, const unsigned int &rati
 void NetworkHandler::getHomeDetails()
 {
     QNetworkReply *reply;
-    QString url = QString(MAIN_URL).append("/api/v2/home");
+    QString url = m_mainUrl + QString("/api/v2/home");
     QTimer *timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
@@ -134,7 +134,7 @@ void NetworkHandler::getHomeDetails()
 
 void NetworkHandler::sendApplicationInstalled(const QString &name)
 {
-    QString url(QString(MAIN_URL).append("/api/v2/statistics"));
+    QString url(m_mainUrl + QString("/api/v2/statistics"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -153,7 +153,7 @@ void NetworkHandler::sendApplicationInstalled(const QString &name)
 
 void NetworkHandler::surveyCheck()
 {
-    QUrl url(QString(MAIN_URL).append("/api/v1/survey/list"));
+    QUrl url(m_mainUrl + QString("/api/v1/survey/list"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -171,7 +171,7 @@ void NetworkHandler::surveyCheck()
 
 void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
 {
-    QUrl url(QString(MAIN_URL).append("/api/v1/survey/join"));
+    QUrl url(m_mainUrl + QString("/api/v1/survey/join"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -191,7 +191,7 @@ void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
 
 QString NetworkHandler::getMainUrl() const
 {
-    return QString(MAIN_URL);
+    return m_mainUrl;
 }
 
 void NetworkHandler::replyFinished(QNetworkReply *reply)
@@ -311,7 +311,7 @@ void NetworkHandler::parseDetailsResponse(const QJsonObject &obj)
                              content.value("maintainer").toObject().value("name").toString());
             ad.setName(content.value("name").toString());
             foreach (const QVariant var, content.value("screenshots").toArray().toVariantList()) {
-                sl.append(QString(MAIN_URL).append(var.toString()));
+                sl.append(QString(m_mainUrl).append(var.toString()));
             }
             ad.setScreenshots(sl);
             jo = content.value("section").toObject();

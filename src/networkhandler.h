@@ -16,8 +16,7 @@ class NetworkHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit NetworkHandler(int msec = 10000, QObject *parent = 0);
-
+    explicit NetworkHandler(const QString &url, const QString &port,int msec = 10000, QObject *parent = 0);
     void getApplicationList();    
     void getApplicationDetails(const QString &packageName);
     void ratingControl(const QString &name, const unsigned int &rating);
@@ -51,6 +50,7 @@ private:
     std::map<QNetworkReply *, QTimer *> m_timerMap;
     int m_timeoutDuration;
     QString m_macId;
+    QString m_mainUrl;
     void parseAppsResponse(const QJsonObject &obj);
     void parseDetailsResponse(const QJsonObject &obj);    
     void parseSurveyResponse(const QJsonObject &obj);

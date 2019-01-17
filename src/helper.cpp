@@ -20,7 +20,7 @@ Helper::Helper(QObject *parent) : QObject(parent),
     s = new QSettings(CONFIG_PATH, QSettings::IniFormat);
     readSettings();
 
-    nh = new NetworkHandler(10000,this);
+    nh = new NetworkHandler(url(),port(),10000,this);
     fh = new FileHandler(this);
     ph = new PackageHandler(this);
 
@@ -36,6 +36,12 @@ Helper::Helper(QObject *parent) : QObject(parent),
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceivedSlot(QString,int)));
     connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));
     connect(fh,SIGNAL(correctingSourcesFinishedWithError(QString)),this,SIGNAL(correctingFinishedWithError(QString)));
+}
+
+Helper::~Helper()
+{
+    writeSettings("url",m_url);
+    writeSettings("port",m_port);
 }
 
 bool Helper::animate() const
@@ -100,12 +106,40 @@ void Helper::setUsedark(bool d)
     }
 }
 
+QString Helper::url() const
+{
+    return m_url;
+}
+
+QString Helper::port() const
+{
+    return m_port;
+}
+
+void Helper::setUrl(const QString &u)
+{
+    if(m_url != u) {
+        m_url = u;
+        writeSettings("url",m_url);
+    }
+}
+
+void Helper::setPort(const QString &p)
+{
+    if(m_port != p) {
+        m_port = p;
+        writeSettings("port",m_port);
+    }
+}
+
 void Helper::readSettings()
 {
     setAnimate(s->value("animate", true).toBool());
     setUpdate(s->value("update", true).toBool());
     setRatio(s->value("ratio", 3).toUInt());
     setUsedark(s->value("dark-theme", true).toBool());
+    setUrl(s->value("url","http://store.pardus.org.tr").toString());
+    setPort(s->value("port","5000").toString());
 }
 
 void Helper::writeSettings(const QString &key, const QVariant &value)
