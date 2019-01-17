@@ -8,12 +8,12 @@ It is currently a work in progress. Maintenance is done by [Pardus](https://pard
 
 Currently the server side of the store is on a test environment and can be updated to a dedicated server in the future.
 
-You can join the discussion on [Pardus Forums](http://forum.pardus.org.tr/t/pardus-store-0-1-0/5542).
+You can join the discussion on [Pardus Forums](https://forum.pardus.org.tr/t/pardus-magaza-beta-surumu-yayinlandi/4768/426).
 
 
 ## Screen Shots
 
-### On Linux (Pardus 17.3 GNU/Linux)
+### On Linux (Pardus 17.4 GNU/Linux)
 
 ![p1](screenshots/ps-1.png)
 
@@ -22,3 +22,9 @@ You can join the discussion on [Pardus Forums](http://forum.pardus.org.tr/t/pard
 ![p3](screenshots/ps-3.png)
 
 ![p4](screenshots/ps-4.png)
+
+![p5](screenshots/ps-5.png)
+
+![p6](screenshots/ps-6.png)
+
+![p7](screenshots/ps-7.png)
