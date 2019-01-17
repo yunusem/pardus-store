@@ -1,29 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/office.svg</file>
         <file>images/home.svg</file>
-        <file>images/video.svg</file>
-        <file>images/development.svg</file>
-        <file>images/system.svg</file>
-        <file>images/game.svg</file>
-        <file>images/layers.svg</file>
-        <file>images/world.svg</file>
-        <file>images/education.svg</file>
-        <file>images/all_inclusive.svg</file>
-        <file>images/others.svg</file>
         <file>images/all.svg</file>
-        <file>images/photo.svg</file>
-        <file>images/graphics.svg</file>
-        <file>images/reading.svg</file>
-        <file>images/music.svg</file>
         <file>images/settings.svg</file>
         <file>images/star.svg</file>
-        <file>images/shop.svg</file>
-        <file>images/shopping_cart.svg</file>
-        <file>images/chat.svg</file>
-        <file>images/internet.svg</file>
         <file>images/search.svg</file>
-        <file>images/installed.svg</file>
         <file>images/icon.svg</file>
         <file>images/back.svg</file>
         <file>images/front.svg</file>
