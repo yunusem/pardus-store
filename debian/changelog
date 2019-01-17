@@ -1,3 +1,12 @@
+pardus-store (0.3.0~beta3) unstable; urgency=medium
+
+  * Fix long name clip issue on detail
+  * Prepare backend for dynamic categories
+  * Implement dynamic category handling and make it functional
+  * Make main url configurable over config.ini
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 17 Jan 2019 08:47:15 +0300
+
 pardus-store (0.3.0~beta2) unstable; urgency=medium
 
   * Fix delegate label clip issue on width bigger then 2 x height. Change minimum weight and height values.
