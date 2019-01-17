@@ -1399,6 +1399,7 @@ Rectangle {
                             delegate: Label {
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignLeft
+                                width: latestColumn.width
                                 wrapMode: Text.WordWrap
                                 text: modelData
                                 color: secondaryTextColor
