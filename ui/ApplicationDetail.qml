@@ -207,7 +207,7 @@ Rectangle {
             id: appBannerNameContainer
             color: "transparent"
             height: parent.height * 4 / 7
-            width: parent.width * 4 / 5 - appBannerIcon.width
+            width: parent.width * 0.75 - appBannerIcon.width
             anchors {
                 top: parent.top
                 left: appBannerIcon.right
@@ -489,7 +489,7 @@ Rectangle {
 
             Button {
                 id: processButton
-                width: parent.height * 2 / 3
+                width: parent.height * 0.77
 
                 enabled: !selectedAppInqueue
                 Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"

@@ -760,7 +760,7 @@ Rectangle {
     Pane {
         id: survey
         height: parent.height - banner.height - 36
-        width: banner.width > 900 ? 450 : 289.927
+        width: banner.width > 900 ? 500 : 289.927
         Material.elevation: 3
         Material.background: backgroundColor
         anchors {
