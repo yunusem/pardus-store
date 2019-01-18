@@ -89,13 +89,24 @@ Rectangle {
 
     Pane {
         id: banner
-        width: parent.width - 96
-        height: bannerImage.sourceSize.height * width / bannerImage.sourceSize.width
+        width: parent.width - 96.375
+        height: 375 * width / 1800
         Material.elevation: 5
         anchors {
             top: parent.top
             topMargin: 12
             horizontalCenter: parent.horizontalCenter
+        }
+
+        ProgressBar {
+            from: 0.0
+            to: 1.0
+            value: bannerImage.progress
+            anchors {
+                bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+            }
         }
 
         Image {
@@ -105,7 +116,7 @@ Rectangle {
             source: helper.getMainUrl() + "/files/screenshots/banner.png"
             anchors {
                 centerIn: parent
-            }
+            }            
             layer.enabled: true
             layer.smooth: true
             layer.effect: OpacityMask {
@@ -127,11 +138,8 @@ Rectangle {
 
         BusyIndicator {
             id: bannerBusy
-            anchors {
-                bottom: parent.bottom
-                horizontalCenter: parent.horizontalCenter
-            }
-            running: !bannerImage.progress
+            anchors.centerIn: parent
+            running: bannerImage.progress < 1.0
         }
 
         Label {

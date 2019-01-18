@@ -657,6 +657,18 @@ Rectangle {
                     width: bottomBanner.width / 2 - 18
                     height: width * 9 / 16
 
+                    ProgressBar {
+                        from: 0.0
+                        to: 1.0
+                        value: ss.progress
+                        anchors {
+                            bottom: parent.bottom
+                            left: parent.left
+                            right: parent.right
+                        }
+                        visible: ss.progress < 1.0
+                    }
+
                     Image {
                         id:ss
                         visible: true
@@ -675,8 +687,9 @@ Rectangle {
                                     height: ss.height
                                     radius: 5
                                 }
-                            }
+                            }                            
                         }
+
                         MouseArea{
                             id:ssma
                             anchors.fill:parent
@@ -704,7 +717,7 @@ Rectangle {
                     BusyIndicator {
                         id: imageBusy
                         anchors.centerIn: parent
-                        running: url === "none" ? false : !ss.progress
+                        running: url === "none" ? false : (ss.progress < 1.0)
                     }
                 }
                 model: lm
