@@ -23,7 +23,8 @@ HEADERS += \
     src/applicationdetail.h \
     src/singleton.h \
     src/dpkg-progress.h \
-    src/application.h
+    src/application.h \
+    src/namfactory.h
 
 TARGET = pardus-store
 

@@ -2,6 +2,7 @@
 #include "src/iconprovider.h"
 #include "src/applicationlistmodel.h"
 #include "src/singleton.h"
+#include "src/namfactory.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
     QQmlContext *context = engine.rootContext();
     context->setContextProperty("applicationModel", &filterModel);
     engine.addImageProvider(QLatin1String("application"), new IconProvider);
+    engine.setNetworkAccessManagerFactory(new NamFactory);
     engine.load(QUrl(QLatin1String("qrc:/ui/main.qml")));
 
 
