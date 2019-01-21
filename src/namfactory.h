@@ -10,6 +10,8 @@
 #include <QStandardPaths>
 #include <QDir>
 
+#define CACHE_PATH "/.cache/pardus-store/"
+
 class StoreNetworkAccessManager : public QNetworkAccessManager
 {
 public:
@@ -37,7 +39,7 @@ QNetworkAccessManager *NamFactory::create(QObject *parent)
 {
     QNetworkAccessManager *nam = new StoreNetworkAccessManager(parent);
     QNetworkDiskCache *cache = new QNetworkDiskCache(nam);
-    cache->setCacheDirectory(QDir::homePath().append("/.cache/pardus-store/"));
+    cache->setCacheDirectory(QDir::homePath().append(QString(CACHE_PATH)));
     nam->setCache(cache);
     return nam;
 }
