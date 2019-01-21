@@ -1,3 +1,17 @@
+pardus-store (0.3.0~beta4) unstable; urgency=medium
+
+  * Fix label clip issue on Detail page action button
+  * Clear images
+  * Update README.md and screenshots
+  * Fix latest changelog data clip issue
+  * Put progress on images incase very low connection speed
+  * Update docker file
+  * Handle qml component network requests manually. Closes: #38
+  * Make cache path defined before class definitions
+  * Fix condition handling issues and bring back queue dialog
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Mon, 21 Jan 2019 16:43:55 +0300
+
 pardus-store (0.3.0~beta3) unstable; urgency=medium
 
   * Fix long name clip issue on detail
