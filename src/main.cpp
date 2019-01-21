@@ -1,3 +1,4 @@
+#include "src/condition.h"
 #include "src/helper.h"
 #include "src/iconprovider.h"
 #include "src/applicationlistmodel.h"
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
     if (!singleton.tryToRun()) {
         return 0;
     }
+    qmlRegisterType<Condition>("ps.condition",1,0,"Condition");
     qmlRegisterType<Helper>("ps.helper",1,0,"Helper");
     QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     QGuiApplication::setWindowIcon(QIcon(":/images/icon.svg"));

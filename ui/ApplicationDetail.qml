@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
+import ps.condition 1.0
 
 Rectangle {
     id:appDetail
@@ -45,6 +46,7 @@ Rectangle {
         if(name !== "" && name === selectedAppName && from === "detail") {
             updateStatusOfAppFromDetail(selectedAppName)
             processQueue.push(selectedAppName + " " + selectedAppInstalled)
+            updateQueue()
         }
     }
 
@@ -504,7 +506,7 @@ Rectangle {
                 ProgressBar {
                     id: processButtonProgressBar
                     property int percent: processingPercent
-                    property string condition: processingCondition
+                    property int condition: processingCondition
                     property string progressColor
 
                     width: parent.width
@@ -556,13 +558,7 @@ Rectangle {
 
                     onConditionChanged: {
                         if(processingPackageName === selectedAppName) {
-                            if(condition === qsTr("Removing")) {
-                                progressColor = "#F44336" //Red
-                            } else if(condition === qsTr("Installing")) {
-                                progressColor = "#4CAF50" //Green
-                            } else if(condition === qsTr("Downloading")) {
-                                progressColor = "#03A9F4" //Blue
-                            }
+                            progressColor = getConditionColor(condition)
                         }
                     }
 
@@ -687,7 +683,7 @@ Rectangle {
                                     height: ss.height
                                     radius: 5
                                 }
-                            }                            
+                            }
                         }
 
                         MouseArea{

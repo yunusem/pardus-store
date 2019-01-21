@@ -1,7 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
-import QtGraphicalEffects 1.0
+//import QtGraphicalEffects 1.0
+import ps.condition 1.0
 
 Rectangle {
     id: navi
@@ -275,8 +276,8 @@ Rectangle {
         height: width / 3 - 12
         anchors {
             horizontalCenter: parent.horizontalCenter
-            bottom: processOutputLabel.top
-            bottomMargin: 6
+            bottom: polContainer.top
+            bottomMargin: 3
         }
 
         Rectangle {
@@ -337,57 +338,71 @@ Rectangle {
 
     }
 
-
-    Label {
-        id: processOutputLabel
-        property string packageName: ""
-        property string condition: ""
-        anchors {
-            bottom: parent.bottom
-            bottomMargin: 6
-            horizontalCenter: parent.horizontalCenter
-        }
-        opacity: 1.0
-        fontSizeMode: Text.VerticalFit
-        wrapMode: Text.WordWrap
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.capitalization: Font.Capitalize
-        enabled: false
-        text: ""
-
-        onTextChanged: {
-            opacity = 1.0
-        }
-
-        onConditionChanged: {
-            if(condition === qsTr("installed") || condition === qsTr("removed")) {
-                processOutputLabel.text = packageName + " " + qsTr("is") + " " + condition
-            } else {
-                processOutputLabel.text = condition + " " + packageName
-            }
-        }
-
-        Behavior on opacity {
-            enabled: animate
-            NumberAnimation {
-                easing.type: Easing.OutExpo
-                duration: 200
-            }
-        }
-
-        Timer {
-            id: outputTimer
-            interval: 8000
-            repeat: true
-            running: true
-            onTriggered: {
-                if(!isThereOnGoingProcess) {
-                    processOutputLabel.opacity = 0.0
-                    //processingPackageName = ""
-                    //processingCondition = ""
+    Item {
+        id: polContainer
+        width: parent.width
+        height: 24
+        anchors.bottom: parent.bottom
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onContainsMouseChanged: {
+                if(containsMouse && isThereOnGoingProcess) {
+                    queueDialog.open()
                 }
             }
         }
+
+        Label {
+            id: processOutputLabel
+            property string packageName: ""
+            property int condition: Condition.Idle
+            anchors {
+                centerIn: parent
+            }
+            opacity: 1.0
+            fontSizeMode: Text.VerticalFit
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.Capitalize
+            enabled: false
+            text: ""
+
+            onTextChanged: {
+                opacity = 1.0
+            }
+
+            onConditionChanged: {
+                if (condition === Condition.Idle) {
+                    processOutputLabel.text = ""
+                } else if(condition === Condition.Installed || condition === Condition.Removed) {
+                    processOutputLabel.text = packageName + " " + qsTr("is") + " " + getConditionString(condition)
+                } else {
+                    processOutputLabel.text = getConditionString(condition) + " " + packageName
+                }
+            }
+
+            Behavior on opacity {
+                enabled: animate
+                NumberAnimation {
+                    easing.type: Easing.OutExpo
+                    duration: 200
+                }
+            }
+
+            Timer {
+                id: outputTimer
+                interval: 8000
+                repeat: true
+                running: true
+                onTriggered: {
+                    if(!isThereOnGoingProcess) {
+                        processOutputLabel.opacity = 0.0
+                    }
+                }
+            }
+        }
+
     }
 }

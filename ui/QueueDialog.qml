@@ -1,16 +1,17 @@
 import QtQuick 2.3
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
+import ps.condition 1.0
 
 Popup {
-    id: queue
+    id: dialogRoot
     closePolicy: Popup.CloseOnPressOutside
-    //Material.background: Material.primary
+    Material.background: backgroundColor
     Material.elevation: 3
-    width: navigationBarWidth - 12
+    width: navigationBarWidth
     z: 99
-    x: 6
-    y: parent.height - height - 100
+    x: 0
+    y: parent.height - height - 26
 
 
     property alias repeater: repeaterQueue
@@ -22,6 +23,13 @@ Popup {
             easing.type: Easing.OutExpo
             duration: 600
         }
+    }
+
+    MouseArea {
+        anchors.centerIn: parent
+        width: parent.width + 24
+        height: parent.height + 24
+        hoverEnabled: true
     }
 
     Label {
@@ -44,22 +52,42 @@ Popup {
         Repeater {
             id: repeaterQueue
             model: processQueue
+
             Item {
                 width: parent.width
                 height: 24
 
                 Label {
                     id: nameLabel
-                    color: "white"
+                    color: textColor
                     anchors.verticalCenter: parent.verticalCenter
                     text: modelData.split(" ")[0]
                     verticalAlignment: Text.AlignVCenter
                     font.capitalization: Font.Capitalize
+                    horizontalAlignment: Text.AlignLeft
+                    anchors.left: parent.left
+                }
+
+                Label {
+                    id: dutyLabel
+                    Material.foreground: textColor
+                    Material.theme: dark ? Material.Dark : Material.Light
+                    anchors.verticalCenter: parent.verticalCenter
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignRight
+                    font.capitalization: Font.Capitalize
+                    enabled: false
+                    anchors {
+                        right: cancelBtn.left
+                        rightMargin: 6
+                    }
+                    text: index === 0 ? getConditionString(processingCondition) : (modelData.split(" ")[1] === "true" ? qsTr("remove") : qsTr("install"))
+                    font.pointSize: 9
                 }
 
                 Rectangle {
                     id: cancelBtn
-                    visible: index != 0
+                    visible: index !== 0 ? true : (processingCondition === Condition.Downloading)
                     color: "#F44336"
                     width: 24
                     height: width
@@ -84,19 +112,11 @@ Popup {
                         onPressAndHold: cancelBtn.color = "#EF9A9A"
                         onReleased: cancelBtn.color = "#F44336"
                         onClicked: {
-                            var i = processQueue.indexOf(modelData)
-                            disqueuedApplication = processQueue.splice(i, 1).toString()
-                            var s = disqueuedApplication.split(" ")
-                            var duty = s[1]
-
-                            if (duty === "true") {
-                                duty = "false"
+                            if(index === 0) {
+                                terminateFromDialog(modelData.split(" ")[0])
                             } else {
-                                duty = "true"
+                                disQueue(modelData.split(" ")[0])
                             }
-
-                            lastProcess = (s[0] + " " + duty)
-                            updateQueue()
                         }
                     }
                 }

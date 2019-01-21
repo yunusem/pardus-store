@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
+import ps.condition 1.0
 
 Item {
     width: gridView.cellWidth
@@ -12,7 +13,7 @@ Item {
     property string applicationDelegatestate: delegatestate
     property int animationDuration: 330
     property bool detailTextHovered: false
-    property string condition: processingCondition
+    property int condition: processingCondition
     property int percent: processingPercent
     property bool processing: isThereOnGoingProcess
     property bool installingFromHere
@@ -27,6 +28,7 @@ Item {
     onTriggered: {
         inqueue = true
         processQueue.push(name + " " + installed)
+        updateQueue()
         if((processingPackageName !== name) && isThereOnGoingProcess) {
             delegatestate = "inqueue"
             stopButton.visible = true
@@ -69,19 +71,51 @@ Item {
 
     onConditionChanged: {
         if(processingPackageName === name) {
-            if(condition === qsTr("Removing")) {
-                processBarItem.colorCircle = "#F44336" //Red
+            if(condition === Condition.Removing) {
+                processBarItem.colorCircle = getConditionColor(condition)
                 stopButton.enabled = false
                 stopButton.visible = false
-            } else if(condition === qsTr("Installing")) {
-                processBarItem.colorCircle = "#4CAF50" //Green
+            } else if(condition === Condition.Installing) {
+                processBarItem.colorCircle = getConditionColor(condition)
                 stopButton.enabled = false
                 stopButton.visible = true
 
-            } else if(condition === qsTr("Downloading")) {
-                processBarItem.colorCircle = "#03A9F4" //Blue
+            } else if(condition === Condition.Downloading) {
+                processBarItem.colorCircle = getConditionColor(condition)
                 stopButton.enabled = true
                 stopButton.visible = true
+            }
+        }
+    }
+
+    function amIDisqueued() {
+        if(disqueuedAppName === name) {
+            disqueuedAppName = ""
+            inqueue = false
+            delegatestate = installed ? "installed" : "get"
+
+            if(selectedAppName === name) {
+                selectedAppInqueue = inqueue
+                selectedAppInstalled = installed
+            }
+        }
+    }
+
+    function tryToTerminate(appName) {
+        if(appName === name) {
+            if(condition === Condition.Downloading) {
+                terminateProcessCalled = true
+                if(helper.terminate()) {
+                    inqueue = false
+                    installed = false
+                    updateQueue()
+                    if(processQueue.length <= 1) {
+                        queueDialog.close()
+                    }
+                } else {
+                    terminateProcessCalled = false
+                    stopButton.enabled = false
+                }
             }
         }
     }
@@ -109,6 +143,8 @@ Item {
     }
 
     Component.onCompleted: {
+        terminateFromDialog.connect(tryToTerminate)
+        anApplicationDisQueued.connect(amIDisqueued)
         updateStatusOfAppFromDetail.connect(updateInQueue)
         confirmationRemoval.connect(operateRemoval)
         errorOccured.connect(errorHappened)
@@ -239,18 +275,21 @@ Item {
                     enabled: animate
                     NumberAnimation { duration: animationDuration }
                 }
+
                 Behavior on width {
                     enabled: animate
                     NumberAnimation { duration: animationDuration / 2 }
                 }
+
                 Material.background: "#4CAF50"
                 hoverEnabled: true
 
                 property string lastprocessed: lastProcess
 
                 onLastprocessedChanged: {
-                    if(lastProcess.search(name) == 0) {
-                        var s = lastProcess.split(" ")
+                    if(lastprocessed.search(name) === 0) {
+                        console.log(lastprocessed)
+                        var s = lastprocessed.split(" ")
                         if (s[1] === "true") {
                             installed = false
                         } else {
@@ -325,7 +364,7 @@ Item {
                 height: width
                 anchors.centerIn: parent
                 colorBackground: "#111111"
-                colorCircle: "#4CAF50"
+                colorCircle: "#03A9F4"
                 thickness: 5
                 opacity: 0.0
                 visible: opacity > 0.0
@@ -357,21 +396,9 @@ Item {
                 onClicked: {
                     forceActiveFocus()
                     if(delegatestate === "inqueue") {
-                        var i = processQueue.indexOf(name)
-                        disqueuedApplication = processQueue.splice(i, 1).toString()
-                        inqueue = false
-                        delegatestate = installed ? "installed" : "get"
+                        disQueue(name)
                     } else if (delegatestate === "process") {
-                        if(condition === qsTr("Downloading")) {
-                            terminateProcessCalled = true
-                            if(helper.terminate()) {
-                                inqueue = false
-                                installed = false
-                            } else {
-                                terminateProcessCalled = false
-                                enabled = false
-                            }
-                        }
+                        tryToTerminate(name)
                     }
                 }
             }

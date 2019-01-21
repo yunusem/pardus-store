@@ -4,7 +4,7 @@ import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
 import ps.helper 1.0
-
+import ps.condition 1.0
 
 ApplicationWindow {
     id: main
@@ -31,10 +31,10 @@ ApplicationWindow {
     property string selectedMenu: "home"
     property string previousMenu: ""
 
-    property variant processQueue: []  
+    property variant processQueue: []
     property variant menuList: {"home": qsTr("home"), "categories": qsTr("categories"), "settings": qsTr("settings")}
     property variant specialApplications: ["gnome-builder", "xfce4-terminal"]
-    property variant categories: []    
+    property variant categories: []
 
     property alias processingPackageName: navigationBar.packageName
     property alias processingCondition: navigationBar.condition
@@ -42,6 +42,9 @@ ApplicationWindow {
     property alias animate: helper.animate
     property alias updateCache: helper.update
     property alias ratio: helper.ratio
+
+    signal anApplicationDisQueued()
+    signal terminateFromDialog(variant applicationName)
 
     signal updateQueue()
     signal updateCacheFinished()
@@ -68,6 +71,7 @@ ApplicationWindow {
     property string selectedAppPrettyName
     property string selectedAppDelegatestate: "get"
     property string selectedAppExecute
+    property string disqueuedAppName
 
     property alias dark: helper.usedark
     property string backgroundColor: dark ? "#2B2B2B" : "#F0F0F0"
@@ -124,21 +128,22 @@ ApplicationWindow {
                 var s = processQueue[0].split(" ")
                 var appName = s[0]
                 var duty = s[1]
-                var dutyText = ""
+                var cond = Condition.Idle
                 if (duty === "true") {
-                    dutyText = qsTr("removed")
+                    cond = Condition.Removed //qsTr("removed")
                 } else {
-                    dutyText = qsTr("installed")
+                    cond = Condition.Installed //qsTr("installed")
                 }
                 processingPackageName = appName
-                processingCondition = dutyText
+                processingCondition = cond
                 lastProcess = processQueue.shift()
                 updateQueue()
                 isThereOnGoingProcess = false
+                appName = getCorrectName(appName)
                 systemNotify(appName,
                              qsTr("Package process is complete"),
                              (appName.charAt(0).toUpperCase() + appName.slice(1)) +
-                             " " + dutyText + " (Pardus " + qsTr("Store") + ")")
+                             " " + getConditionString(cond) + " (Pardus " + qsTr("Store") + ")")
             } else {
                 if(!cacheIsUpToDate) {
                     updateCacheFinished()
@@ -167,18 +172,18 @@ ApplicationWindow {
                 errorOccured()
             } else {
                 terminateProcessCalled = false
+                processingCondition = Condition.Idle
             }
         }
 
         onProcessingStatus: {
             if(condition === "pmstatus") {
-                if(processingCondition === qsTr("Removing")) {
-                } else if(processingCondition === qsTr("Downloading")) {
-                    processingCondition = qsTr("Installing")
+                if(processingCondition === Condition.Downloading) {
+                    processingCondition =  Condition.Installing //qsTr("Installing")
                 }
 
             } else if (condition === "dlstatus") {
-                processingCondition = qsTr("Downloading")
+                processingCondition = Condition.Downloading
             }
             processingPercent = percent
         }
@@ -255,7 +260,7 @@ ApplicationWindow {
             for(var i = 0; i < categorylist.length; i++){
                 categories.push(categorylist[i])
             }
-            categoriesFilled()            
+            categoriesFilled()
         }
     }
 
@@ -335,12 +340,13 @@ ApplicationWindow {
                 processingPackageName = appName
                 isThereOnGoingProcess = true
                 if (duty === "true") {
-                    processingCondition = qsTr("Removing")
+                    processingCondition = Condition.Removing //qsTr("Removing")
                     helper.remove(appName)
                 } else {
-                    processingCondition = qsTr("Downloading")
+                    processingCondition = Condition.Downloading //qsTr("Downloading")
                     helper.install(appName)
                 }
+                updateQueue()
             }
         }
     }
@@ -379,7 +385,38 @@ ApplicationWindow {
             return appName.split("-")[1]
         }
         return appName
-    }    
+    }
+
+    function getConditionString(con) {
+        switch (con) {
+        case Condition.Installed: return qsTr("Installed")
+        case Condition.Removed: return qsTr("Removed")
+        case Condition.Downloading: return qsTr("Downloading")
+        case Condition.Installing: return qsTr("Installing")
+        case Condition.Removing: return qsTr("Removing")
+        default: return ""
+        }
+    }
+
+    function getConditionColor(con) {
+        switch (con) {
+        case Condition.Downloading: return "#03A9F4"
+        case Condition.Installing: return "#4CAF50"
+        case Condition.Removing: return "#F44336"
+        default: return accentColor
+        }
+    }
+
+    function disQueue(name) {
+        for(var i = 0; i < processQueue.length; i++) {
+            if(processQueue[i].split(" ")[0] === name) {
+                processQueue.splice(i, 1).toString()
+                disqueuedAppName = name
+                anApplicationDisQueued()
+            }
+        }
+        updateQueue()
+    }
 
     onClosing: {
         if(isThereOnGoingProcess) {
@@ -426,7 +463,7 @@ ApplicationWindow {
     onUpdateQueue: {
         queueDialog.repeater.model = processQueue
         queueDialog.height = queueDialog.repeater.count * 34 + queueDialog.title.height + 26
-        if(processQueue.length == 0) {
+        if(processQueue.length === 0) {
             queueDialog.close()
         }
     }
