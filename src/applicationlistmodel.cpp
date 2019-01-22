@@ -42,7 +42,8 @@ QVariant ApplicationListModel::data(const QModelIndex &index, int role) const
     case StateRole: return app.state();
     case InstalledRole: return app.installed();
     case InQueueRole: return app.inqueue();
-    case NonFreeRole: return app.nonfree();        
+    case NonFreeRole: return app.nonfree();
+    case SearchRole: return app.search();
     default: return QVariant();
     }
     return QVariant();
@@ -84,7 +85,8 @@ QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     roles[RatingRole] = "rating";
     roles[InstalledRole] = "installed";
     roles[InQueueRole] = "inqueue";
-    roles[NonFreeRole] = "nonfree";    
+    roles[NonFreeRole] = "nonfree";
+    roles[SearchRole] = "search";
     return roles;
 }
 
@@ -101,10 +103,14 @@ FilterProxyModel::~FilterProxyModel()
 
 void FilterProxyModel::setFilterString(QString s, bool isSearch)
 {
-    this->setFilterRole(isSearch ? NameRole : CategoryRole);
-    this->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    this->setFilterFixedString(s);
-
+    setFilterCaseSensitivity(Qt::CaseInsensitive);
+    if(s == "") {
+        setFilterRole(isSearch ? NameRole : CategoryRole);
+        setFilterFixedString(s);
+    } else {
+        setFilterRole(isSearch ? SearchRole : CategoryRole);
+        setFilterRegExp(s);
+    }
 }
 
 QString FilterProxyModel::getFilterString() const

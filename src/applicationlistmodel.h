@@ -18,7 +18,8 @@ enum Roles {
     RatingRole,
     InstalledRole,
     InQueueRole,
-    NonFreeRole
+    NonFreeRole,
+    SearchRole
 };
 
 class ApplicationListModel : public QAbstractListModel

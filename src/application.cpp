@@ -10,6 +10,8 @@ Application::Application(const QString &name)
     m_prettyname = QHash<QString, QString>();
     m_exec = "";
     m_state = "get";
+    m_search = "";
+    m_search.append(m_name);
     m_rating = 0.0;
     m_installed = false;
     m_inqueue = false;
@@ -70,6 +72,11 @@ QString Application::state() const
     return m_state;
 }
 
+QString Application::search() const
+{
+    return m_search;
+}
+
 double Application::rating() const
 {
     return m_rating;
@@ -103,11 +110,21 @@ void Application::setDownloadsize(const QString &downloadsize)
 void Application::setCategory(const QHash<QString, QString> &category)
 {
     m_category = category;
+    foreach (const QString &key, category.keys()) {
+        if(m_search.indexOf(category.value(key)) == -1) {
+            m_search.append(category.value(key));
+        }
+    }
 }
 
 void Application::setPrettyname(const QHash<QString, QString> &prettyname)
 {
     m_prettyname = prettyname;
+    foreach (const QString &key, prettyname.keys()) {
+        if(m_search.indexOf(prettyname.value(key)) == -1) {
+            m_search.append(prettyname.value(key));
+        }
+    }
 }
 
 void Application::setExec(const QString &exec)

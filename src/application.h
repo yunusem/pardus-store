@@ -18,6 +18,7 @@ public:
     QString prettyname() const;
     QString exec() const;
     QString state() const;
+    QString search() const;
     double rating() const;
     bool installed() const;
     bool inqueue() const;
@@ -32,7 +33,7 @@ public:
     void setRating(const double &rating);
     void setInstalled(bool installed);
     void setInQueue(bool inqueue);
-    void setNonfree(bool nonfree);
+    void setNonfree(bool nonfree);    
 
 private:
     QString m_name;
@@ -42,6 +43,7 @@ private:
     QHash<QString,QString> m_prettyname;
     QString m_exec;
     QString m_state;
+    QString m_search;
     double m_rating;
     bool m_installed;
     bool m_inqueue;
