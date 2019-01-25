@@ -13,7 +13,7 @@
 #define CONFIG_PATH "/usr/share/pardus/pardus-store/config.ini"
 
 Helper::Helper(QObject *parent) : QObject(parent),
-    p(false), c(""), v("beta"), m_corrected(false),
+    p(false), m_surveychoice(""), v("beta"), m_corrected(false),
     m_erroronreply(false), m_detailsopened(false),
     m_rating(0), m_homeloaded(true)
 {
@@ -32,8 +32,10 @@ Helper::Helper(QObject *parent) : QObject(parent),
     connect(nh,SIGNAL(appRatingReceived(double,uint,uint,QList<int>)),this,SIGNAL(ratingDetailReceived(double,uint,uint,QList<int>)));
     connect(nh,SIGNAL(homeDetailsReceived(QString,QString,uint,double,QString,QString,uint,double,QString,QString,uint,double)),
             this, SIGNAL(homeReceived(QString,QString,uint,double,QString,QString,uint,double,QString,QString,uint,double)));
-    connect(nh,SIGNAL(surveyListReceived(QString,QStringList)),this,SLOT(surveyListReceivedSlot(QString,QStringList)));
+    connect(nh,SIGNAL(surveyListReceived(bool,QString,QString,QString,QStringList,uint,bool)),
+            this,SLOT(surveyListReceivedSlot(bool,QString,QString,QString,QStringList,uint,bool)));
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceivedSlot(QString,int)));
+    connect(nh,SIGNAL(surveyDetailReceived(uint,QString,QString,QString)),this,SIGNAL(surveyDetailReceived(uint,QString,QString,QString)));
     connect(fh,SIGNAL(correctingSourcesFinished()),this,SLOT(correctingFinishedSlot()));
     connect(fh,SIGNAL(correctingSourcesFinishedWithError(QString)),this,SIGNAL(correctingFinishedWithError(QString)));
 }
@@ -152,9 +154,9 @@ bool Helper::processing() const
     return p;
 }
 
-QString Helper::choice() const
+QString Helper::surveychoice() const
 {
-    return c;
+    return m_surveychoice;
 }
 
 QString Helper::version() const
@@ -260,6 +262,11 @@ void Helper::surveyCheck()
 void Helper::surveyJoin(const QString &appName, const QString &duty)
 {
     nh->surveyJoin(appName, duty);
+}
+
+void Helper::getSurveyDetail(const QString &name)
+{
+    nh->surveyDetail(name);
 }
 
 void Helper::systemNotify(const QString &pkg, const QString &title, const QString &content)
@@ -455,8 +462,7 @@ void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
                          ad.copyright(), ad.description(),ad.download(),ad.license(),
                          ad.maintainerMail(),ad.maintainerName(),ad.screenshots(),
                          ad.section(),ad.website());
-    emit descriptionReceived(ad.description());
-    emit screenshotReceived(ad.screenshots());
+    emit descriptionReceived(ad.description());    
 }
 
 void Helper::getSelfVersion()
@@ -491,11 +497,14 @@ void Helper::appListReceivedSlot(const QList<Application> &apps)
     this->fillTheList();
 }
 
-void Helper::surveyListReceivedSlot(const QString &mySelection, const QStringList &sl)
+void Helper::surveyListReceivedSlot(const bool isForm, const QString &title,
+                                    const QString &question, const QString &mychoice,
+                                    const QStringList &choices, const unsigned int &timestamp,
+                                    const bool pending)
 {
-    c = mySelection;
-    emit choiceChanged();
-    emit surveyListReceived(sl);
+    m_surveychoice = mychoice;
+    emit surveychoiceChanged();
+    emit surveyListReceived(isForm,title,question,choices,timestamp,pending);
 }
 
 void Helper::surveyJoinResultReceivedSlot(const QString &duty, const int &result)

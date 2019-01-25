@@ -23,13 +23,13 @@ class Helper : public QObject
                NOTIFY processingFinishedWithError
                NOTIFY processingStatus
                NOTIFY fetchingAppListFinished
-               NOTIFY gatheringLocalDetailFinished
+               NOTIFY gatheringLocalDetailFinished)
+    Q_PROPERTY(QString surveychoice
+               READ surveychoice
+               NOTIFY surveychoiceChanged
                NOTIFY surveyListReceived
                NOTIFY surveyJoinSuccess
                NOTIFY surveyJoinUpdateSuccess)
-    Q_PROPERTY(QString choice
-               READ choice
-               NOTIFY choiceChanged)
     Q_PROPERTY(bool animate
                READ animate
                WRITE setAnimate
@@ -84,7 +84,7 @@ public:
     QString port() const;
     void setUrl(const QString &u);
     void setPort(const QString &p);
-    QString choice() const;
+    QString surveychoice() const;
     QString version() const;
     bool corrected() const;
     bool erroronreply() const;
@@ -104,6 +104,7 @@ public:
     Q_INVOKABLE void getHomeScreenDetails();
     Q_INVOKABLE void surveyCheck();
     Q_INVOKABLE void surveyJoin(const QString &appName, const QString &duty);
+    Q_INVOKABLE void getSurveyDetail(const QString &name);
     Q_INVOKABLE void systemNotify(const QString &pkg,
                                   const QString &title,
                                   const QString &content);
@@ -116,7 +117,7 @@ public:
 
 private:
     bool p;
-    QString c;
+    QString m_surveychoice;
     QString v;
     bool m_corrected;
     bool m_erroronreply;
@@ -152,12 +153,13 @@ private slots:
 signals:
     void processingFinished();
     void processingFinishedWithError(const QString &output);
-    void processingStatus(const QString &condition, int percent);
-    void screenshotReceived(const QStringList &urls);
+    void processingStatus(const QString &condition, int percent);    
     void descriptionReceived(const QString &description);
-    void choiceChanged();
+    void surveychoiceChanged();
     void versionChanged();
-    void surveyListReceived(const QStringList &list);
+    void surveyListReceived(const bool isform, const QString &title,
+                            const QString &question, const QStringList &choices,
+                            const unsigned int &timestamp, const bool pending);
     void surveyJoinSuccess();
     void surveyJoinUpdateSuccess();
     void screenshotNotFound();
@@ -180,6 +182,8 @@ signals:
                               const unsigned int &individual,
                               const unsigned int &total,
                               const QList<int> &rates);
+    void surveyDetailReceived(const unsigned int &count, const QString &reason,
+                              const QString &website, const QString &explanation);
     void homeReceived(const QString &ename, const QString &epname, const unsigned int &ecount, const double &erating,
                       const QString &dname, const QString &dpname, const unsigned int &dcount, const double &drating,
                       const QString &rname, const QString &rpname, const unsigned int &rcount, const double &rrating);
@@ -188,7 +192,10 @@ signals:
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);
     void appListReceivedSlot(const QList<Application> &apps);
-    void surveyListReceivedSlot(const QString &mySelection, const QStringList &sl);
+    void surveyListReceivedSlot(const bool isForm, const QString &title,
+                                const QString &question, const QString &mychoice,
+                                const QStringList &choices, const unsigned int &timestamp,
+                                const bool pending);
     void surveyJoinResultReceivedSlot(const QString &duty, const int &result);
     void correctingFinishedSlot();
 };

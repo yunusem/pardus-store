@@ -38,7 +38,7 @@ Rectangle {
     property var changelogLatest: []
     property var rates: []
 
-    property string seperatorColor: dark ? "#21ffffff" : "#21000000"
+
 
     color: "transparent"
 

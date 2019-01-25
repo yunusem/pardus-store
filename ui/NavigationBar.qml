@@ -221,6 +221,7 @@ Rectangle {
                     id: categoryListView
                     clip: true
                     interactive: false
+                    cacheBuffer: (categoryItemHeight + 4) * categories.length
                     spacing: categoryItemListSpacing
                     anchors.fill: parent
                     model: categoryListModel

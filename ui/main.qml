@@ -50,12 +50,11 @@ ApplicationWindow {
     signal updateCacheFinished()
     signal updateStatusOfAppFromDetail(string appName)
     signal confirmationRemoval(string appName, string from)
-    signal gotSurveyList(variant sl)
+    signal gotSurveyList(variant isf, variant t, variant q, variant cs, variant t, variant p)
     signal surveyJoined()
     signal surveyJoinUpdated()
     signal errorOccured()
     signal categoriesFilled()
-    signal appDescriptionReceived(variant desc)
     signal appDetailsReceived(variant cl, variant ch, variant ct, variant cp,
                               variant desc, variant down, variant l,
                               variant mm, variant mn, variant ss, variant sec,
@@ -64,6 +63,8 @@ ApplicationWindow {
     signal homeDetailsReceived(variant ename, variant epname, variant edc, variant er,
                                variant dname, variant dpname, variant ddc, variant dr,
                                variant rname, variant rpname, variant rdc, variant rr)
+
+    signal surveyDetailsReceived(variant cnt, variant reas, variant ws, variant exp)
 
     property bool selectedAppInstalled
     property bool selectedAppInqueue
@@ -83,7 +84,7 @@ ApplicationWindow {
     property string textColor: dark ? "#E4E4E4" : "#DD2B2B2B"
     property string secondaryTextColor: dark ? "#A9A9A9" : "#686868"
     property string oppositeTextColor: "#2B2B2B"
-
+    property string seperatorColor: dark ? "#21ffffff" : "#21000000"
 
     Rectangle {
         id: mainBackground
@@ -222,7 +223,7 @@ ApplicationWindow {
         }
 
         onSurveyListReceived: {
-            gotSurveyList(list)
+            gotSurveyList(isform,title,question,choices,timestamp,pending)
             if(splashScreen.visible) {
                 splashScreen.label.text = qsTr("Done.")
                 splashScreen.timer.start()
@@ -238,6 +239,10 @@ ApplicationWindow {
         onSurveyJoinUpdateSuccess: {
             surveyJoinUpdated()
             surveyCheck()
+        }
+
+        onSurveyDetailReceived: {
+            surveyDetailsReceived(count, reason, website, explanation)
         }
 
         onCorrectingFinished: {

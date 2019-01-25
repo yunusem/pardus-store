@@ -16,5 +16,6 @@
         <file>ui/ApplicationList.qml</file>
         <file>ui/FadeAnimation.qml</file>
         <file>ui/Seperator.qml</file>
+        <file>ui/SurveyDetail.qml</file>
     </qresource>
 </RCC>

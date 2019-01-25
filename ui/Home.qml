@@ -1,6 +1,5 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Window 2.0
 import QtQuick.Controls.Material 2.0
 import QtGraphicalEffects 1.0
 
@@ -10,10 +9,8 @@ Rectangle {
     color: "transparent"
     property string current: "home"
     property int animationSpeed: 200
-    property variant surveyList : []
-    property variant surveyCounts: []
-    property string surveySelectedApp: ""
-    property string choice : helper.choice
+
+    property string choice : helper.surveychoice
     property int selectedIndex: 0
 
     property real cellWidth: 308
@@ -34,11 +31,25 @@ Rectangle {
     property string mraName: ""
     property string mraPrettyName: ""
 
+    property bool form: true
+    property string title: ""
+    property string question: ""
+    property variant surveyList : []
+    property variant surveyCounts: []
+    property int timestamp: 0
+    property bool pending: false
+
     signal joined()
     signal updated()
     signal countsChanged()
 
-    function fillSurveyList(sl) {
+    function fillSurveyList(f, t, q, sl, ts, p) {
+        form = f
+        title = t
+        question = q
+        timestamp = ts
+        pending = p
+
         surveyList = []
         surveyCounts = []
         for(var i =0; i < sl.length; i++) {
@@ -116,7 +127,7 @@ Rectangle {
             source: helper.getMainUrl() + "/files/screenshots/banner.png"
             anchors {
                 centerIn: parent
-            }            
+            }
             layer.enabled: true
             layer.smooth: true
             layer.effect: OpacityMask {
@@ -689,82 +700,6 @@ Rectangle {
         }
     }
 
-    //    Item {
-    //        id: middle
-    //        anchors {
-    //            left: suggester.right
-    //            right: survey.left
-    //            top: survey.top
-    //            bottom: survey.bottom
-    //            margins: 6
-    //        }
-
-    //        Image {
-    //            id: middleBackgroundIcon
-    //            source: "../images/icon.svg"
-    //            width: parent.width * 2 / 3
-    //            height: width
-    //            fillMode: Image.PreserveAspectFit
-    //            anchors.centerIn: parent
-    //            opacity: 0.04
-    //        }
-
-    //        Column {
-    //            anchors.centerIn: parent
-    //            spacing: 24
-
-    //            Label {
-    //                text: qsTr("Source Code") + " : " +"<a href='https://github.com/yunusem/pardus-store'>GitHub</a>"
-    //                font.pointSize: 12
-    //                horizontalAlignment: Text.AlignHCenter
-    //                verticalAlignment: Text.AlignVCenter
-    //                onLinkActivated: Qt.openUrlExternally(link)
-
-    //                MouseArea {
-    //                    anchors.fill: parent
-    //                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-    //                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-    //                }
-    //            }
-
-    //            Label {
-    //                font.pointSize: 12
-    //                horizontalAlignment: Text.AlignHCenter
-    //                verticalAlignment: Text.AlignVCenter
-    //                text: qsTr("License") + " : " +"<a href='http://ozgurlisanslar.org.tr/gpl/gpl-v3/'>GPL v3</a>"
-    //                onLinkActivated: Qt.openUrlExternally(link)
-
-    //                MouseArea {
-    //                    anchors.fill: parent
-    //                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-    //                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-    //                }
-    //            }
-
-    //            Label {
-    //                font.pointSize: 12
-    //                horizontalAlignment: Text.AlignHCenter
-    //                verticalAlignment: Text.AlignVCenter
-    //                text:qsTr("Version") + " : " + helper.version
-    //            }
-
-    //            Label {
-    //                font.pointSize: 12
-    //                horizontalAlignment: Text.AlignHCenter
-    //                verticalAlignment: Text.AlignVCenter
-    //                text: qsTr("Leave comments on") + " : " +"<a href='http://forum.pardus.org.tr/t/pardus-magaza-pardus-store'>Pardus Forum</a>"
-    //                onLinkActivated: Qt.openUrlExternally(link)
-
-    //                MouseArea {
-    //                    anchors.fill: parent
-    //                    acceptedButtons: Qt.NoButton // we don't want to eat clicks on the Text
-    //                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-    //                }
-    //            }
-    //        }
-    //    }
-
-
     Pane {
         id: survey
         height: parent.height - banner.height - 36
@@ -787,8 +722,7 @@ Rectangle {
                     anchors {
                         horizontalCenter: parent.horizontalCenter
                     }
-                    //text: qsTr("application survey")
-                    text: qsTr("dynamic survey")
+                    text: title
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.capitalization: Font.Capitalize
@@ -806,8 +740,7 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                     }
                     Material.theme: dark ? Material.Dark : Material.Light
-                    //text: qsTr("Which application should be added to the store in next week ?")
-                    text: qsTr("Upgrading") + " ..."
+                    text: question
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
@@ -828,7 +761,7 @@ Rectangle {
 
                     Repeater {
                         id: surveyRepeater
-                        //model: surveyList
+                        model: surveyList
                         Row {
                             spacing: 6
                             Label {
@@ -887,9 +820,9 @@ Rectangle {
                                     hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: {
-                                        surveySelectedApp = modelData
-                                        helper.getAppDetails(surveySelectedApp)
-                                        surveyStackView.push(surveyDetail)
+                                        surveyStackView.push(surveyDetail,{
+                                                                 objectName: "surveydetail",
+                                                                 "surveySelectedApp": modelData})
                                     }
 
                                     onHoveredChanged: {
@@ -933,6 +866,35 @@ Rectangle {
                             helper.surveyJoin(surveyList[selectedIndex],"update")
                         }
                     }
+                }
+
+                Button {
+                    id: surveyFormBtn
+                    visible: !pending
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        bottom: surveyBtn.top
+                        bottomMargin: 12
+                    }
+                    width: surveyFormBtnLabel.width + 24
+                    Material.theme: dark ? Material.Dark : Material.Light
+                    Material.background: primaryColor
+
+                    Label {
+                        id: surveyFormBtnLabel
+                        anchors.centerIn: parent
+                        Material.foreground: "#e4e4e4"
+                        text: qsTr("create option")
+                        fontSizeMode: Text.HorizontalFit
+                        font.capitalization: Font.Capitalize
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    onClicked: {
+                        formPane.opacity = 1.0
+                    }
+
                 }
 
             }
@@ -979,111 +941,88 @@ Rectangle {
         }
     }
 
-    Item {
-        id: surveyDetail
-        visible: false
-        property string description
-        function descriptionArrived(desc) {
-            description = desc
+    Pane {
+        id: formPane
+        visible: opacity > 0.1
+        width : parent.width - 90
+        height: parent.height - 24
+        z: parent.z + 50
+        anchors.centerIn: parent
+        Material.elevation: 15
+        Material.background: backgroundColor
+        opacity: 0.0
+
+        Behavior on opacity {
+            enabled: animate
+            NumberAnimation {
+                easing.type: Easing.OutExpo
+                duration: 300
+            }
         }
 
-        Component.onCompleted: {
-            appDescriptionReceived.connect(descriptionArrived)
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.ArrowCursor
         }
 
-        Button {
-            id: surveyBackButton
-            z: 92
-            height: 54
-            width: height * 2 / 3
+        Label {
+            id: formTitleLabel
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pointSize: 14
+            font.bold: true
+            color: textColor
+            text: qsTr("Application Request From for Survey")
+        }
+
+
+
+
+        Pane {
+            id: closeBtn
+            width: 32
+            height: 32
             Material.background: primaryColor
+            Material.elevation: 10
             anchors {
-                top: parent.top
-                topMargin: - 6
-                left: parent.left
-            }
-
-            Image {
-                width: parent.height - 24
-                anchors.centerIn: parent
-                fillMode: Image.PreserveAspectFit
-                sourceSize.width: width
-                sourceSize.height: width
-                smooth: true
-                source: "qrc:/images/back.svg"
-            }
-
-            onClicked: {
-                surveyStackView.pop(null)
-            }
-        }
-
-        Column {
-            anchors {
-                left: surveyBackButton.right
                 right: parent.right
-                rightMargin: surveyBackButton.width - 9
-                top: surveyBackButton.bottom
-                bottom: parent.bottom
+                top: parent.top
             }
 
-            spacing: 24
-
-            Row {
-                id: surveyDetailHeader
-                spacing: 12
-                height: surveyBackButton.height
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Image {
-                    id:surveyAppIcon
-                    height: parent.height + 24
-                    width: height
-                    anchors {
-                        verticalCenter: parent.verticalCenter
-                    }
-                    verticalAlignment: Image.AlignVCenter
-                    fillMode: Image.PreserveAspectFit
-                    visible: true
-                    source: surveySelectedApp !== "" ? "image://application/" + getCorrectName(surveySelectedApp) : "image://application/image-missing"
-                    sourceSize.width: width
-                    sourceSize.height: width
-                    smooth: true
-                }
-
-                Label {
-                    anchors {
-                        verticalCenter: parent.verticalCenter
-                    }
-                    text: surveySelectedApp
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    font.capitalization: Font.Capitalize
-                    font.bold: true
-                    font.pointSize:24
-                }
+            Label {
+                anchors.centerIn: parent
+                text: "X"
+                font.weight: Font.DemiBold
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
             }
 
-            Flickable {
-                id: surveyAppDescriptionFlick
-                clip: true
-                width: parent.width - 6
-
-
-                //anchors.horizontalCenter: parent.horizontalCenter
-                height: survey.height - surveyDetailHeader.height - 96
-                //contentWidth: surveyAppDescription.width
-                contentHeight: surveyAppDescription.height
-                ScrollBar.vertical: ScrollBar { }
-                flickableDirection: Flickable.VerticalFlick
-                Label {
-                    id:surveyAppDescription
-                    //anchors.horizontalCenter: parent.horizontalCenter
-                    width: parent.width - 12
-                    wrapMode: Text.WordWrap
-                    text: surveyDetail.description
+            MouseArea {
+                width: 32
+                height: 32
+                hoverEnabled: true
+                anchors.centerIn: parent
+                onPressed: {
+                    if (containsMouse) {
+                        parent.Material.elevation = 0
+                    }
+                }
+                onReleased: {
+                    parent.Material.elevation = 2
+                }
+                onClicked: {
+                    formPane.opacity = 0.0
                 }
             }
         }
     }
+
+    Component {
+        id: surveyDetail
+        SurveyDetail {
+
+        }
+    }
+
 }

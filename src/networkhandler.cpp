@@ -153,7 +153,7 @@ void NetworkHandler::sendApplicationInstalled(const QString &name)
 
 void NetworkHandler::surveyCheck()
 {
-    QUrl url(m_mainUrl + QString("/api/v1/survey/list"));
+    QUrl url(m_mainUrl + QString("/api/v2/survey/list"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -171,7 +171,7 @@ void NetworkHandler::surveyCheck()
 
 void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
 {
-    QUrl url(m_mainUrl + QString("/api/v1/survey/join"));
+    QUrl url(m_mainUrl + QString("/api/v2/survey/join"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -185,6 +185,18 @@ void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
     timer->setSingleShot(true);
     reply = m_nam.post(request, QJsonDocument(data).toJson());
+    timer_put(&m_timerMap, reply, timer);
+    timer->start(m_timeoutDuration);
+}
+
+void NetworkHandler::surveyDetail(const QString &name)
+{
+    QNetworkReply *reply;
+    QString url = m_mainUrl + QString("/api/v2/survey/detail/"+ name);
+    QTimer *timer = new QTimer();
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer->setSingleShot(true);
+    reply = m_nam.get(QNetworkRequest(QUrl(url)));
     timer_put(&m_timerMap, reply, timer);
     timer->start(m_timeoutDuration);
 }
@@ -346,19 +358,28 @@ void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
 
 void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
 {
+    QJsonObject content;
+    //qDebug() << obj;
     if(obj.keys().contains("survey-list")) {
-        QStringList sl;
-        QJsonObject content = obj.value("survey-list").toObject();
-        QJsonArray counts = content["counts"].toArray();
-        for(int i=0; i< counts.size();i++) {
-            sl.append(counts.at(i).toObject().value("app").toString() + " " +
-                      QString::number(counts.at(i).toObject().value("count").toInt()));
+        QStringList choices;
+        content = obj.value("survey-list").toObject();
+        QJsonObject choicesobj = content.value("choices").toObject();
+        foreach (const QString &key, choicesobj.keys()) {
+            choices.append(key + " " + QString::number(choicesobj.value(key).toInt()));
         }
-        emit surveyListReceived(content.value("individual").toString(), sl);
+        emit surveyListReceived(content.value("type").toBool(true), content.value("title").toString(""),
+                                content.value("question").toString(""), content.value("individual").toString(""),
+                                choices,content.value("timestamp").toInt(-1), content.value("pending").toBool(false));
     } else if(obj.keys().contains("survey-join")) {
-        QJsonObject content = obj.value("survey-join").toObject();
+        content = obj.value("survey-join").toObject();
         emit surveyJoinResultReceived(content.value("duty").toString(),
                                       content.value("result").toInt());
+    } else if(obj.keys().contains("survey-detail")) {        
+        content = obj.value("survey-detail").toObject();        
+        emit surveyDetailReceived(content.value("count").toInt(0),
+                                  content.value("reason").toString("reason"),
+                                  content.value("website").toString("website"),
+                                  content.value("explanation").toString("explanation"));
     }
 }
 

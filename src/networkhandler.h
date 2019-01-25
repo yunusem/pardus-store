@@ -24,6 +24,7 @@ public:
     void sendApplicationInstalled(const QString &name);
     void surveyCheck();
     void surveyJoin(const QString &appName, const QString &duty);
+    void surveyDetail(const QString &name);
     QString getMainUrl() const;
 
 signals:
@@ -37,7 +38,11 @@ signals:
                              const QString &dname, const QString &dpname, const unsigned int &dcount, const double &drating,
                              const QString &rname, const QString &rpname, const unsigned int &rcount, const double &rrating);
 
-    void surveyListReceived(const QString &mySelection, const QStringList &sl);
+    void surveyListReceived(const bool isForm, const QString &title,
+                            const QString &question, const QString &mychoice,
+                            const QStringList &choices, const unsigned int &timestamp,
+                            const bool pending);
+    void surveyDetailReceived(const unsigned int &count, const QString &reason, const QString &website, const QString &explanation);
     void surveyJoinResultReceived(const QString &duty, const int &result);
     void replyError(const QString &error);
 
