@@ -169,7 +169,9 @@ void NetworkHandler::surveyCheck()
     timer->start(m_timeoutDuration);
 }
 
-void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
+void NetworkHandler::surveyJoin(const QString &option, const bool sendingForm,
+                                const QString &reason, const QString &website,
+                                const QString &mail, const QString &explanation)
 {
     QUrl url(m_mainUrl + QString("/api/v2/survey/join"));
     QNetworkRequest request(url);
@@ -177,8 +179,12 @@ void NetworkHandler::surveyJoin(const QString &appName, const QString &duty)
 
     QJsonObject data;
     data.insert("mac",QJsonValue::fromVariant(m_macId));
-    data.insert("app",QJsonValue::fromVariant(appName));
-    data.insert("duty",QJsonValue::fromVariant(duty));
+    data.insert("type",QJsonValue::fromVariant(sendingForm));
+    data.insert("answer",QJsonValue::fromVariant(option));
+    data.insert("reason",QJsonValue::fromVariant(reason));
+    data.insert("website",QJsonValue::fromVariant(website));
+    data.insert("mail",QJsonValue::fromVariant(mail));
+    data.insert("explanation",QJsonValue::fromVariant(explanation));
 
     QNetworkReply *reply;
     QTimer *timer = new QTimer();
@@ -358,14 +364,13 @@ void NetworkHandler::parseRatingResponse(const QJsonObject &obj)
 
 void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
 {
-    QJsonObject content;
-    //qDebug() << obj;
+    QJsonObject content;   
     if(obj.keys().contains("survey-list")) {
         QStringList choices;
         content = obj.value("survey-list").toObject();
         QJsonObject choicesobj = content.value("choices").toObject();
         foreach (const QString &key, choicesobj.keys()) {
-            choices.append(key + " " + QString::number(choicesobj.value(key).toInt()));
+            choices.append(key + " " + QString::number(choicesobj.value(key).toInt()));            
         }
         emit surveyListReceived(content.value("type").toBool(true), content.value("title").toString(""),
                                 content.value("question").toString(""), content.value("individual").toString(""),

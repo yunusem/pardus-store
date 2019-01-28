@@ -52,7 +52,7 @@ ApplicationWindow {
     signal confirmationRemoval(string appName, string from)
     signal gotSurveyList(variant isf, variant t, variant q, variant cs, variant t, variant p)
     signal surveyJoined()
-    signal surveyJoinUpdated()
+    signal surveyMyChoiceChanged()
     signal errorOccured()
     signal categoriesFilled()
     signal appDetailsReceived(variant cl, variant ch, variant ct, variant cp,
@@ -232,17 +232,15 @@ ApplicationWindow {
         }
 
         onSurveyJoinSuccess: {
-            surveyJoined()
-            surveyCheck()
-        }
-
-        onSurveyJoinUpdateSuccess: {
-            surveyJoinUpdated()
-            surveyCheck()
+            surveyJoined()            
         }
 
         onSurveyDetailReceived: {
             surveyDetailsReceived(count, reason, website, explanation)
+        }
+
+        onSurveychoiceChanged: {
+            surveyMyChoiceChanged()
         }
 
         onCorrectingFinished: {

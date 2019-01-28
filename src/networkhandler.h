@@ -23,7 +23,8 @@ public:
     void getHomeDetails();
     void sendApplicationInstalled(const QString &name);
     void surveyCheck();
-    void surveyJoin(const QString &appName, const QString &duty);
+    void surveyJoin(const QString &option, const bool sendingForm, const QString &reason,
+                    const QString &website, const QString &mail, const QString &explanation);
     void surveyDetail(const QString &name);
     QString getMainUrl() const;
 

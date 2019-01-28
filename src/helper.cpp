@@ -259,9 +259,9 @@ void Helper::surveyCheck()
     nh->surveyCheck();
 }
 
-void Helper::surveyJoin(const QString &appName, const QString &duty)
+void Helper::surveyJoin(const QString &option, const bool sendingForm, const QString &reason, const QString &website, const QString &mail, const QString &explanation)
 {
-    nh->surveyJoin(appName, duty);
+    nh->surveyJoin(option,sendingForm,reason,website,mail,explanation);
 }
 
 void Helper::getSurveyDetail(const QString &name)
@@ -462,7 +462,7 @@ void Helper::appDetailReceivedSlot(const ApplicationDetail &ad)
                          ad.copyright(), ad.description(),ad.download(),ad.license(),
                          ad.maintainerMail(),ad.maintainerName(),ad.screenshots(),
                          ad.section(),ad.website());
-    emit descriptionReceived(ad.description());    
+    emit descriptionReceived(ad.description());
 }
 
 void Helper::getSelfVersion()
@@ -490,7 +490,7 @@ void Helper::appListReceivedSlot(const QList<Application> &apps)
         m_categories.removeAt(m_categories.indexOf("others"));
         m_categories.append("others");
     }
-        emit categorylistChanged();
+    emit categorylistChanged();
     emit fetchingAppListFinished();
     this->updateListUsingPackageManager();
     this->getSelfVersion();
@@ -501,22 +501,19 @@ void Helper::surveyListReceivedSlot(const bool isForm, const QString &title,
                                     const QString &question, const QString &mychoice,
                                     const QStringList &choices, const unsigned int &timestamp,
                                     const bool pending)
-{
+{    
     m_surveychoice = mychoice;
     emit surveychoiceChanged();
     emit surveyListReceived(isForm,title,question,choices,timestamp,pending);
 }
 
 void Helper::surveyJoinResultReceivedSlot(const QString &duty, const int &result)
-{
+{    
     if (result == 1) {
-        if(duty == "update") {
-            emit surveyJoinUpdateSuccess();
-        } else if(duty == "join") {
-            emit surveyJoinSuccess();
-        }
+        emit surveyJoinSuccess();
+
     } else {
-        qDebug() << "Survey join result is " << result;
+        qDebug() << "Survey join result is " << result << " duty is " << duty;
     }
 }
 

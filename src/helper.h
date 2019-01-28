@@ -28,8 +28,7 @@ class Helper : public QObject
                READ surveychoice
                NOTIFY surveychoiceChanged
                NOTIFY surveyListReceived
-               NOTIFY surveyJoinSuccess
-               NOTIFY surveyJoinUpdateSuccess)
+               NOTIFY surveyJoinSuccess)
     Q_PROPERTY(bool animate
                READ animate
                WRITE setAnimate
@@ -103,7 +102,9 @@ public:
     Q_INVOKABLE void ratingControl(const QString &name, const unsigned int &rating = 0);
     Q_INVOKABLE void getHomeScreenDetails();
     Q_INVOKABLE void surveyCheck();
-    Q_INVOKABLE void surveyJoin(const QString &appName, const QString &duty);
+    Q_INVOKABLE void surveyJoin(const QString &option, const bool sendingForm, const QString &reason = "",
+                                const QString &website = "", const QString &mail = "",
+                                const QString &explanation = "");
     Q_INVOKABLE void getSurveyDetail(const QString &name);
     Q_INVOKABLE void systemNotify(const QString &pkg,
                                   const QString &title,
@@ -160,8 +161,7 @@ signals:
     void surveyListReceived(const bool isform, const QString &title,
                             const QString &question, const QStringList &choices,
                             const unsigned int &timestamp, const bool pending);
-    void surveyJoinSuccess();
-    void surveyJoinUpdateSuccess();
+    void surveyJoinSuccess();    
     void screenshotNotFound();
     void fetchingAppListFinished();
     void gatheringLocalDetailFinished();

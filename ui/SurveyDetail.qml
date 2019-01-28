@@ -168,6 +168,15 @@ Item {
                     horizontalAlignment: Text.AlignLeft
                     text: explanation
                     color: secondaryTextColor
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.NoButton
+                        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    }
+
+                    onLinkActivated: {
+                        helper.openUrl(link)
+                    }
                 }
 
                 Seperator {
