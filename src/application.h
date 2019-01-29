@@ -12,6 +12,7 @@ public:
 
     QString name() const;
     QString version() const;
+    unsigned int downloadcount();
     QString downloadsize() const;
     QString category() const;
     QString categoryLocal() const;
@@ -25,6 +26,7 @@ public:
     bool nonfree() const;
 
     void setVersion(const QString &version);
+    void setDownloadcount(const unsigned int &downloadcount);
     void setDownloadsize(const QString &downloadsize);
     void setCategory(const QHash<QString,QString> &category);
     void setPrettyname (const QHash<QString, QString> &prettyname);
@@ -38,6 +40,7 @@ public:
 private:
     QString m_name;
     QString m_version;
+    unsigned int m_downloadcount;
     QString m_downloadsize;
     QHash<QString,QString> m_category;
     QHash<QString,QString> m_prettyname;
@@ -47,7 +50,7 @@ private:
     double m_rating;
     bool m_installed;
     bool m_inqueue;
-    bool m_nonfree;
+    bool m_nonfree;    
 };
 
 #endif // APPLICATION_H

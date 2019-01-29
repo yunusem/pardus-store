@@ -390,53 +390,31 @@ void NetworkHandler::parseSurveyResponse(const QJsonObject &obj)
 
 void NetworkHandler::parseHomeResponse(const QJsonObject &obj)
 {
-    if(obj.keys().contains("home")) {
-        QJsonObject content = obj.value("home").toObject();
+    if (obj.keys().contains("home")) {
+        QJsonObject arr = obj.value("home").toObject();
+        QList<Application> apps;
+        QJsonObject appobj;
         QHash<QString,QString> hash;
-        QString name, ename, dname, rname = "";
-        QString epname, dpname, rpname = "";
-        unsigned int d, ed, dd, rd = 0;
-        double r, er, dr, rr = 0.0;
-        QLocale systemLocale;
-        QString locale = systemLocale.name().split("_")[0];
-
-        foreach (const QString &key, content.keys()) {
-            QJsonObject jo = content.value(key).toObject();
-            if(!jo.isEmpty() && jo.keys().contains("prettyname")) {
-                foreach (const QString &subkey, jo.value("prettyname").toObject().keys()) {
-                    hash.insert(subkey,jo.value("prettyname").toObject().value(subkey).toString());
-                }
-
-                name = jo.value("appname").toString();
-                d = jo.value("downloadcount").toInt();
-                r = jo.value("rating").toDouble();
-                if(key == "editor"){
-                    epname = hash.value("en");
-                    ename = name;
-                    ed = d;
-                    er = r;
-                }else if(key == "mostdownloaded"){
-                    dpname = hash.value("en");
-                    dname = name;
-                    dd = d;
-                    dr = r;
-                }else if(key == "mostrated"){
-                    rpname = hash.value("en");
-                    rname = name;
-                    rd = d;
-                    rr = r;
-                }
-
-                if(hash.keys().contains(locale) && hash.value(locale) != "") {
-                    if(key == "editor") epname = hash.value(locale);
-                    else if(key == "mostdownloaded") dpname = hash.value(locale);
-                    else if(key == "mostrated") rpname = hash.value(locale);
-                }
-                hash.clear();
+        foreach (const QString &key, arr.keys()) {
+            appobj = arr.value(key).toObject();
+            Application app(appobj.value("name").toString());
+            foreach (const QString &key, appobj.value("category").toObject().keys()) {
+                hash.insert(key,appobj.value("category").toObject().value(key).toString());
             }
+            app.setCategory(hash);
+            hash.clear();
+            app.setDownloadcount(appobj.value("downloadcount").toInt());
+            app.setNonfree(appobj.value("component").toString() == "non-free");
+            app.setExec(appobj.value("exec").toString());
+            foreach (const QString &key, appobj.value("prettyname").toObject().keys()) {
+                hash.insert(key,appobj.value("prettyname").toObject().value(key).toString());
+            }
+            app.setPrettyname(hash);
+            hash.clear();
+            app.setRating(appobj.value("rating").toDouble());
+            apps.append(app);
         }
-
-        emit homeDetailsReceived(ename,epname,ed,er,dname,dpname,dd,dr,rname,rpname,rd,rr);
+        emit homeAppListReceived(apps);
     }
 }
 

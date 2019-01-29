@@ -60,9 +60,12 @@ ApplicationWindow {
                               variant mm, variant mn, variant ss, variant sec,
                               variant w)
     signal appRatingDetailsReceived(variant avg, variant ind, variant tot, variant rs)
-    signal homeDetailsReceived(variant ename, variant epname, variant edc, variant er,
-                               variant dname, variant dpname, variant ddc, variant dr,
-                               variant rname, variant rpname, variant rdc, variant rr)
+    signal homeDetailsReceived(variant ename, variant epname, variant ecat, variant eexec, variant eins,
+                               variant ecount, variant erating, variant ever, variant esize, variant enf,
+                               variant dname, variant dpname, variant dcat, variant dexec, variant dins,
+                               variant dcount, variant drating, variant dver, variant dsize, variant dnf,
+                               variant rname, variant rpname, variant rcat, variant rexec, variant rins,
+                               variant rcount, variant rrating, variant rver, variant rsize, variant rnf)
 
     signal surveyDetailsReceived(variant cnt, variant reas, variant ws, variant exp)
 
@@ -199,9 +202,9 @@ ApplicationWindow {
         }
 
         onHomeReceived: {
-            homeDetailsReceived(ename, epname, ecount, erating,
-                                dname, dpname, dcount, drating,
-                                rname, rpname, rcount, rrating)
+            homeDetailsReceived(ename,epname,ecat,eexec,eins,ecount,erating,ever,esize,enf,
+                                dname,dpname,dcat,dexec,dins,dcount,drating,dver,dsize,dnf,
+                                rname,rpname,rcat,rexec,rins,rcount,rrating,rver,rsize,rnf)
         }
 
         onReplyError: {
@@ -232,7 +235,7 @@ ApplicationWindow {
         }
 
         onSurveyJoinSuccess: {
-            surveyJoined()            
+            surveyJoined()
         }
 
         onSurveyDetailReceived: {
@@ -277,6 +280,8 @@ ApplicationWindow {
             right: parent.right
         }
 
+
+
         initialItem: Home {}
 
         pushEnter: Transition {
@@ -318,6 +323,7 @@ ApplicationWindow {
                 easing.type: Easing.OutCubic
             }
         }
+
     }
 
     NavigationBar {
@@ -449,7 +455,7 @@ ApplicationWindow {
             helper.surveyCheck()
         } else if (m === "categories") {
             if(name === "detail") {
-                stackView.pop()
+                stackView.replace(applicationList,{objectName: "list", "current": c, "previous": previousMenu})
             } else if((previousMenu !== "settings") || (previousMenu === "settings" && current === "home")) {
                 stackView.push(applicationList,{objectName: "list", "current": c, "previous": previousMenu})
             }

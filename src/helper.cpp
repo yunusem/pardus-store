@@ -30,8 +30,7 @@ Helper::Helper(QObject *parent) : QObject(parent),
     connect(nh,SIGNAL(appDetailsReceived(ApplicationDetail)),this,SLOT(appDetailReceivedSlot(ApplicationDetail)));
     connect(nh,SIGNAL(replyError(QString)),this,SIGNAL(replyError(QString)));
     connect(nh,SIGNAL(appRatingReceived(double,uint,uint,QList<int>)),this,SIGNAL(ratingDetailReceived(double,uint,uint,QList<int>)));
-    connect(nh,SIGNAL(homeDetailsReceived(QString,QString,uint,double,QString,QString,uint,double,QString,QString,uint,double)),
-            this, SIGNAL(homeReceived(QString,QString,uint,double,QString,QString,uint,double,QString,QString,uint,double)));
+    connect(nh,SIGNAL(homeAppListReceived(QList<Application>)),this, SLOT(homeReceivedSlot(QList<Application>)));
     connect(nh,SIGNAL(surveyListReceived(bool,QString,QString,QString,QStringList,uint,bool)),
             this,SLOT(surveyListReceivedSlot(bool,QString,QString,QString,QStringList,uint,bool)));
     connect(nh,SIGNAL(surveyJoinResultReceived(QString,int)),this,SLOT(surveyJoinResultReceivedSlot(QString,int)));
@@ -204,7 +203,7 @@ void Helper::fillTheList()
     for(int i = 0; i < m_fakelist.size(); i++) {
         lc.l->addData(m_fakelist.at(i));
     }
-    emit gatheringLocalDetailFinished();
+    getHomeScreenDetails();
 }
 
 void Helper::updateCache()
@@ -362,14 +361,14 @@ void Helper::packageProcessStatus(const QString &status, const QString &pkg, int
     emit processingStatus(status, value);
 }
 
-void Helper::updateListUsingPackageManager()
+void Helper:: updateListUsingPackageManager(QList<Application> &list)
 {
     QMap<QString,QString> sizeList;
     QString apps;
-    for(int i = 0; i < m_fakelist.size(); i++) {
-        sizeList.insert(m_fakelist.at(i).name(),"");
-        apps += m_fakelist.at(i).name();
-        if (i != (m_fakelist.size() - 1)) {
+    for(int i = 0; i < list.size(); i++) {
+        sizeList.insert(list.at(i).name(),"");
+        apps += list.at(i).name();
+        if (i != (list.size() - 1)) {
             apps += " ";
         }
     }
@@ -406,18 +405,18 @@ void Helper::updateListUsingPackageManager()
     int ix = 0;
     QString checkInstalled;
 
-    for(int i = 0; i< m_fakelist.size(); i++) {
-        ix = output.indexOf(QRegExp(m_fakelist[i].name() + QString("*.*")));
+    for(int i = 0; i< list.size(); i++) {
+        ix = output.indexOf(QRegExp(list[i].name() + QString("*.*")));
         checkInstalled = output.at(ix + 1).split(" ").last();
         if (checkInstalled.contains("none")) {
-            m_fakelist[i].setInstalled(false);
-            m_fakelist[i].setState("get");
+            list[i].setInstalled(false);
+            list[i].setState("get");
         } else {
-            m_fakelist[i].setInstalled(true);
-            m_fakelist[i].setState("installed");
+            list[i].setInstalled(true);
+            list[i].setState("installed");
         }
-        m_fakelist[i].setVersion(output.at(ix + 2).split(" ").last());
-        m_fakelist[i].setDownloadsize(sizeList.value(m_fakelist[i].name()));
+        list[i].setVersion(output.at(ix + 2).split(" ").last());
+        list[i].setDownloadsize(sizeList.value(list[i].name()));
     }
 }
 
@@ -491,10 +490,26 @@ void Helper::appListReceivedSlot(const QList<Application> &apps)
         m_categories.append("others");
     }
     emit categorylistChanged();
+    updateListUsingPackageManager(m_fakelist);
     emit fetchingAppListFinished();
-    this->updateListUsingPackageManager();
-    this->getSelfVersion();
-    this->fillTheList();
+    getSelfVersion();
+    fillTheList();
+}
+
+void Helper::homeReceivedSlot(const QList<Application> &apps)
+{
+    m_homelist = apps;
+    updateListUsingPackageManager(m_homelist);
+    emit homeReceived(m_homelist[0].name(), m_homelist[0].prettyname(), m_homelist[0].category(), m_homelist[0].exec(),
+            m_homelist[0].installed(), m_homelist[0].downloadcount(), m_homelist[0].rating(), m_homelist[0].version(),
+            m_homelist[0].downloadsize(),m_homelist[0].nonfree(),
+            m_homelist[1].name(), m_homelist[1].prettyname(), m_homelist[1].category(), m_homelist[1].exec(),
+            m_homelist[1].installed(), m_homelist[1].downloadcount(), m_homelist[1].rating(), m_homelist[1].version(),
+            m_homelist[1].downloadsize(), m_homelist[1].nonfree(),
+            m_homelist[2].name(), m_homelist[2].prettyname(), m_homelist[2].category(), m_homelist[2].exec(),
+            m_homelist[2].installed(), m_homelist[2].downloadcount(), m_homelist[2].rating(), m_homelist[2].version(),
+            m_homelist[2].downloadsize(), m_homelist[2].nonfree());
+    emit gatheringLocalDetailFinished();
 }
 
 void Helper::surveyListReceivedSlot(const bool isForm, const QString &title,
@@ -511,7 +526,6 @@ void Helper::surveyJoinResultReceivedSlot(const QString &duty, const int &result
 {    
     if (result == 1) {
         emit surveyJoinSuccess();
-
     } else {
         qDebug() << "Survey join result is " << result << " duty is " << duty;
     }

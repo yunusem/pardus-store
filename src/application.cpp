@@ -5,6 +5,7 @@ Application::Application(const QString &name)
     :m_name(name)
 {
     m_version = "";
+    m_downloadcount = 0;
     m_downloadsize = "";
     m_category = QHash<QString, QString>();
     m_prettyname = QHash<QString, QString>();
@@ -26,6 +27,11 @@ QString Application::name() const
 QString Application::version() const
 {
     return m_version;
+}
+
+unsigned int Application::downloadcount()
+{
+    return m_downloadcount;
 }
 
 QString Application::downloadsize() const
@@ -100,6 +106,11 @@ bool Application::inqueue() const
 void Application::setVersion(const QString &version)
 {
     m_version = version;
+}
+
+void Application::setDownloadcount(const unsigned int &downloadcount)
+{
+    m_downloadcount = downloadcount;
 }
 
 void Application::setDownloadsize(const QString &downloadsize)

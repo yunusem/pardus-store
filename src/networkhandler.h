@@ -35,9 +35,8 @@ signals:
                            const unsigned int &individual,
                            const unsigned int &total,
                            const QList<int> &rates);
-    void homeDetailsReceived(const QString &ename, const QString &epname, const unsigned int &ecount, const double &erating,
-                             const QString &dname, const QString &dpname, const unsigned int &dcount, const double &drating,
-                             const QString &rname, const QString &rpname, const unsigned int &rcount, const double &rrating);
+
+    void homeAppListReceived(const QList<Application> &apps);
 
     void surveyListReceived(const bool isForm, const QString &title,
                             const QString &question, const QString &mychoice,

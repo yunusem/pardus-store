@@ -18,16 +18,34 @@ Rectangle {
     property int epaDownloadCount: 0
     property string epaName: ""
     property string epaPrettyName: ""
+    property string epaCategory: ""
+    property string epaExec: ""
+    property string epaVersion: ""
+    property string epaDownloadSize: ""
+    property bool epaInstalled: false
+    property bool epaNonfree: false
 
     property double mdaRating: 0.0
     property int mdaDownloadCount: 0
     property string mdaName: ""
     property string mdaPrettyName: ""
+    property string mdaCategory: ""
+    property string mdaExec: ""
+    property string mdaVersion: ""
+    property string mdaDownloadSize: ""
+    property bool mdaInstalled: false
+    property bool mdaNonfree: false
 
     property double mraRating: 0.0
     property int mraDownloadCount: 0
     property string mraName: ""
     property string mraPrettyName: ""
+    property string mraCategory: ""
+    property string mraExec: ""
+    property string mraVersion: ""
+    property string mraDownloadSize: ""
+    property bool mraInstalled: false
+    property bool mraNonfree: false
 
     property bool form: true
     property string title: ""
@@ -81,21 +99,41 @@ Rectangle {
         }
     }
 
-    function homeDetailsSlot(en, epn, ec, er, dn, dpn, dc, dr, rn, rpn, rc, rr) {
+    function homeDetailsSlot(en, epn, ecat, ex, eins, ec, er, ev, es, enf,
+                             dn, dpn, dcat, dx, dins, dc, dr, dv, ds, dnf,
+                             rn, rpn, rcat, rx, rins, rc, rr, rv, rs, rnf) {
         epaName = en
         epaPrettyName = epn
         epaDownloadCount = ec
         epaRating = er
+        epaCategory = ecat
+        epaExec = ex
+        epaVersion = ev
+        epaDownloadSize = es
+        epaInstalled = eins
+        epaNonfree = enf
 
         mdaName = dn
         mdaPrettyName = dpn
         mdaDownloadCount = dc
         mdaRating = dr
+        mdaCategory = dcat
+        mdaExec = dx
+        mdaVersion = dv
+        mdaDownloadSize = ds
+        mdaInstalled = dins
+        mdaNonfree = dnf
 
         mraName = rn
         mraPrettyName = rpn
         mraDownloadCount = rc
         mraRating = rr
+        mraCategory = rcat
+        mraExec = rx
+        mraVersion = rv
+        mraDownloadSize = rs
+        mraInstalled = rins
+        mraNonfree = rnf
     }
 
     function choiceChanged(){
@@ -148,7 +186,6 @@ Rectangle {
 
     Component.onCompleted: {
         surveyMyChoiceChanged.connect(choiceChanged)
-        helper.getHomeScreenDetails()
         gotSurveyList.connect(fillSurveyList)
         surveyJoined.connect(joined)
         homeDetailsReceived.connect(homeDetailsSlot)
@@ -258,11 +295,22 @@ Rectangle {
 
                 onClicked: {
                     if(epaPrettyName !== "") {
-                        selectedCategory = "all"
-                        expanded = true
-                        selectedMenu = "categories"
                         forceActiveFocus()
-                        applicationModel.setFilterString(epaName, true)
+                        selectedAppName = epaName
+                        selectedAppPrettyName = epaPrettyName
+
+                        selectedAppDelegatestate = epaInstalled ? "installed" : "get"
+                        selectedAppExecute = epaExec
+                        selectedAppInstalled = epaInstalled
+                        selectedAppInqueue = false
+                        stackView.push(applicationDetail, {
+                                           objectName: "detail",
+                                           "current": epaName,
+                                           "previous": "home",
+                                           "appVersion": epaVersion,
+                                           "appDownloadSize" : epaDownloadSize,
+                                           "appCategory" : epaCategory,
+                                           "appNonfree" : epaNonfree})
                     }
                 }
                 onPressed: {
@@ -340,7 +388,7 @@ Rectangle {
 
                 Rectangle {
                     width: parent.width
-                    height: mdaRatingLabel.contentHeight + 6
+                    height: epaRatingLabel.contentHeight + 6
                     color: "transparent"
                     Row {
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -430,11 +478,22 @@ Rectangle {
 
                 onClicked: {
                     if(mdaPrettyName !== "") {
-                        selectedCategory = "all"
-                        expanded = true
-                        selectedMenu = "categories"
                         forceActiveFocus()
-                        applicationModel.setFilterString(mdaName, true)
+                        selectedAppName = mdaName
+                        selectedAppPrettyName = mdaPrettyName
+
+                        selectedAppDelegatestate = mdaInstalled ? "installed" : "get"
+                        selectedAppExecute = mdaExec
+                        selectedAppInstalled = mdaInstalled
+                        selectedAppInqueue = false
+                        stackView.push(applicationDetail, {
+                                           objectName: "detail",
+                                           "current": mdaName,
+                                           "previous": "home",
+                                           "appVersion": mdaVersion,
+                                           "appDownloadSize" : mdaDownloadSize,
+                                           "appCategory" : mdaCategory,
+                                           "appNonfree" : mdaNonfree})
                     }
                 }
                 onPressed: {
@@ -603,11 +662,22 @@ Rectangle {
 
                 onClicked: {
                     if(mraPrettyName  !== "") {
-                        selectedCategory = "all"
-                        expanded = true
-                        selectedMenu = "categories"
                         forceActiveFocus()
-                        applicationModel.setFilterString(mraName, true)
+                        selectedAppName = mraName
+                        selectedAppPrettyName = mraPrettyName
+
+                        selectedAppDelegatestate = mraInstalled ? "installed" : "get"
+                        selectedAppExecute = mraExec
+                        selectedAppInstalled = mraInstalled
+                        selectedAppInqueue = false
+                        stackView.push(applicationDetail, {
+                                           objectName: "detail",
+                                           "current": mraName,
+                                           "previous": "home",
+                                           "appVersion": mraVersion,
+                                           "appDownloadSize" : mraDownloadSize,
+                                           "appCategory" : mraCategory,
+                                           "appNonfree" : mraNonfree})
                     }
                 }
                 onPressed: {
@@ -686,7 +756,7 @@ Rectangle {
 
                 Rectangle {
                     width: parent.width
-                    height: mdaRatingLabel.contentHeight + 6
+                    height: mraRatingLabel.contentHeight + 6
                     color: "transparent"
                     Row {
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -956,7 +1026,7 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     fontSizeMode: Text.HorizontalFit
-                    font.pointSize: 11
+                    font.pointSize: 10
                     text: countdownToString() + "\n" + qsTr("after survey will be ended")
                     visible: !surveyFinished
 

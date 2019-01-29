@@ -100,7 +100,6 @@ public:
     Q_INVOKABLE void getAppList();
     Q_INVOKABLE void getAppDetails(const QString &pkg);
     Q_INVOKABLE void ratingControl(const QString &name, const unsigned int &rating = 0);
-    Q_INVOKABLE void getHomeScreenDetails();
     Q_INVOKABLE void surveyCheck();
     Q_INVOKABLE void surveyJoin(const QString &option, const bool sendingForm, const QString &reason = "",
                                 const QString &website = "", const QString &mail = "",
@@ -128,10 +127,12 @@ private:
     FileHandler *fh;
     PackageHandler *ph;
     QList<Application> m_fakelist;
+    QList<Application> m_homelist;
     ListCover lc;
     NetworkHandler *nh;
     QSettings *s;
     void fillTheList();
+    void getHomeScreenDetails();
     bool m_animate;
     bool m_update;
     unsigned int m_ratio;
@@ -146,7 +147,7 @@ private slots:
     void packageProcessFinished(int code);
     void packageProcessStatus(const QString &status, const QString &pkg,
                               int value, const QString &desc);
-    void updateListUsingPackageManager();
+    void updateListUsingPackageManager(QList<Application> &list);
     QString getLanguagePackage(const QString &pkg) const;
     void writeSettings(const QString &key, const QVariant &value);
     void getSelfVersion();
@@ -184,14 +185,18 @@ signals:
                               const QList<int> &rates);
     void surveyDetailReceived(const unsigned int &count, const QString &reason,
                               const QString &website, const QString &explanation);
-    void homeReceived(const QString &ename, const QString &epname, const unsigned int &ecount, const double &erating,
-                      const QString &dname, const QString &dpname, const unsigned int &dcount, const double &drating,
-                      const QString &rname, const QString &rpname, const unsigned int &rcount, const double &rrating);
+    void homeReceived(const QString &ename, const QString &epname, const QString &ecat, const QString &eexec, const bool eins,
+                      const unsigned int &ecount, const double &erating, const QString &ever, const QString &esize, const bool enf,
+                      const QString &dname, const QString &dpname, const QString &dcat, const QString &dexec, const bool dins,
+                      const unsigned int &dcount, const double &drating, const QString &dver, const QString &dsize, const bool dnf,
+                      const QString &rname, const QString &rpname, const QString &rcat, const QString &rexec, const bool rins,
+                      const unsigned int &rcount, const double &rrating, const QString &rver, const QString &rsize, const bool rnf);
     void categorylistChanged();
 
 public slots:    
     void appDetailReceivedSlot(const ApplicationDetail &ad);
     void appListReceivedSlot(const QList<Application> &apps);
+    void homeReceivedSlot(const QList<Application> &apps);
     void surveyListReceivedSlot(const bool isForm, const QString &title,
                                 const QString &question, const QString &mychoice,
                                 const QStringList &choices, const unsigned int &timestamp,
