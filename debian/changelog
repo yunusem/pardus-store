@@ -1,3 +1,16 @@
+pardus-store (0.3.1~beta1) unstable; urgency=medium
+
+  * Bump version to 0.3.1~beta1
+  * Make another role just for search. Closes: #11
+  * Prepare survey form mechanism
+  * Implement dynamic survey and make it functional. Closes: #7
+  * Fix update bug on repeater in survey list
+  * Add count down for custom surveys
+  * Make switching to detail from home page possible.
+  * Decrease font pointsize in survey detail app name
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 29 Jan 2019 18:09:30 +0300
+
 pardus-store (0.3.0~beta4) unstable; urgency=medium
 
   * Fix label clip issue on Detail page action button
