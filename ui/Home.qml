@@ -43,8 +43,13 @@ Rectangle {
     property string formMail: ""
     property string formExplanation: ""
 
+    property int days: 0
+    property int hours: 0
+    property int minutes: 0
+    property int seconds: 0
+    property bool surveyFinished: false
+
     signal joined()
-    signal updated()
     signal countsChanged()
 
     function fillSurveyList(f, t, q, sl, ts, p) {
@@ -53,7 +58,7 @@ Rectangle {
         question = q
         timestamp = ts
         pending = p
-
+        surveyFinished = form
         surveyList = []
         surveyCounts = []
         for(var i =0; i < sl.length; i++) {
@@ -66,6 +71,14 @@ Rectangle {
         }
         countsChanged()
         surveyFlickableObject.contentHeight = (surveyText.height + 50 * surveyList.length)
+
+        if(form) {
+            countdownTimer.stop()
+        } else {
+            if(!countdownTimer.running && !surveyFinished) {
+                countdownTimer.start()
+            }
+        }
     }
 
     function homeDetailsSlot(en, epn, ec, er, dn, dpn, dc, dr, rn, rpn, rc, rr) {
@@ -85,12 +98,52 @@ Rectangle {
         mraRating = rr
     }
 
-    onJoined: {
-        helper.surveyCheck()
-    }
-
     function choiceChanged(){
         myChoice = helper.surveychoice
+    }
+
+    function updateCountdown() {
+        var target = new Date()
+        var now = new Date()
+
+        target.setTime(timestamp * 1000)
+        var totalMilliSeconds = target.getTime() - now.getTime()
+
+        if (totalMilliSeconds < 0) {
+            surveyFinished = true
+            days = 0
+            hours = 0
+            minutes = 0
+            seconds = 0
+            return
+        }
+
+        var totalSeconds = parseInt(totalMilliSeconds / 1000)
+        seconds = totalSeconds % 60
+
+        var totalMinutes = parseInt(totalSeconds / 60)
+        minutes = totalMinutes % 60
+
+        var totalHours = parseInt(totalMinutes / 60)
+        hours = totalHours % 24
+
+        var totalDays = parseInt(totalHours / 24)
+        days = totalDays
+    }
+
+    Timer {
+        id: countdownTimer
+        repeat: true
+        interval: 1000
+        running: true
+        triggeredOnStart: true
+        onTriggered: {
+            updateCountdown()
+        }
+    }
+
+    onJoined: {
+        helper.surveyCheck()
     }
 
     Component.onCompleted: {
@@ -820,7 +873,8 @@ Rectangle {
                                     width: height
                                     source: "image://application/" + getCorrectName(modelData)
                                     sourceSize.width: width
-                                    sourceSize.height: width
+                                    sourceSize.height: height
+                                    visible: form
                                     verticalAlignment: Image.AlignVCenter
                                     fillMode: Image.PreserveAspectFit
                                     smooth: true
@@ -888,7 +942,44 @@ Rectangle {
                     onClicked: {
                         formPane.opacity = 1.0
                     }
+                }
 
+                Label {
+                    id: countdownLabel
+                    width: parent.width
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        bottom: parent.bottom
+                    }
+                    Material.theme: dark ? Material.Dark : Material.Light
+                    color: accentColor
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    fontSizeMode: Text.HorizontalFit
+                    font.pointSize: 11
+                    text: countdownToString() + "\n" + qsTr("after survey will be ended")
+                    visible: !surveyFinished
+
+                    function countdownToString() {
+                        var d = ""
+                        var h = ""
+                        var m = ""
+                        var s = ""
+
+                        if(!(days === 0)) {
+                            d = days + " " + qsTr("days") + " "
+                        }
+                        if(!(hours === 0)) {
+                            h = hours + " " + qsTr("hours") + " "
+                        }
+                        if(!(minutes === 0)) {
+                            m = minutes + " " + qsTr("minutes") + " "
+                        }
+                        if(!(seconds === 0)) {
+                            s = seconds + " " + qsTr("seconds")
+                        }
+                        return d + h + m + s
+                    }
                 }
 
             }
@@ -1359,6 +1450,12 @@ Rectangle {
             signal rejected
             closePolicy: Popup.NoAutoClose
 
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.ArrowCursor
+            }
+
             Label {
                 id: contentLabel
                 anchors {
@@ -1400,6 +1497,11 @@ Rectangle {
             onAccepted: {
                 helper.surveyJoin(formApp,true,formReason, formWebsite, formMail, formExplanation)
                 formPane.opacity = 0.0
+                formApp = ""
+                formReason = ""
+                formWebsite = ""
+                formMail = ""
+                formExplanation = ""
                 confirmFormPopup.close()
             }
             onRejected: {
