@@ -446,6 +446,7 @@ ApplicationWindow {
 
         if(m === "home") {
             stackView.pop(null)
+            helper.surveyCheck()
         } else if (m === "categories") {
             if(name === "detail") {
                 stackView.pop()

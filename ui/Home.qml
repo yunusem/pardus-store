@@ -60,14 +60,12 @@ Rectangle {
             surveyList.push(sl[i].split(" ")[0].toString())
             surveyCounts.push(sl[i].split(" ")[1])
         }
+
         if(surveyRepeater.model) {
-            if (surveyRepeater.model[0] !== surveyList[0]) {
-                surveyRepeater.model = surveyList
-            }
+            surveyRepeater.model = surveyList
         }
         countsChanged()
         surveyFlickableObject.contentHeight = (surveyText.height + 50 * surveyList.length)
-
     }
 
     function homeDetailsSlot(en, epn, ec, er, dn, dpn, dc, dr, rn, rpn, rc, rr) {
@@ -788,7 +786,11 @@ Rectangle {
                                     verticalAlignment: Text.AlignVCenter
 
                                     function updateValue() {
-                                        text = surveyCounts[index]
+                                        if(typeof(surveyCounts) != "undefined") {
+                                            text = surveyCounts[index]
+                                        } else {
+                                            text = 0
+                                        }
                                     }
 
                                     Component.onCompleted: {
