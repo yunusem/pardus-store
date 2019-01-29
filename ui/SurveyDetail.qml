@@ -108,7 +108,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 font.capitalization: Font.Capitalize
                 font.bold: true
-                font.pointSize:24
+                font.pointSize:18
             }
         }
 
