@@ -427,6 +427,15 @@ ApplicationWindow {
         updateQueue()
     }
 
+    function checkAppIntheQueue(name) {
+        for(var i = 0; i < processQueue.length; i++) {
+            if(processQueue[i].split(" ")[0] === name) {
+                return true
+            }
+        }
+        return false
+    }
+
     onClosing: {
         if(isThereOnGoingProcess) {
             popupHeaderText = qsTr("Warning!")

@@ -302,7 +302,7 @@ Rectangle {
                         selectedAppDelegatestate = epaInstalled ? "installed" : "get"
                         selectedAppExecute = epaExec
                         selectedAppInstalled = epaInstalled
-                        selectedAppInqueue = false
+                        selectedAppInqueue = checkAppIntheQueue(epaName)
                         stackView.push(applicationDetail, {
                                            objectName: "detail",
                                            "current": epaName,
@@ -485,7 +485,7 @@ Rectangle {
                         selectedAppDelegatestate = mdaInstalled ? "installed" : "get"
                         selectedAppExecute = mdaExec
                         selectedAppInstalled = mdaInstalled
-                        selectedAppInqueue = false
+                        selectedAppInqueue = checkAppIntheQueue(mdaName)
                         stackView.push(applicationDetail, {
                                            objectName: "detail",
                                            "current": mdaName,
@@ -669,7 +669,7 @@ Rectangle {
                         selectedAppDelegatestate = mraInstalled ? "installed" : "get"
                         selectedAppExecute = mraExec
                         selectedAppInstalled = mraInstalled
-                        selectedAppInqueue = false
+                        selectedAppInqueue = checkAppIntheQueue(mraName)
                         stackView.push(applicationDetail, {
                                            objectName: "detail",
                                            "current": mraName,
