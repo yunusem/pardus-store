@@ -461,7 +461,7 @@ ApplicationWindow {
 
         if(m === "home") {
             stackView.pop(null)
-            helper.surveyCheck()
+            helper.getHomeScreenDetails()
         } else if (m === "categories") {
             if(name === "detail") {
                 stackView.replace(applicationList,{objectName: "list", "current": c, "previous": previousMenu})

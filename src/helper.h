@@ -99,6 +99,7 @@ public:
     Q_INVOKABLE bool terminate();
     Q_INVOKABLE void getAppList();
     Q_INVOKABLE void getAppDetails(const QString &pkg);
+    Q_INVOKABLE void getHomeScreenDetails();
     Q_INVOKABLE void ratingControl(const QString &name, const unsigned int &rating = 0);
     Q_INVOKABLE void surveyCheck();
     Q_INVOKABLE void surveyJoin(const QString &option, const bool sendingForm, const QString &reason = "",
@@ -132,7 +133,7 @@ private:
     NetworkHandler *nh;
     QSettings *s;
     void fillTheList();
-    void getHomeScreenDetails();
+
     bool m_animate;
     bool m_update;
     unsigned int m_ratio;
