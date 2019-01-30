@@ -496,7 +496,7 @@ Rectangle {
                 enabled: !selectedAppInqueue
                 Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"
                 Material.foreground: textColor
-                text: selectedAppInstalled ? qsTr("remove") : qsTr("install")
+                text: enabled ? (selectedAppInstalled ? qsTr("remove") : qsTr("install")) : ""
 
                 anchors {
                     verticalCenter: parent.verticalCenter
@@ -517,17 +517,15 @@ Rectangle {
                     }
 
                     to: 100
-                    background: Rectangle {
-                        implicitHeight: parent.height - 12
+                    background: Item {
+                        implicitHeight: parent.height - 24
                         implicitWidth: parent.width
-                        radius: 2
-                        color: backgroundColor
                     }
 
-                    contentItem: Rectangle {
+                    contentItem: Item {
                         implicitWidth: parent.width
-                        implicitHeight: parent.height
-                        color: backgroundColor
+                        implicitHeight: parent.height - 24
+
                         Rectangle {
                             width: processButtonProgressBar.visualPosition * parent.width
                             height: parent.height - 12
@@ -540,7 +538,7 @@ Rectangle {
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
                             color: dark ? "#FAFAFA" : "#111111"
-                            visible: processButtonProgressBar.value > 0
+                            visible: processButtonProgressBar.value >= 0
                             text: "%" + processButtonProgressBar.value.toFixed(0)
                             anchors {
                                 verticalCenter: parent.verticalCenter

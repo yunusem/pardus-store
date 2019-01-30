@@ -73,14 +73,6 @@ Rectangle {
                     left: parent.left
                     leftMargin: width / 2
                 }
-                onStatusChanged: {
-                    if(name == "test") {
-                        if(status == Image.Error) {
-                            console.log("Error occured")
-                        }
-                    }
-
-                }
             }
 
             Label {

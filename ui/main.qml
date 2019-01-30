@@ -221,7 +221,9 @@ ApplicationWindow {
         }
 
         onGatheringLocalDetailFinished: {
-            splashScreen.label.text = qsTr("Fetching survey data.")
+            if(splashScreen.visible) {
+                splashScreen.label.text = qsTr("Fetching survey data.")
+            }
             surveyCheck()
         }
 

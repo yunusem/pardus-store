@@ -945,9 +945,9 @@ Rectangle {
                                     sourceSize.width: width
                                     sourceSize.height: height
                                     visible: form
-                                    verticalAlignment: Image.AlignVCenter
-                                    fillMode: Image.PreserveAspectFit
-                                    smooth: true
+                                    //verticalAlignment: Image.AlignVCenter
+                                    //fillMode: Image.PreserveAspectFit
+                                    //smooth: true
                                 }
 
                                 Label {

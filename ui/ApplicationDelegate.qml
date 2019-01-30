@@ -288,7 +288,6 @@ Item {
 
                 onLastprocessedChanged: {
                     if(lastprocessed.search(name) === 0) {
-                        console.log(lastprocessed)
                         var s = lastprocessed.split(" ")
                         if (s[1] === "true") {
                             installed = false
