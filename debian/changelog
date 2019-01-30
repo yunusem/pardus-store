@@ -1,3 +1,11 @@
+pardus-store (0.3.1~beta2) unstable; urgency=medium
+
+  * Fix if app in the queue when switching from home page
+  * Update home screen and survey when switched back to home
+  * Fix progress bar background transparency on detail page
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Wed, 30 Jan 2019 12:03:46 +0300
+
 pardus-store (0.3.1~beta1) unstable; urgency=medium
 
   * Bump version to 0.3.1~beta1
