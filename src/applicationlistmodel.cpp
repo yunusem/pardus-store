@@ -73,6 +73,22 @@ bool ApplicationListModel::setData(const QModelIndex &index, const QVariant &val
     return false;
 }
 
+bool ApplicationListModel::setInstallStatusAtIndex(const int &index, const bool s)
+{
+    if(index < lst.size() && index >= 0 ) {
+
+        lst[index].setInstalled(s);
+        if(s) {
+            lst[index].setState("installed");
+        } else {
+            lst[index].setState("get");
+        }
+        dataChanged(this->index(index),this->index(index));
+        return true;
+    }
+    return false;
+}
+
 QHash<int, QByteArray> ApplicationListModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[NameRole] = "name";

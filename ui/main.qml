@@ -140,6 +140,13 @@ ApplicationWindow {
                 }
                 processingPackageName = appName
                 processingCondition = cond
+
+                helper.updatePackageInstalledStatus(appName,(cond === Condition.Installed))
+
+                if(cond === Condition.Installed) {
+                    helper.sendStatistics(appName)
+                }
+
                 lastProcess = processQueue.shift()
                 updateQueue()
                 isThereOnGoingProcess = false
@@ -148,6 +155,7 @@ ApplicationWindow {
                              qsTr("Package process is complete"),
                              (appName.charAt(0).toUpperCase() + appName.slice(1)) +
                              " " + getConditionString(cond) + " (Pardus " + qsTr("Store") + ")")
+                getHomeScreenDetails()
             } else {
                 if(!cacheIsUpToDate) {
                     updateCacheFinished()

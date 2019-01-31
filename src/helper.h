@@ -114,6 +114,7 @@ public:
     Q_INVOKABLE void openUrl(const QString &url);
     Q_INVOKABLE void runCommand(const QString &cmd);
     Q_INVOKABLE void sendStatistics(const QString &appname);
+    Q_INVOKABLE void updatePackageInstalledStatus(const QString &pkg, const bool s);
     Q_INVOKABLE QString getCategoryLocal(const QString &c) const;
 
 private:

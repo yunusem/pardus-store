@@ -338,6 +338,19 @@ void Helper::sendStatistics(const QString &appname)
     nh->sendApplicationInstalled(appname);
 }
 
+void Helper::updatePackageInstalledStatus(const QString &pkg, const bool s)
+{
+    int index = 0;
+    for(int i = 0; i< m_fakelist.length(); i++) {
+        if(m_fakelist.at(i).name() == pkg) {
+            index = i;
+        }
+    }
+    if(!lc.l->setInstallStatusAtIndex(index,s)) {
+        qDebug() << "Something went wrong while updating package installed status";
+    }
+}
+
 QString Helper::getCategoryLocal(const QString &c) const
 {
     return m_categorieswithlocal.value(c);

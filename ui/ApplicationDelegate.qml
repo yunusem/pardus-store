@@ -245,10 +245,7 @@ Item {
 
                 width: parent.width + 12
                 height: parent.height + 12
-                hoverEnabled: true
-                //enabled: false
-                //propagateComposedEvents: true
-                //acceptedButtons: Qt.NoButton
+                hoverEnabled: true                
             }
 
             Timer {
@@ -287,14 +284,7 @@ Item {
                 property string lastprocessed: lastProcess
 
                 onLastprocessedChanged: {
-                    if(lastprocessed.search(name) === 0) {
-                        var s = lastprocessed.split(" ")
-                        if (s[1] === "true") {
-                            installed = false
-                        } else {
-                            installed = true
-                            helper.sendStatistics(name)
-                        }
+                    if(lastprocessed.search(name) === 0) {                        
                         inqueue = false
                     }
                 }
