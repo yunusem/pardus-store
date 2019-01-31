@@ -155,7 +155,6 @@ ApplicationWindow {
                              qsTr("Package process is complete"),
                              (appName.charAt(0).toUpperCase() + appName.slice(1)) +
                              " " + getConditionString(cond) + " (Pardus " + qsTr("Store") + ")")
-                getHomeScreenDetails()
             } else {
                 if(!cacheIsUpToDate) {
                     updateCacheFinished()
@@ -290,9 +289,15 @@ ApplicationWindow {
             right: parent.right
         }
 
+        onBusyChanged: {
+            if(!busy && stackView.currentItem.objectName === "home") {
+                helper.getHomeScreenDetails()
+            }
+        }
 
-
-        initialItem: Home {}
+        initialItem: Home {
+            objectName: "home"
+        }
 
         pushEnter: Transition {
             enabled: animate
@@ -489,7 +494,6 @@ ApplicationWindow {
 
         if(m === "home") {
             stackView.pop(null)
-            helper.getHomeScreenDetails()
         } else if (m === "categories") {
             if(name === "detail") {
                 stackView.replace(applicationList,{objectName: "list", "current": c, "previous": previousMenu})

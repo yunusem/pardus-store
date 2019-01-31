@@ -178,12 +178,16 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         forceActiveFocus()
-                        selectedMenu = name
-                        if(selectedMenu === "categories") {
-                            expanded = !expanded
-                            selectedCategory = "all"
+                        if(selectedMenu === "home" && name === "home" && stackView.depth > 1) {
+                            stackView.pop(null)
                         } else {
-                            expanded = false
+                            selectedMenu = name
+                            if(selectedMenu === "categories") {
+                                expanded = !expanded
+                                selectedCategory = "all"
+                            } else {
+                                expanded = false
+                            }
                         }
                     }
                     onPressed: {
