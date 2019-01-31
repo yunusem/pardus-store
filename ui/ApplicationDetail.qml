@@ -45,7 +45,7 @@ Rectangle {
     function startRemoving(name, from) {
         if(name !== "" && name === selectedAppName && from === "detail") {
             updateStatusOfAppFromDetail(selectedAppName)
-            processQueue.push(selectedAppName + " " + selectedAppInstalled)
+            processQueue.push(selectedAppName + " " + selectedAppInstalled)            
             updateQueue()
         }
     }
@@ -496,7 +496,7 @@ Rectangle {
                 enabled: !selectedAppInqueue
                 Material.background: selectedAppInstalled ? "#F44336" : "#4CAF50"
                 Material.foreground: textColor
-                text: enabled ? (selectedAppInstalled ? qsTr("remove") : qsTr("install")) : ""
+                text: selectedAppInqueue ? "" : (selectedAppInstalled ? qsTr("remove") : qsTr("install"))
 
                 anchors {
                     verticalCenter: parent.verticalCenter
@@ -582,7 +582,7 @@ Rectangle {
                         confirmationDialog.open()
                     } else {
                         updateStatusOfAppFromDetail(selectedAppName)
-                        processQueue.push(selectedAppName + " " + selectedAppInstalled)
+                        processQueue.push(selectedAppName + " " + selectedAppInstalled)                        
                         updateQueue()
                     }
                 }

@@ -296,10 +296,6 @@ Item {
                             helper.sendStatistics(name)
                         }
                         inqueue = false
-                        if(selectedAppName === name) {
-                            selectedAppInqueue = inqueue
-                            selectedAppInstalled = installed
-                        }
                     }
                 }
 

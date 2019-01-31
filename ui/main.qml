@@ -350,6 +350,9 @@ ApplicationWindow {
                 var duty = s[1]
                 processingPackageName = appName
                 isThereOnGoingProcess = true
+                if(selectedAppName !== "") {
+                    selectedAppInqueue = true
+                }
                 if (duty === "true") {
                     processingCondition = Condition.Removing //qsTr("Removing")
                     helper.remove(appName)
@@ -446,6 +449,21 @@ ApplicationWindow {
             close.accepted = false
         } else {
             close.accepted = true
+        }
+    }
+
+    onLastProcessChanged: {
+        if(selectedAppName !== "") {
+            if(lastProcess.search(selectedAppName) === 0) {
+                var s = lastProcess.split(" ")
+                if (s[1] === "true") {
+                    selectedAppInstalled = false
+                } else {
+                    selectedAppInstalled = true
+                    helper.sendStatistics(selectedAppName)
+                }
+                selectedAppInqueue = false
+            }
         }
     }
 

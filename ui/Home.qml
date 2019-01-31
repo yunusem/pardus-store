@@ -302,7 +302,7 @@ Rectangle {
                         selectedAppDelegatestate = epaInstalled ? "installed" : "get"
                         selectedAppExecute = epaExec
                         selectedAppInstalled = epaInstalled
-                        selectedAppInqueue = checkAppIntheQueue(epaName)
+                        selectedAppInqueue = checkAppIntheQueue(epaName)                        
                         stackView.push(applicationDetail, {
                                            objectName: "detail",
                                            "current": epaName,
