@@ -41,7 +41,7 @@ ApplicationWindow {
     property alias processOutputLabel: navigationBar.processOutput
     property alias animate: helper.animate
     property alias updateCache: helper.update
-    property alias ratio: helper.ratio
+    //property alias ratio: helper.ratio
 
     signal anApplicationDisQueued()
     signal terminateFromDialog(variant applicationName)

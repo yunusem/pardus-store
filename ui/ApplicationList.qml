@@ -34,11 +34,11 @@ Page {
         GridView {
             id: gridView
             clip: true
-            cellWidth: (width - scrollBarWidth) / ratio
-            cellHeight: height / ratio
+            cellWidth:((width - scrollBarWidth) / 4) < 241.458   ? (width - scrollBarWidth) / 3 : Math.max((width - scrollBarWidth) / 4, 241.45833333333334)
+            cellHeight: Math.max(height / 4, 234.33333333333334)
             cacheBuffer: height * 5
             visible: true
-            interactive: count > 15 ? true : false
+            interactive: true
             snapMode: GridView.SnapToRow
             width: parent.width - visualOffset + scrollBarWidth
             height: parent.height
@@ -70,6 +70,7 @@ Page {
                     }
                 }
             }
+
             delegate: ApplicationDelegate {}
             ScrollBar.vertical: ScrollBar {
                 hoverEnabled: true
