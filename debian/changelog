@@ -1,3 +1,9 @@
+pardus-store (0.3.1~beta4) unstable; urgency=medium
+
+  * Handle ratio dynamically, remove it from settings
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Wed, 06 Feb 2019 12:31:01 +0300
+
 pardus-store (0.3.1~beta3) unstable; urgency=medium
 
   * Fix not handling states when swtiched from home screen
